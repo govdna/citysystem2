@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.govmade.common.utils.db.DbConfig;
+import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.computer.GovComputerRoom;
 import com.govmade.entity.system.data.DataElement;
@@ -762,13 +763,20 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
 		String name = new String(req.getParameter("name").getBytes("iso8859-1"),"utf-8");
+		String depart = "";
+		Company c = new Company();
+		c.setId(AccountShiroUtil.getCurrentUser().getCompanyId());
+		List<Company> cpList = companyservice.find(c);		
 		JSONObject echartjson = new JSONObject();
 		JSONArray nodeArray = new JSONArray();
 		JSONArray linkArray = new JSONArray();
 		JSONObject unitjson = new JSONObject();
 		JSONObject linkjson = new JSONObject();
+		if(cpList.size()>0){
+			depart = cpList.get(0).getCompanyName();
+		}
 		unitjson.put("category", 0);
-		unitjson.put("name", name);
+		unitjson.put("name", depart);
 		unitjson.put("value", 10);
 		nodeArray.add(unitjson);
 		List<GovServer> syslist = govServerService.syslist(gs);
@@ -782,7 +790,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 				unitjson.put("value", s);
 				nodeArray.add(unitjson);
 				linkjson.put("source", name1);	
-				linkjson.put("target", name);
+				linkjson.put("target", depart);
 				linkjson.put("weight", s);
 				linkjson.put("name", "系统");
 				linkArray.add(linkjson);

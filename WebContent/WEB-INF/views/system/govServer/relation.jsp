@@ -87,14 +87,14 @@ function dshow(id,name) {
     	        },
     	        legend: {
     	          x: 'left',
-    	          data: ['服务器','系统','表','字段']
+    	          data: ['部门','系统','表','字段']
     	        },
     	        series: [{
     	          type: 'force',
     	          name: "关系分析",
     	          ribbonType: false,
     	          categories: [{
-    	            name: '服务器'
+    	            name: '部门'
     	          }, {
     	            name: '系统'
     	          },{
@@ -159,7 +159,7 @@ function doFormatterL(value, row, index) {
     var html = '';
     html += '<div class="btn-group">';
     //html+='<button type="button" class="btn btn-default">按钮 1</button>';
-    html += '<button type="button" class="btn btn-white" onclick="dshow(\''+row.id+'\',\''+row.value1+'\')"><i class="fa fa-pencil"></i>&nbsp;关系展现</button>';
+    html += '<button type="button" class="btn btn-white" onclick="dshow(\''+row.id+'\',\''+row.value2ForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;关系展现</button>';
     html += '</div>';
     return html;
   }

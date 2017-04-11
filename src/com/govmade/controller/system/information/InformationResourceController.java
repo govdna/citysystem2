@@ -907,11 +907,11 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 
 		String tinfor = sortManagerService.findById(new SortManager(o.getInforTypes())).getSortCode();
 		String tinfor2 = sortManagerService.findById(new SortManager(o.getInforTypes2())).getSortCode();
-		String tinfor3 = "N01";
+		String tinfor3 = "000";
 		if (o.getInforTypes3() != null) {
 			tinfor3 = sortManagerService.findById(new SortManager(o.getInforTypes3())).getSortCode();
 		}
-		String tinfor4 = "N001";
+		String tinfor4 = "0000";
 		if (o.getInforTypes4() != null) {
 			tinfor4 = sortManagerService.findById(new SortManager(o.getInforTypes3())).getSortCode();
 		}
