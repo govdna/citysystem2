@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.information.NoticeDao">
+	<resultMap id="base" type="Notice"></resultMap>
+	
+	
+	<select id="find" resultMap="base" parameterType="Notice">
+		SELECT  t.id,information_resource_id informationResourceId,msg,readed,notice_type noticeType,notice_id noticeId,account_id accountId,t.time_create timeCreate,t.time_modified timeModified,t.isDeleted
+		 FROM gov_notice t,gov_information_resource_main irm 
+		 WHERE irm.id=t.information_resource_id 
+		 and irm.isDeleted=0
+		<if test="param.informationResourceId != null ">
+			and t.information_resource_id=#{param.informationResourceId}
+		</if>
+		<if test="param.accountId!= null ">
+			and t.account_id=#{param.accountId}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.readed != null ">
+			and t.readed=#{param.readed}
+		</if>
+		
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  t.id,information_resource_id informationResourceId,msg,readed,notice_type noticeType,notice_id noticeId,account_id accountId,t.time_create timeCreate,t.time_modified timeModified,t.isDeleted
+		 FROM gov_notice t,gov_information_resource_main irm 
+		 WHERE irm.id=t.information_resource_id 
+		 and irm.isDeleted=0
+		 <if test="param.informationResourceId != null ">
+			and t.information_resource_id=#{param.informationResourceId}
+		</if>
+		<if test="param.accountId!= null ">
+			and t.account_id=#{param.accountId}
+		</if>
+		<if test="param.readed != null ">
+			and t.readed=#{param.readed}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="Notice">
+		SELECT count(*) FROM gov_notice t ,gov_information_resource_main irm 
+		 WHERE irm.id=t.information_resource_id 
+		 and irm.isDeleted=0
+		<if test="readed != null ">
+			and t.readed = #{readed} 
+		</if>
+		<if test="accountId!= null ">
+			and t.account_id=#{accountId}
+		</if>
+	</select>
+	<insert id="insert" parameterType="Notice" >	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_notice_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_notice(information_resource_id,account_id,msg,readed,notice_type,notice_id,time_create,time_modified,isDeleted) 
+	VALUES (#{informationResourceId,jdbcType=NUMERIC},#{accountId,jdbcType=NUMERIC},#{msg,jdbcType=VARCHAR},#{readed,jdbcType=NUMERIC},#{noticeType,jdbcType=NUMERIC},#{noticeId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="Notice">
+		UPDATE gov_notice
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_notice
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="Notice">
+		DELETE FROM gov_notice
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_notice
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+	</delete>
+	<update id="update" parameterType="Notice">
+		UPDATE gov_notice
+		SET 
+		readed=#{readed,jdbcType=NUMERIC},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

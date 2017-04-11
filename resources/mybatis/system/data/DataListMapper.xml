@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.data.DataListDao">
+	<resultMap id="base" type="DataList"></resultMap>
+<select id="find" resultMap="base" parameterType="DataList">
+			SELECT
+				id,
+				is_share isShare,
+				data_element_id dataElementId,
+				data_manager_id dataManagerId,
+				information_res_id informationResId,
+				time_create timeCreate,
+				time_modified timeModified,
+				house_model_id houseModelId,
+				item_sort_id itemSortId,
+				application_materials applicationMaterials,
+				customization_id customizationId,
+				isDeleted
+			FROM
+				gov_data_list t
+			WHERE
+				1 = 1
+		<if test="param.dataElementId != null and param.dataElementId != 0 ">
+			and t.data_element_id=#{param.dataElementId}
+		</if>
+		<if test="param.isShare != null ">
+			and t.is_share=#{param.isShare}
+		</if>
+		<if test="param.dataManagerId != null and param.dataManagerId != 0 ">
+			and t.data_manager_id=#{param.dataManagerId}
+		</if>
+		<if test="param.informationResId != null and param.informationResId != 0 ">
+			and t.information_res_id=#{param.informationResId}
+		</if>
+		<if test="param.houseModelId != null  and param.houseModelId != 0 ">
+			and t.house_model_id=#{param.houseModelId}
+		</if>
+		<if test="param.itemSortId != null and param.itemSortId != 0 ">
+			and t.item_sort_id=#{param.itemSortId}
+		</if>
+		<if test="param.customizationId != null and param.customizationId != 0 ">
+			and t.customization_id=#{param.customizationId}
+		</if>		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		   SELECT
+				id,
+				is_share isShare,
+				data_element_id dataElementId,
+				data_manager_id dataManagerId,
+				information_res_id informationResId,
+				time_create timeCreate,
+				time_modified timeModified,
+				house_model_id houseModelId,
+				item_sort_id itemSortId,
+				application_materials applicationMaterials,
+				customization_id customizationId,
+				isDeleted
+			FROM
+				gov_data_list t
+			WHERE
+				1 = 1
+		<if test="param.dataElementId != null ">
+			and t.data_element_id=#{param.dataElementId}
+		</if>
+		<if test="param.dataManagerId != null ">
+			and t.data_manager_id=#{param.dataManagerId}
+		</if>
+		<if test="param.isShare != null ">
+			and t.is_share=#{param.isShare}
+		</if>
+		<if test="param.informationResId != null ">
+			and t.information_res_id=#{param.informationResId}
+		</if>
+		<if test="param.houseModelId != null ">
+			and t.house_model_id=#{param.houseModelId}
+		</if>
+		<if test="param.itemSortId != null ">
+			and t.item_sort_id=#{param.itemSortId}
+		</if>
+		<if test="param.customizationId != null ">
+			and t.customization_id=#{param.customizationId}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="DataList">
+		SELECT count(*) FROM gov_data_list t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="DataList" >	
+ 	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_data_list_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_data_list(
+	is_share,item_sort_id,application_materials,
+	data_element_id,data_manager_id,information_res_id,time_create,time_modified,isDeleted,House_model_id,customization_id) 
+	VALUES (
+	#{isShare,jdbcType=NUMERIC},#{itemSortId,jdbcType=NUMERIC},#{applicationMaterials,jdbcType=VARCHAR},
+	#{dataElementId,jdbcType=NUMERIC},#{dataManagerId,jdbcType=NUMERIC},#{informationResId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{houseModelId,jdbcType=NUMERIC},#{customizationId,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	
+	<delete id="deleteByItemSortId" parameterType="DataList">
+		delete from gov_data_list where item_sort_id=#{itemSortId}
+	</delete>
+	
+	<delete id="deleteByInformationResId" parameterType="DataList">
+		delete from gov_data_list where information_res_id=#{informationResId}
+	</delete>
+		<delete id="deleteByHouseModelId" parameterType="DataList">
+		delete from gov_data_list where House_model_id=#{houseModelId}
+	</delete>
+	<delete id="deleteByDataManagerId" parameterType="DataList">
+		delete from gov_data_list where data_manager_id=#{dataManagerId}
+	</delete>
+	<delete id="deleteByCustomizationId" parameterType="DataList">
+		delete from gov_data_list where customization_id=#{customizationId}
+	</delete>
+	
+	<update id="delete" parameterType="DataList">
+		UPDATE gov_data_list
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_data_list
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="DataList">
+		DELETE FROM gov_data_list
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_data_list
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="DataList">
+		UPDATE gov_data_list 
+		SET 
+		data_element_id=#{dataElementId,jdbcType=NUMERIC},
+		data_manager_id=#{dataManagerId,jdbcType=NUMERIC},
+		information_res_id=#{informationResId,jdbcType=NUMERIC},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		is_share=#{isShare,jdbcType=NUMERIC},
+		customization_id=#{customizationId,jdbcType=NUMERIC},
+		house_model_id=#{houseModelId,jdbcType=NUMERIC} 
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

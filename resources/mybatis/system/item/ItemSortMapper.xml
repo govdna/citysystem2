@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.item.ItemSortDao">
+	<resultMap id="base" type="ItemSort">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="ser_obj_sort" property="serObjSort" jdbcType="INTEGER" />
+    <result column="ser_content" property="serContent" jdbcType="INTEGER" />
+    <result column="pre_approval_matter" property="preApprovalMatter" jdbcType="INTEGER" />
+    <result column="deadline" property="deadline" jdbcType="INTEGER" />
+    <result column="certificate_name" property="certificateName" jdbcType="VARCHAR" />
+    <result column="file_type" property="fileType" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="yesorno" property="yesorno" jdbcType="INTEGER" />
+    <result column="bus_system" property="busSystem" jdbcType="INTEGER" />
+    <result column="time_create" property="timeCreate" jdbcType="TIMESTAMP" />
+    <result column="time_modified" property="timeModified" jdbcType="TIMESTAMP" />
+    <result column="isDeleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+	<result column="company_id" property="companyId" jdbcType="INTEGER" />    
+	<result column="item_sort_id" property="itemSortId" jdbcType="INTEGER" /> 
+	</resultMap>
+	  <sql id="Base_Column_List" >
+    id, item_name, ser_obj_sort, ser_content, pre_approval_matter, deadline, 
+    certificate_name, file_type, file_name, yesorno,bus_system, time_create, 
+    time_modified, isDeleted,company_id,group_id,item_sort_id
+	  </sql>
+	  <sql id="Base_Where_Clause" >
+  	<if test="param.id != null" >  and
+        id = #{param.id,jdbcType=NUMERIC}
+      </if>
+      <if test="param.itemName != null and param.itemName !=''">  and
+        item_name = #{param.itemName,jdbcType=VARCHAR}
+      </if>
+      <if test="param.serObjSort != null" >  and
+        ser_obj_sort = #{param.serObjSort,jdbcType=NUMERIC}
+      </if>
+      <if test="param.serContent!= null" >  and
+        ser_content = #{param.serContent,jdbcType=NUMERIC}
+      </if>
+      <if test="param.preApprovalMatter != null" >  and
+        pre_approval_matter = #{param.preApprovalMatter,jdbcType=NUMERIC}
+      </if>
+      <if test="param.deadline != null" >  and
+        deadline = #{param.deadline,jdbcType=NUMERIC}
+      </if>
+      <if test="param.certificateName != null" >  and
+        certificate_name = #{param.certificateName,jdbcType=VARCHAR}
+      </if>
+      <if test="param.fileType!= null" >  and
+        file_type = #{param.fileType,jdbcType=NUMERIC}
+      </if>
+      <if test="param.fileName!= null" >  and
+        file_name = #{param.fileName,jdbcType=VARCHAR}
+      </if>
+        <if test="param.yesorno!= null" >  and
+        yesorno = #{param.yesorno,jdbcType=NUMERIC}
+      </if>
+      <if test="param.busSystem!= null" >  and
+        bus_system = #{param.busSystem,jdbcType=NUMERIC}
+      </if>
+      <if test="param.timeCreate != null" >  and
+        time_create = #{param.timeCreate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="param.timeModified != null" >  and
+        time_modified = #{param.timeModified,jdbcType=TIMESTAMP}
+      </if>
+      <if test="param.isDeleted != null" >  and
+        isDeleted = #{param.isDeleted,jdbcType=NUMERIC}
+      </if>
+      <if test="param.companyId != null" >   and
+        company_id = #{param.companyId,jdbcType=NUMERIC}
+      </if>
+      <if test="param.groupId != null" >  and
+        group_id = #{param.groupId,jdbcType=NUMERIC}
+      </if>     
+         <if test="param.itemSortId != null" >  and
+        item_sort_id = #{param.itemSortId,jdbcType=NUMERIC}
+      </if>  
+  	</sql>
+	<select id="find" resultMap="base" parameterType="ItemSort">
+		SELECT  <include refid="Base_Column_List" />
+		FROM gov_item_sort  WHERE 1=1 
+		<include refid="Base_Where_Clause" />
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  <include refid="Base_Column_List" />
+		FROM gov_item_sort  WHERE 1=1 
+	<if test="param.id != null" >  and
+        id = #{param.id,jdbcType=NUMERIC}
+      </if>
+      <if test="param.itemName != null and param.itemName !=''">  and
+        item_name like '%${param.itemName}%'
+      </if>
+      <if test="param.serObjSort != null" >  and
+        ser_obj_sort = #{param.serObjSort,jdbcType=NUMERIC}
+      </if>
+      <if test="param.serContent!= null" >  and
+        ser_content = #{param.serContent,jdbcType=NUMERIC}
+      </if>
+      <if test="param.preApprovalMatter != null" >  and
+        pre_approval_matter = #{param.preApprovalMatter,jdbcType=NUMERIC}
+      </if>
+      <if test="param.deadline != null" >  and
+        deadline = #{param.deadline,jdbcType=NUMERIC}
+      </if>
+      <if test="param.certificateName != null" >  and
+        certificate_name = #{param.certificateName,jdbcType=VARCHAR}
+      </if>
+      <if test="param.fileType!= null" >  and
+        file_type = #{param.fileType,jdbcType=NUMERIC}
+      </if>
+      <if test="param.fileName!= null" >  and
+        file_name = #{param.fileName,jdbcType=VARCHAR}
+      </if>
+          <if test="param.yesorno!= null" >  and
+        yesorno = #{param.yesorno,jdbcType=NUMERIC}
+      </if>
+      <if test="param.busSystem!= null" >  and
+        bus_system = #{param.busSystem,jdbcType=NUMERIC}
+      </if>
+      <if test="param.timeCreate != null" >  and
+        time_create = #{param.timeCreate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="param.timeModified != null" >  and
+        time_modified = #{param.timeModified,jdbcType=TIMESTAMP}
+      </if>
+      <if test="param.isDeleted != null" >  and
+        isDeleted = #{param.isDeleted,jdbcType=NUMERIC}
+      </if>
+      <if test="param.companyId != null" >   and
+        company_id = #{param.companyId,jdbcType=NUMERIC}
+      </if>
+      <if test="param.groupId != null" >  and
+        group_id = #{param.groupId,jdbcType=NUMERIC}
+      </if> 
+       <if test="param.itemSortId != null" >  and
+        item_sort_id = #{param.itemSortId,jdbcType=NUMERIC}
+      </if>   
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="ItemSort">
+		SELECT count(*) FROM gov_item_sort t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="ItemSort" >	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_item_sort_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	
+ 	<![CDATA[
+	insert into gov_item_sort (item_name, ser_obj_sort, 
+      ser_content, pre_approval_matter, deadline,
+      certificate_name, file_type,
+      file_name,yesorno,bus_system,time_create, time_modified, 
+      isDeleted,group_id,company_id,item_sort_id)
+    values (#{itemName,jdbcType=VARCHAR}, #{serObjSort,jdbcType=NUMERIC}, 
+      #{serContent,jdbcType=NUMERIC}, #{preApprovalMatter,jdbcType=NUMERIC}, #{deadline,jdbcType=NUMERIC}, 
+      #{certificateName,jdbcType=VARCHAR}, 
+      #{fileType,jdbcType=NUMERIC},#{fileName,jdbcType=VARCHAR},#{yesorno,jdbcType=NUMERIC}, #{busSystem,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC}, #{companyId,jdbcType=NUMERIC},#{itemSortId,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="ItemSort">
+		UPDATE gov_item_sort
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_item_sort
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="ItemSort">
+		DELETE FROM gov_item_sort
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_item_sort
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="ItemSort">
+ 	update gov_item_sort
+    set item_name = #{itemName,jdbcType=VARCHAR},
+      ser_obj_sort = #{serObjSort,jdbcType=NUMERIC},
+      ser_content = #{serContent,jdbcType=NUMERIC},
+      pre_approval_matter = #{preApprovalMatter,jdbcType=NUMERIC},
+      deadline = #{deadline,jdbcType=NUMERIC},
+      certificate_name = #{certificateName,jdbcType=VARCHAR},
+      file_type = #{fileType,jdbcType=NUMERIC},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      yesorno = #{yesorno,jdbcType=NUMERIC},
+      bus_system = #{busSystem,jdbcType=NUMERIC},
+      time_modified = #{timeModified,jdbcType=TIMESTAMP},
+      isDeleted = #{isDeleted,jdbcType=NUMERIC},
+      group_id=#{groupId,jdbcType=NUMERIC},
+      company_id = #{companyId,jdbcType=NUMERIC},
+      item_sort_id = #{itemSortId,jdbcType=NUMERIC}
+    where id = #{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

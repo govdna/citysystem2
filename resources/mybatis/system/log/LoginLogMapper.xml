@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.log.LoginLogDao">
+	<!-- com.govmade.entity.system.log.LoginLog -->
+ 	<resultMap id="base" type="LoginLog" ></resultMap>
+ 	<select id="find" resultMap="base" parameterType="LoginLog">
+			SELECT
+			id,
+			account_id accountId,
+			log_name logName,
+			login_time loginTime,
+			login_ip loginIP,
+			msg,
+			time_create timeCreate,
+			time_modified timeModified,
+			isDeleted
+		FROM
+			CITY_LOGIN_LOG t
+      	ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		   SELECT
+			id,
+			account_id accountId,
+			log_name logName,
+			login_time loginTime,
+			login_ip loginIP,
+			msg,
+			time_create timeCreate,
+			time_modified timeModified,
+			isDeleted
+		FROM
+			CITY_LOGIN_LOG t
+      ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select> 
+    <select id="count"  resultType="int" parameterType="LoginLog">
+       SELECT count(*) FROM CITY_LOGIN_LOG t WHERE 1=1 
+    </select>        
+
+	<insert id="insert" parameterType="LoginLog" >	
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT city_login_log_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	<![CDATA[
+	INSERT INTO city_login_log
+	(account_id,login_time,login_ip,log_name,msg,time_create,time_modified,isDeleted) 
+	VALUES (
+	#{accountId,jdbcType=NUMERIC},#{timeModified,jdbcType=TIMESTAMP},#{loginIP,jdbcType=VARCHAR},#{logName,jdbcType=VARCHAR},#{msg,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+
+<!-- 
+	<delete id="deleteBatch" parameterType ="java.util.List">
+	DELETE FROM CITY_LOGIN_LOG WHERE id in(
+		<foreach item="o" collection="list" open="" separator="," close="" >
+			#{o.id}
+		</foreach>
+		)
+	</delete>
+ -->		
+</mapper>

@@ -1,0 +1,129 @@
+.auto-row {clear: both;}
+.auto-colum {float: left;}
+.auto-clear {clear: both;width: 1px;height: 1px;overflow: hidden;}
+
+.dg-do {cursor:pointer;}
+.dg-do-add {float:right;}
+#tb {background: url(../images/login/login1.jpg) no-repeat left;width:100%;height:100%;}
+.header {background:#f8f8f8;height:100%;text-align:center;}
+.header .search {float:left;/* margin:35px 0 0 10px; */padding-top: 25px;padding-left: 50px;}
+.header .title {font-family:"SimHei";padding-left: 30px;background: url(../images/login/logo2.png) no-repeat left;display:inline-block;line-height:60px;line-height: 75px;font-size: 30px;/* margin:0 auto; */width: 400px;float: left;background-size: 50px auto;margin-left: 15px;}
+.user {float:right;margin: 20px 10px 0 0;}
+.user .userinfo {float:right;margin:10px 10px 0 10px;line-height:25px;}
+.user .userinfo .logintime {color:#666;text-algin:center;}
+.user .userinfo .username {color:#ba1b21;text-align: center;}
+.user .userinfo .username a {cursor:pointer;text-decoration: none;color: #666;padding-right: 10px;}
+.user .userinfo .username a:hover {color: #ba1b21;}
+.user .userinfo span {color:#666;}
+.user .userimg {width:40px;height:40px;float:left;}
+.user .userimg img {display:block;width:40px;height:40px;}
+
+.footer {text-align:center;font-size:14px;line-height:40px;height:100%;background:#f8f8f8;}
+.footer ul {width:100%;}
+.footer li {width:25%;}
+.doc_item{word-wrap: break-word;white-space: normal;padding:10px;}
+.doc_title{font-size: 18px !important;margin: 0 0 10px 0;}
+.doc_content{color: #444;font-size: 16px !important;margin: 0 0 10px 0;}
+.doc_item em{font-style: normal;color: red;}
+.doc_res{height:auto;min-height:30px;line-height:30px;float:left;color: #222;font-size: 14px !important;margin: 0 0 10px 0;}
+.doc_action{float:right;font-size: 14px !important;width:100px;margin-bottom: 10px;}
+.dg-do-download{width:80px;}
+
+.msg_item{word-wrap: break-word;white-space: normal;padding:10px;}
+.msg_left{width: 50px;float: left;}
+.msg_img{width: 50px;height: 50px;}
+.msg_right{float: left;padding-left: 10px;max-width: 90%;}
+.msg_member{font-size: 18px;color: #333;}
+.msg_content{font-size: 14px;color: #666;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;}
+.msg_time{font-size: 10px;color: #666;}
+
+
+.govmade-tb{
+	font-size:16px;
+	color:#666;
+	line-height:24px;
+	border-left:1px solid #ebebeb;border-top:1px solid #ebebeb;
+	width:100%;
+	border-collapse:collapse;
+	border-spacing:0;
+}
+.govmade-tb td{
+	
+	min-width:110px;
+	border-right:1px solid #ebebeb;border-bottom:1px solid #ebebeb;
+
+}
+a{cursor:pointer;}
+.link{text-decoration: underline;}
+.textbox-readonly input {color:#999;}
+.new_msg{margin-left:10px;color:red;font-size:12px}
+.item_left{width:95%;float:left}
+.item_right{width:5%;float:right;padding-top:10px;}
+.md_btn{cursor: pointer;
+    height: 22px;
+    line-height: 2px;
+    padding: 0 10px 0 10px;
+    border: 0;
+    background: none;
+    background-color: #38f;
+    font-size: 12px;
+    color: white;
+    box-shadow: none;
+    font-weight: normal;}
+
+/*********************���²����ʽstart*****************/
+.mytable
+{
+    padding: 0;
+    margin: 10px auto;
+    border-collapse: collapse;
+    font-family: @����;
+    empty-cells: show;
+}
+
+.mytable caption
+{
+    font-size: 12px;
+    color: #0E2D5F;
+    height: 16px;
+    line-height: 16px;
+    border: 1px dashed red;
+    empty-cells: show;
+}
+
+.mytable tr th
+{
+    border: 1px dashed #C1DAD7;
+    letter-spacing: 2px;
+    text-align: left;
+    padding: 6px 6px 6px 12px;
+    font-size: 13px;
+    height: 16px;
+    line-height: 16px;
+    empty-cells: show;
+}
+
+.mytable tr td
+{
+    font-size: 12px;
+    border: 1px dashed #C1DAD7;
+    padding: 6px 6px 6px 12px;
+    empty-cells: show;
+    border-collapse: collapse;
+}
+.cursor
+{
+    cursor: pointer;
+}
+.tdbackground
+{
+    background-color: #FFE48D;
+}
+/*********************���²����ʽend*****************/
+input[name='wait0'] {padding:3px;}
+.searchbar label {
+    vertical-align: middle;
+}
+/* #left-nav .tree-node {height:20px;padding:1px 0;}
+#left-nav .tree-file {width:20px;height:20px;}
+#left-nav .tree-folder {width:20px;height:20px;} */

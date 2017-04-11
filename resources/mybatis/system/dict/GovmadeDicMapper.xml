@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.dict.GovmadeDicDAO">
+	<resultMap id="base" type="GovmadeDic"></resultMap>
+	<select id="getDicList" resultMap="base" parameterType="GovmadeDic">
+		SELECT  id,level_s "level",root_id rootId,father_id fatherId,dic_num dicNum,dic_name dicName,dic_key dicKey,dic_value dicValue ,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted FROM govmade_dic t WHERE 
+			t.father_id in (SELECT id FROM govmade_dic WHERE dic_num=#{dicNum})
+		<if test="dicName != null ">
+			and t.dic_name=#{dicName}
+		</if>
+		<if test="dicKey != null and dicKey!=''">
+			and t.dic_key=#{dicKey}
+		</if>
+		<if test="fatherId != null ">
+			and t.father_id=#{fatherId}
+		</if>
+		<if test="level != null ">
+			and t.level_s=#{level}
+		</if>
+		<if test="isDeleted != null ">
+			and t.isDeleted=#{isDeleted}
+		</if>
+		ORDER BY list_no
+	</select>
+
+	<select id="getDicByNumKey" resultMap="base" parameterType="GovmadeDic">
+	select id,level_s "level",root_id rootId,father_id fatherId,dic_num dicNum,dic_name dicName,dic_key dicKey,dic_value dicValue ,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted 
+	from govmade_dic t where 
+	t.father_id IN 
+	( SELECT id FROM govmade_dic t WHERE t.father_id IN 
+	( SELECT id FROM govmade_dic WHERE dic_num = #{dicNum})) 
+	</select>
+
+	<select id="getDicTreeList" resultMap="base" parameterType="GovmadeDic">
+		SELECT  id,level_s "level",root_id rootId,father_id fatherId,dic_num dicNum,dic_name dicName,dic_key dicKey,dic_value dicValue ,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted FROM govmade_dic t WHERE 
+			t.root_id in (SELECT id FROM govmade_dic WHERE dic_num=#{dicNum})
+		<if test="dicName != null ">
+			and t.dic_name=#{dicName}
+		</if>
+		<if test="dicKey != null ">
+			and t.dic_key=#{dicKey}
+		</if>
+		<if test="fatherId != null ">
+			and t.father_id=#{fatherId}
+		</if>
+		<if test="level != null ">
+			and t.level_s=#{level}
+		</if>
+		<if test="isDeleted != null ">
+			and t.isDeleted=#{isDeleted}
+		</if>
+		ORDER BY list_no
+
+	</select>
+	
+	<select id="find" resultMap="base" parameterType="GovmadeDic">
+		SELECT  id,level_s "level",root_id rootId,father_id fatherId,dic_num dicNum,dic_name dicName,dic_key dicKey,dic_value dicValue ,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted FROM govmade_dic t WHERE 1=1
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.fatherId != null ">
+			and t.father_id=#{param.fatherId}
+		</if>
+		<if test="param.dicName != null ">
+			and t.dic_name=#{param.dicName}
+		</if>
+		<if test="param.dicNum != null ">
+			and t.dic_num=#{param.dicNum}
+		</if>
+		<if test="param.dicKey != null ">
+			and t.dic_key=#{param.dicKey}
+		</if>
+		<if test="param.rootId != null ">
+			and t.root_id=#{param.rootId}
+		</if>
+		<if test="param.fatherId != null ">
+			and t.father_id=#{param.fatherId}
+		</if>
+		<if test="param.level != null ">
+			and t.level_s=#{param.level}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+			SELECT  id,level_s "level",root_id rootId,father_id fatherId,dic_num dicNum,dic_name dicName,dic_key dicKey,dic_value dicValue ,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted FROM govmade_dic t WHERE 1=1
+		<if test="param.dicName != null and param.dicName!=''">
+			and t.dic_name like '%${param.dicName}%'
+		</if>
+		<if test="param.dicNum != null ">
+			and t.dic_num=#{param.dicNum}
+		</if>
+		<if test="param.dicKey != null ">
+			and t.dic_key=#{param.dicKey}
+		</if>
+		<if test="param.dicValue != null and param.dicValue != '' ">
+			and t.dic_value=#{param.dicValue}
+		</if>
+		<if test="param.rootId != null ">
+			and t.root_id=#{param.rootId}
+		</if>
+		<if test="param.fatherId != null ">
+			and t.father_id=#{param.fatherId}
+		</if>
+		<if test="param.level != null ">
+			and t.level_s=#{param.level}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="GovmadeDic">
+		SELECT count(*) FROM govmade_dic t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="GovmadeDic" >	
+ 	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT govmade_dic_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+    
+ 	<![CDATA[
+	INSERT INTO govmade_dic(level_s,root_id,father_id,dic_num,dic_name,dic_key,dic_value,list_no,time_create,time_modified,isDeleted) 
+	VALUES (#{level,jdbcType=NUMERIC},#{rootId,jdbcType=NUMERIC},#{fatherId,jdbcType=NUMERIC},#{dicNum,jdbcType=VARCHAR},#{dicName,jdbcType=VARCHAR},#{dicKey,jdbcType=VARCHAR},#{dicValue,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="GovmadeDic">
+		UPDATE govmade_dic
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE govmade_dic
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="GovmadeDic">
+		DELETE FROM govmade_dic
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM govmade_dic
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="GovmadeDic">
+		UPDATE govmade_dic
+		SET dic_num =#{dicNum,jdbcType=VARCHAR},
+		dic_name=#{dicName,jdbcType=VARCHAR},
+		dic_key=#{dicKey,jdbcType=VARCHAR},
+		dic_value=#{dicValue,jdbcType=VARCHAR},
+		list_no=#{listNo,jdbcType=NUMERIC},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

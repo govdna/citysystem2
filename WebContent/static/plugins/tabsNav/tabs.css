@@ -1,0 +1,46 @@
+.tabsNav {
+  width: 100%;
+}
+
+.tabsNav .nav {
+  width: 100%;
+  line-height: 0;
+  min-height: 40px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #d8d8d8;
+  font-size: 12px;
+}
+
+.tabsNav .nav a{
+  display: block;
+  border-right: 1px solid #e2e2e2;
+  color: #777;
+  float: left;
+  font-size: 14px;
+  line-height: 40px;
+  min-height: 40px;
+  padding: 0 20px;
+  position: relative;
+}
+.tabsNav .nav a:hover {
+  background: #EBEBEB;
+}
+.tabsNav .nav a.current {
+  background: #3389D4;
+  border-color: #3389D4;
+  color: #fff;
+  cursor: default;
+  margin: -1px 0;
+  padding: 1px 20px;
+}
+/*.tabsNav .tabs-container {
+  padding: 10px 20px;
+}
+ .tabsNav .tabs-container .item + .item {
+  display: none;
+} */
+.tabsNav .item .title {
+  margin: 0;
+  padding: 15px 0 15px 10px;
+  background-color: #fff;
+}

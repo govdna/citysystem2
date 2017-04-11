@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.organization.GroupsDAO">
+	<resultMap id="base" type="Groups"></resultMap>
+	<select id="find" resultMap="base" parameterType="Groups">
+		SELECT id,time_create timeCreate,time_modified timeModified,isDeleted,name,number_s "number",company_id companyId,contract,telephone FROM gov_groups t WHERE 1=1
+		<if test="param.id != null">
+			and t.id=#{param.id} 
+		</if>
+		<if test="param.name != null ">
+			and t.name=#{param.name}
+		</if>
+		<if test="param.companyId != null">
+			and t.company_id = #{param.companyId}
+		</if>
+		<if test="param.isDeleted != null">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByPage" resultMap="base">
+		SELECT id,time_create timeCreate,time_modified timeModified,isDeleted,name,number_s "number",company_id companyId,contract,telephone FROM gov_groups t WHERE 1=1
+		<if test="param.id != null">
+			and t.id=#{param.id} 
+		</if>
+		<if test="param.name != null and param.name!=''">
+			and t.name like '%${param.name}%'
+		</if>
+		<if test="param.companyId != null">
+			and t.company_id = #{param.companyId}
+		</if>
+		<if test="param.isDeleted != null">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="count" resultType="int" parameterType="Groups">
+		SELECT count(*) FROM gov_groups t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="Groups" >	
+ 	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_groups_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+    
+ 	<![CDATA[
+	INSERT INTO gov_groups(time_create,time_modified,isDeleted,name,number_s,company_id,contract,telephone) 
+	VALUES (#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{name,jdbcType=VARCHAR},#{number,jdbcType=VARCHAR},#{companyId,jdbcType=NUMERIC},#{contract,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	<update id="delete" parameterType="Groups">
+		UPDATE gov_groups
+		SET isDeleted=1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_groups
+		SET isDeleted=1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	<delete id="deletePhysically" parameterType="Groups">
+		DELETE FROM gov_groups
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_groups
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="Groups">
+	UPDATE gov_groups
+	SET
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		name=#{name,jdbcType=VARCHAR},
+		number_s=#{number,jdbcType=VARCHAR},
+		telephone=#{telephone,jdbcType=VARCHAR},
+		company_id=#{companyId,jdbcType=NUMERIC},
+		contract=#{contract,jdbcType=VARCHAR}
+	WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

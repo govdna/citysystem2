@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.information.InformationResDao">
+	<resultMap id="base" type="InformationRes"></resultMap>
+	<select id="getInformationResByLog" resultMap="base" parameterType="InformationRes">
+			SELECT
+				t.id,
+				t.infor_name inforName,
+				t.infor_code inforCode,
+				t.infor_types inforTypes,
+				t.infor_provider inforProvider,
+				t.infor_remark inforRemark,
+				t.data_element_id dataElementId,
+				t.business_id businessId,
+				t.time_create timeCreate,
+				t.time_modified timeModified,
+				t.inforTypes2,inforTypes3,inforTypes4,
+				t.isDeleted
+			FROM
+				gov_information_resource t,gov_information_log l
+				where t.id=l.information_id
+				and t.isDeleted=0
+				<![CDATA[
+				and rownum<6
+				]]>
+				<if test="accountId != null ">
+					and l.account_id=#{accountId}
+				</if>
+				order by l.time_modified desc 
+	</select>			
+	
+	<select id="find" resultMap="base" parameterType="InformationRes">
+			SELECT
+				id,
+				infor_name inforName,
+				infor_code inforCode,
+				infor_types inforTypes,
+				infor_provider inforProvider,
+				infor_remark inforRemark,				
+				business_id businessId,
+				time_create timeCreate,
+				time_modified timeModified,
+				inforTypes2,inforTypes3,inforTypes4,
+				isDeleted,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,value31,value32,value33,value34,value35,value36,value37,value38,value39,value40,value41,value42,value43,value44,value45,value46,value47,value48,value49,value50
+			FROM
+				gov_information_resource t
+			WHERE
+				1 = 1
+		<if test="param.value1 != null and param.value1!=''">
+			and t.value1=#{param.value1}
+		</if>
+		<if test="param.value2 != null and param.value2!=''">
+			and t.value2=#{param.value2}
+		</if>		
+		<if test="param.inforName != null ">
+			and t.infor_name=#{param.inforName}
+		</if>
+		<if test="param.inforTypes != null and param.inforTypes!=''">
+			and t.infor_types IN (#{param.inforTypes})
+		</if>
+		<if test="param.inforTypes2 != null ">
+			and t.inforTypes2=#{param.inforTypes2}
+		</if>
+		<if test="param.inforTypes3 != null ">
+			and t.inforTypes3=#{param.inforTypes3}
+		</if>
+		<if test="param.inforTypes4 != null ">
+			and t.inforTypes4=#{param.inforTypes4}
+		</if>
+		<if test="param.inforProvider != null and param.inforProvider!='' ">
+			and t.infor_provider IN (#{param.inforProvider})
+		</if>
+		<if test="param.inforCode != null ">
+			and t.infor_code=#{param.inforCode}
+		</if>
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		   SELECT
+				id,
+				infor_name inforName,
+				infor_code inforCode,
+				infor_types inforTypes,
+				infor_provider inforProvider,
+				infor_remark inforRemark,				
+				business_id businessId,
+			    inforTypes2,inforTypes3,inforTypes4,
+				time_create timeCreate,
+				time_modified timeModified,
+				isDeleted,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,value31,value32,value33,value34,value35,value36,value37,value38,value39,value40,value41,value42,value43,value44,value45,value46,value47,value48,value49,value50
+			FROM
+				gov_information_resource t
+			WHERE
+				1 = 1
+<!-- 				
+		<if test="param.inforName != null and param.inforName!=''">
+			and t.infor_name like '%${param.inforName}%'
+		</if>
+ -->		
+		<if test="param.inforCode != null ">
+			and t.infor_code=#{param.inforCode}
+		</if>
+		<if test="param.inforTypes != null and param.inforTypes!=''">
+			and t.infor_types IN (#{param.inforTypes})
+		</if>
+		<if test="param.inforTypes2 != null ">
+			and t.inforTypes2=#{param.inforTypes2}
+		</if>
+		<if test="param.inforTypes3 != null ">
+			and t.inforTypes3=#{param.inforTypes3}
+		</if>
+		<if test="param.inforTypes4 != null ">
+			and t.inforTypes4=#{param.inforTypes4}
+		</if>
+		<if test="param.inforProvider != null and param.inforProvider!='' ">
+			and t.infor_provider IN (#{param.inforProvider})
+		</if>
+		<if test="param.value1 != null and param.value1 !=''">
+			and t.value1 like '%${param.value1}%'
+		</if>
+		<if test="param.value2 != null and param.value2 !=''">
+			and t.value2=#{param.value2}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getMaxCode" resultType="String" parameterType="InformationRes">
+	SELECT MAX(infor_code) from gov_information_resource where 1=1  
+	<if test="inforTypes != null ">
+		and infor_types=#{inforTypes}
+	</if>	
+	<if test="inforTypes2 != null ">
+		and inforTypes2=#{inforTypes2}
+	</if>	
+	<choose>
+		<when  test="inforTypes3 != null ">
+				and inforTypes3=#{inforTypes3}
+		</when>
+		<otherwise>
+			and inforTypes3 is null
+		</otherwise>
+	</choose>
+	<choose>
+		<when  test="inforTypes4 != null ">
+				and inforTypes4=#{inforTypes4}
+		</when>
+		<otherwise>
+			and inforTypes4 is null
+		</otherwise>
+	</choose>	
+	</select>
+	
+	<select id="count" resultType="int" parameterType="InformationRes">
+		SELECT count(*) FROM gov_information_resource t WHERE isDeleted=0 
+		<if test="inforTypes != null and inforTypes!=''">
+			and t.infor_types = #{inforTypes}
+		</if>
+		<if test="inforProvider != null and inforProvider!='' ">
+			and t.infor_provider = #{inforProvider}
+		</if>
+		<if test="inforTypes2 != null ">
+			and t.inforTypes2=#{inforTypes2}
+		</if>
+		<if test="inforTypes3 != null ">
+			and t.inforTypes3=#{inforTypes3}
+		</if>
+		<if test="inforTypes4 != null ">
+			and t.inforTypes4=#{inforTypes4}
+		</if>
+		<if test="value2 != null ">
+			and t.value2=#{value2}
+		</if>	
+	</select>
+	
+	<select id="countValue2" resultMap="base" parameterType="InformationRes">
+		SELECT count(*) businessId,value2 FROM gov_information_resource t WHERE isDeleted=0 
+		
+		<if test="inforProvider != null and inforProvider!='' ">
+			and t.infor_provider = #{inforProvider}
+		</if>
+		
+		group by value2
+	</select>
+	
+	<select id="countInforTypes" resultMap="base" parameterType="InformationRes">
+		SELECT count(*) businessId,inforTypes FROM gov_information_resource t WHERE isDeleted=0 
+		
+		<if test="inforProvider != null and inforProvider!='' ">
+			and t.infor_provider = #{inforProvider}
+		</if>
+		
+		<if test="value2 != null ">
+			and t.value2=#{value2}
+		</if>
+		group by inforTypes
+	</select>
+	
+	<select id="countInforTypes2" resultMap="base" parameterType="InformationRes">
+		SELECT count(*) businessId,inforTypes2 FROM gov_information_resource t WHERE isDeleted=0 
+		
+		<if test="inforProvider != null and inforProvider!='' ">
+			and t.infor_provider = #{inforProvider}
+		</if>
+		
+		<if test="value2 != null ">
+			and t.value2=#{value2}
+		</if>
+		group by inforTypes2
+	</select>
+	<select id="countInforTypes3" resultMap="base" parameterType="InformationRes">
+		SELECT count(*) businessId,inforTypes3 FROM gov_information_resource t WHERE isDeleted=0 
+		
+		<if test="inforProvider != null and inforProvider!='' ">
+			and t.infor_provider = #{inforProvider}
+		</if>
+		
+		<if test="value2 != null ">
+			and t.value2=#{value2}
+		</if>
+		group by inforTypes3
+	</select>
+	
+	<insert id="insert" parameterType="InformationRes" >	
+ 	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_information_resource_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+    
+ 	<![CDATA[
+	INSERT INTO gov_information_resource(infor_name,infor_code,infor_types,infor_provider,inforTypes2,inforTypes3,inforTypes4,infor_remark,business_id,time_create,time_modified,isDeleted,
+	value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,value31,value32,value33,value34,value35,value36,value37,value38,value39,value40,value41,value42,value43,value44,value45,value46,value47,value48,value49,value50
+	)  
+	VALUES (#{inforName,jdbcType=VARCHAR},#{inforCode,jdbcType=VARCHAR},#{inforTypes,jdbcType=NUMERIC},#{inforProvider,jdbcType=VARCHAR},#{inforTypes2,jdbcType=NUMERIC},#{inforTypes3,jdbcType=NUMERIC},#{inforTypes4,jdbcType=NUMERIC},#{inforRemark,jdbcType=VARCHAR},#{businessId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},
+	#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{value31,jdbcType=VARCHAR},#{value32,jdbcType=VARCHAR},#{value33,jdbcType=VARCHAR},#{value34,jdbcType=VARCHAR},#{value35,jdbcType=VARCHAR},#{value36,jdbcType=VARCHAR},#{value37,jdbcType=VARCHAR},#{value38,jdbcType=VARCHAR},#{value39,jdbcType=VARCHAR},#{value40,jdbcType=VARCHAR},#{value41,jdbcType=VARCHAR},#{value42,jdbcType=VARCHAR},#{value43,jdbcType=VARCHAR},#{value44,jdbcType=VARCHAR},#{value45,jdbcType=VARCHAR},#{value46,jdbcType=VARCHAR},#{value47,jdbcType=VARCHAR},#{value48,jdbcType=VARCHAR},#{value49,jdbcType=VARCHAR},#{value50,jdbcType=VARCHAR}
+	)
+	]]>
+	</insert>
+	<update id="delete" parameterType="InformationRes">
+		UPDATE gov_information_resource
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_information_resource
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="InformationRes">
+		DELETE FROM gov_information_resource
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_information_resource
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	
+	<delete id="truncateTable" parameterType="InformationRes">
+		truncate table gov_information_resource
+	</delete>
+	
+	<update id="update" parameterType="InformationRes">
+		UPDATE gov_information_resource
+		SET 
+		infor_name =#{inforName,jdbcType=VARCHAR},
+		infor_code=#{inforCode,jdbcType=VARCHAR},
+		infor_types=#{inforTypes,jdbcType=NUMERIC},
+		infor_provider=#{inforProvider,jdbcType=VARCHAR},
+		infor_remark=#{inforRemark,jdbcType=VARCHAR},		
+		business_id=#{businessId,jdbcType=NUMERIC},
+		inforTypes2=#{inforTypes2,jdbcType=NUMERIC},
+		inforTypes3=#{inforTypes3,jdbcType=NUMERIC},
+		inforTypes4=#{inforTypes4,jdbcType=NUMERIC},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		value1=#{value1,jdbcType=VARCHAR},
+		value2=#{value2,jdbcType=VARCHAR},
+		value3=#{value3,jdbcType=VARCHAR},
+		value4=#{value4,jdbcType=VARCHAR},
+		value5=#{value5,jdbcType=VARCHAR},
+		value6=#{value6,jdbcType=VARCHAR},
+		value7=#{value7,jdbcType=VARCHAR},
+		value8=#{value8,jdbcType=VARCHAR},
+		value9=#{value9,jdbcType=VARCHAR},
+		value10=#{value10,jdbcType=VARCHAR},
+		value11=#{value11,jdbcType=VARCHAR},
+		value12=#{value12,jdbcType=VARCHAR},
+		value13=#{value13,jdbcType=VARCHAR},
+		value14=#{value14,jdbcType=VARCHAR},
+		value15=#{value15,jdbcType=VARCHAR},
+		value16=#{value16,jdbcType=VARCHAR},
+		value17=#{value17,jdbcType=VARCHAR},
+		value18=#{value18,jdbcType=VARCHAR},
+		value19=#{value19,jdbcType=VARCHAR},
+		value20=#{value20,jdbcType=VARCHAR},
+		value21=#{value21,jdbcType=VARCHAR},
+		value22=#{value22,jdbcType=VARCHAR},
+		value23=#{value23,jdbcType=VARCHAR},
+		value24=#{value24,jdbcType=VARCHAR},
+		value25=#{value25,jdbcType=VARCHAR},
+		value26=#{value26,jdbcType=VARCHAR},
+		value27=#{value27,jdbcType=VARCHAR},
+		value28=#{value28,jdbcType=VARCHAR},
+		value29=#{value29,jdbcType=VARCHAR},
+		value30=#{value30,jdbcType=VARCHAR},
+		value31=#{value31,jdbcType=VARCHAR},
+		value32=#{value32,jdbcType=VARCHAR},
+		value33=#{value33,jdbcType=VARCHAR},
+		value34=#{value34,jdbcType=VARCHAR},
+		value35=#{value35,jdbcType=VARCHAR},
+		value36=#{value36,jdbcType=VARCHAR},
+		value37=#{value37,jdbcType=VARCHAR},
+		value38=#{value38,jdbcType=VARCHAR},
+		value39=#{value39,jdbcType=VARCHAR},
+		value40=#{value40,jdbcType=VARCHAR},
+		value41=#{value41,jdbcType=VARCHAR},
+		value42=#{value42,jdbcType=VARCHAR},
+		value43=#{value43,jdbcType=VARCHAR},
+		value44=#{value44,jdbcType=VARCHAR},
+		value45=#{value45,jdbcType=VARCHAR},
+		value46=#{value46,jdbcType=VARCHAR},
+		value47=#{value47,jdbcType=VARCHAR},
+		value48=#{value48,jdbcType=VARCHAR},
+		value49=#{value49,jdbcType=VARCHAR},
+		value50=#{value50,jdbcType=VARCHAR}		
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	<update id="clearColumn" parameterType="InformationRes">
+		UPDATE gov_memorizer
+		SET value${valueNo}=''
+	</update>
+
+</mapper>

@@ -1,0 +1,56 @@
+#tabsholder .tabs{
+	background-color: #f5f5f5;
+}
+#tabsholder .tabs1{
+	width:100% !important;
+}
+#tabsholder .tabs li{
+	background-color: #f5f5f5;
+	display: inline-block;
+    text-decoration: none;
+    margin: 0;
+    padding: 0 10px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    white-space: nowrap;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ddd;
+    -moz-border-radius: 2px 2px 0 0;
+    -webkit-border-radius: 2px 2px 0 0;
+    border-radius: 2px 2px 0 0;
+    margin: 0 4px -1px 0;
+}
+#tabsholder .tabs li.current {
+	background-color: #fff;
+	-moz-border-radius: 0 0 0 0;
+    -webkit-border-radius: 0 0 0 0;
+    border-radius: 0 0 0 0;
+}
+table caption {
+	height:40px;
+	font-size:16px;
+	line-height:40px;
+	border:1px solid #ddd;
+}
+table {
+	border-bottom:1px solid #ddd;
+	border-right:1px solid #ddd;
+}
+table td {
+	border-left:1px solid #ddd;
+	border-top:1px solid #ddd;
+}
+
+
+
+
+
+
+
+
+
+
+
+

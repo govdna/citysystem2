@@ -1,0 +1,69 @@
+/*
+* @Author: kk
+* @Date:   2017-03-06 16:37:05
+* @Last Modified by:   kk
+* @Last Modified time: 2017-04-05 13:36:34
+*/
+body {background-color: rgba(255, 255, 255, 0);}
+/* button style */
+
+.btn-primary {
+  background-color: #319cdf !important;
+  border-color: #319cdf !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  background-color: #319cdf !important;
+  border-color: #319cdf !important;
+}
+
+.tabsNav .nav a.current {
+  background-color: #319cdf !important;
+}
+.layui-layer-btn .layui-layer-btn0 {
+  background-color:#319cdf !important;
+  border-color: #319cdf !important;
+}
+.form-control:focus,.single-line:focus {
+    border-color: #319cdf !important;
+}
+.chosen-container .chosen-results li.highlighted {
+    background-color: #319cdf !important;;
+     color: #fff !important;;
+}
+#tagTop .red {
+  background: #319cdf !important;;
+    border-color: #319cdf !important;;
+}
+.webuploader-container .webuploader-pick {
+  background: #319cdf !important;
+}
+.checkbox-success input[type="checkbox"]:checked + label::before, .checkbox-success input[type="radio"]:checked + label::before {
+      background-color: #319cdf !important;
+    border-color: #319cdf !important;
+}
+.small-box.box-1 .icon-container {
+    background-color: #337ab7 !important;
+}
+.small-box.box-1 {
+    background-color: #1c84c5 !important;
+}
+.small-box.box-2 .icon-container {
+    background-color: #337ab7 !important;
+}
+.small-box.box-2 {
+    background-color: #1c84c5 !important;
+}
+.com-count {
+  background-color: #319cdf !important;
+}
+.com-count .badge {
+  background-color: #fff !important;
+}
+.label-info, .badge-info {
+  background-color: #319cdf !important;
+}

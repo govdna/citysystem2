@@ -1,0 +1,54 @@
+/*
+* @Author: kk
+* @Date:   2017-03-10 10:09:26
+* @Last Modified by:   kk
+* @Last Modified time: 2017-03-17 09:08:58
+*/
+/* header start*/
+.skin-4-5 .header { height: 78px; position: relative; z-index: 10000; background-color: #fff; box-shadow: 0px 0px 20px 4px rgba(0, 0, 0, .2);}
+.skin-4-5 .header .name img {border-color: #d9d9d9;}
+.skin-4-5 .header .logo { margin-left: 30px; color: #333; font-size: 20px; font-weight: 700; }
+.skin-4-5 .header .logo h1 { color: #005293; }
+.skin-4-5 .header .name span, 
+.skin-4-5 .header .btn-signout { background-color: #f7f7f7; border-color: #d9d9d9; color: #005293; }
+.skin-4-5 .message-group .count-info { background-color: #f7f7f7; border-color: #d9d9d9; }
+.skin-4-5 .message-group .count-info .label-primary { background-color: #0d4e91; }
+/* header end */
+
+/* login start */
+
+/* login end */
+
+/* index start */
+.skin-4-5 { background: #f7f7f7; }
+.skin-4-5 .menu-list-container .menu-item .img { background: url(../../images/icon/icon_sprite_2.png) no-repeat; }
+
+.skin-4-5 .menu-list-container .menu-item:nth-child(2n) .name { color: #fff; }
+
+.skin-4-5 .menu-list-container .menu-item:hover { box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.25); }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-1 { background-color: #b6c1dd; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-1 .img { background-position: center -126px; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-2 { background-color: #568ad0; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-2 .img { background-position: center 9px; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-3 { background-color: #c7dcee; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-3 .img { background-position: center -405px; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-4 { background-color: #0d4e91; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-4 .img { background-position: center -548px; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-5 { background-color: #d8d9db; }
+
+.skin-4-5 .menu-list-container .menu-item.menu-item-5 .img { background-position: center -270px; }
+
+/* index end */
+
+/* manage start */
+
+/* manage end */
