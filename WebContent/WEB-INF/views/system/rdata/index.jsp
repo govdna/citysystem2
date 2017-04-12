@@ -355,7 +355,7 @@ $("input[name='value1']").blur(function (){
   if($("input[name='value1']").val()==""){
     return;
   }
-  jQuery.post("${base}/backstage/dataElement/validation",{"classType":1,"chName":$("input[name='value1']").val(),"id":$("input[name='id']").val()},function(data){
+  jQuery.post("${base}/backstage/dataElement/validation",{"classType":1,"chName":$("input[name='value1']").val(),"value8":$("select[name='value8']").val(),"id":$("input[name='id']").val()},function(data){
     if(data.results==1){
       layer.msg("此中文名称已存在，请重新填写");
       $("input[name='value1']").val("");
