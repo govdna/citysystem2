@@ -101,6 +101,9 @@
       <if test="param.isDeleted != null" >  and
         isDeleted = #{param.isDeleted,jdbcType=NUMERIC}
       </if>
+      <if test="param.value1 != null and param.value1 !=''" >  and
+        value1 = #{param.value1,jdbcType=VARCHAR}
+      </if>     
   	</sql>
 	<select id="find" resultMap="base" parameterType="GovApplicationSystem">
 		SELECT  <include refid="Base_Column_List" />

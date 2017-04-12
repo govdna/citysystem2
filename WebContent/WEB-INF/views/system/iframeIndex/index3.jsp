@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="com.govmade.common.utils.ServiceUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+pageContext.setAttribute("jsa", ServiceUtil.getService("CompanyService").find(ServiceUtil.buildBean("Company@isDeleted=0")));
+%>
 <!DOCTYPE html >
 <html lang="en">
 
@@ -9,6 +12,7 @@
 <link rel="stylesheet" href="${base}/static/js/bootstrap-select/css/bootstrap-select.min.css">
 </head>
 <style>
+.bootstrap-select.btn-group .dropdown-menu.inner {max-width: 300px;}
   .tabsNav .item .title {
     margin: 0;
     padding: 15px 0 15px 10px;
@@ -49,6 +53,14 @@ h3 {font-size: 16px; font-weight: 600;}
     	    <div class="row">
     	        <div class="col-sm-12">
                 <h3 class="title">排行榜</h3>
+                <div class="pull-right multiselect">
+                    <select id="testSelect" class="selectpicker"  multiple data-hide-disabled="true" data-size="5">
+                      <c:forEach items="${jsa}" var="company" >
+                      <option value="${company.id}">${company.companyName}</option>
+                      </c:forEach>
+                    </select>
+                    <button class="btn btn-default firstSubmit" type="button">提交</button>
+                </div>
     	            <div class="ibox float-e-margins">
     	                <div class="ibox-content">
     	                    <div class="echarts" id="main1"></div>
@@ -120,6 +132,15 @@ h3 {font-size: 16px; font-weight: 600;}
  $('.selectpicker').selectpicker({
     maxOptions: 5
   });
+ $('.firstSubmit').click(function(){
+  var arr = [];
+	 $(this).prev().find('option').each(function(index, value) {
+    if ($(this).prop('selected')) {
+      arr.push($(this).val());
+    }
+	 });
+   console.log(arr);
+ });
 </script>
 <script>
   var myChart1 = echarts.init(document.getElementById('main1'));

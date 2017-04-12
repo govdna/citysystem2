@@ -1,7 +1,6 @@
 package com.govmade.controller.system.application;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +18,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.govmade.adapter.appAdapter;
 import com.govmade.adapter.object2excel.Application2ExcelAdapter;
+import com.govmade.common.ajax.AjaxRes;
 import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.DataHandlerUtil;
-import com.govmade.common.utils.SecurityUtil;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.base.Const;
+import com.govmade.common.utils.poi.ExcelUtil;
 import com.govmade.common.utils.poi.Object2ExcelUtil;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
-import com.govmade.entity.base.IdBaseEntity;
 import com.govmade.entity.system.application.GovApplicationSystem;
 import com.govmade.entity.system.computer.GovComputerRoom;
 import com.govmade.entity.system.customFields.SimpleFields;
@@ -390,6 +394,43 @@ public class GovApplicationSystemController extends GovmadeBaseController<GovApp
 		res.getWriter().flush();
 		res.getWriter().close();
 		return null;
+	}
+	
+	@RequestMapping("import")
+	@ResponseBody
+	public AjaxRes importapp(@RequestParam(value = "file", required = false) MultipartFile file, Model model,HttpServletRequest request) {
+		AjaxRes ar = getAjaxRes();
+		try {
+			String path = request.getSession().getServletContext().getRealPath("upload/excel");
+			String fileName = file.getOriginalFilename().trim();
+			String icon = System.currentTimeMillis() + "/";
+			File targetFile = new File(path + "/" + icon, fileName);
+			if (!targetFile.exists()) {
+				targetFile.mkdirs();
+			}
+			file.transferTo(targetFile);
+			appAdapter adapter = new appAdapter();
+			ExcelUtil excelUtil = new ExcelUtil(adapter);
+			excelUtil.excelToList(targetFile.getAbsolutePath(),0);
+			if (adapter.isError()) {
+				ar.setRes(Const.FAIL);
+			} else {
+				try {
+					for (GovApplicationSystem dm : adapter.getEntityList()) {
+						service.insert(dm);
+					}
+					ar.setRes(Const.SUCCEED);
+				} catch (Exception e) {
+					ar.setRes(Const.FAIL);
+					e.printStackTrace();
+				}
+			}
+			ar.setResMsg(adapter.getErrorMsg().toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			ar.setFailMsg(Const.DATA_FAIL);
+		}
+		return ar;
 	}
 	
 }
