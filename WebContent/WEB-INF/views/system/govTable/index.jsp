@@ -504,6 +504,7 @@ function import2InfoRes(id,unid){
 	$('input[name="value14"]').val(getNowFormatDate());
 	 var data = $(dicList).bootstrapTable('getRowByUniqueId', unid);
 	$('input[name="companyId"]').val(data.companyId);
+	$('input[name="value3"]').val(data.companyId);
     $('#infor_form input[name="value1"]').val(data.value2);
     $('#infor_form').valid();
 	checkedIds = ",";
