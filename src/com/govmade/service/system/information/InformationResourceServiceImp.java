@@ -122,6 +122,11 @@ public class InformationResourceServiceImp extends GovmadeBaseServiceImp<Informa
 		List<InformationResource> list2= informationResourceDao.countInforTypes2(info);
 		List<InformationResource> list3= informationResourceDao.countInforTypes3(info);
 		
+		
+		List<InformationResource> blist2= informationResourceDao.countBinforTypes2(info);
+		List<InformationResource> blist3= informationResourceDao.countBinforTypes3(info);
+		
+		
 		Map<Integer, Integer> map=new HashMap<Integer, Integer>();
 		for(InformationResource infor:list2){
 			map.put(infor.getInforTypes2(), infor.getStatus());
@@ -130,9 +135,26 @@ public class InformationResourceServiceImp extends GovmadeBaseServiceImp<Informa
 		for(InformationResource infor:list3){
 			map.put(infor.getInforTypes3(), infor.getStatus());
 		}
+		
+		for(InformationResource infor:blist2){
+			addCount(map,infor.getBinforTypes2(), infor.getStatus());
+		}
+		
+		for(InformationResource infor:blist3){
+			addCount(map,infor.getBinforTypes3(), infor.getStatus());
+		}
+		
 		return map;
 	}
 
+	
+	private void addCount(Map<Integer, Integer> map,Integer key,Integer value){
+		if(map.containsKey(key)){
+			map.put(key, map.get(key)+value);
+		}else{
+			map.put(key, value);
+		}
+	}
 	@Override
 	public Map<String, Integer> countValue3(InformationResource info) {
 		List<InformationResource> list2= informationResourceDao.countValue3(info);

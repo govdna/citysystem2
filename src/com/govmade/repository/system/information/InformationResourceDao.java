@@ -170,6 +170,26 @@ public interface InformationResourceDao extends GovmadeBaseDao<InformationResour
 	*/ 
 	public List<InformationResource> countInforTypes3(InformationResource info);
 	
+	/** 
+	* @Title: countInforTypes 
+	* @Description: TODO(统计每个项下的信息资源数量) 
+	* @param @param info
+	* @param @return    设定文件 
+	* @return List<InformationResource>    返回类型 
+	* 2017年4月11日    日期   
+	*/ 
+	public List<InformationResource> countBinforTypes2(InformationResource info);
+	
+	/** 
+	* @Title: countInforTypes 
+	* @Description: TODO(统计每个目下的信息资源数量) 
+	* @param @param info
+	* @param @return    设定文件 
+	* @return List<InformationResource>    返回类型 
+	* 2017年4月11日    日期   
+	*/ 
+	public List<InformationResource> countBinforTypes3(InformationResource info);
+	
 	
 	public  List<InformationResource> countValue3(InformationResource infor);
 	

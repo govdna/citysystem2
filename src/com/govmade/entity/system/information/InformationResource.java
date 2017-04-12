@@ -56,6 +56,11 @@ public class InformationResource extends IdBaseEntity{
 	private Integer inforTypes2;
 	private Integer inforTypes3;
 	private Integer inforTypes4;
+	private Integer binforTypes;
+	private Integer binforTypes2;
+	private Integer binforTypes3;
+	private Integer binforTypes4;
+	
 	private String dataElementId;// 一对多数据元
 	private String reason;//审核不通过理由
    /* 0、审核通过，已发布
@@ -68,6 +73,30 @@ public class InformationResource extends IdBaseEntity{
 	private Integer sourceType=0;//来源 0新增1模版导入2excel导入3表生成4数据库导入
 	private List<DataElement> dataElementList;
 	   
+	public Integer getBinforTypes() {
+		return binforTypes;
+	}
+	public void setBinforTypes(Integer binforTypes) {
+		this.binforTypes = binforTypes;
+	}
+	public Integer getBinforTypes2() {
+		return binforTypes2;
+	}
+	public void setBinforTypes2(Integer binforTypes2) {
+		this.binforTypes2 = binforTypes2;
+	}
+	public Integer getBinforTypes3() {
+		return binforTypes3;
+	}
+	public void setBinforTypes3(Integer binforTypes3) {
+		this.binforTypes3 = binforTypes3;
+	}
+	public Integer getBinforTypes4() {
+		return binforTypes4;
+	}
+	public void setBinforTypes4(Integer binforTypes4) {
+		this.binforTypes4 = binforTypes4;
+	}
 	public String getValue1() {
 		return value1;
 	}

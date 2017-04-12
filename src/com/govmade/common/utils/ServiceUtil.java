@@ -546,7 +546,9 @@ public class ServiceUtil implements ApplicationContextAware {
 	*/ 
 	public static Object findServiceValue(String serviceName,String po,String field){
 		List list=getService(serviceName).find(buildBean(po));
+	
 		if(list!=null&&list.size()>0){
+			System.out.println("listsize"+list.size());
 			return ObjectUtil.getFieldValueByName(field, list.get(0));
 		}
 		return null;

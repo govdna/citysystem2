@@ -197,8 +197,8 @@ $("input[name='sortName']").blur(function (){
   jQuery.post("${base}/backstage/sortManager/validation",{"sortName":$("input[name='sortName']").val(),"id":$("input[name='id']").val(),"level":$("input[name='level']").val(),type:3},function(data){
     data=JSON.parse(data); 
     if(data.results==1){
-      layer.msg("名称已存在，请重新填写");
-      $("input[name='sortName']").val("");
+     // layer.msg("名称已存在，请重新填写");
+      //$("input[name='sortName']").val("");
     }
   });
 });
@@ -208,8 +208,8 @@ $("input[name='sortCode']").blur(function (){
   jQuery.post("${base}/backstage/sortManager/validation",{"sortCode":$("input[name='sortCode']").val(),"id":$("input[name='id']").val(),type:3},function(data){
     data=JSON.parse(data); 
     if(data.results==1){
-      layer.msg("代码已存在，请重新填写");
-      $("input[name='sortCode']").val("");
+     // layer.msg("代码已存在，请重新填写");
+      //$("input[name='sortCode']").val("");
     }
   });
 });
