@@ -646,6 +646,57 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		res.getWriter().close();
 	}
 	
+	@RequestMapping(value="dataInforSelect")
+	public void dataInforSelect(Company c,GovServer s,DataElement d,InformationResource i,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		res.setCharacterEncoding("utf-8");		
+		String[] ids = s.getValue1().split(",");		
+		JSONObject echartjson = new JSONObject();
+		int lsize = ids.length;
+		if(lsize>0){
+			String[] strArray =  new String[lsize];
+			int[] dataArray = new int[lsize]; 
+			int[] inforArray = new int[lsize];
+			int[] openArray = new int[lsize]; 
+			int[] shareArray = new int[lsize];
+			int index = 0;
+			for(String cid : ids){
+				c.setId(Integer.valueOf(cid));
+				List<Company> companies = companyservice.find(c,"id","asc");
+				strArray[index] = companies.get(0).getCompanyName();
+				d.setValue8(cid);
+				d.setStatus(0);
+				d.setIsDeleted(0);
+				dataArray[index] = dataElementService.count(d);
+				i.setValue3(cid);
+				i.setIsDeleted(0);
+				i.setStatus(0);
+				inforArray[index] = informationResourceService.count(i);
+				InformationResource informationRes = new InformationResource();
+				informationRes.setValue3(cid);	
+				informationRes.setValue11("1");
+				informationRes.setIsDeleted(0);
+				informationRes.setStatus(0);
+				openArray[index] = informationResourceService.count(informationRes);
+				InformationResource informationResource = new InformationResource();
+				informationResource.setValue3(cid);
+				informationResource.setStatus(0);
+				informationResource.setId(0);
+				informationResource.setValue8("1");
+				shareArray[index] = informationResourceService.count(informationResource);
+				index++;						
+			}
+			echartjson.put("legend", strArray);
+			echartjson.put("data", dataArray);
+			echartjson.put("infor", inforArray);
+			echartjson.put("open", openArray);
+			echartjson.put("share", shareArray);
+		}		
+		res.getWriter().write(echartjson.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+	}
+	
 	@RequestMapping(value="openShare")
 	public void openShare(Company c,InformationResource i,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
@@ -902,7 +953,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					"    gov_company\n" +
 					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
 					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.inforTypes = 42\n" +
+					"  AND gov_information_resource_main.inforTypes = 1\n" +
 					"  AND gov_information_resource_main.isDeleted = 0\n" +
 					"  WHERE\n" +
 					"    gov_company.isDeleted = 0\n" +
@@ -922,7 +973,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					"    gov_company\n" +
 					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
 					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.inforTypes = 301\n" +
+					"  AND gov_information_resource_main.inforTypes = 0\n" +
 					"  AND gov_information_resource_main.isDeleted = 0\n" +
 					"  WHERE\n" +
 					"    gov_company.isDeleted = 0\n" +
@@ -969,6 +1020,52 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	@RequestMapping("unionsSelect")
+	public void unionsSelect(GovServer s,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		String[] ids = s.getValue1().split(",");
+		JSONObject json = new JSONObject();
+		JSONObject Ejson = new JSONObject();
+		JSONArray jsa = new JSONArray();
+		List<String > list= new ArrayList<String >();
+		Company c = new Company();
+		c.setIsDeleted(0);
+		DataElement da = new DataElement();
+		da.setIsDeleted(0);
+		InformationResource in = new InformationResource();
+		InformationResource in1 = new InformationResource();
+		InformationResource in2 = new InformationResource();
+		in.setIsDeleted(0);
+		in.setStatus(0);
+		in1.setIsDeleted(0);
+		in1.setStatus(0);
+		in2.setIsDeleted(0);
+		in2.setStatus(0);
+		for(String id : ids) {
+			da.setValue8(id);
+			in.setValue3(id);
+			in1.setValue3(id);
+			in2.setValue3(id);
+			in1.setInforTypes(1);
+			in2.setInforTypes2(2);
+			c.setId(Integer.valueOf(id));
+			Company cm = companyservice.findById(c);
+			int[] arr3=new int[]{informationResourceService.count(in),dataElementService.count(da),informationResourceService.count(in2),informationResourceService.count(in1)};
+			json.put("value", arr3);
+			json.put("name", cm.getCompanyName());
+			list.add(cm.getCompanyName());
+			jsa.add(json);
+		}
+		String[] arr3=new String[]{"信息资源","数据元","主题库","基础库"};
+		Ejson.put("sdata", jsa);
+		Ejson.put("keyCity", list);
+		Ejson.put("xpoint", arr3);
+		res.getWriter().write(Ejson.toString());
+		res.getWriter().flush();
+		res.getWriter().close();	
 	}
 	
 	@RequestMapping(value="muban")
