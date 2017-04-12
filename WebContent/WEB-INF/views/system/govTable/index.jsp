@@ -57,6 +57,7 @@ cursor: pointer !important;
    <div id="infor_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal eform1" id="infor_form">
       <input type="hidden" name="tableId" />
+      <input type="hidden" name="companyId" />
       <!-- form input封装 -->
      <%@include file="../information/resource/form.jsp"%>
       <!-- form input封装 结束-->
@@ -502,7 +503,7 @@ function import2InfoRes(id,unid){
 	$('input[name="tableId"]').val(id);
 	$('input[name="value14"]').val(getNowFormatDate());
 	 var data = $(dicList).bootstrapTable('getRowByUniqueId', unid);
-	    
+	$('input[name="companyId"]').val(data.companyId);
     $('#infor_form input[name="value1"]').val(data.value2);
     $('#infor_form').valid();
 	checkedIds = ",";

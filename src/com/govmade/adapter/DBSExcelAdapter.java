@@ -8,7 +8,10 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.poi.ExcelAdapter;
+import com.govmade.common.utils.security.AccountShiroUtil;
+import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.entity.system.dict.GovmadeDic;
+import com.govmade.entity.system.organization.Company;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.entity.system.tablex.GovTableField;
 
@@ -26,7 +29,8 @@ import com.govmade.entity.system.tablex.GovTableField;
 public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 	private Map<String, String> yesOrNo = new HashMap<String, String>();
 	private Map<String,GovTable> tableMap=new HashMap<String,GovTable>();
-	private Set<String> databaseSet=new HashSet<String>();
+	private Map<String,GovDatabase> databaseMap=new HashMap<String,GovDatabase>();
+	private Map<String,String> companyname=new HashMap<String, String>();
 	
 	private void initDic() {
 		if (yesOrNo.size() > 0) {
@@ -36,12 +40,17 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 		for (GovmadeDic d : dic) {
 			yesOrNo.put(d.getDicValue(), d.getDicKey());
 		}
+		Company com=new Company();
+		List<Company> company=(List<Company>)ServiceUtil.getService("CompanyService").find(com);
+		for(Company c:company){
+			companyname.put(c.getCompanyName(), c.getId()+"");
+		}
 
 	}
 
 	@Override
 	public int getClumnSize() {
-		return 13;
+		return 14;
 	}
 
 	@Override
@@ -65,11 +74,34 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 		//value11 默认值 11
 		//value12 是否外键 11
 		GovTableField field = new GovTableField();
-		databaseSet.add(clumns[0].trim());
+		
 		GovTable gt=new GovTable();
 		gt.setValue1(clumns[1].trim());
 		gt.setValue2(clumns[2].trim());
 		gt.setValue3(clumns[0].trim());
+		if(StringUtils.isNotEmpty(clumns[13])) {
+			if(companyname.get(clumns[13])==null){
+				appendMsg("不存在该部门！");
+				setError(true);
+			}else{
+				if(!databaseMap.containsKey(clumns[0].trim())){
+					GovDatabase base =new GovDatabase();
+					base.setValue1(clumns[0].trim());
+					base.setCompanyId(Integer.valueOf(companyname.get(clumns[13].trim())));
+					databaseMap.put(clumns[0].trim(),base);
+				}
+				gt.setCompanyId(Integer.valueOf(companyname.get(clumns[13].trim())));
+			}
+		}else{
+			gt.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
+			if(!databaseMap.containsKey(clumns[0].trim())){
+				GovDatabase base =new GovDatabase();
+				base.setValue1(clumns[0].trim());
+				base.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
+				databaseMap.put(clumns[0].trim(),base);
+			}
+		}
+		
 		if(tableMap.get(clumns[0].trim()+"?"+clumns[1].trim())==null){
 			tableMap.put(clumns[0].trim()+"?"+clumns[1].trim(), gt);
 		}
@@ -86,6 +118,18 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 		field.setValue8(clumns[8].trim());
 		field.setValue8(clumns[8].trim());
 		field.setValue11(clumns[11].trim());
+		
+		if(StringUtils.isNotEmpty(clumns[13])) {
+			if(companyname.get(clumns[13])==null){
+				appendMsg("不存在该部门！");
+				setError(true);
+			}else{
+				field.setCompanyId(Integer.valueOf(companyname.get(clumns[13].trim())));
+			}
+		}else{
+			field.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
+		}
+		
 		if (StringUtils.isNotEmpty(clumns[9])) {
 			if (yesOrNo.get(clumns[9].trim()) != null) {
 				field.setValue9(yesOrNo.get(clumns[9].trim()));
@@ -113,12 +157,13 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 		
 	}
 
-	public Set<String> getDatabaseSet() {
-		return databaseSet;
+
+	public Map<String, GovDatabase> getDatabaseMap() {
+		return databaseMap;
 	}
 
-	public void setDatabaseSet(Set<String> databaseSet) {
-		this.databaseSet = databaseSet;
+	public void setDatabaseMap(Map<String, GovDatabase> databaseMap) {
+		this.databaseMap = databaseMap;
 	}
 
 	public Map<String, GovTable> getTableMap() {
