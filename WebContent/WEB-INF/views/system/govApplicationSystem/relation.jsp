@@ -44,7 +44,7 @@
        <div class="form-group">
         <label class="col-sm-3 control-label">部署服务器：</label>
         <div class="col-sm-7">
-          <select name="value5" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
+          <select name="value5" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" >
             <option value=""></option>
             <c:forEach var="obj" items="<%=ServiceUtil.getService(\"GovServerService\").find(ServiceUtil.buildBean(\"GovServer@isDeleted=0\"),\"id\",\"desc\") %>">
             <option value="${obj.id}">${obj.value1}</option>
@@ -55,7 +55,7 @@
        <div class="form-group">
         <label class="col-sm-3 control-label">部署存储器：</label>
         <div class="col-sm-7">
-          <select name="value6" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
+          <select name="value6" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" >
             <option value=""></option>
             <c:forEach var="obj" items="<%=ServiceUtil.getService(\"GovMemorizerService\").find(ServiceUtil.buildBean(\"GovMemorizer@isDeleted=0\"),\"id\",\"desc\") %>">
             <option value="${obj.id}">${obj.value1}</option>
