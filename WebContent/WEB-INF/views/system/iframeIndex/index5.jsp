@@ -82,8 +82,8 @@ myChart.on('mapSelected', function (param){
 });
 option = {
     title: {
-        text : '中国',
-        subtext : 'china （海南）'
+        text : '海南',
+        subtext : '海南'
     },
     tooltip : {
         trigger: 'item',
@@ -95,13 +95,13 @@ option = {
         max: 1000,
         color:['orange','yellow'],
         text:['高','低'],// 文本，默认为数值文本
-        calculable : true
+        calculable : false
     },
     series : [
         {
             name: '随机数据',
             type: 'map',
-            mapType: 'china',
+            mapType: '海南',
             selectedMode : 'single',
             itemStyle:{
                 normal:{label:{show:true}},

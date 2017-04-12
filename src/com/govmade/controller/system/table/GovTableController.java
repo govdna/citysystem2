@@ -59,7 +59,7 @@ import net.sf.json.JSONObject;
 
 /**
  * @author (作者) Dong Jie 154046519@qq.com
- * @Description: citysystem_hainan 数据表
+ * @Description: CitySystem_Oracle 数据表
  * @date 2017年3月14日 上午9:49:07
  * @company (开发公司) 国脉海洋信息发展有限公司
  * @copyright (版权) 本文件归国脉海洋信息发展有限公司所有
@@ -285,30 +285,30 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 							tf.setValue3(tb.getId() + "");
 							tf.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
 							tf.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
-							DataElement de = new DataElement();
-							de.setClassType(1);
-							de.setChName(tf.getValue2());
-							de.setSourceType(4);
-							dataElementService.setIdentifier(de);
-							if(StringUtils.isNotEmpty(tf.getValue5())){
-								for(GovmadeDic dic:dicList){
-									if(dic.getDicKey().contains("/"+tf.getValue5().trim().toUpperCase()+"/")){
-										de.setValue4(dtMap.get(dic.getDicValue()));
-										break;
-									}
-								}
-							}
-						
-							//
-							//de.setDataType(tf.getValue5());
-							de.setValue2(tf.getValue1());
-							de.setValue7(tf.getValue6());
-							de.setValue8(""+AccountShiroUtil.getCurrentUser().getCompanyId());
-							
-							de.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
-							de.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
-							dataElementService.insert(de);
-							tf.setDataElementId(de.getId());
+//							DataElement de = new DataElement();
+//							de.setClassType(1);
+//							de.setChName(tf.getValue2());
+//							de.setSourceType(4);
+//							dataElementService.setIdentifier(de);
+//							if(StringUtils.isNotEmpty(tf.getValue5())){
+//								for(GovmadeDic dic:dicList){
+//									if(dic.getDicKey().contains("/"+tf.getValue5().trim().toUpperCase()+"/")){
+//										de.setValue4(dtMap.get(dic.getDicValue()));
+//										break;
+//									}
+//								}
+//							}
+//						
+//							//
+//							//de.setDataType(tf.getValue5());
+//							de.setValue2(tf.getValue1());
+//							de.setValue7(tf.getValue6());
+//							de.setValue8(""+AccountShiroUtil.getCurrentUser().getCompanyId());
+//							
+//							de.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
+//							de.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
+//							dataElementService.insert(de);
+//							tf.setDataElementId(de.getId());
 							tfList.add(tf);
 							
 						}
@@ -443,4 +443,62 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 	}
 
 
+	@RequestMapping(value = "fields2DataElement")
+	public String fields2DataElement(String id, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		JSONObject ar = new JSONObject();	
+		
+		if(StringUtils.isNotEmpty(id)){
+			String [] ids=id.split(",");
+			List<GovmadeDic> dicList=ServiceUtil.getDicByDicNum("TABLETODATATYPE");
+			for(GovmadeDic dic:dicList){
+				dic.setDicKey("/"+dic.getDicKey().trim().toUpperCase()+"/");
+			}
+			List<GovmadeDic> dtList=ServiceUtil.getDicByDicNum("DATATYPE");
+			Map<String,String> dtMap=new HashMap<String,String>();
+			for(GovmadeDic d:dtList){
+				dtMap.put(d.getDicValue(), d.getDicKey());
+			}
+			
+			for(String idStr:ids){
+				if(StringUtils.isNotEmpty(idStr)&&StringUtils.isNumeric(idStr)){
+					int dId=Integer.valueOf(idStr);
+					GovTableField field=new GovTableField();
+					field.setId(dId);
+					field=govTableFieldService.findById(field);
+					DataElement de = new DataElement();
+					de.setClassType(1);
+					de.setChName(field.getValue2());
+					de.setSourceType(4);
+					dataElementService.setIdentifier(de);
+					if(StringUtils.isNotEmpty(field.getValue5())){
+						for(GovmadeDic dic:dicList){
+							if(dic.getDicKey().contains("/"+field.getValue5().trim().toUpperCase()+"/")){
+								de.setValue4(dtMap.get(dic.getDicValue()));
+								break;
+							}
+						}
+					}
+				
+					de.setValue2(field.getValue1());
+					de.setValue7(field.getValue6());
+					de.setValue8(""+field.getCompanyId());
+					de.setCompanyId(field.getCompanyId());
+					de.setGroupId(field.getGroupId());
+					dataElementService.insert(de);
+					field.setDataElementId(de.getId());
+					govTableFieldService.update(field);
+				}
+			}
+			
+		}
+		ar.put("code", Const.SUCCEED);
+		res.getWriter().write(ar.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
+	}
+	
+	
 }

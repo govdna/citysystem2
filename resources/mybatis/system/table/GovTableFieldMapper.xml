@@ -206,6 +206,7 @@
 		update gov_table_field
 		set 
 		time_modified = #{timeModified,jdbcType=TIMESTAMP},
+		data_element_id=#{dataElementId,jdbcType=NUMERIC},
 		value1=#{value1,jdbcType=VARCHAR},
 		value2=#{value2,jdbcType=VARCHAR},
 		value3=#{value3,jdbcType=VARCHAR},

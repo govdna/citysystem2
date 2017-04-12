@@ -140,12 +140,114 @@ cursor: pointer !important;
       </div>
   </div>
   
+  <!-- 新增数据元 -->		
+	<div id="data_form" style="display: none;" class="ibox-content">
+		<form method="post" class="form-horizontal" id="dataform"  >
+			<input type="hidden" name="id"  class="form-control">
+			<input type="hidden" name="idForShow"  class="form-control">
+			<input type="hidden" name="identifier"  class="form-control">
+			<input type="hidden" name="imported"  class="form-control">
+			<input type="hidden" name="sourceId"  class="form-control">
+			<input type="hidden" name="fatherId"  class="form-control">	
+			<input type="hidden" name="companyId"  class="form-control">	
+			<div class="form-group">
+				<label class="col-sm-3 control-label">中文名称：</label>
+				<div class="col-sm-7">
+					<input type="text" name="chName"  class="form-control" required>
+				</div>
+			</div>			
+			<div class="form-group">
+				<label class="col-sm-3 control-label">英文名称：</label>
+				<div class="col-sm-7">
+					<input type="text" name="egName"  class="form-control" >
+				</div>
+			</div>			
+			
+			<div class="form-group">
+				<label class="col-sm-3 control-label">定义：</label>
+				<div class="col-sm-7">
+					<input type="text" name="define" class="form-control" >
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">数据类型：</label>
+				<div class="col-sm-7">
+					<select name="dataType" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" >
+                        <option value=""></option>
+                        <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"DATATYPE\") %>">
+                        <option value="${obj.dicKey}">${obj.dicValue}</option>
+                        </c:forEach>
+                 </select>  
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">数据长度：</label>			
+				<div class="col-sm-7">
+					<input type="text" name="dataFormat" class="form-control" >
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">对象类型：</label>
+				<div class="col-sm-7">
+					<select name="objectType" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
+                                    <option value=""></option>
+                                    <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"OBJECTTYPE\") %>">
+                                    <option value="${obj.dicKey}">${obj.dicValue}</option>
+                                    </c:forEach>
+                             </select> 
+				</div>
+			</div>
+		   <div class="form-group">
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-7">
+					<input type="text" name="notes" class="form-control" >
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">来源部门：</label>
+				<div class="col-sm-7">
+					  <select id="deCompanyId" name="value8" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" >
+                             <option value=""></option>
+			                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"))%>">
+			                  <option value="${obj2.id}">${obj2.companyName}</option>
+                            </c:forEach>
+                     </select>  
+				</div>
+			</div>
+		</form>
+	</div>
+<!-- 新增数据元 -->	
+  
+  <!--提示未导入的数据元开始-->
+  <div id="notAddedDataElement" class="form-horizontal"
+    style="overflow: hidden; display: none;">
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <div class="alert alert-danger">
+                 下列数据元还未导入，如需使用下列数据元，请先导入！   
+        </div>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div style="text-align:right;padding-right:10px;">
+        <button type="button" id="importAll_btn" class="btn btn-primary btn-sm" onclick="importRow(this,1)"><i class="fa fa-download"></i>&nbsp;全部导入</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--提示未导入的数据元结束-->
+  
+  
 </body>
 </html>
 <%@include file="../common/includeJS.jsp"%>
 <script src="${base}/static/js/plugins/webuploader/webuploader.min.js"></script>
 <script>
-var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
+var userCompanyId = "<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>";
+var cdata = {"companyId":userCompanyId};
 var layerIndex;//layer 窗口对象
 var title_name="数据表";
 var layerContent='#layer_form';//layer窗口主体内容dom Id
@@ -270,7 +372,7 @@ function doFormatter(value, row, index)
 	html+='<button type="button" class="btn btn-white" id="edit"  onclick="editRow(\''+row.idForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;修改</button>';
 	html+='<button type="button" class="btn btn-white" onclick="deleteRow(\''+row.idForShow+'\')"><i class="fa fa-trash"></i>&nbsp;删除</button>';
 	if(typeof(row.inforResId)=="undefined"||row.inforResId==""){
-		html+='<button type="button" class="btn btn-white" onclick="import2InfoRes('+row.id+',\''+row.idForShow+'\')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成信息资源</button>';
+		html+='<button type="button" class="btn btn-white" onclick="checkFields('+row.id+',\''+row.idForShow+'\')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成信息资源</button>';
 	}
 	html+='<button type="button" class="btn btn-white" onclick="createSql('+row.id+')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成sql</button>';
 	html+='</div>';
@@ -335,6 +437,53 @@ $('select[name="value11"]').on('change', function(e, params) {
 
 
 var layerIndex;
+var notLayer;
+var tableId_im;
+var tableUnId_im;
+function checkFields(id,unid){
+	tableId_im=id;
+	tableUnId_im=unid;
+
+	 jQuery.get("${base}/backstage/govTableField/listAjax",{value3 : id},function(r){
+		 var html = '';
+         r = r.rows;
+         for (var i = 0; i < r.length; i++) {
+           if (typeof(r[i].dataElementId)=='undefined'||r[i].dataElementId==='') {
+             	html += '<tr><td>'
+                 + r[i].value1
+                 + '</td><td>'
+                 + r[i].value2
+                 + '</td><td>';
+                 html+='<button type="button" class="btn btn-white btn-sm" data-id="'+r[i].id+'" data-idForShow="'+r[i].idForShow+'" data-type="importDE" onclick="importRow(this);"><i class="fa fa-download"></i>&nbsp;导入</button>';
+                 
+                 html +='</td></tr>';
+           }
+         }
+         
+         //未导入数据元处理
+         if (html != '') {
+           $('#importAll_btn').show();
+           notLayer=layer.open({
+             type : 1,
+             shade : false,
+             area: ['450px', '70%'], //宽高
+              
+             offset: '40px',
+             scrollbar : false,
+             title : '提示', //不显示标题
+             cancel: function(index, layero){ 
+            	 import2InfoRes(id,unid);
+           	  return true; 
+           	},
+             content : $('#notAddedDataElement')
+           });
+           $('#notAddedDataElement tbody').html(html);
+         }else{
+        	 import2InfoRes(id,unid);
+         }
+		 
+	 },'json');
+}
 //生成信息资源
 function import2InfoRes(id,unid){
 	$('#infor_form').form('clear');
@@ -432,7 +581,7 @@ var DETableFInit = function() {
       detailView: false,
       queryParamsType: "limit", //参数格式,发送标准的RESTFul类型的参数请求  //是否显示父子表
 	  onLoadSuccess:function(data){
-          
+		  checkedIds=",";
           if(typeof(data.rows)!="undefined"){
             dataEles=data.rows;
             for(var i=0;i<dataEles.length;i++){
@@ -484,11 +633,89 @@ function doFormatter2(value, row, index) {
       html += '<button type="button" class="btn btn-white" onclick="detail(\''
         + row.idForShow + '\',\'#dm2\',\'\')">查看</button>';
     }
+    if(row.companyId==userCompanyId){
+    	html += '<button type="button" class="btn btn-white" onclick="deEdit(\''
+            + row.idForShow + '\',0)">编辑</button>';
+    }
+    html += '</div>';
+    return html;
+  }
+function doFormatter22(value, row, index) {
+    var html = '';
+    html += '<div class="btn-group">';
+    if(row.status==4){
+      html +='已注销';
+    }else{
+      html += '<button type="button" class="btn btn-white" onclick="detail(\''
+        + row.idForShow + '\',\'#dm2\',\'\')">查看</button>';
+    }
+    if(row.companyId==userCompanyId){
+    	html += '<button type="button" class="btn btn-white" onclick="deEdit(\''
+            + row.idForShow + '\',1)">编辑</button>';
+    }
     html += '</div>';
     return html;
   }
 
 
+var dataLayerIndex;
+function openDataLayer() {
+	$('#dataform').form('clear');
+	$('#deCompanyId').val(cdata.companyId);
+	$(".chosen-select").trigger("chosen:updated");
+	  //initChosen();
+	 $('#dataform').valid();
+	dataLayerIndex = layer.open({
+		type : 1,
+		area : [ '50%', '80%' ], //宽高
+		title : '新增信息项',
+		scrollbar : false,
+		btn : [ '保存', '关闭' ],
+		yes : function(index, layero) {
+			$('#dataform').submit();
+		},
+		offset : '20px',
+		content : $('#data_form')
+	});	
+}
+
+$('#dataform').form({
+	  url: "${base}/backstage/govRdataElement/insertAjax",
+	  onSubmit: function() {
+	    return $('#dataform').valid();
+	  },
+	  success: function(result) {
+		  var r = eval('(' + result + ')');
+		  var id=r.show;
+		   $('#infor_de_table').bootstrapTable('refresh');
+		   $('#dm3').bootstrapTable('refresh');
+		   layer.close(dataLayerIndex);
+			  //setTimeout(function () {
+    			  //checkData(id);
+			//  }, 300);
+	  }
+	});
+function deEdit(id,i){
+	openDataLayer();
+	layer.title('信息项修改', layerIndex);
+	if(i==0){
+		var data=$('#infor_de_table').bootstrapTable('getRowByUniqueId', id);
+	}else {
+		var data=$('#dm3').bootstrapTable('getRowByUniqueId', id);
+	}
+	$('#dataform').form('load',data);
+	$(".chosen-select").trigger("chosen:updated");
+	$('#dataform').valid();
+}
+function checkData(idforshow){
+	
+	//console.log("idforshow",idforshow[0].id);
+	checkedIds=","+idforshow[0].id+","+checkedIds;
+	dataEles.push(idforshow[0]);
+	initDataElements();
+	$('#infor_de_table').bootstrapTable('refresh');
+	$('#dm3').bootstrapTable('refresh');
+}
 
 
 
@@ -573,13 +800,10 @@ var TableInit3 = function() {
 
         field : 'chName',
         title : '中文名称'
-      },{
-        field : 'objectTypeForShow',
-        title : '对象类型'
       }, {
         field : 'id',
         title : '操作',
-        formatter : 'doFormatter2',//对本列数据做格式化    
+        formatter : 'doFormatter22',//对本列数据做格式化    
       } ]
     });
   };
@@ -618,6 +842,36 @@ function checkFormatter(value, row, index) {
         + row.chName + '" onclick="selectDE(this);"/>';
   }
   return html;
+}
+
+
+//数据元导入
+function importRow(t,isAll){
+  if(typeof(isAll)!="undefined"){
+    //全部导入
+    var ids=$('button[data-type="importDE"]');
+    var str="";
+    for(var i=0;i<ids.length;i++){
+      var id=$(ids[i]).attr('data-id');        
+      str+=id+',';
+    }
+    jQuery.post("${base}/backstage/govTable/fields2DataElement",{"id":str},function(){
+      layer.msg('导入成功');
+      layer.close(notLayer);
+      $('button[data-type="importDE"]').hide();
+      $('#importAll_btn').hide();
+ 	 import2InfoRes(tableId_im,tableUnId_im);
+    });
+  }else{
+    //导入单个
+    var id=$(t).attr('data-id');
+    
+    jQuery.post("${base}/backstage/govTable/fields2DataElement",{"id":id},function(){
+      layer.msg('导入成功');
+      //layer.close(layerIndex);
+      $(t).hide();
+    });
+  }
 }
 
 //选中信息项

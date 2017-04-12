@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -39,10 +40,16 @@ public class ExcelUtil {
 				// 将Excel中各行记录依次导入到ImpExcelBean的list中
 				if (row != null) {
 					String [] str=new String[adapter.getClumnSize()];
+					boolean isEmpty=true;
 					for(int j=0;j<adapter.getClumnSize();j++){
 						str[j]=getValue(row.getCell(j));
+						if(StringUtils.isNotEmpty(str[j].trim())){
+							isEmpty=false;
+						}
 					}
-					adapter.buildList(str,i);
+					if(!isEmpty){
+						adapter.buildList(str,i);
+					}
 				}
 			}
 
