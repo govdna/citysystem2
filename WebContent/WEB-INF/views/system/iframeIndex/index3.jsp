@@ -51,8 +51,8 @@ h3 {font-size: 16px; font-weight: 600;}
       <div class="tabs-container">
         <div class="item col-sm-12">
     	    <div class="row">
-    	        <div class="col-sm-12">
-                <h3 class="title">排行榜</h3>
+    	        <div class="col-sm-12 clearfix">
+                <h3 class="title pull-left">排行榜</h3>
                 <div class="pull-right multiselect">
                     <select id="testSelect" class="selectpicker"  multiple data-hide-disabled="true" data-size="5">
                       <c:forEach items="${jsa}" var="company" >
