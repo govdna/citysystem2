@@ -12,6 +12,7 @@ pageContext.setAttribute("jsa", ServiceUtil.getService("CompanyService").find(Se
 <link rel="stylesheet" href="${base}/static/js/bootstrap-select/css/bootstrap-select.min.css">
 </head>
 <style>
+.bootstrap-select.btn-group .dropdown-menu.inner {max-width: 300px;}
   .tabsNav .item .title {
     margin: 0;
     padding: 15px 0 15px 10px;
@@ -132,7 +133,13 @@ h3 {font-size: 16px; font-weight: 600;}
     maxOptions: 5
   });
  $('.firstSubmit').click(function(){
-	 console.info($('#testSelect option:selected').val());
+  var arr = [];
+	 $(this).prev().find('option').each(function(index, value) {
+    if ($(this).prop('selected')) {
+      arr.push($(this).val());
+    }
+	 });
+   console.log(arr);
  });
 </script>
 <script>
