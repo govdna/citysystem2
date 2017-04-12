@@ -49,7 +49,7 @@ display:none;
             		</c:otherwise>
         	
         	</c:choose>
-        	${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(informationResource.inforTypes),"sortName")}
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.inforTypes),"sortName")}
        		 </span>
        		 <span class="col-xs-1">&nbsp;</span>
        		<c:choose>
@@ -64,7 +64,7 @@ display:none;
             		</c:otherwise>
         	
         	</c:choose>
-        	${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(informationResource.inforTypes2),"sortName")}
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.inforTypes2),"sortName")}
        		 </span>
       </div>
       <div class="form-group">
@@ -81,7 +81,7 @@ display:none;
             		</c:otherwise>
         	
         	</c:choose>
-        	${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(informationResource.inforTypes3),"sortName")}
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.inforTypes3),"sortName")}
        		 </span>
        		 <span class="col-xs-1">&nbsp;</span>
        		<c:choose>
@@ -96,11 +96,76 @@ display:none;
             		</c:otherwise>
         	
         	</c:choose>
-        	${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(informationResource.inforTypes4),"sortName")}
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.inforTypes4),"sortName")}
        		 </span>
       </div>	
    
    
+   <div class="form-group">
+        <label class="col-xs-4 control-label" style="margin-top: 10px;text-align:right;">关联分类</label>
+        	<c:choose>
+        	<c:when test="${oldVersion!=null && oldVersion.binforTypes!=informationResource.binforTypes}">
+            			<div class="old-version" data-id="901">
+							之前版本：${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(oldVersion.binforTypes),"sortName")}
+       					</div>
+            			<span class="col-xs-3 dt-span has-change" onmouseout="layer.close(infoLayer);" onmouseover="showChange(901);" data-id="data901">
+            		</c:when>
+            		<c:otherwise>
+             				<span class="col-xs-3 dt-span">
+            		</c:otherwise>
+        	
+        	</c:choose>
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.binforTypes),"sortName")}
+       		 </span>
+       		 <span class="col-xs-1">&nbsp;</span>
+       		<c:choose>
+        	<c:when test="${oldVersion!=null && oldVersion.binforTypes2!=informationResource.binforTypes2}">
+            			<div class="old-version" data-id="902">
+							之前版本：${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(oldVersion.binforTypes2),"sortName")}
+       					</div>
+            			<span class="col-xs-3 dt-span has-change" onmouseout="layer.close(infoLayer);" onmouseover="showChange(902);" data-id="data902">
+            		</c:when>
+            		<c:otherwise>
+             				<span class="col-xs-3 dt-span">
+            		</c:otherwise>
+        	
+        	</c:choose>
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.binforTypes2),"sortName")}
+       		 </span>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-4 control-label">&nbsp;</label>
+        	<c:choose>
+        			<c:when test="${oldVersion!=null && oldVersion.binforTypes3!=informationResource.binforTypes3}">
+            			<div class="old-version" data-id="903">
+							之前版本：${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(oldVersion.binforTypes3),"sortName")}
+       					</div>
+            			<span class="col-xs-3 dt-span has-change" onmouseout="layer.close(infoLayer);" onmouseover="showChange(903);" data-id="data903">
+            		</c:when>
+            		<c:otherwise>
+             				<span class="col-xs-3 dt-span">
+            		</c:otherwise>
+        	
+        	</c:choose>
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.binforTypes3),"sortName")}
+       		 </span>
+       		 <span class="col-xs-1">&nbsp;</span>
+       		<c:choose>
+        			<c:when test="${oldVersion!=null && oldVersion.binforTypes4!=informationResource.binforTypes4}">
+            			<div class="old-version" data-id="904">
+							之前版本：${MyFunction:findServiceValue("SortManagerService","SortManager@isDeleted=0&id=".concat(oldVersion.binforTypes4),"sortName")}
+       					</div>
+            			<span class="col-xs-3 dt-span has-change" onmouseout="layer.close(infoLayer);" onmouseover="showChange(904);" data-id="data904">
+            		</c:when>
+            		<c:otherwise>
+             				<span class="col-xs-3 dt-span">
+            		</c:otherwise>
+        	
+        	</c:choose>
+        	${MyFunction:findServiceValue("SortManagerService","SortManager@belong=2&isDeleted=0&id=".concat(informationResource.binforTypes4),"sortName")}
+       		 </span>
+      </div>	
+      
    
    
         <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataManagerService\").find(ServiceUtil.buildBean(\"DataManager@isDeleted=0\"),\"list_no\",\"asc\")%>">

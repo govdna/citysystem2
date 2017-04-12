@@ -46,6 +46,51 @@
           </select>
         </div>
       </div>
+      
+      
+      
+       <div class="form-group">
+        <label class="col-sm-3 control-label">关联分类</label>
+        <div class="col-sm-4">
+          <select name="binforTypes" data-placeholder=" "
+            data-param="sortId" data-bind="select[name='binforTypes2']"
+            class="chosen-select" >
+            <option value=""></option>
+            <c:forEach var="obj"
+              items="<%=ServiceUtil.getService(\"SortManagerService\")
+            .find(ServiceUtil.buildBean(\"SortManager@isDeleted=0&level=1&belong=2\"))%>">
+            <option value="${obj.id}">${obj.sortName}</option>
+            </c:forEach>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <select name="binforTypes2" data-placeholder=" " data-param="sortId" data-bind="select[name='binforTypes3']"
+            data-level="2" data-url="${base}/backstage/sortManager/listAjax?all=y&level=2&belong=2"
+            data-keyField="id" data-valueField="sortName"
+            class="chosen-select" >
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-4">
+          <select name="binforTypes3" data-placeholder=" " data-param="sortId" data-bind="select[name='binforTypes4']"
+            data-level="3" data-url="${base}/backstage/sortManager/listAjax?all=y&level=3&belong=2"
+            data-keyField="id" data-valueField="sortName"
+            class="chosen-select" >
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <select name="binforTypes4" data-placeholder=" " 
+            data-level="4" data-url="${base}/backstage/sortManager/listAjax?all=y&level=4&belong=2"
+            data-keyField="id" data-valueField="sortName"
+            class="chosen-select">
+          </select>
+        </div>
+      </div>
+      
+      
+      
       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataManagerService\").find(ServiceUtil.buildBean(\"DataManager@isDeleted=0\"),\"list_no\",\"asc\")%>">
         <div class="data-info" data-id="${obj.id}">
           定义：${obj.define}<br />

@@ -1417,6 +1417,18 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		if(o.getInforTypes4()==null){
 			o.setInforTypes4(0);
 		}
+		if(o.getBinforTypes()==null){
+			o.setBinforTypes(0);
+		}
+		if(o.getBinforTypes2()==null){
+			o.setBinforTypes2(0);
+		}
+		if(o.getBinforTypes3()==null){
+			o.setBinforTypes3(0);
+		}
+		if(o.getBinforTypes4()==null){
+			o.setBinforTypes4(0);
+		}
 		DataList dl=new DataList();
 		dl.setDataManagerId(o.getId());
 		m.addAttribute("dataElementList",dataElementService.getDataElementListByDataList(dl));

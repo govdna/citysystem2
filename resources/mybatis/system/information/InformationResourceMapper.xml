@@ -13,14 +13,14 @@
 	</select>
 	
 	<select id="getInforResByDataElementIds" resultMap="base" parameterType="subscribe">
-		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
+		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
 		FROM gov_information_resource_main t,gov_data_list l
 		where  l.data_manager_id=t.id and l.data_element_id in (${ids})
 		and t.isDeleted=0
 	</select>
 	
 	<select id="getInformationResourceBySubscribe" resultMap="base" parameterType="subscribe">
-		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
+		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
 		FROM gov_information_resource_main t,gov_subscribe gs WHERE gs.information_resource_id=t.id
 		<if test="accountId != null ">
 			and gs.account_id=#{accountId}
@@ -60,7 +60,7 @@
 	
 	
 	<select id="findExactly" resultMap="base" parameterType="InformationResource">
-		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
+		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
 		<if test="param.id != null ">
 			and t.id=#{param.id}
 		</if>
@@ -200,7 +200,7 @@
 	
 	
 	<select id="find" resultMap="base" parameterType="InformationResource">
-		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
+		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
 		<if test="param.id != null ">
 			and t.id=#{param.id}
 		</if>
@@ -247,16 +247,16 @@
 			and t.status=#{param.status}
 		</if>
 		<if test="param.inforTypes != null ">
-			and t.inforTypes=#{param.inforTypes}
+			and (t.inforTypes=#{param.inforTypes} or t.binforTypes=#{param.inforTypes})
 		</if>
 		<if test="param.inforTypes2 != null ">
-			and t.inforTypes2=#{param.inforTypes2}
+			and (t.inforTypes2=#{param.inforTypes2} or t.binforTypes2=#{param.inforTypes2})
 		</if>
 		<if test="param.inforTypes3 != null ">
-			and t.inforTypes3=#{param.inforTypes3}
+			and (t.inforTypes3=#{param.inforTypes3} or t.binforTypes3=#{param.inforTypes3})
 		</if>
 		<if test="param.inforTypes4 != null ">
-			and t.inforTypes4=#{param.inforTypes4}
+			and (t.inforTypes4=#{param.inforTypes4} or t.binforTypes4=#{param.inforTypes4})
 		</if>
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
@@ -267,9 +267,7 @@
 		<if test="param.companyId != null">
 			and t.company_id=#{param.companyId}
 		</if>
-		<if test="param.inforTypes2 != null  and param.inforTypes2!=''">
-			and t.inforTypes2=#{param.inforTypes2}
-		</if>		
+				
 		ORDER BY
 
 		<choose>
@@ -291,7 +289,7 @@
 		</choose>
 	</select>
 	<select id="findByPage" resultMap="base">
-		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
+		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
 		<if test="param.id != null ">
 			and t.id=#{param.id}
 		</if>
@@ -344,17 +342,17 @@
 			</if>
 			</otherwise>
 		</choose>
-		<if test="param.inforTypes != null ">
-			and t.inforTypes=#{param.inforTypes}
+			<if test="param.inforTypes != null ">
+			and (t.inforTypes=#{param.inforTypes} or t.binforTypes=#{param.inforTypes})
 		</if>
 		<if test="param.inforTypes2 != null ">
-			and t.inforTypes2=#{param.inforTypes2}
+			and (t.inforTypes2=#{param.inforTypes2} or t.binforTypes2=#{param.inforTypes2})
 		</if>
 		<if test="param.inforTypes3 != null ">
-			and t.inforTypes3=#{param.inforTypes3}
+			and (t.inforTypes3=#{param.inforTypes3} or t.binforTypes3=#{param.inforTypes3})
 		</if>
 		<if test="param.inforTypes4 != null ">
-			and t.inforTypes4=#{param.inforTypes4}
+			and (t.inforTypes4=#{param.inforTypes4} or t.binforTypes4=#{param.inforTypes4})
 		</if>
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
@@ -365,9 +363,7 @@
 		<if test="param.companyId != null">
 			and (t.company_id=#{param.companyId} or t.value3=#{param.companyId})
 		</if>
-		<if test="param.inforTypes2 != null  and param.inforTypes2!=''">
-			and t.inforTypes2=#{param.inforTypes2}
-		</if>
+		
 		ORDER BY
 		<choose>
 			<when  test="sort !=null and sort!=''">
@@ -564,6 +560,65 @@
 		 group by inforTypes3
 	</select>
 	
+	
+	
+	<select id="countBinforTypes2" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,binforTypes2 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by binforTypes2
+	</select>
+	
+	
+	<select id="countBinforTypes3" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,binforTypes3 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by binforTypes3
+	</select>
+	
 	<select id="datacount" resultType="int" parameterType="InformationResource">
 		SELECT
 			  COUNT(gov_data_list.data_element_id)
@@ -616,8 +671,8 @@
     </selectKey>  
  	
  	<![CDATA[
-	INSERT INTO gov_information_resource_main(source_type,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,time_create,time_modified,isDeleted,company_id,group_id,status,reason) 
-	VALUES (#{sourceType,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{inforTypes,jdbcType=NUMERIC},#{inforTypes2,jdbcType=NUMERIC},#{inforTypes3,jdbcType=NUMERIC},#{inforTypes4,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{status,jdbcType=NUMERIC},#{reason,jdbcType=VARCHAR})
+	INSERT INTO gov_information_resource_main(source_type,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create,time_modified,isDeleted,company_id,group_id,status,reason) 
+	VALUES (#{sourceType,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{inforTypes,jdbcType=NUMERIC},#{inforTypes2,jdbcType=NUMERIC},#{inforTypes3,jdbcType=NUMERIC},#{inforTypes4,jdbcType=NUMERIC},#{binforTypes,jdbcType=NUMERIC},#{binforTypes2,jdbcType=NUMERIC},#{binforTypes3,jdbcType=NUMERIC},#{binforTypes4,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{status,jdbcType=NUMERIC},#{reason,jdbcType=VARCHAR})
 	]]>
 	</insert>
 	<update id="delete" parameterType="InformationResource">
@@ -690,6 +745,10 @@
 		inforTypes2=#{inforTypes2,jdbcType=NUMERIC},
 		inforTypes3=#{inforTypes3,jdbcType=NUMERIC},
 		inforTypes4=#{inforTypes4,jdbcType=NUMERIC},
+		binforTypes=#{binforTypes,jdbcType=NUMERIC},
+		binforTypes2=#{binforTypes2,jdbcType=NUMERIC},
+		binforTypes3=#{binforTypes3,jdbcType=NUMERIC},
+		binforTypes4=#{binforTypes4,jdbcType=NUMERIC},
 		status=#{status,jdbcType=NUMERIC},
         reason=#{reason,jdbcType=VARCHAR},
 		time_modified=#{timeModified,jdbcType=TIMESTAMP}
