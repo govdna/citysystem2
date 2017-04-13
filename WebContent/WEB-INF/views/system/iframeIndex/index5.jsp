@@ -12,6 +12,10 @@
     <link href="${base}/static/css/plugins/chosen/chosen.css" rel="stylesheet">
   	<link href="${base}/static/css/style.css?v=4.1.0" rel="stylesheet">
 </head>
+<style>
+  .myclass{max-width: 400px;}
+  .myclass .layui-layer-content {padding: 10px;}
+</style>
 <body class="skin-<%=ServiceUtil.getThemeType(10)%>">
 	<div class="wrapper wrapper-content animated fadeInRight">
 	    <div class="row">
@@ -27,59 +31,20 @@
 	        </div>
 	    </div>
 	</div>
+  <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 	<script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
+  <script src="${base}/static/js/plugins/layer/layer.js"></script>
 	<script>
+  $(function() {
+    layer.config({
+      extend: '../extend/layer.ext.js'
+    });
+  })
         var myChart = echarts.init(document.getElementById('main1'));
        // var myChart = echarts.init(document.getElementById('main'));
   
 var curIndx = 0;
-var mapType = [
-     'china',
-    // 23个省
-    '广东', '青海', '四川', '海南', '陕西', 
-    '甘肃', '云南', '湖南', '湖北', '黑龙江',
-    '贵州', '山东', '江西', '河南', '河北',
-    '山西', '安徽', '福建', '浙江', '江苏', 
-    '吉林', '辽宁', '台湾',
-    // 5个自治区
-    '新疆', '广西', '宁夏', '内蒙古', '西藏', 
-    // 4个直辖市
-    '北京', '天津', '上海', '重庆',
-    // 2个特别行政区
-    '香港', '澳门'
-];
 
-myChart.on('mapSelected', function (param){
-    var len = mapType.length;
-    var mt = mapType[curIndx % len];
-    var selected = param.selected;
-   
-    if (mt == 'china') {
-        // 全国选择时指定到选中的省份
-        var selected = param.selected;
-        console.log(selected);
-        for (var i in selected) {
-            if (selected[i]) {
-                mt = i;
-                while (len--) {
-                    if (mapType[len] == mt) {
-                        curIndx = len;
-                    }
-                }
-                break;
-            }
-        }
-        option.tooltip.formatter = '{b}';
-    }
-    else {
-        curIndx = 0;
-        mt = 'china';
-        option.tooltip.formatter = '{b}';
-    }
-    option.series[0].mapType = mt;
-    // option.title.subtext = mt + ' （滚轮或点击切换）';
-    myChart.setOption(option, true);
-});
 option = {
     title: {
         text : '海南',
@@ -131,8 +96,19 @@ option = {
     ]
 };
                     
-
+myChart.on('click', eConsole);
   myChart.setOption(option);
+    function eConsole(param) { 
+      var content = param.name;
+        layer.open({
+          type: 1,
+          title: false,
+          closeBtn: 0,
+          shadeClose: true,
+          skin: 'myclass',
+          content: content
+        });
+    }
     </script>
 </body>
 </html>
