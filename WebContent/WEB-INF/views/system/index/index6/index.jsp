@@ -178,6 +178,12 @@ a, a:hover, a:focus {text-decoration: none;}
       		</c:otherwise>
       		</c:choose>
            </c:forEach> 
+            <a href="${base}/backstage/manage?menuType=5" class="item item-5">
+              <div class="item-body">
+                <div class="item-bg"></div>
+                <h3 class="text-center"><%=ServiceUtil.modRename(5) %></h3>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -225,6 +231,18 @@ a, a:hover, a:focus {text-decoration: none;}
          width: '17%',
          marginLeft: '4%',
          marginRight: '4%'
+       });
+       itemBg.css({
+         height: 170,
+         paddingTop: 10,
+         paddingBottom: 10
+       });
+       break;
+    case 6:
+       item.css({
+         width: '14%',
+         marginLeft: '1%',
+         marginRight: '1%'
        });
        itemBg.css({
          height: 170,
