@@ -271,7 +271,7 @@ $("select[name='cId']").chosen({
   no_results_text: "没有匹配到这条记录",
     width: "100%"
 });
-<%@include file="../common/simpleFieldsColumns.jsp"%>
+<%@include file="../common/simpleFieldsColumnsCompany.jsp"%>
   //得到查询的参数
   var queryParams = function(params) {
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的

@@ -113,12 +113,6 @@ var columns = [{
   title: '应用系统名称',
   formatter: 'longFormatter',
 }, {
-  field: 'value5ForShow',
-  title: '部署服务器'
-}, {
-  field: 'value6ForShow',
-  title: '部署存储器'
-}, {
   field: 'id',
   title: '操作',
   formatter: 'doFormatterl', //对本列数据做格式化
