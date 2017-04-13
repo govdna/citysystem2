@@ -14,7 +14,7 @@
 <c:set var="cpid" value="" />
 </c:otherwise>
 </c:choose> 
-
+<c:set var="cpid" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>" />
 <%
 int c = ServiceUtil.getService("GovTableService").count(ServiceUtil.buildBean("GovTable@isDeleted=0&companyId="+pageContext.getAttribute("cpid")));
 int c1 = ServiceUtil.getService("GovApplicationSystemService").count(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0&value3="+pageContext.getAttribute("cpid")));
@@ -82,7 +82,7 @@ h3 {font-size: 16px; font-weight: 600;}
             <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-window-restore"></i></div>
               <div class="content pull-left">
-                <p class="name ">系统</p>
+                <p class="name ">系统<%=AccountShiroUtil.getCurrentUser().getCompanyId()%></p>
                 <p class="number">${s1}</p>
               </div>
             </div>

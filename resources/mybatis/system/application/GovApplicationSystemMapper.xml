@@ -177,6 +177,9 @@
 		<if test="isDeleted != null" >  and
         isDeleted = #{isDeleted,jdbcType=NUMERIC}
       </if>
+      <if test="value3 != null and value3 !=''" >  and
+        value3 = #{value3,jdbcType=VARCHAR}
+      </if>
 	</select>
 	<insert id="insert" parameterType="GovApplicationSystem" >	
  	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
