@@ -82,7 +82,7 @@ h3 {font-size: 16px; font-weight: 600;}
             <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-window-restore"></i></div>
               <div class="content pull-left">
-                <p class="name ">系统<%=AccountShiroUtil.getCurrentUser().getCompanyId()%></p>
+                <p class="name ">系统</p>
                 <p class="number">${s1}</p>
               </div>
             </div>
