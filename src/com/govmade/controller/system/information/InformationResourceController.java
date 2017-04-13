@@ -942,6 +942,11 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 
 		if (StringUtils.isEmpty(o.getValue3())) {
 			o.setValue3(AccountShiroUtil.getCurrentUser().getCompanyId() + "");
+		}else{
+			Company c=new Company();
+			c.setId(Integer.valueOf(o.getValue3()));
+			c=companyService.findById(c);
+			o.setValue4(c.getCompanyCode());
 		}
 		if (StringUtils.isEmpty(o.getValue4())) {
 			Company c=new Company();

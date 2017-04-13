@@ -239,32 +239,32 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 			} else {
 				try {
 					Map<String, GovTable> tableMap = adapter.getTableMap();
+					for (String key : tableMap.keySet()) { 
+						System.out.println("key= " + key + " and value= " + tableMap.get(key)); 
+					}
 					// 批量插入数据库
-					Set<String> dbSet = adapter.getDatabaseSet();
+					
+					Map<String,GovDatabase> dataBaseMap=adapter.getDatabaseMap();
 					List<GovDatabase> dbList = new ArrayList<GovDatabase>();
-					for (String dbName : dbSet) {
-						GovDatabase db = new GovDatabase();
-						db.setValue1(dbName);
-						db.setValue2(dbName);
-						db.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
-						db.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
+					
+					for (String dbName : dataBaseMap.keySet()) {
+						GovDatabase db =dataBaseMap.get(dbName);
+						db.setValue2(db.getValue1());
+						System.out.println("db cid"+db.getCompanyId());
 						dbList.add(db);
 					}
 					govDatabaseService.insertList(dbList);
 					// 批量插入数据库结束
 					Map<String, Integer> dbMap = new HashMap<String, Integer>();
 					for (GovDatabase db : dbList) {
-						System.out.println(db.getValue1()+"---"+db.getId());
 						dbMap.put(db.getValue1(), db.getId());
 					}
 					//批量插入表
 					List<GovTable> tbList = new ArrayList<GovTable>();
 					for (String tableName : tableMap.keySet()) {
 						GovTable tb = tableMap.get(tableName);
-						System.out.println(tb.getValue3()+"db"+dbMap.get(tb.getValue3()));
 						tb.setValue3(dbMap.get(tb.getValue3()) + "");
-						tb.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
-						tb.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
+						System.out.println("tb cid"+tb.getCompanyId());
 						tbList.add(tb);
 					}
 					service.insertList(tbList);
@@ -283,32 +283,7 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 					for (GovTable tb : tbList) {
 						for (GovTableField tf : tb.getFieldList()) {
 							tf.setValue3(tb.getId() + "");
-							tf.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
-							tf.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
-//							DataElement de = new DataElement();
-//							de.setClassType(1);
-//							de.setChName(tf.getValue2());
-//							de.setSourceType(4);
-//							dataElementService.setIdentifier(de);
-//							if(StringUtils.isNotEmpty(tf.getValue5())){
-//								for(GovmadeDic dic:dicList){
-//									if(dic.getDicKey().contains("/"+tf.getValue5().trim().toUpperCase()+"/")){
-//										de.setValue4(dtMap.get(dic.getDicValue()));
-//										break;
-//									}
-//								}
-//							}
-//						
-//							//
-//							//de.setDataType(tf.getValue5());
-//							de.setValue2(tf.getValue1());
-//							de.setValue7(tf.getValue6());
-//							de.setValue8(""+AccountShiroUtil.getCurrentUser().getCompanyId());
-//							
-//							de.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
-//							de.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
-//							dataElementService.insert(de);
-//							tf.setDataElementId(de.getId());
+							System.out.println("fd cid"+tf.getCompanyId());
 							tfList.add(tf);
 							
 						}
