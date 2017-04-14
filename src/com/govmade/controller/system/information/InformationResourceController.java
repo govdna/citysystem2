@@ -184,11 +184,10 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 
 	@Autowired
 	private DataManagerService dataManagerService;
-	
-	
+
 	@Autowired
 	private ApiAccountService apiAccountService;
-	
+
 	@Override
 	public String indexURL() {
 		return "/system/information/resource/index";
@@ -215,9 +214,9 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	public String searchIndex(Model model) {
 		model.addAttribute("hotKeyWord", searchLogService.getHotKeyWord());
 		model.addAttribute("companyCount", service.getInforResGroupByCompany());
-		Integer theme=ServiceUtil.getThemeType(10);
+		Integer theme = ServiceUtil.getThemeType(10);
 		model.addAttribute("theme", theme);
-		System.out.println("theme="+theme);
+		System.out.println("theme=" + theme);
 		return "/system/information/search/index";
 	}
 
@@ -227,7 +226,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	}
 
 	@RequestMapping(value = "basis")
-	public String basisDirectory(InformationResource o, HttpServletResponse res,Model model) {
+	public String basisDirectory(InformationResource o, HttpServletResponse res, Model model) {
 		SortManager sm = new SortManager();
 		SortManager sms = new SortManager();
 		SortManager sm2 = new SortManager();
@@ -241,41 +240,41 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		sms.setIsDeleted(0);
 		sm2.setIsDeleted(0);
 		sm2.setBelong(2);
-		o.setIsDeleted(0);	
+		o.setIsDeleted(0);
 		o.setStatus(0);
-		p.setIsDeleted(0);	
+		p.setIsDeleted(0);
 		p.setStatus(0);
 		cp.setIsDeleted(0);
 		List<Company> cpList = companyService.find(cp);
-		Map<String,Integer> value3Map=service.countValue3(p);
-		if(cpList.size()>0){
+		Map<String, Integer> value3Map = service.countValue3(p);
+		if (cpList.size() > 0) {
 			JSONObject unitJson = new JSONObject();
 			JSONArray unitArray = new JSONArray();
 			InformationResource ir = new InformationResource();
 			ir.setIsDeleted(0);
 			uson.put("name", "部门类");
-			for(Company cps : cpList){
-				
+			for (Company cps : cpList) {
+
 				unitJson.put("name", cps.getCompanyName());
 				unitJson.put("id", cps.getId());
 				unitJson.put("tp", 1);
-				unitJson.put("count", value3Map.get(cps.getId()+""));
+				unitJson.put("count", value3Map.get(cps.getId() + ""));
 				unitArray.add(unitJson);
 			}
 			uson.put("children", unitArray);
 			uarray.add(uson);
-		}	
+		}
 		List<SortManager> smList = sortManagerService.find(sm);
-		Map<Integer,Integer> map=service.countInforTypes(p);
-		if(smList.size()>0){			
+		Map<Integer, Integer> map = service.countInforTypes(p);
+		if (smList.size() > 0) {
 			JSONObject unitJson = new JSONObject();
-			for(SortManager smsm : smList){
+			for (SortManager smsm : smList) {
 				JSONArray unitArray = new JSONArray();
 				sms.setSortId(smsm.getId());
 				sms.setBelong(2);
 				List<SortManager> smsList = sortManagerService.find(sms);
-				if(smsList.size()>0){
-					for(SortManager smsms : smsList){
+				if (smsList.size() > 0) {
+					for (SortManager smsms : smsList) {
 						unitJson.put("name", smsms.getSortName());
 						unitJson.put("id", smsms.getId());
 						unitJson.put("count", map.get(smsms.getId()));
@@ -283,21 +282,21 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 						sm2.setSortId(smsms.getId());
 						unitArray.add(unitJson);
 						List<SortManager> sms2List = sortManagerService.find(sm2);
-						for(SortManager smsms2 : sms2List){
+						for (SortManager smsms2 : sms2List) {
 							unitJson.put("name", smsms2.getSortName());
 							unitJson.put("id", smsms2.getId());
 							unitJson.put("tp", 3);
 							unitJson.put("count", map.get(smsms2.getId()));
 							unitArray.add(unitJson);
-						}	
-					}					
+						}
+					}
 				}
 				uson.put("name", smsm.getSortName());
 				uson.put("children", unitArray);
 				uarray.add(uson);
-			}			
+			}
 		}
-		model.addAttribute("uson",uarray);
+		model.addAttribute("uson", uarray);
 		return "/system/informationResource/basis/index";
 	}
 
@@ -312,7 +311,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	}
 
 	@RequestMapping(value = "mainbasis")
-	public String mainbasis(InformationResource o, HttpServletResponse res,Model model) {
+	public String mainbasis(InformationResource o, HttpServletResponse res, Model model) {
 		SortManager sm = new SortManager();
 		SortManager sms = new SortManager();
 		SortManager sm2 = new SortManager();
@@ -324,23 +323,24 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		sm.setBelong(2);
 		sms.setIsDeleted(0);
 		sm2.setIsDeleted(0);
-		sm2.setBelong(2);;
-		o.setIsDeleted(0);	
+		sm2.setBelong(2);
+		;
+		o.setIsDeleted(0);
 		o.setStatus(0);
-		p.setIsDeleted(0);	
+		p.setIsDeleted(0);
 		p.setStatus(0);
 		List<SortManager> smList = sortManagerService.find(sm);
-		
-		Map<Integer, Integer> countMap=service.countInforTypes(p);
-		if(smList.size()>0){			
+
+		Map<Integer, Integer> countMap = service.countInforTypes(p);
+		if (smList.size() > 0) {
 			JSONObject unitJson = new JSONObject();
-			for(SortManager smsm : smList){
+			for (SortManager smsm : smList) {
 				JSONArray unitArray = new JSONArray();
 				sms.setSortId(smsm.getId());
 				sms.setBelong(2);
 				List<SortManager> smsList = sortManagerService.find(sms);
-				if(smsList.size()>0){
-					for(SortManager smsms : smsList){
+				if (smsList.size() > 0) {
+					for (SortManager smsms : smsList) {
 						unitJson.put("name", smsms.getSortName());
 						unitJson.put("id", smsms.getId());
 						unitJson.put("count", countMap.get(smsms.getId()));
@@ -348,21 +348,21 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 						sm2.setSortId(smsms.getId());
 						unitArray.add(unitJson);
 						List<SortManager> sms2List = sortManagerService.find(sm2);
-						for(SortManager smsms2 : sms2List){
+						for (SortManager smsms2 : sms2List) {
 							unitJson.put("name", smsms2.getSortName());
 							unitJson.put("id", smsms2.getId());
 							unitJson.put("tp", 3);
 							unitJson.put("count", countMap.get(smsms2.getId()));
 							unitArray.add(unitJson);
-						}	
-					}					
+						}
+					}
 				}
 				uson.put("name", smsm.getSortName());
 				uson.put("children", unitArray);
 				uarray.add(uson);
-			}			
+			}
 		}
-		model.addAttribute("uson",uarray);
+		model.addAttribute("uson", uarray);
 		return "/system/information/mainbasis/index";
 	}
 
@@ -389,7 +389,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	@Override
 	public Map<String, DataHandler> getDataHandlers() {
 		Map<String, DataHandler> map = super.getDataHandlers();
-		map=DataHandlerUtil.buildDataManagerDataHandlers(map);
+		map = DataHandlerUtil.buildDataManagerDataHandlers(map);
 		map.put("sourceType", new DataHandler() {
 			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
 			@Override
@@ -410,7 +410,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			}
 
 		});
-		
+
 		map.put("value3", new DataHandler() {
 
 			@Override
@@ -537,8 +537,10 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 				DataList dl = new DataList();
 				String dmids = "";
 				dl.setDataManagerId(id);
-//				List<DataElement> delist = dataElementService.getDataElementListByDataList(dl);
-//				jo.put("dataElementList", DataHandlerUtil.buildJson(delist, getDataHandlers(), true).toString());
+				// List<DataElement> delist =
+				// dataElementService.getDataElementListByDataList(dl);
+				// jo.put("dataElementList", DataHandlerUtil.buildJson(delist,
+				// getDataHandlers(), true).toString());
 				List<DataList> dmlist = dataListService.find(dl);
 				for (DataList dm : dmlist) {
 					dmids = dmids + dm.getDataElementId() + ",";
@@ -551,6 +553,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 
 		return map;
 	}
+
 	private Map<String, DataHandler> getExcelHandler() {
 		Map<String, DataHandler> map = new HashMap<String, DataHandler>();
 		List<DataManager> list = dataManagerService.find(new DataManager());
@@ -560,6 +563,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 				public int getMode() {
 					return ADD_MODE;
 				}
+
 				@Override
 				public Object doHandle(Object obj) {
 					if (sf.getInputType().equals("2")) {
@@ -623,15 +627,35 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 				}
 			});
 		}
-		
+
+		map.put("value3", new DataHandler() {
+
+			@Override
+			public int getMode() {
+				return ADD_MODE;
+			}
+
+			@Override
+			public Object doHandle(Object obj) {
+				if (obj == null) {
+					return "";
+				}
+				Company c = new Company();
+				c.setId(Integer.valueOf((String) obj));
+				c = companyService.findById(c);
+				return c.getCompanyName();
+			}
+
+		});
+
 		map.put("inforTypes", new DataHandler() {
 			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
 			@Override
 			public Object doHandle(Object obj) {
 				SortManager dic = new SortManager();
-				dic.setId((Integer)obj);
+				dic.setId((Integer) obj);
 				dic = sortManagerService.findById(dic);
-				if (dic.getSortName()!= null ) {
+				if (dic.getSortName() != null) {
 					return dic.getSortName();
 				}
 				return "";
@@ -648,9 +672,9 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			@Override
 			public Object doHandle(Object obj) {
 				SortManager dic = new SortManager();
-				dic.setId((Integer)obj);
+				dic.setId((Integer) obj);
 				dic = sortManagerService.findById(dic);
-				if (dic.getSortName()!= null ) {
+				if (dic.getSortName() != null) {
 					return dic.getSortName();
 				}
 				return "";
@@ -662,14 +686,15 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			}
 
 		});
+
 		map.put("inforTypes3", new DataHandler() {
 			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
 			@Override
 			public Object doHandle(Object obj) {
 				SortManager dic = new SortManager();
-				dic.setId((Integer)obj);
+				dic.setId((Integer) obj);
 				dic = sortManagerService.findById(dic);
-				if (dic.getSortName()!= null ) {
+				if (dic.getSortName() != null) {
 					return dic.getSortName();
 				}
 				return "";
@@ -686,9 +711,9 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			@Override
 			public Object doHandle(Object obj) {
 				SortManager dic = new SortManager();
-				dic.setId((Integer)obj);
+				dic.setId((Integer) obj);
 				dic = sortManagerService.findById(dic);
-				if (dic.getSortName()!= null ) {
+				if (dic.getSortName() != null) {
 					return dic.getSortName();
 				}
 				return "";
@@ -702,7 +727,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		});
 		return map;
 	}
-	
+
 	@RequestMapping(value = "updateStatus")
 	public String updateStatus(InformationResource o, HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
@@ -729,7 +754,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 							noticeService.sendNotice(notice);
 							// 版本控制
 							InformationResource ir = service.findById(o);
-							DataList dl=new DataList();
+							DataList dl = new DataList();
 							dl.setDataManagerId(o.getId());
 							ir.setDataElementList(dataElementService.getDataElementListByDataList(dl));
 							VersionControl vc = new VersionControl();
@@ -754,7 +779,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 				noticeService.sendNotice(notice);
 				// 版本控制
 				InformationResource ir = service.findById(o);
-				DataList dl=new DataList();
+				DataList dl = new DataList();
 				dl.setDataManagerId(o.getId());
 				ir.setDataElementList(dataElementService.getDataElementListByDataList(dl));
 				VersionControl vc = new VersionControl();
@@ -942,21 +967,21 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 
 		if (StringUtils.isEmpty(o.getValue3())) {
 			o.setValue3(AccountShiroUtil.getCurrentUser().getCompanyId() + "");
-		}else{
-			Company c=new Company();
+		} else {
+			Company c = new Company();
 			c.setId(Integer.valueOf(o.getValue3()));
-			c=companyService.findById(c);
+			c = companyService.findById(c);
 			o.setValue4(c.getCompanyCode());
 		}
 		if (StringUtils.isEmpty(o.getValue4())) {
-			Company c=new Company();
+			Company c = new Company();
 			c.setId(AccountShiroUtil.getCurrentUser().getCompanyId());
-			c=companyService.findById(c);
+			c = companyService.findById(c);
 			o.setValue4(c.getCompanyCode());
 		}
-		
-		String tableId=req.getParameter("tableId");
-		if(StringUtils.isNotEmpty(tableId)&&StringUtils.isNumeric(tableId)){
+
+		String tableId = req.getParameter("tableId");
+		if (StringUtils.isNotEmpty(tableId) && StringUtils.isNumeric(tableId)) {
 			o.setSourceType(3);
 		}
 	}
@@ -964,9 +989,9 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	@Override
 	public void doAfterInsertUpdate(InformationResource o, HttpServletRequest req, HttpServletResponse res) {
 		int infoResId = o.getId();
-		String tableId=req.getParameter("tableId");
-		if(StringUtils.isNotEmpty(tableId)&&StringUtils.isNumeric(tableId)){
-			GovTable table=new GovTable();
+		String tableId = req.getParameter("tableId");
+		if (StringUtils.isNotEmpty(tableId) && StringUtils.isNumeric(tableId)) {
+			GovTable table = new GovTable();
 			table.setId(Integer.valueOf(tableId));
 			table = govTableService.findById(table);
 			table.setInforResId(infoResId);
@@ -1001,7 +1026,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			}
 		}
 		PushUtil.pushInformation(o);
-		
+
 	}
 
 	/**
@@ -1135,12 +1160,12 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		in.setValue1(inname);
 		String results = "";
 		if (o.getId() == null) {
-			if (!service.find(in).isEmpty()&&StringUtils.isNotEmpty(o.getValue1())) {
+			if (!service.find(in).isEmpty() && StringUtils.isNotEmpty(o.getValue1())) {
 				results = "1";
 			}
 		} else {
 
-			if (service.find(in).size() != 0&&StringUtils.isNotEmpty(o.getValue1())) {
+			if (service.find(in).size() != 0 && StringUtils.isNotEmpty(o.getValue1())) {
 				if ((int) service.find(in).get(0).getId() != (int) o.getId()) {
 					results = "1";
 				}
@@ -1185,7 +1210,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 						for (InformationResource dm : adapter.getEntityList()) {
 							dm.setStatus(1);
 							dm.setSourceType(2);
-							//dm.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
+							// dm.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
 							dm.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
 							doBeforeInsertUpdate(dm, request, null);
 							service.insert(dm);
@@ -1220,10 +1245,11 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 							de.setIsShare(0);
 							de.setSourceType(2);
 							dataElement.setChName(de.getValue1());
-							List<DataElement> list=dataElementService.findByName(dataElement," case when t.source_type=2 then -1 end ","asc");
-							if(list !=null && list.size() != 0){
+							List<DataElement> list = dataElementService.findByName(dataElement,
+									" case when t.source_type=2 then -1 end ", "asc");
+							if (list != null && list.size() != 0) {
 								dl.setDataElementId(list.get(0).getId());
-							}else{
+							} else {
 								dataElementService.insert(de);
 								dl.setDataElementId(de.getId());
 							}
@@ -1333,12 +1359,13 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		res.getWriter().close();
 		return null;
 	}
-	
+
 	@RequestMapping(value = "getInforResByDataElementIds")
-	public String getInforResByDataElementIds(String ids, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public String getInforResByDataElementIds(String ids, HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
 		res.setContentType("text/html;charset=utf-8");
 		res.setCharacterEncoding("utf-8");
-		
+
 		JSONObject ar = new JSONObject();
 		try {
 			if (StringUtils.isNotEmpty(ids)) {
@@ -1346,7 +1373,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 				ar.put("rows", DataHandlerUtil.buildJson(inforList, getDataHandlers(), true));
 				ar.put("total", inforList.size());
 				ar.put("code", Const.SUCCEED);
-			}else{
+			} else {
 				ar.put("code", Const.FAIL);
 			}
 		} catch (Exception e) {
@@ -1400,72 +1427,74 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		res.getWriter().close();
 		return null;
 	}
-	
-	//信息资源查看
+
+	// 信息资源查看
 	@RequestMapping(value = "detail")
-	public String detail(InformationResource o, HttpServletRequest req, HttpServletResponse res, Model m) throws Exception {
+	public String detail(InformationResource o, HttpServletRequest req, HttpServletResponse res, Model m)
+			throws Exception {
 
 		if (o instanceof IdBaseEntity && StringUtils.isNotEmpty(req.getParameter("idForShow"))) {
 			int id = Integer.valueOf(SecurityUtil.decrypt(req.getParameter("idForShow")));
 			((IdBaseEntity) o).setId(id);
 		}
 		o = service.findById(o);
-		if(o.getInforTypes()==null){
+		if (o.getInforTypes() == null) {
 			o.setInforTypes(0);
 		}
-		if(o.getInforTypes2()==null){
+		if (o.getInforTypes2() == null) {
 			o.setInforTypes2(0);
 		}
-		if(o.getInforTypes3()==null){
+		if (o.getInforTypes3() == null) {
 			o.setInforTypes3(0);
 		}
-		if(o.getInforTypes4()==null){
+		if (o.getInforTypes4() == null) {
 			o.setInforTypes4(0);
 		}
-		if(o.getBinforTypes()==null){
+		if (o.getBinforTypes() == null) {
 			o.setBinforTypes(0);
 		}
-		if(o.getBinforTypes2()==null){
+		if (o.getBinforTypes2() == null) {
 			o.setBinforTypes2(0);
 		}
-		if(o.getBinforTypes3()==null){
+		if (o.getBinforTypes3() == null) {
 			o.setBinforTypes3(0);
 		}
-		if(o.getBinforTypes4()==null){
+		if (o.getBinforTypes4() == null) {
 			o.setBinforTypes4(0);
 		}
-		DataList dl=new DataList();
+		DataList dl = new DataList();
 		dl.setDataManagerId(o.getId());
-		m.addAttribute("dataElementList",dataElementService.getDataElementListByDataList(dl));
+		m.addAttribute("dataElementList", dataElementService.getDataElementListByDataList(dl));
 		m.addAttribute("informationResource", o);
-		VersionControl vc=new VersionControl();
+		VersionControl vc = new VersionControl();
 		vc.setClassName(InformationResource.class.getSimpleName());
 		vc.setSourceId(o.getId());
-		List<VersionControl> list=versionControlService.find(vc);
-		if(list!=null&&list.size()>0){
-			JSONObject jo=JSONObject.fromObject(list.get(0).getNewVersion());
-			InformationResource old=(InformationResource)JSONObject.toBean(jo,InformationResource.class);
+		List<VersionControl> list = versionControlService.find(vc);
+		if (list != null && list.size() > 0) {
+			JSONObject jo = JSONObject.fromObject(list.get(0).getNewVersion());
+			InformationResource old = (InformationResource) JSONObject.toBean(jo, InformationResource.class);
 			JSONArray jsonArray = jo.getJSONArray("dataElementList");
-		    List<DataElement> oldDataElementList = (List) JSONArray.toCollection(jsonArray,DataElement.class);  
-			m.addAttribute("oldDataElementList",oldDataElementList);
-			m.addAttribute("oldVersion",old);
+			List<DataElement> oldDataElementList = (List) JSONArray.toCollection(jsonArray, DataElement.class);
+			m.addAttribute("oldDataElementList", oldDataElementList);
+			m.addAttribute("oldVersion", old);
 			m.addAttribute("versionList", list);
 		}
 		return "/system/information/resource/detail";
 	}
 
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields,String[] deFields, HttpServletRequest req, HttpServletResponse response)
-			throws Exception {
-		if(xlsFields==null){
-			xlsFields=new String[0];
+	public ResponseEntity<byte[]> downloadData(String[] xlsFields, String[] deFields, HttpServletRequest req,
+			HttpServletResponse response) throws Exception {
+		if (xlsFields == null) {
+			xlsFields = new String[0];
 		}
-		if(deFields==null){
-			deFields=new String[0];
+		if (deFields == null) {
+			deFields = new String[0];
 		}
-		
+
 		InformationResource de = new InformationResource();
-		InformationResource2ExcelAdapter adapter = new InformationResource2ExcelAdapter(service.find(de), xlsFields,deFields,getExcelHandler());
+		InformationResource2ExcelAdapter adapter = new InformationResource2ExcelAdapter(service.find(de), xlsFields,
+				deFields, getExcelHandler());
 		Object2ExcelComplexUtil util = new Object2ExcelComplexUtil(adapter);
 		String path = req.getSession().getServletContext().getRealPath("upload/excel");
 		String fileName = "导出数据.xls";
@@ -1483,7 +1512,5 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(fullPath)), headers,
 				HttpStatus.CREATED);
 	}
-	
-	
-	
+
 }

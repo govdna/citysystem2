@@ -454,9 +454,8 @@ background:#18a689;
         <input type="checkbox" name="xlsFields" value="inforTypes3"/> 目
         <input type="checkbox" name="xlsFields" value="inforTypes4"/> 细目 
        <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataManagerService\").find(ServiceUtil.buildBean(\"DataManager@isDeleted=0\"),\"list_no\",\"asc\")%>">
-       <c:if test="${obj.valueNo!=4 && obj.valueNo!=3}">
-       	<input type="checkbox" name="xlsFields" value="value${obj.valueNo}"/> ${obj.dataName}
-       	</c:if>
+      	<input type="checkbox" name="xlsFields" value="value${obj.valueNo}"/> ${obj.dataName}
+       	
        </c:forEach>
        <br/>
        <br/>
