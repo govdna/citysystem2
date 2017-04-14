@@ -383,15 +383,18 @@ cursor: pointer;
  //bootstrap-table 列数
  var columns = [{
    field: 'value2',
-   title: '信息资源代码'
+   title: '信息资源代码',
+   sortable:true
  }, {
    field: 'value1',
    title: '信息资源名称',
    formatter: 'longFormatter',
+   sortable:true
  }, {
    field: 'status',
    title: '状态',
    formatter: 'statusFormatter', //对本列数据做格式化
+   sortable:true
  }, {
    field: 'id',
    title: '操作',
@@ -414,6 +417,8 @@ cursor: pointer;
    var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
      rows: params.limit,
      page: params.offset / params.limit + 1,
+     sort:params.sort,
+     order:params.order,
      value1: $('input[name="val1"]').val(),
    };
    return temp;

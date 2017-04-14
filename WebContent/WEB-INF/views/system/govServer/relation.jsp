@@ -59,7 +59,7 @@ $("select[name='cId']").chosen({
   no_results_text: "没有匹配到这条记录",
     width: "100%"
 });
-var columns = [{field: 'value1',title: '服务器编号'},{field: 'value2ForShow',title: '责任部门'},{field: 'value3',title: '购买时间'}, {field: 'id',title: '操作',formatter: 'doFormatterL'}];
+var columns = [{field: 'value1',title: '服务器编号',sortable:true},{field: 'value2ForShow',title: '责任部门'},{field: 'value3',title: '购买时间',sortable:true}, {field: 'id',title: '操作',formatter: 'doFormatterL'}];
 
 function dshow(id,name) {
 	console.info(id+'----'+name);
@@ -168,6 +168,8 @@ function doFormatterL(value, row, index) {
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
+      sort:params.sort,
+      order:params.order,
       value2:$('select[name="cId"]').val(),
       serverNum:1,
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govServer/index\")==1}" >

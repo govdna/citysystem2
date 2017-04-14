@@ -5,10 +5,10 @@ var columns = [
 	<c:if test="${obj.isShow==1}">
 		<c:choose>
 			<c:when test="${obj.inputType==1}">
-			 	{field: 'value${obj.valueNo}',title: '${obj.name}', formatter: 'longFormatter'}, 
+			 	{field: 'value${obj.valueNo}',title: '${obj.name}',sortable:true, formatter: 'longFormatter'}, 
 			</c:when>
 			<c:when test="${obj.inputType==6}">
-			 	{field: 'value${obj.valueNo}',title: '${obj.name}'}, 
+			 	{field: 'value${obj.valueNo}',title: '${obj.name}',sortable:true,}, 
 			</c:when>
 			<c:otherwise>
 				{field: 'value${obj.valueNo}ForShow',title: '${obj.name}'},

@@ -176,7 +176,7 @@ var columns = [{
 	<c:if test="${obj.isShow==1}">
 		<c:choose>
 			<c:when test="${obj.inputType==1}">
-			 	{field: 'value${obj.valueNo}',title: '${obj.name}'}, 
+			 	{field: 'value${obj.valueNo}',title: '${obj.name}',sortable:true,formatter:'longFormatter'}, 
 			</c:when>
 			<c:otherwise>
 				{field: 'value${obj.valueNo}ForShow',title: '${obj.name}'},
@@ -189,13 +189,25 @@ var columns = [{
   title: '操作',
   formatter: 'doFormatter', 
 }];
-
+function longFormatter(value, row, index)
+{
+  var html='<span title="'+value+'">';
+  if(value.length>10){
+    html+=value.substring(0,10)+"...";
+  }else{
+    html+=value;
+  }
+  html+='</span>';
+  return html;
+}
 //得到查询的参数
 var queryParams = function(params) {
 
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
+    sort:params.sort,
+    order:params.order,
     value1: $('input[name="busN"]').val(),
     value2: $('select[name="val2"]').val(),
     value3: $('select[name="val3"]').val()

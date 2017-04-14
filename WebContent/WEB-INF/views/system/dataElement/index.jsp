@@ -425,15 +425,17 @@ var columns = [{
   field: 'identifier',
   title: '内部标识符'
 }, {
-  field: 'chName',
+  field: 'value1',
   title: '中文名称',
   formatter: 'longFormatter',
+  sortable:true
 }, {
   field: 'dataTypeForShow',
   title: '数据类型'
 }, {
-  field: 'dataFormat',
-  title: '数据长度'
+  field: 'value7',
+  title: '数据长度',
+  sortable:true
 }, {
   field: 'objectTypeForShow',
   title: '对象类型'
@@ -521,8 +523,8 @@ var queryParams = function(params) {
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
-    sort: 'identifier',
-    order: 'asc',
+    sort:params.sort,
+    order:params.order,
     chName: $('input[name="chN"]').val(),
     value5:$('select[name="obT"]').val(),
     companyId:$('select[name="cId"]').val()
