@@ -7,14 +7,25 @@
 <%@include file="../../common/includeBaseHead.jsp"%>
 </head>
 <body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>">
-  <div class="wrapper wrapper-content animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-        <div class="btn-group hidden-xs" id="toolbar" role="group">
-          <div class="text-center">
-          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/company/index\") %>">
-            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
-            </c:if>
+        <div id="toolbar">
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" placeholder="输入单位名称" name="companyN" class="form-control col-sm-8">
+              <div class="input-group-btn col-sm-4">
+                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索
+                </button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-left: 5px;">
+	          <div class="text-center">
+	          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/company/index\") %>">
+	            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
+	            </c:if>
+	          </div>
+            </div>
           </div>
         </div>
         <table id="dicList">
@@ -22,7 +33,6 @@
       </div>
     </div>
   </div>
-
   <div id="layer_form" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="eform">
       <input type="hidden" name="id" class="form-control">
@@ -116,6 +126,7 @@ var queryParams = function(params) {
     page: params.offset / params.limit + 1,
     sort:params.sort,
     order:params.order,
+    companyName:$('input[name="companyN"]').val()
   };
   return temp;
 };

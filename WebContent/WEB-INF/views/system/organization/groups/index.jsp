@@ -7,14 +7,25 @@
 <%@include file="../../common/includeBaseHead.jsp"%>
 </head>
 <body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>">
-   <div class="wrapper wrapper-content animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-        <div class="btn-group hidden-xs" id="toolbar" role="group">
-          <div class="text-center">
-          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/groups/index\") %>">
-            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
-            </c:if>
+        <div id="toolbar">
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" placeholder="输入名称" name="gname" class="form-control col-sm-8">
+              <div class="input-group-btn col-sm-4">
+                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索
+                </button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-left: 5px;">
+	          <div class="text-center">
+	          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/groups/index\") %>">
+	            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
+	            </c:if>
+	          </div>
+            </div>
           </div>
         </div>
         <table id="dicList">
@@ -80,8 +91,7 @@ var url = '${base}/backstage/groups/'; //controller 路径
 //bootstrap-table 列数
 var columns = [{
   field: 'number',
-  title: '编号',
-  sortable:true
+  title: '编号'
 }, {
   field: 'name',
   title: '名称',
@@ -115,6 +125,7 @@ var queryParams = function(params) {
     page: params.offset / params.limit + 1,
     sort:params.sort,
     order:params.order,
+    name:$('input[name="gname"]').val()
   };
   return temp;
 };
