@@ -19,85 +19,85 @@
 <%@include file="../common/includeJS.jsp"%>
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
 <script>
-$.getJSON("${base}/backstage/echart/seranalyse", function(data) {
-    var myChart4 = echarts.init(document.getElementById('main4'));
-    var option4 = {
-  	        title: {
-  	          // text: '人物关系：乔布斯',
-  	          //subtext: '数据来自人立方',
-  	          x: 'right',
-  	          y: 'bottom'
-  	        },
-  	        tooltip: {
-  	          trigger: 'item',
-  	          formatter: '{a} : {b}'
-  	        },
-  	        toolbox: {
-  	          show: true,
-  	          feature: {
-  	            restore: { show: true },
-  	            magicType: { show: true, type: ['force', 'chord'] },
-  	            saveAsImage: { show: true }
-  	          }
-  	        },
-  	        legend: {
-  	          x: 'left',
-  	          data: ['部门','系统','库','表','字段']
-  	        },
-  	        series: [{
-  	          type: 'force',
-  	          name: "关系分析",
-  	          ribbonType: false,
-  	          categories: [{
-  	            name: '部门'
-  	          }, {
-  	            name: '系统'
-  	          },{
-  	        	 name:'库' 
-  	          },{
-  	            name: '表'
-  	          },{
-  	            name: '字段'
-  	          }],
-  	          itemStyle: {
-  	            normal: {
-  	              label: {
-  	                show: true,
-  	                textStyle: {
-  	                  color: '#333'
-  	                }
-  	              },
-  	              nodeStyle: {
-  	                brushType: 'both',
-  	                borderColor: 'rgba(255,215,0,0.4)',
-  	                borderWidth: 1
-  	              },
-  	              linkStyle: {
-  	                type: 'curve'
-  	              }
-  	            },
-  	            emphasis: {
-  	              label: {
-  	                show: false
-  	                  // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
-  	              },
-  	              nodeStyle: {
-  	                //r: 30
-  	              },
-  	              linkStyle: {}
-  	            }
-  	          },
-  	          useWorker: false,
-  	          minRadius: 15,
-  	          maxRadius: 25,
-  	          gravity: 1.1,
-  	          scaling: 1.5,
-  	          roam: 'move',
-  	          nodes: data.node,
-  	          links: data.link
-  	        }]
-  	      };
-    myChart4.setOption(option4);
-    
-  });
-</script>
+    $.getJSON("${base}/backstage/echart/seranalyse", function(data) {
+      var myChart4 = echarts.init(document.getElementById('main4'));
+      var option4 = {
+    	        title: {
+    	          // text: '人物关系：乔布斯',
+    	          //subtext: '数据来自人立方',
+    	          x: 'right',
+    	          y: 'bottom'
+    	        },
+    	        tooltip: {
+    	          trigger: 'item',
+    	          formatter: '{a} : {b}'
+    	        },
+    	        toolbox: {
+    	          show: true,
+    	          feature: {
+    	            restore: { show: true },
+    	            magicType: { show: true, type: ['force', 'chord'] },
+    	            saveAsImage: { show: true }
+    	          }
+    	        },
+    	        legend: {
+    	          x: 'left',
+    	          data: ['部门','系统','库','表','字段']
+    	        },
+    	        series: [{
+    	          type: 'force',
+    	          name: "关系分析",
+    	          ribbonType: false,
+    	          categories: [{
+    	            name: '部门'
+    	          }, {
+    	            name: '系统'
+    	          },{
+    	        	 name:'库' 
+    	          },{
+    	            name: '表'
+    	          },{
+    	            name: '字段'
+    	          }],
+    	          itemStyle: {
+    	            normal: {
+    	              label: {
+    	                show: true,
+    	                textStyle: {
+    	                  color: '#333'
+    	                }
+    	              },
+    	              nodeStyle: {
+    	                brushType: 'both',
+    	                borderColor: 'rgba(255,215,0,0.4)',
+    	                borderWidth: 1
+    	              },
+    	              linkStyle: {
+    	                type: 'curve'
+    	              }
+    	            },
+    	            emphasis: {
+    	              label: {
+    	                show: false
+    	                  // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+    	              },
+    	              nodeStyle: {
+    	                //r: 30
+    	              },
+    	              linkStyle: {}
+    	            }
+    	          },
+    	          useWorker: false,
+    	          minRadius: 15,
+    	          maxRadius: 25,
+    	          gravity: 1.1,
+    	          scaling: 1.5,
+    	          roam: 'move',
+    	          nodes: data.node,
+    	          links: data.link
+    	        }]
+    	      };
+      myChart4.setOption(option4);
+      
+    });
+  </script>
