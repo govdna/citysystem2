@@ -112,10 +112,12 @@ var treeInited = 0;
 //bootstrap-table 列数
 var columns = [{
   field: 'dicValue',
-  title: '字典名称'
+  title: '字典名称',
+  sortable:true
 }, {
   field: 'dicKey',
-  title: '字典号'
+  title: '字典号',
+  sortable:true
 }, {
   field: 'id',
   title: '操作',
@@ -128,6 +130,8 @@ var queryParams = function(params) {
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: 100,
     page: 1,
+    sort:params.sort,
+    order:params.order,
     level: 2,
     dicValue: $('input[name="dicN"]').val()
   };
@@ -239,7 +243,7 @@ var TableInit = function() {
       striped: true, //是否显示行间隔色
       cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
       pagination: false, //是否显示分页（*）
-      sortable: false, //是否启用排序
+      sortable: true, //是否启用排序
       sortOrder: "asc", //排序方式
       queryParams: queryParams, //传递参数（*）
       sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）

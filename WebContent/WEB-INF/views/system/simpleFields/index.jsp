@@ -114,10 +114,12 @@ var url = '${base}/backstage/simpleFields/${className}/'; //controller 路径
 //bootstrap-table 列数
 var columns = [{
   field: 'name',
-  title: '名称'
+  title: '名称',
+  sortable:true
 }, {
   field: 'listNo',
-  title: '排序'
+  title: '排序',
+  sortable:true
 }, {
   field: 'id',
   title: '操作',

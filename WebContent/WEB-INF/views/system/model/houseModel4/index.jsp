@@ -567,7 +567,7 @@ function openLayer() {
   $(formId).valid();
   layerIndex = layer.open({
     type: 1,
-    area: ['70%', '70%'], //宽高
+    area: ['70%', '80%'], //宽高
     title: '新增',
     scrollbar: false,
     btn: ['保存', '关闭'],

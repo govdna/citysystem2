@@ -112,10 +112,12 @@ var url = '${base}/backstage/dataElementFields/'; //controller 路径
 //bootstrap-table 列数
 var columns = [{
   field: 'name',
-  title: '名称'
+  title: '名称',
+  sortable:true
 }, {
   field: 'listNo',
-  title: '排序'
+  title: '排序',
+  sortable:true
 },{
   field: 'id',
   title: '操作',
@@ -126,7 +128,9 @@ var queryParams = function(params) {
 
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
-    page: params.offset / params.limit + 1
+    page: params.offset / params.limit + 1,
+    sort:params.sort,
+    order:params.order,
   };
   return temp;
 };
