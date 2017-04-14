@@ -817,10 +817,12 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	public void seranalyse(GovServer gs,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
-		String name = new String(req.getParameter("name").getBytes("iso8859-1"),"utf-8");
 		String depart = "";
 		Company c = new Company();
-		c.setId(AccountShiroUtil.getCurrentUser().getCompanyId());
+		int companyId = AccountShiroUtil.getCurrentUser().getCompanyId();
+		c.setId(companyId);
+		gs.setCompanyId(companyId);
+		gs.setValue3(companyId+"");
 		List<Company> cpList = companyservice.find(c);		
 		JSONObject echartjson = new JSONObject();
 		JSONArray nodeArray = new JSONArray();
@@ -837,52 +839,70 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		List<GovServer> syslist = govServerService.syslist(gs);
 		if(syslist.size()>0){
 			for(GovServer gs1 : syslist){
-				String name1 = gs1.getValue2();
-				Random random = new Random();
-				int s = random.nextInt(6)%(6-2+1) + 2; 
-				unitjson.put("category", 1);
-				unitjson.put("name", name1);
-				unitjson.put("value", s);
-				nodeArray.add(unitjson);
-				linkjson.put("source", name1);	
-				linkjson.put("target", depart);
-				linkjson.put("weight", s);
-				linkjson.put("name", "系统");
-				linkArray.add(linkjson);
-				gs.setValue3(gs1.getValue7());
-				List<GovServer> tblist = govServerService.tblist(gs);
-				if(tblist.size()>0){
-					for(GovServer gs2 : tblist){
-						String name2 = gs2.getValue2();
-						int s1 = random.nextInt(6)%(6-2+1) + 2; 
-						unitjson.put("category", 2);
-						unitjson.put("name", name2);
-						unitjson.put("value", s1);
+				if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
+					int dbid = Integer.valueOf(gs1.getValue7());
+					GovDatabase gd = new GovDatabase();
+					gd.setId(dbid);
+					List<GovDatabase> gdList = govDatabaseService.find(gd);
+					if(gdList.size()>0){
+						String dbName = gdList.get(0).getValue2();
+						String name1 = gs1.getValue2();
+						Random random = new Random();
+						int s = random.nextInt(6)%(6-2+1) + 2;						
+						unitjson.put("category", 1);
+						unitjson.put("name", name1);
+						unitjson.put("value", s);
 						nodeArray.add(unitjson);
-						linkjson.put("source", name2);	
-						linkjson.put("target", name1);
-						linkjson.put("weight", s1);
-						linkjson.put("name", "表");
+						linkjson.put("source", name1);	
+						linkjson.put("target", depart);
+						linkjson.put("weight", s);
+						linkjson.put("name", "系统");
 						linkArray.add(linkjson);
-						gs.setValue3(gs2.getId()+"");
-						List<GovServer> fllist = govServerService.fllist(gs);
-						if(fllist.size()>0){
-							for(GovServer gs3 : fllist){
-								String name3 = gs3.getValue1();
-								int s2 = random.nextInt(6)%(6-2+1) + 2; 
+						unitjson.put("category", 2);
+						unitjson.put("name", dbName);
+						unitjson.put("value", s);
+						nodeArray.add(unitjson);
+						linkjson.put("source", dbName);	
+						linkjson.put("target", name1);
+						linkjson.put("weight", s);
+						linkjson.put("name", "库");
+						linkArray.add(linkjson);
+						gs.setValue3(gs1.getValue7());
+						List<GovServer> tblist = govServerService.tblist(gs);
+						if(tblist.size()>0){
+							for(GovServer gs2 : tblist){
+								String name2 = gs2.getValue2();
+								int s1 = random.nextInt(6)%(6-2+1) + 2; 
 								unitjson.put("category", 3);
-								unitjson.put("name", gs3.getValue2());
-								unitjson.put("value", s2);
+								unitjson.put("name", name2);
+								unitjson.put("value", s1);
 								nodeArray.add(unitjson);
-								linkjson.put("source", gs3.getValue2());	
-								linkjson.put("target", name2);
-								linkjson.put("weight", s2);
-								linkjson.put("name", gs3.getValue2());
+								linkjson.put("source", name2);	
+								linkjson.put("target", dbName);
+								linkjson.put("weight", s1);
+								linkjson.put("name", "表");
 								linkArray.add(linkjson);
+								gs.setValue3(gs2.getId()+"");
+								List<GovServer> fllist = govServerService.fllist(gs);
+								if(fllist.size()>0){
+									for(GovServer gs3 : fllist){
+										String name3 = gs3.getValue1();
+										int s2 = random.nextInt(6)%(6-2+1) + 2; 
+										unitjson.put("category", 4);
+										unitjson.put("name", gs3.getValue2());
+										unitjson.put("value", s2);
+										nodeArray.add(unitjson);
+										linkjson.put("source", gs3.getValue2());	
+										linkjson.put("target", name2);
+										linkjson.put("weight", s2);
+										linkjson.put("name", gs3.getValue2());
+										linkArray.add(linkjson);
+									}
+								}
 							}
 						}
 					}
-				}
+				}				
 			}
 		}		
 		echartjson.put("node", nodeArray);
@@ -1374,4 +1394,90 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		res.getWriter().flush();
 		res.getWriter().close();
 	}
+	
+	
+	@RequestMapping("systreeall")
+	public void systreeall(GovServer gs,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		List<GovServer> cplist =  govServerService.cplist(gs);
+		JSONObject artjson = new JSONObject();		
+		if(cplist.size()>0){
+			JSONArray uArray = new JSONArray();
+			for(GovServer gscp : cplist){				
+				JSONObject echartjson = new JSONObject();
+			echartjson.put("name", gscp.getValue1());
+		JSONArray unitArray = new JSONArray();
+		String[] sar = gscp.getValue2().split(",");
+		int[] array = new int[sar.length];  
+		for(int i=0;i<sar.length;i++){  
+		    array[i]=Integer.parseInt(sar[i]); 
+		}
+		List<GovServer> syslist = govServerService.applist(array);
+				if(syslist.size()>0){			
+					for(GovServer gs1 : syslist){
+						JSONObject unitjson = new JSONObject();
+						JSONArray unArray = new JSONArray();
+						String name1 = gs1.getValue1();				
+						unitjson.put("name", name1);
+						if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
+							int dbid = Integer.valueOf(gs1.getValue7());
+							GovDatabase gd = new GovDatabase();
+							gd.setId(dbid);
+							List<GovDatabase> gdList = govDatabaseService.find(gd);
+							if(gdList.size()>0){
+								JSONObject unitjson1 = new JSONObject();
+								gs.setValue3(gs1.getValue7());
+								List<GovServer> tblist = govServerService.tblist(gs);
+								unitjson1.put("name", gdList.get(0).getValue2());
+								if(tblist.size()>0){
+									JSONArray unitArray1 = new JSONArray();
+									for(GovServer gs2 : tblist){
+										JSONObject unitjson2 = new JSONObject();
+										String name2 = gs2.getValue2();
+										unitjson2.put("name", name2);
+										gs.setValue3(gs2.getId()+"");
+										List<GovServer> fllist = govServerService.fllist(gs);
+										if(fllist.size()>0){
+											JSONObject unitjson3 = new JSONObject();
+											JSONArray unitArray2 = new JSONArray();
+											int index = 0;
+											for(GovServer gs3 : fllist){
+												if(index < 5){
+													String name3 = gs3.getValue2();
+													unitjson3.put("name", name3);
+													unitArray2.add(unitjson3);
+													index++;
+												}									
+											}
+											unitjson2.put("children", unitArray2);
+										}
+										unitArray1.add(unitjson2);
+									}
+									unitjson1.put("children", unitArray1);
+								}
+
+								unArray.add(unitjson1);
+							}							
+						}
+						unitjson.put("children", unArray);
+						unitArray.add(unitjson);
+					}			
+				}		
+		echartjson.put("children", unitArray);
+		uArray.add(echartjson);
+			}
+			artjson.put("children", uArray);
+		}
+		artjson.put("name", "部门");
+		res.getWriter().write(artjson.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+	}
+	
+	@RequestMapping("exall")
+	public String exall() {
+		return "/system/govServer/exall";
+	}
+	
 }

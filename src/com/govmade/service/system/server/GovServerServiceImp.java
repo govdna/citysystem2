@@ -35,6 +35,14 @@ public class GovServerServiceImp extends GovmadeBaseServiceImp<GovServer> implem
 	public List<GovServer> fllist(GovServer gs){
 		return govServerDAO.fllist(gs);
 	};
+	@Override
+	public List<GovServer> cplist(GovServer gs){
+		return govServerDAO.cplist(gs);
+	};
+	@Override
+	public List<GovServer> applist(int[] sar){
+		return govServerDAO.applist(sar);
+	};
 
 }
 

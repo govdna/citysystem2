@@ -374,7 +374,11 @@
 		WHERE
 			t2. ID = t1.value3
 	</select>
-	<select id="applist" resultMap="base" parameterType="GovServer">
-		SELECT ID,VALUE1,Value2,VALUE7 FROM GOV_APPLICATION_SYSTEM WHERE ISDELETED = 0 AND ID IN #{value3}
+	<select id="applist" resultMap="base">
+		SELECT ID,VALUE1,Value2,VALUE7 FROM GOV_APPLICATION_SYSTEM WHERE ISDELETED = 0 AND ID IN 
+		<foreach collection="array" item="employeeId" index="index"
+            open="(" close=")" separator=",">
+            #{employeeId}
+        </foreach>
 	</select>
 </mapper>
