@@ -1213,8 +1213,13 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 						for (DataElement de : nnadapter.getEntityList()) {
 
 							dataElementService.setIdentifier(de);
-							de.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
-							de.setGroupId(AccountShiroUtil.getCurrentUser().getGroupId());
+							if(de.getValue8()==null || de.getValue8()==""){
+								InformationResource im=new InformationResource();
+								im.setId(Integer.valueOf(de.getValue30()));
+								int companyid=service.findById(im).getCompanyId();
+								de.setCompanyId(companyid);
+								de.setValue8(companyid+"");
+							}
 							dl.setDataManagerId(Integer.valueOf(de.getValue30()));
 							de.setValue30(null);
 							de.setIsShare(0);
