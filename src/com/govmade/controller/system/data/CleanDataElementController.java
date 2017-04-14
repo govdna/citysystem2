@@ -429,7 +429,7 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 			Page<DataElement> page = new Page<DataElement>();
 			int pageNum = 1;
 			page.setPageNum(pageNum);
-			page.setPageSize(500);
+			page.setPageSize(1000);
 			long time = System.currentTimeMillis();
 			Page p = dataElementService.findByPage(dataElement, page);
 			while (p.getResults() != null && p.getResults().size() > 0) {

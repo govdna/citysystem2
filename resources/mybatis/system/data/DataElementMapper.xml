@@ -688,16 +688,6 @@
 		<if test="value8 != null ">
 			and t.value8 = #{value8}
 		</if>		
-		<choose>
-			<when  test="status==25">
-					and t.status in (2,5)
-			</when>
-			<otherwise>
-				<if test="status != null ">
-					and t.status = #{status} 
-				</if>
-			</otherwise>
-		</choose>
 		<if test="isDeleted != null ">
 			and t.isDeleted=#{isDeleted}
 		</if>

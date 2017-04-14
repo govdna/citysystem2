@@ -173,6 +173,9 @@
 		<if test="isDeleted != null" >  and
         isDeleted = #{isDeleted,jdbcType=NUMERIC}
       </if>
+      <if test="companyId != null"> and
+			company_id = #{companyId,jdbcType=NUMERIC}
+		</if>
 	</select>
 	<insert id="insert" parameterType="GovTable">
 		<selectKey resultType="java.lang.Integer" order="AFTER"

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.govmade.common.mybatis.Page;
 import com.govmade.entity.base.BaseEntity;
@@ -148,7 +149,7 @@ public class CleanDataElementServiceImp extends GovmadeBaseServiceImp<CleanDataE
 		page.setResults(cleanDataElementDao.findSingleDataElementByPage(o,page));
 		return page;
 	}
-
+	@Transactional(rollbackFor = Exception.class)  
 	@Override
 	public void importList(List<DataElement> list) {
 		for (DataElement d : list) {

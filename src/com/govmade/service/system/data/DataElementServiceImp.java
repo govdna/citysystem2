@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.govmade.common.mybatis.Page;
 import com.govmade.common.utils.DataHandlerUtil;
 import com.govmade.common.utils.StringUtil;
 import com.govmade.common.utils.base.Const;
+import com.govmade.entity.base.BaseEntity;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.tablex.GovTable;
@@ -38,6 +40,10 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 	@Autowired
 	private DataListDao dataListDao;
 
+	private static String maxIdentifier0;
+	
+	private static String maxIdentifier1;
+	
 	@Override
 	public List<DataElement> getDataElementListByInforResId(Integer inforResId, Integer objectType, String chName) {
 		return dataElementDao.getDataElementListByInforResId(inforResId, objectType, chName);
@@ -76,6 +82,17 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 
 	@Override
 	public String maxIdentifier(DataElement o) {
+		if(o.getClassType()==0){
+			if(maxIdentifier0==null){
+				maxIdentifier0=dataElementDao.maxIdentifier(o);
+			}
+			return maxIdentifier0;
+		}else if(o.getClassType()==1){
+			if(maxIdentifier1==null){
+				maxIdentifier1=dataElementDao.maxIdentifier(o);
+			}
+			return maxIdentifier1;
+		}
 		return dataElementDao.maxIdentifier(o);
 	}
 	
@@ -202,6 +219,7 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 		dataElementDao.clearImported(dataElement);
 	}
 
+	@Transactional(rollbackFor = Exception.class)  
 	@Override
 	public void insertList(List<DataElement> list) {
 		for(DataElement d:list){
@@ -211,6 +229,8 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 
 	@Override
 	public void cleanTable(DataElement dataElement) {
+		maxIdentifier0=null;
+		maxIdentifier1=null;
 		dataElementDao.cleanTable(dataElement);
 	}
 
@@ -252,20 +272,21 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 	}
 
 	@Override
-	public void setIdentifier(DataElement dataElement) {
+	public synchronized void setIdentifier(DataElement dataElement) {
 	
 		String i = maxIdentifier(dataElement);
 		if (i != null && i != "") {
-			i = Integer.valueOf(i) + 1 + "";
-			while (i.length() < 7) {
-				i = "0" + i;
-			}
+			i=String.format("%07d", Integer.valueOf(i) + 1);
 		} else {
 			i = "0000001";
 		}
-
+		if(dataElement.getClassType()==0){
+			maxIdentifier0=i;
+		}else if(dataElement.getClassType()==1){
+			maxIdentifier1=i;
+		}
 		if (dataElement.getId() == null) {
-			dataElement.setIdentifier(  i);
+			dataElement.setIdentifier(i);
 		} 
 	}
 
@@ -287,6 +308,20 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 	@Override
 	public List<DataElement> getUseCount() {
 		return dataElementDao.getUseCount();
+	}
+	
+	
+	@Transactional(rollbackFor = Exception.class)  
+	@Override
+	public  void insertList(List<DataElement> list, int classType) {
+		for (DataElement dm :list) {
+			dm.setClassType(classType);
+			dm.setSourceType(2);
+			setIdentifier(dm);
+			dm.setTimeCreate(new Date());
+			dm.setTimeModified(new Date());
+			dataElementDao.insert(dm);
+		}
 	}
 
 

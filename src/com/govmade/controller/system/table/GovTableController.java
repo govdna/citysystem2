@@ -310,7 +310,9 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 		GovTableField gtf = new GovTableField();
 		gtf.setValue3(o.getId() + "");
 		List<GovTableField> list = govTableFieldService.find(gtf);
-		govTableFieldService.deleteBatch(list);
+		if(list!=null&&list.size()>0){
+			govTableFieldService.deleteBatch(list);
+		}
 	}
 
 	@RequestMapping(value = "createSql")

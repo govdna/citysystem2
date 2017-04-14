@@ -13,5 +13,7 @@ public interface GovServerService extends BaseService<GovServer>,CanSimpleFields
 	public List<GovServer> syslist(GovServer gs);
 	public List<GovServer> tblist(GovServer gs);
 	public List<GovServer> fllist(GovServer gs);
+	public List<GovServer> cplist(GovServer gs);
+	public List<GovServer> applist(int[] sar);
 }
 

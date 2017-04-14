@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.repository.system.database.GovDatabaseDAO;
@@ -19,7 +20,7 @@ public class GovDatabaseServiceImp extends GovmadeBaseServiceImp<GovDatabase> im
 	public void clearColumn(int no) {
 		govDatabaseDAO.clearColumn(no);
 	}
-
+	@Transactional(rollbackFor = Exception.class)  
 	@Override
 	public void insertList(List<GovDatabase> list) {
 		for(GovDatabase db:list){

@@ -14,13 +14,13 @@
 <c:set var="cpid" value="" />
 </c:otherwise>
 </c:choose> 
-
+<c:set var="cpid" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>" />
 <%
 int c = ServiceUtil.getService("GovTableService").count(ServiceUtil.buildBean("GovTable@isDeleted=0&companyId="+pageContext.getAttribute("cpid")));
 int c1 = ServiceUtil.getService("GovApplicationSystemService").count(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0&value3="+pageContext.getAttribute("cpid")));
 int c2 = ServiceUtil.getService("GovTableFieldService").count(ServiceUtil.buildBean("GovTableField@isDeleted=0&companyId="+pageContext.getAttribute("cpid")));
 int c3 =ServiceUtil.getService("InformationResourceService").count(ServiceUtil.buildBean("InformationResource@status=0&isDeleted=0&companyId="+pageContext.getAttribute("cpid")));
-int c4 =ServiceUtil.getService("DataElementService").count(ServiceUtil.buildBean("DataElement@classType=1&status=0&isDeleted=0&value8="+pageContext.getAttribute("cpid")));
+int c4 =ServiceUtil.getService("DataElementService").count(ServiceUtil.buildBean("DataElement@classType=1&isDeleted=0&value8="+pageContext.getAttribute("cpid")));
 int s =String.valueOf(c).length();
 int s1 = String.valueOf(c1).length(); 
 int s2 = String.valueOf(c2).length();  

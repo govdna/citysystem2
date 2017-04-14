@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.entity.system.tablex.GovTableField;
@@ -21,7 +22,7 @@ public class GovTableFieldServiceImp extends GovmadeBaseServiceImp<GovTableField
 	public void clearColumn(int no) {
 		govTableField.clearColumn(no);
 	}
-
+	@Transactional(rollbackFor = Exception.class)  
 	@Override
 	public void insertList(List<GovTableField> list) {
 		for(GovTableField gf:list){
