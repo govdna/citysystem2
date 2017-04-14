@@ -7,200 +7,368 @@
 <head>
 <%@include file="../common/includeBaseHead.jsp"%>
 </head>
-<style>
-.form_datetime.input-group[class*=col-]{float: left;padding-right: 15px;padding-left: 15px;}
-</style>
 <body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
-  <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="ibox float-e-margins">
-      <div class="ibox-content">
-        <div id="toolbar">
-          <div class="form-inline">
-            <div class="form-group clearfix">
-              <label class="control-label  pull-left">责任部门</label>
-              <div class=" pull-left" style="margin-left:10px;width:250px;">
-                <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
-                  <option value=""></option>
-                  <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
-                  <option value="${obj.id}">${obj.companyName}</option>
-                  </c:forEach>
-                </select>
-              </div>
-              <div class="pull-left"  style="margin-left:10px;">
-                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索</button> 
-                </div>
-            </div>
-          </div>
-        </div>
-        <table id="dicList">
-        </table>
-      </div>
-    </div>
-  </div>
-  <div id="main5">
-      <div id="main4" class="form-horizontal" style="height:800px;"></div>
-  </div>
+
+  <div id="holder"  style="background-color:#fff;padding:0px;"> </div>
+   
 </body>
 </html>
+<script src="${base}/static/js/raphael.js" ></script>
 <%@include file="../common/includeJS.jsp"%>
-<script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
-<script>
-var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
-var layerIndex;//layer 窗口对象
-var title_name="服务器资料";
-var layerContent='#layer_form';//layer窗口主体内容dom Id
-var tableId='#dicList';//bootstrap-table id
-var toolbar='#toolbar';//bootstrap-table 工具栏id
-var formId='#eform';//form id
-var url='${base}/backstage/govServer/';//controller 路径
+<script type="text/javascript"> 
 
-$("select[name='cId']").chosen({
-  disable_search_threshold: 10,
-  no_results_text: "没有匹配到这条记录",
-    width: "100%"
-});
-var columns = [{field: 'value1',title: '服务器编号'},{field: 'value2ForShow',title: '责任部门'},{field: 'value3',title: '购买时间'}, {field: 'id',title: '操作',formatter: 'doFormatterL'}];
 
-function dshow(id,name) {
-	console.info(id+'----'+name);
-    $.getJSON("${base}/backstage/echart/seranalyse?value3=" + id +"&name="+name, function(data) {
-      $("#main5").show();
-      var myChart4 = echarts.init(document.getElementById('main4'));
-      var option4 = {
-    	        title: {
-    	          // text: '人物关系：乔布斯',
-    	          //subtext: '数据来自人立方',
-    	          x: 'right',
-    	          y: 'bottom'
-    	        },
-    	        tooltip: {
-    	          trigger: 'item',
-    	          formatter: '{a} : {b}'
-    	        },
-    	        toolbox: {
-    	          show: true,
-    	          feature: {
-    	            restore: { show: true },
-    	            magicType: { show: true, type: ['force', 'chord'] },
-    	            saveAsImage: { show: true }
-    	          }
-    	        },
-    	        legend: {
-    	          x: 'left',
-    	          data: ['部门','系统','表','字段']
-    	        },
-    	        series: [{
-    	          type: 'force',
-    	          name: "关系分析",
-    	          ribbonType: false,
-    	          categories: [{
-    	            name: '部门'
-    	          }, {
-    	            name: '系统'
-    	          },{
-    	            name: '表'
-    	          },{
-    	            name: '字段'
-    	          }],
-    	          itemStyle: {
-    	            normal: {
-    	              label: {
-    	                show: true,
-    	                textStyle: {
-    	                  color: '#333'
-    	                }
-    	              },
-    	              nodeStyle: {
-    	                brushType: 'both',
-    	                borderColor: 'rgba(255,215,0,0.4)',
-    	                borderWidth: 1
-    	              },
-    	              linkStyle: {
-    	                type: 'curve'
-    	              }
-    	            },
-    	            emphasis: {
-    	              label: {
-    	                show: false
-    	                  // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
-    	              },
-    	              nodeStyle: {
-    	                //r: 30
-    	              },
-    	              linkStyle: {}
-    	            }
-    	          },
-    	          useWorker: false,
-    	          minRadius: 15,
-    	          maxRadius: 25,
-    	          gravity: 1.1,
-    	          scaling: 1.8,
-    	          roam: 'move',
-    	          nodes: data.node,
-    	          links: data.link
-    	        }]
-    	      };
-      myChart4.setOption(option4);
-      layer.open({
-        type: 1,
-        shade: false,
-        area: ['98%', '96%'], //宽高
-        scrollbar: false,
-        title: false, //不显示标题
-        content: $("#main4"), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
-        cancel: function() {
-          $("#main5").hide();
-        }
-      });
 
-    });
-}
-function doFormatterL(value, row, index) {
-    var html = '';
-    html += '<div class="btn-group">';
-    //html+='<button type="button" class="btn btn-default">按钮 1</button>';
-    html += '<button type="button" class="btn btn-white" onclick="dshow(\''+row.id+'\',\''+row.value2ForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;关系展现</button>';
-    html += '</div>';
-    return html;
+
+//官网
+
+Raphael.fn.connection = function(obj1, obj2, line, bg) {
+  if (obj1.line && obj1.from && obj1.to) {
+      line = obj1;
+      obj1 = line.from;
+      obj2 = line.to;
   }
-  //得到查询的参数
-  var queryParams = function(params) {
-    var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-      rows : params.limit,
-      page : params.offset / params.limit + 1,
-      value2:$('select[name="cId"]').val(),
-      serverNum:1,
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govServer/index\")==1}" >
-       companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
-        </c:if>
-    };
-    return temp;
-  };
-</script>
-<%@include file="../common/baseSystemJS.jsp"%>
-<script>
-function openLayer() {
-  $(formId).form('clear');
-  initChosen();
-  $(formId).form('load', cdata);
-  $(".chosen-select").trigger("chosen:updated");
-  $(formId).valid();
-  layerIndex = layer.open({
-    type: 1,
-    area: ['70%', '70%'], //宽高
-    title: '新增',
-    scrollbar: false,
-    btn: ['保存', '关闭'],
-    yes: function(index, layero) {
-      $(formId).submit();
-    },
-    cancel: function(index, layero) {
-      $(layerContent + ' .dt-span').remove();
-      $(layerContent + ' .div_hidden').removeClass('div_hidden');
-    },
-    offset: '20px',
-    content: $(layerContent) //这里content是一个DOM
-  });
+  //var bb1 = obj1.getBBox(), bb2 = obj2.getBBox(), p = [ {
+  var bb1 = obj1.getBBox(), 
+      bb2 = obj2.getBBox(),
+      p = [ {
+          x : bb1.x + bb1.width / 2,
+          y : bb1.y - 1
+      }, {
+          x : bb1.x + bb1.width / 2,
+          y : bb1.y + bb1.height + 1
+      }, {
+          x : bb1.x - 1,
+          y : bb1.y + bb1.height / 2
+      }, {
+          x : bb1.x + bb1.width + 1,
+          y : bb1.y + bb1.height / 2
+      }, {
+          x : bb2.x + bb2.width / 2,
+          y : bb2.y - 1
+      }, {
+          x : bb2.x + bb2.width / 2,
+          y : bb2.y + bb2.height + 1
+      }, {
+          x : bb2.x - 1,
+          y : bb2.y + bb2.height / 2
+      }, {
+          x : bb2.x + bb2.width + 1,
+          y : bb2.y + bb2.height / 2
+      } ], 
+      d = {}, 
+      dis = [];
+   
+  for (var i = 0; i < 4; i++) {
+      for (var j = 4; j < 8; j++) {
+          var dx = Math.abs(p[i].x - p[j].x), dy = Math.abs(p[i].y
+                  - p[j].y);
+          if ((i == j - 4)
+                  || (((i != 3 && j != 6) || p[i].x < p[j].x)
+                  && ((i != 2 && j != 7) || p[i].x > p[j].x)
+                  && ((i != 0 && j != 5) || p[i].y > p[j].y) 
+                  && ((i != 1 && j != 4) || p[i].y < p[j].y))) {
+              dis.push(dx + dy);
+              d[dis[dis.length - 1]] = [ i, j ];
+          }
+      }
+  }
+  if (dis.length == 0) {
+      var res = [ 0, 4 ];
+  } else {
+      res = d[Math.min.apply(Math, dis)];
+  }
+  var x1 = p[res[0]].x, y1 = p[res[0]].y, x4 = p[res[1]].x, y4 = p[res[1]].y;
+  dx = Math.max(Math.abs(x1 - x4) / 2, 10);
+  dy = Math.max(Math.abs(y1 - y4) / 2, 10);
+  var x2 = [ x1, x1, x1 - dx, x1 + dx ][res[0]].toFixed(3), y2 = [
+          y1 - dy, y1 + dy, y1, y1 ][res[0]].toFixed(3), x3 = [ 0, 0,
+          0, 0, x4, x4, x4 - dx, x4 + dx ][res[1]].toFixed(3), y3 = [
+          0, 0, 0, 0, y1 + dy, y1 - dy, y4, y4 ][res[1]].toFixed(3);
+  var path = [ "M", x1.toFixed(3), y1.toFixed(3), "C", x2, y2, x3,
+          y3, x4.toFixed(3), y4.toFixed(3) ].join(",");
+  if (line && line.line) {
+      line.bg && line.bg.attr({
+          path : path
+      });
+      line.line.attr({
+          path : path
+      });
+  } else {
+      var color = typeof line == "string" ? line : "#000";
+      return {
+          bg : bg && bg.split && this.path(path).attr({
+              stroke : bg.split("|")[0],
+              fill : "none",
+              //"stroke-width" : bg.split("|")[1] || 3
+              "stroke-width" : 2
+          }),
+          line : this.path(path).attr({
+              stroke : color,
+              fill : "none"
+          }),
+          from : obj1,
+          to : obj2
+      };
+  }
+};
+
+
+
+
+
+var jifangpic="${base}/static/images/system/jifang.png";
+var databasepic="${base}/static/images/system/dataBase.png";
+var bumenpic="${base}/static/images/system/bumen.png";
+
+var selectBumen;//选中的部门
+var selectSystem;//选中的系统
+var selectDatabase;//选中的数据库
+
+function DataBase(r, l, t,db){ 
+var title=db.value1;
+var tt=title;
+if(tt.length>8){
+	tt=tt.substring(0,8)+"...";
+}
+this.Label = r.text(l + 55/2, t + 90, tt); 
+this.Label.attr({"fill":"#333", "font-size":"14px"});
+this.Rectangle = r.image(databasepic,l, t, 55, 80).attr({title:title}).drag(move, Dragger, up).data("cooperative", this.Label).toBack(); 
+
+function Dragger(){ 
+this.xx = this.attr("x"); 
+this.yy = this.attr("y"); 
+this.animate({"fill-opacity": .2}, 100); 
+} 
+function move(dx, dy){ 
+var attr = {x: this.xx + dx, y: this.yy + dy}; 
+this.attr(attr); 
+var lb = this.data("cooperative"); 
+var attr1 = {x: this.xx + dx + 55 / 2, y: this.yy + dy + 90}; 
+lb.attr(attr1); 
+} 
+function up(){ 
+this.animate({"fill-opacity": 1}, 300); 
+} 
+} 
+
+//st 系统
+function System(r, l, t,st){ 
+	var title;
+	if(typeof(st.value2)!='undefined'){
+		title=st.value2;
+	}else{
+		title=st;
+	}
+var tt=title;
+if(tt.length>8){
+	tt=tt.substring(0,8)+"...";
+}
+this.Label = r.text(l + 55/2, t + 90, tt); 
+this.Label.attr({"fill":"#333", "font-size":"14px"});
+this.Rectangle = r.image(jifangpic,l, t, 55, 80).attr({title:title}).drag(move, Dragger, up).data("cooperative", this.Label).toBack(); 
+this.Rectangle.click(function(){
+	if(typeof(st.value2)!='undefined'){
+		buildDataBase(st);
+	}else{
+		buildSystem(selectBumen);
+	}
+});
+function Dragger(){ 
+this.xx = this.attr("x"); 
+this.yy = this.attr("y"); 
+this.animate({"fill-opacity": .2}, 100); 
+} 
+function move(dx, dy){ 
+var attr = {x: this.xx + dx, y: this.yy + dy}; 
+this.attr(attr); 
+var lb = this.data("cooperative"); 
+var attr1 = {x: this.xx + dx + 55 / 2, y: this.yy + dy + 90}; 
+lb.attr(attr1); 
+} 
+function up(){ 
+this.animate({"fill-opacity": 1}, 300); 
+} 
+} 
+
+
+
+
+function BuMen(r, l, t,bm){
+	var title;
+	if(typeof(bm.value3ForShow)!='undefined'){
+		title=bm.value3ForShow;
+	}else{
+		title=bm;
+	}
+var tt=title;
+if(tt.length>8){
+	tt=tt.substring(0,8)+"...";
+}
+this.Label = r.text(l + 55/2, t + 90, tt); 
+this.Label.attr({"fill":"#333", "font-size":"14px"});
+this.Rectangle = r.image(bumenpic,l, t, 55, 80).attr({title:title}).drag(move, Dragger, up).data("cooperative", this.Label).toBack(); 
+
+this.Rectangle.click(function(){
+	if(typeof(bm.value3ForShow)!='undefined'){
+		buildSystem(bm);
+	}else{
+		buildBuMen();
+	}
+
+});
+function Dragger(){ 
+this.xx = this.attr("x"); 
+this.yy = this.attr("y"); 
+this.animate({"fill-opacity": .2}, 100); 
+} 
+function move(dx, dy){ 
+var attr = {x: this.xx + dx, y: this.yy + dy}; 
+this.attr(attr); 
+var lb = this.data("cooperative"); 
+var attr1 = {x: this.xx + dx + 55 / 2, y: this.yy + dy + 90}; 
+lb.attr(attr1); 
+} 
+function up(){ 
+this.animate({"fill-opacity": 1}, 300); 
+} 
+} 
+
+var systemList;
+var bumenList;
+window.onload = function(){ 
+	
+	jQuery.post('${base}/backstage/govApplicationSystem/listAjax?all=y',function(r){
+		systemList=r;
+		initBumenList();
+		buildBuMen();
+	},'json');
+
+}; 
+
+function initBumenList(){
+	bumenList=new Array();
+	var s=",";
+	for(var i=0;i<systemList.length;i++){
+		if(s.indexOf(systemList[i].value3ForShow)==-1){
+			bumenList.push(systemList[i]);
+			s+=systemList[i].value3ForShow+",";
+		}
+	}
 }
 
-</script>
+
+
+
+
+function buildDataBase(st){
+	selectSystem=st;
+	
+	jQuery.post('${base}/backstage/govDatabase/listAjax?all=y',function(r){
+		var list=r;
+		var num=r.length;
+		var c_width=document.body.clientWidth;
+		var clumns= Math.ceil((c_width-200)/120);//能放几列
+		var rows=Math.ceil(num/clumns);//行数
+		var height=rows*120+100;
+		if(height<document.body.clientHeight){
+		height=document.body.clientHeight;
+		}
+		initPaper( c_width, height);
+		var x=100;
+		var y=190;
+		var bumen = new BuMen(paper, x,50,selectBumen.value3ForShow); 
+		var stm = new System(paper, x+120,50,st.value2); 
+		var p = paper.path("M 120,90 L220,90 Z").toBack();//路径  
+		var p = paper.path("M 250,90 L250,170 Z").toBack();//路径  
+		
+		var p = paper.path("M 120,170 L"+clumns*120+",170 Z").toBack();//路径  
+		var p = paper.path("M 120,170 L120,180 Z").toBack();//路径  
+		var p = paper.path("M "+clumns*120+",170 L"+clumns*120+",180 Z").toBack();//路径  
+		
+		for(var i=0;i<num;i++){
+			var entity1 = new DataBase(paper, x+ (i%clumns)*120,y+ Math.floor(i/clumns)*120,list[i]); 
+		}
+	},'json');
+	
+	
+
+
+}
+
+function buildSystem(bm){
+	selectBumen=bm;
+var list=new Array();
+for(var i=0;i<systemList.length;i++){
+	if(systemList[i].value3===bm.value3){
+		list.push(systemList[i]);
+	}
+}
+var num=list.length;
+var c_width=document.body.clientWidth;
+var clumns= Math.ceil((c_width-200)/120);//能放几列
+var rows=Math.ceil(num/clumns);//行数
+var height=rows*120+100;
+if(height<document.body.clientHeight){
+height=document.body.clientHeight;
+}
+initPaper( c_width, height);
+var x=100;
+var y=190;
+var bumen = new BuMen(paper, x,50,bm.value3ForShow); 
+
+for(var i=0;i<num;i++){
+	var entity1 = new System(paper, x+ (i%clumns)*120,y+ Math.floor(i/clumns)*120,list[i]); 
+}
+}
+
+
+function buildBuMen(){
+var num=bumenList.length;
+var c_width=document.body.clientWidth;
+var clumns= Math.ceil((c_width-200)/120);//能放几列
+var rows=Math.ceil(num/clumns);//行数
+var height=rows*120+100;
+if(height<document.body.clientHeight){
+height=document.body.clientHeight;
+}
+initPaper( c_width, height);
+var x=100;
+var y=50;
+for(var i=0;i<num;i++){
+	var entity1 = new BuMen(paper, x+ (i%clumns)*120,y+ Math.floor(i/clumns)*120,bumenList[i]); 
+}
+}
+
+
+
+var paper;
+function initPaper(width,height){
+	if(typeof(paper)=="undefined"){
+		paper=Raphael("holder", width, height),discattr={fill:"red", stroke:"none"};
+	}else{
+		paper.clear();
+		paper.setSize( width, height);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+</script> 
+
+
+
+
+
+
+
+
+
