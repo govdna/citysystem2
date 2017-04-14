@@ -14,7 +14,7 @@
 <c:set var="cpid" value="" />
 </c:otherwise>
 </c:choose> 
-
+<c:set var="cpid" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>" />
 <%
 int c = ServiceUtil.getService("GovTableService").count(ServiceUtil.buildBean("GovTable@isDeleted=0&companyId="+pageContext.getAttribute("cpid")));
 int c1 = ServiceUtil.getService("GovApplicationSystemService").count(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0&value3="+pageContext.getAttribute("cpid")));

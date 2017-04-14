@@ -1,374 +1,222 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="com.govmade.common.utils.ServiceUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.govmade.cn/MyFunction" prefix="MyFunction"%>
+<%@ page import="com.govmade.common.utils.security.AccountShiroUtil" %>
 <!DOCTYPE html >
 <html lang="en">
 <head>
 <%@include file="../common/includeBaseHead.jsp"%>
-</head>
-<body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
+<style>
 
-  <div id="holder"  style="background-color:#fff;padding:0px;"> </div>
-   
+.node {
+cursor: pointer;
+}
+
+.node circle {
+fill: #fff;
+stroke: steelblue;
+stroke-width: 1.5px;
+}
+
+.node text {
+padding: 3px 10px;
+border: 1px solid #999;
+border-radius: 2px;
+font: 12px sans-serif;
+}
+.link {
+fill: none;
+stroke: #ccc;
+stroke-width: 1.5px;
+}
+
+</style>
+</head>
+<body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>">
 </body>
 </html>
-<script src="${base}/static/js/raphael.js" ></script>
-<%@include file="../common/includeJS.jsp"%>
-<script type="text/javascript"> 
 
+<script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
+<script src="${base}/static/js/d3.v3.min.js"></script>
+<script src="${base}/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script>
+var margin = { top: 20, right: 120, bottom: 20, left: 120 },
+  width = 960 - margin.right - margin.left,
+  height = 800 - margin.top - margin.bottom;
 
+var i = 0,
+  duration = 750,
+  root;
 
+var tree = d3.layout.tree()
+  .size([height, width]);
 
-//官网
+var diagonal = d3.svg.diagonal()
+  .projection(function(d) {
+    return [d.y, d.x]; });
 
-Raphael.fn.connection = function(obj1, obj2, line, bg) {
-  if (obj1.line && obj1.from && obj1.to) {
-      line = obj1;
-      obj1 = line.from;
-      obj2 = line.to;
+var svg = d3.select("body").append("svg")
+  .attr("width", width + margin.right + margin.left)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.json("${base}/backstage/echart/systree?companyId=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>", function(error, flare) {
+  if (error) throw error;
+
+  root = flare;
+  root.x0 = height / 2;
+  root.y0 = 0;
+
+  function collapse(d) {
+    if (d.children) {
+      d._children = d.children;
+      d._children.forEach(collapse);
+      d.children = null;
+    }
   }
-  //var bb1 = obj1.getBBox(), bb2 = obj2.getBBox(), p = [ {
-  var bb1 = obj1.getBBox(), 
-      bb2 = obj2.getBBox(),
-      p = [ {
-          x : bb1.x + bb1.width / 2,
-          y : bb1.y - 1
-      }, {
-          x : bb1.x + bb1.width / 2,
-          y : bb1.y + bb1.height + 1
-      }, {
-          x : bb1.x - 1,
-          y : bb1.y + bb1.height / 2
-      }, {
-          x : bb1.x + bb1.width + 1,
-          y : bb1.y + bb1.height / 2
-      }, {
-          x : bb2.x + bb2.width / 2,
-          y : bb2.y - 1
-      }, {
-          x : bb2.x + bb2.width / 2,
-          y : bb2.y + bb2.height + 1
-      }, {
-          x : bb2.x - 1,
-          y : bb2.y + bb2.height / 2
-      }, {
-          x : bb2.x + bb2.width + 1,
-          y : bb2.y + bb2.height / 2
-      } ], 
-      d = {}, 
-      dis = [];
-   
-  for (var i = 0; i < 4; i++) {
-      for (var j = 4; j < 8; j++) {
-          var dx = Math.abs(p[i].x - p[j].x), dy = Math.abs(p[i].y
-                  - p[j].y);
-          if ((i == j - 4)
-                  || (((i != 3 && j != 6) || p[i].x < p[j].x)
-                  && ((i != 2 && j != 7) || p[i].x > p[j].x)
-                  && ((i != 0 && j != 5) || p[i].y > p[j].y) 
-                  && ((i != 1 && j != 4) || p[i].y < p[j].y))) {
-              dis.push(dx + dy);
-              d[dis[dis.length - 1]] = [ i, j ];
-          }
-      }
-  }
-  if (dis.length == 0) {
-      var res = [ 0, 4 ];
-  } else {
-      res = d[Math.min.apply(Math, dis)];
-  }
-  var x1 = p[res[0]].x, y1 = p[res[0]].y, x4 = p[res[1]].x, y4 = p[res[1]].y;
-  dx = Math.max(Math.abs(x1 - x4) / 2, 10);
-  dy = Math.max(Math.abs(y1 - y4) / 2, 10);
-  var x2 = [ x1, x1, x1 - dx, x1 + dx ][res[0]].toFixed(3), y2 = [
-          y1 - dy, y1 + dy, y1, y1 ][res[0]].toFixed(3), x3 = [ 0, 0,
-          0, 0, x4, x4, x4 - dx, x4 + dx ][res[1]].toFixed(3), y3 = [
-          0, 0, 0, 0, y1 + dy, y1 - dy, y4, y4 ][res[1]].toFixed(3);
-  var path = [ "M", x1.toFixed(3), y1.toFixed(3), "C", x2, y2, x3,
-          y3, x4.toFixed(3), y4.toFixed(3) ].join(",");
-  if (line && line.line) {
-      line.bg && line.bg.attr({
-          path : path
-      });
-      line.line.attr({
-          path : path
-      });
-  } else {
-      var color = typeof line == "string" ? line : "#000";
-      return {
-          bg : bg && bg.split && this.path(path).attr({
-              stroke : bg.split("|")[0],
-              fill : "none",
-              //"stroke-width" : bg.split("|")[1] || 3
-              "stroke-width" : 2
-          }),
-          line : this.path(path).attr({
-              stroke : color,
-              fill : "none"
-          }),
-          from : obj1,
-          to : obj2
-      };
-  }
-};
 
-
-
-
-
-var jifangpic="${base}/static/images/system/jifang.png";
-var databasepic="${base}/static/images/system/dataBase.png";
-var bumenpic="${base}/static/images/system/bumen.png";
-
-var selectBumen;//选中的部门
-var selectSystem;//选中的系统
-var selectDatabase;//选中的数据库
-
-function DataBase(r, l, t,db){ 
-var title=db.value1;
-var tt=title;
-if(tt.length>8){
-	tt=tt.substring(0,8)+"...";
-}
-this.Label = r.text(l + 55/2, t + 90, tt); 
-this.Label.attr({"fill":"#333", "font-size":"14px"});
-this.Rectangle = r.image(databasepic,l, t, 55, 80).attr({title:title}).drag(move, Dragger, up).data("cooperative", this.Label).toBack(); 
-
-function Dragger(){ 
-this.xx = this.attr("x"); 
-this.yy = this.attr("y"); 
-this.animate({"fill-opacity": .2}, 100); 
-} 
-function move(dx, dy){ 
-var attr = {x: this.xx + dx, y: this.yy + dy}; 
-this.attr(attr); 
-var lb = this.data("cooperative"); 
-var attr1 = {x: this.xx + dx + 55 / 2, y: this.yy + dy + 90}; 
-lb.attr(attr1); 
-} 
-function up(){ 
-this.animate({"fill-opacity": 1}, 300); 
-} 
-} 
-
-//st 系统
-function System(r, l, t,st){ 
-	var title;
-	if(typeof(st.value2)!='undefined'){
-		title=st.value2;
-	}else{
-		title=st;
-	}
-var tt=title;
-if(tt.length>8){
-	tt=tt.substring(0,8)+"...";
-}
-this.Label = r.text(l + 55/2, t + 90, tt); 
-this.Label.attr({"fill":"#333", "font-size":"14px"});
-this.Rectangle = r.image(jifangpic,l, t, 55, 80).attr({title:title}).drag(move, Dragger, up).data("cooperative", this.Label).toBack(); 
-this.Rectangle.click(function(){
-	if(typeof(st.value2)!='undefined'){
-		buildDataBase(st);
-	}else{
-		buildSystem(selectBumen);
-	}
+  root.children.forEach(collapse);
+  update(root);
 });
-function Dragger(){ 
-this.xx = this.attr("x"); 
-this.yy = this.attr("y"); 
-this.animate({"fill-opacity": .2}, 100); 
-} 
-function move(dx, dy){ 
-var attr = {x: this.xx + dx, y: this.yy + dy}; 
-this.attr(attr); 
-var lb = this.data("cooperative"); 
-var attr1 = {x: this.xx + dx + 55 / 2, y: this.yy + dy + 90}; 
-lb.attr(attr1); 
-} 
-function up(){ 
-this.animate({"fill-opacity": 1}, 300); 
-} 
-} 
+
+d3.select(self.frameElement).style("height", "800px");
+
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+    links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+    .data(nodes, function(d) {
+      return d.id || (d.id = ++i); });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+    .attr("class", "node")
+    .attr("transform", function(d) {
+      return "translate(" + source.y0 + "," + source.x0 + ")"; })
+    .on("click", click);
+
+  nodeEnter.append("circle")
+    .attr("r", 1e-6)
+    .style("fill", function(d) {
+      return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeEnter.append("text")
+    .attr("x", function(d) {
+      return d.children || d._children ? -10 : 10; })
+    .attr("dy", ".35em")
+    .attr("text-anchor", function(d) {
+      return d.children || d._children ? "end" : "start"; })
+    .text(function(d) {
+      return d.name; })
+    .style({ "fill-opacity": 1e-6 });
 
 
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+    .duration(duration)
+    .attr("transform", function(d) {
+      return "translate(" + d.y + "," + d.x + ")"; });
 
+  nodeUpdate.select("circle")
+    .attr("r", 4.5)
+    .style("fill", function(d) {
+      return d._children ? "lightsteelblue" : "#fff"; });
 
-function BuMen(r, l, t,bm){
-	var title;
-	if(typeof(bm.value3ForShow)!='undefined'){
-		title=bm.value3ForShow;
-	}else{
-		title=bm;
-	}
-var tt=title;
-if(tt.length>8){
-	tt=tt.substring(0,8)+"...";
+  nodeUpdate.select("text")
+    .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+    .duration(duration)
+    .attr("transform", function(d) {
+      return "translate(" + source.y + "," + source.x + ")"; })
+    .remove();
+
+  nodeExit.select("circle")
+    .attr("r", 1e-6);
+
+  nodeExit.select("text")
+    .style("fill-opacity", 1e-6);
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+    .data(links, function(d) {
+      return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+    .attr("class", "link")
+    .attr("d", function(d) {
+      var o = { x: source.x0, y: source.y0 };
+      return diagonal({ source: o, target: o });
+    });
+
+  // Transition links to their new position.
+  link.transition()
+    .duration(duration)
+    .attr("d", diagonal);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+    .duration(duration)
+    .attr("d", function(d) {
+      var o = { x: source.x, y: source.y };
+      return diagonal({ source: o, target: o });
+    })
+    .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
 }
-this.Label = r.text(l + 55/2, t + 90, tt); 
-this.Label.attr({"fill":"#333", "font-size":"14px"});
-this.Rectangle = r.image(bumenpic,l, t, 55, 80).attr({title:title}).drag(move, Dragger, up).data("cooperative", this.Label).toBack(); 
 
-this.Rectangle.click(function(){
-	if(typeof(bm.value3ForShow)!='undefined'){
-		buildSystem(bm);
-	}else{
-		buildBuMen();
-	}
-
+// Toggle children on click.
+function click(d) {
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  update(d);
+}
+$(function() {
+  $(".gray-bg").slimScroll({
+    width: 'auto', //可滚动区域宽度
+    height: '1000px', //可滚动区域高度
+    size: '10px', //组件宽度
+    color: '#000', //滚动条颜色
+    position: 'right', //组件位置：left/right
+    distance: '0px', //组件与侧边之间的距离
+    start: 'top', //默认滚动位置：top/bottom
+    opacity: .4, //滚动条透明度
+    alwaysVisible: false, //是否 始终显示组件
+    disableFadeOut: false, //是否 鼠标经过可滚动区域时显示组件，离开时隐藏组件
+    railVisible: true, //是否 显示轨道
+    railColor: '#333', //轨道颜色
+    railOpacity: .2, //轨道透明度
+    railDraggable: true, //是否 滚动条可拖动
+    railClass: 'slimScrollRail', //轨道div类名 
+    barClass: 'slimScrollBar', //滚动条div类名
+    wrapperClass: 'slimScrollDiv', //外包div类名
+    allowPageScroll: true, //是否 使用滚轮到达顶端/底端时，滚动窗口
+    wheelStep: 20, //滚轮滚动量
+    touchScrollStep: 200, //滚动量当用户使用手势
+    borderRadius: '7px', //滚动条圆角
+    railBorderRadius: '7px' //轨道圆角
+  });
 });
-function Dragger(){ 
-this.xx = this.attr("x"); 
-this.yy = this.attr("y"); 
-this.animate({"fill-opacity": .2}, 100); 
-} 
-function move(dx, dy){ 
-var attr = {x: this.xx + dx, y: this.yy + dy}; 
-this.attr(attr); 
-var lb = this.data("cooperative"); 
-var attr1 = {x: this.xx + dx + 55 / 2, y: this.yy + dy + 90}; 
-lb.attr(attr1); 
-} 
-function up(){ 
-this.animate({"fill-opacity": 1}, 300); 
-} 
-} 
 
-var systemList;
-var bumenList;
-window.onload = function(){ 
-	
-	jQuery.post('${base}/backstage/govApplicationSystem/listAjax?all=y',function(r){
-		systemList=r;
-		initBumenList();
-		buildBuMen();
-	},'json');
-
-}; 
-
-function initBumenList(){
-	bumenList=new Array();
-	var s=",";
-	for(var i=0;i<systemList.length;i++){
-		if(s.indexOf(systemList[i].value3ForShow)==-1){
-			bumenList.push(systemList[i]);
-			s+=systemList[i].value3ForShow+",";
-		}
-	}
-}
-
-
-
-
-
-function buildDataBase(st){
-	selectSystem=st;
-	
-	jQuery.post('${base}/backstage/govDatabase/listAjax?all=y',function(r){
-		var list=r;
-		var num=r.length;
-		var c_width=document.body.clientWidth;
-		var clumns= Math.ceil((c_width-200)/120);//能放几列
-		var rows=Math.ceil(num/clumns);//行数
-		var height=rows*120+100;
-		if(height<document.body.clientHeight){
-		height=document.body.clientHeight;
-		}
-		initPaper( c_width, height);
-		var x=100;
-		var y=190;
-		var bumen = new BuMen(paper, x,50,selectBumen.value3ForShow); 
-		var stm = new System(paper, x+120,50,st.value2); 
-		var p = paper.path("M 120,90 L220,90 Z").toBack();//路径  
-		var p = paper.path("M 250,90 L250,170 Z").toBack();//路径  
-		
-		var p = paper.path("M 120,170 L"+clumns*120+",170 Z").toBack();//路径  
-		var p = paper.path("M 120,170 L120,180 Z").toBack();//路径  
-		var p = paper.path("M "+clumns*120+",170 L"+clumns*120+",180 Z").toBack();//路径  
-		
-		for(var i=0;i<num;i++){
-			var entity1 = new DataBase(paper, x+ (i%clumns)*120,y+ Math.floor(i/clumns)*120,list[i]); 
-		}
-	},'json');
-	
-	
-
-
-}
-
-function buildSystem(bm){
-	selectBumen=bm;
-var list=new Array();
-for(var i=0;i<systemList.length;i++){
-	if(systemList[i].value3===bm.value3){
-		list.push(systemList[i]);
-	}
-}
-var num=list.length;
-var c_width=document.body.clientWidth;
-var clumns= Math.ceil((c_width-200)/120);//能放几列
-var rows=Math.ceil(num/clumns);//行数
-var height=rows*120+100;
-if(height<document.body.clientHeight){
-height=document.body.clientHeight;
-}
-initPaper( c_width, height);
-var x=100;
-var y=190;
-var bumen = new BuMen(paper, x,50,bm.value3ForShow); 
-
-for(var i=0;i<num;i++){
-	var entity1 = new System(paper, x+ (i%clumns)*120,y+ Math.floor(i/clumns)*120,list[i]); 
-}
-}
-
-
-function buildBuMen(){
-var num=bumenList.length;
-var c_width=document.body.clientWidth;
-var clumns= Math.ceil((c_width-200)/120);//能放几列
-var rows=Math.ceil(num/clumns);//行数
-var height=rows*120+100;
-if(height<document.body.clientHeight){
-height=document.body.clientHeight;
-}
-initPaper( c_width, height);
-var x=100;
-var y=50;
-for(var i=0;i<num;i++){
-	var entity1 = new BuMen(paper, x+ (i%clumns)*120,y+ Math.floor(i/clumns)*120,bumenList[i]); 
-}
-}
-
-
-
-var paper;
-function initPaper(width,height){
-	if(typeof(paper)=="undefined"){
-		paper=Raphael("holder", width, height),discattr={fill:"red", stroke:"none"};
-	}else{
-		paper.clear();
-		paper.setSize( width, height);
-	}
-
-}
-
-
-
-
-
-
-
-
-
-
-</script> 
-
-
-
-
-
-
-
-
+</script>
 

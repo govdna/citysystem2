@@ -27,6 +27,7 @@ import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.computer.GovComputerRoom;
 import com.govmade.entity.system.data.DataElement;
+import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.entity.system.information.InformationRes;
 import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.information.SearchLog;
@@ -35,6 +36,7 @@ import com.govmade.entity.system.server.GovServer;
 import com.govmade.entity.system.sort.SortManager;
 import com.govmade.service.base.BaseService;
 import com.govmade.service.system.data.DataElementService;
+import com.govmade.service.system.database.GovDatabaseService;
 import com.govmade.service.system.information.InformationResService;
 import com.govmade.service.system.information.InformationResourceService;
 import com.govmade.service.system.information.SearchLogService;
@@ -55,6 +57,8 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	private CompanyService companyservice;
 	@Autowired
 	private GovServerService govServerService;
+	@Autowired
+	private GovDatabaseService govDatabaseService;
 	@Autowired
 	private InformationResourceService informationResourceService;
 	@Autowired
@@ -1207,54 +1211,67 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	public void systree(GovServer gs,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
-		JSONObject echartjson = new JSONObject();
 		int cid = gs.getCompanyId();
 		Company cp = new Company();
 		cp.setId(cid);
 		List<Company> cpList = companyservice.find(cp);
+		JSONObject echartjson = new JSONObject();
 		if(cpList.size()>0){
 			echartjson.put("name", cpList.get(0).getCompanyName());
 		}
 		JSONArray unitArray = new JSONArray();
+		gs.setValue3(cid+"");
 		List<GovServer> syslist = govServerService.syslist(gs);
-		if(syslist.size()>0){			
-			for(GovServer gs1 : syslist){
-				JSONObject unitjson1 = new JSONObject();
-				String name1 = gs1.getValue1();				
-				unitjson1.put("name", name1);
-				if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
-					gs.setValue3(gs1.getValue7());
-					List<GovServer> tblist = govServerService.tblist(gs);
-					if(tblist.size()>0){
-						JSONArray unitArray1 = new JSONArray();
-						for(GovServer gs2 : tblist){
-							JSONObject unitjson2 = new JSONObject();
-							String name2 = gs2.getValue2();
-							unitjson2.put("name", name2);
-							gs.setValue3(gs2.getId()+"");
-							List<GovServer> fllist = govServerService.fllist(gs);
-							if(fllist.size()>0){
-								JSONObject unitjson3 = new JSONObject();
-								JSONArray unitArray2 = new JSONArray();
-								int index = 0;
-								for(GovServer gs3 : fllist){
-									if(index < 5){
-										String name3 = gs3.getValue2();
-										unitjson3.put("name", name3);
-										unitArray2.add(unitjson3);
-										index++;
-									}									
+				if(syslist.size()>0){			
+					for(GovServer gs1 : syslist){
+						JSONObject unitjson = new JSONObject();
+						JSONArray unArray = new JSONArray();
+						String name1 = gs1.getValue1();				
+						unitjson.put("name", name1);
+						if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
+							int dbid = Integer.valueOf(gs1.getValue7());
+							GovDatabase gd = new GovDatabase();
+							gd.setId(dbid);
+							List<GovDatabase> gdList = govDatabaseService.find(gd);
+							if(gdList.size()>0){
+								JSONObject unitjson1 = new JSONObject();
+								gs.setValue3(gs1.getValue7());
+								List<GovServer> tblist = govServerService.tblist(gs);
+								unitjson1.put("name", gdList.get(0).getValue2());
+								if(tblist.size()>0){
+									JSONArray unitArray1 = new JSONArray();
+									for(GovServer gs2 : tblist){
+										JSONObject unitjson2 = new JSONObject();
+										String name2 = gs2.getValue2();
+										unitjson2.put("name", name2);
+										gs.setValue3(gs2.getId()+"");
+										List<GovServer> fllist = govServerService.fllist(gs);
+										if(fllist.size()>0){
+											JSONObject unitjson3 = new JSONObject();
+											JSONArray unitArray2 = new JSONArray();
+											int index = 0;
+											for(GovServer gs3 : fllist){
+												if(index < 5){
+													String name3 = gs3.getValue2();
+													unitjson3.put("name", name3);
+													unitArray2.add(unitjson3);
+													index++;
+												}									
+											}
+											unitjson2.put("children", unitArray2);
+										}
+										unitArray1.add(unitjson2);
+									}
+									unitjson1.put("children", unitArray1);
 								}
-								unitjson2.put("children", unitArray2);
-							}
-							unitArray1.add(unitjson2);
+
+								unArray.add(unitjson1);
+							}							
 						}
-						unitjson1.put("children", unitArray1);
-					}
-				}				
-				unitArray.add(unitjson1);
-			}			
-		}		
+						unitjson.put("children", unArray);
+						unitArray.add(unitjson);
+					}			
+				}		
 		echartjson.put("children", unitArray);
 		res.getWriter().write(echartjson.toString());
 		res.getWriter().flush();

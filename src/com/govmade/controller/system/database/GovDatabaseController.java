@@ -119,7 +119,9 @@ public class GovDatabaseController extends GovmadeBaseController<GovDatabase>{
 			GovTableField gtf = new GovTableField();
 			gtf.setValue3(t.getId() + "");
 			List<GovTableField> list = govTableFieldService.find(gtf);
-			govTableFieldService.deleteBatch(list);
+			if(list!=null&&list.size()>0){
+				govTableFieldService.deleteBatch(list);
+			}
 		}
 		//删除关联表
 		if(tblist!=null&&tblist.size()>0){
