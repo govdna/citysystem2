@@ -140,6 +140,7 @@ public interface DataElementService extends BaseService<DataElement>{
 	
 	public void insertList(List<DataElement> list);
 	
+	public void insertList(List<DataElement> list,int classType);
 	/** 
 	* @Title: clearTable 
 	* @Description: TODO(删除表) 

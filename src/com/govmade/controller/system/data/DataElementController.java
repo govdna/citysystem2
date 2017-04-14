@@ -629,6 +629,7 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 	@ResponseBody
 	public AjaxRes importDataElement(@RequestParam(value = "file", required = false) MultipartFile file, Model model,
 			HttpServletRequest request) {
+		long time=System.currentTimeMillis();
 		String t = request.getParameter("t");
 		AjaxRes ar = getAjaxRes();
 		try {
@@ -648,24 +649,22 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 				ar.setRes(Const.FAIL);
 			} else {
 				try {
-					for (DataElement dm : adapter.getEntityList()) {
-
-						if (t.equals("1")) {
-							dm.setClassType(0);
-						} else {
-							dm.setStatus(2);
-							dm.setClassType(1);
-						}
-						dm.setSourceType(2);
-						doBeforeInsertUpdate(dm, request, null);
-						service.insert(dm);
+					
+					int classType=1;
+					if (t.equals("1")) {
+						classType=0;
 					}
+					System.out.println(System.currentTimeMillis()-time);
+					
+					service.insertList(adapter.getEntityList(), classType);
+					
 					ar.setRes(Const.SUCCEED);
 				} catch (Exception e) {
 					ar.setRes(Const.FAIL);
 					e.printStackTrace();
 				}
 			}
+			System.out.println(System.currentTimeMillis()-time);
 			ar.setResMsg(adapter.getErrorMsg().toString());
 		} catch (Exception e) {
 			e.printStackTrace();

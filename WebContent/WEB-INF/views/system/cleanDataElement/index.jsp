@@ -514,7 +514,7 @@ function systemTypeFormatter(value, row, index)
 	  var loadIndex =  layer.load(0, {
 		  shade: [0.1,'#fff'] //0.1透明度的白色背景
 	  });
-	  var tm=$('#dm3').bootstrapTable('getOptions').totalRows/25;
+	  var tm=$('#dm3').bootstrapTable('getOptions').totalRows/50;
 	  if(tm>5){
 		  layer.msg('整个导入过程预计需要'+parseInt(tm)+'秒，请耐心等待！', {time: 5000, icon:6});
 	  }
