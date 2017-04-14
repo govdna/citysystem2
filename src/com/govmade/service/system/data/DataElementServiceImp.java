@@ -219,6 +219,7 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 		dataElementDao.clearImported(dataElement);
 	}
 
+	@Transactional(rollbackFor = Exception.class)  
 	@Override
 	public void insertList(List<DataElement> list) {
 		for(DataElement d:list){
