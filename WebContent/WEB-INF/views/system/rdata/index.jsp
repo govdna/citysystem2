@@ -537,16 +537,17 @@ var  columns=[{
 	  formatter: 'checkFormatter2',
 	}, {
     field: 'identifier',
-    title: '内部标识符'
+    title: '内部标识符',
+    sortable:true
 }, 
 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataElementFieldsService\").find(ServiceUtil.buildBean(\"DataElementFields@isDeleted=0\"),\"list_no\",\"asc\")%>">
 <c:if test="${obj.isShow==1}">
 	<c:choose>
 		<c:when test="${obj.inputType==1}">
-		 	{field: 'value${obj.valueNo}',title: '${obj.name}'}, 
+		 	{field: 'value${obj.valueNo}',title: '${obj.name}',sortable:true}, 
 		</c:when>
 		<c:when test="${obj.inputType==6}">
-		 	{field: 'value${obj.valueNo}',title: '${obj.name}'}, 
+		 	{field: 'value${obj.valueNo}',title: '${obj.name}',sortable:true}, 
 		</c:when>
 		<c:otherwise>
 			{field: 'value${obj.valueNo}ForShow',title: '${obj.name}'},
@@ -630,8 +631,8 @@ function statuserro(id,s){
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
-      sort:'identifier',
-      order:'asc',
+      sort:params.sort,
+      order:params.order,
       chName:$('input[name="chN"]').val(),
       value5:$('select[name="obT"]').val(),
       value8:$('select[name="cId"]').val(),

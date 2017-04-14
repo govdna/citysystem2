@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import org.apache.commons.lang3.StringUtils;
 
 import com.govmade.common.utils.ChineseTo;
 import com.govmade.common.utils.ServiceUtil;
@@ -58,7 +58,7 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 	}
 	@Override
 	public int getClumnSize() {
-		return 7;
+		return 8;
 	}
 
 	@Override
@@ -109,6 +109,17 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 		de.setDefine(clumns[5]);
 		de.setNotes(clumns[6]);
 		de.setClassType(1);
+		
+		if(!StringUtils.isEmpty(clumns[7])){
+			if(companyname.get(clumns[7])==null){
+				appendMsg("第"+realNum+"行第8列 不存在该部门");
+				setError(true);
+			}else{
+				de.setCompanyId(Integer.valueOf(companyname.get(clumns[7])));
+				de.setValue8(companyname.get(clumns[7]));
+			}
+		}
+
 		return de;
 	}
 

@@ -350,12 +350,14 @@ $('.dropdown-btn').on('click', function() {
 
 //bootstrap-table 列数
 var  columns=[{
-    field: 'identifier',
-    title: '内部标识符'
-}, {
-    field: 'chName',
-    title: '中文名称',
-    formatter: 'longFormatter',
+	  field: 'identifier',
+	    title: '内部标识符',
+	    sortable:true
+	}, {
+	    field: 'value1',
+	    title: '中文名称',
+	    formatter: 'longFormatter',
+	    sortable:true
 }, {
     field: 'egName',
     title: '英文名称',
@@ -363,7 +365,7 @@ var  columns=[{
 }, {
     field: 'systemType',
     title: '数据元类型',
-    formatter: 'systemTypeFormatter',
+    formatter: 'systemTypeFormatter'
 }, {
     field: 'id',
     title: '操作',
@@ -396,10 +398,10 @@ function systemTypeFormatter(value, row, index)
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
-      sort:'identifier',
-      order:'asc',
-      chName:$('input[name="chN"]').val(),
-      value5:$('select[name="obT"]').val(),
+      sort:params.sort,
+      order:params.order,
+      chName:$('input[name="chN"]').val(),     
+      value5:$('select[name="obT"]').val(),     
       <c:if test="${pubDE!=null}">
       systemType:1,
 	  </c:if>

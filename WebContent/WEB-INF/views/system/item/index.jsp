@@ -304,9 +304,10 @@ var url='${base}/backstage/itemSort/';//controller 路径
 
 //bootstrap-table 列数
 var  columns=[{
-    field: 'itemName',
+    field: 'ITEM_NAME',
     title: '事项名称',
     formatter: 'longFormatter',
+    sortable:true
 }, {
     field: 'serObjSortForShow',
     title: '服务对象分类'
@@ -320,6 +321,7 @@ var  columns=[{
     field: 'yesorno',
     title: '是否有应用系统支撑',
     formatter: 'doFormatter11',
+    sortable:true
 },{
     field: 'id',
     title: '操作',
@@ -328,11 +330,11 @@ var  columns=[{
 
 function longFormatter(value, row, index)
 {
-	var html='<span title="'+value+'">';
-	if(value.length>10){
-		html+=value.substring(0,10)+"...";
+	var html='<span title="'+row.itemName+'">';
+	if(row.itemName.length>10){
+		html+=row.itemName.substring(0,10)+"...";
 	}else{
-		html+=value;
+		html+=row.itemName;
 	}
 	html+='</span>';
 	return html;
@@ -353,6 +355,8 @@ function doFormatter11(value, row, index)
 		var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 			rows : params.limit,
 			page : params.offset / params.limit + 1,
+		    sort:params.sort,
+		    order:params.order,
 			itemName:$('input[name="itemN"]').val(),
 			companyId: $('select[name="cId"]').val(),
 			serContent: $('select[name="serC"]').val(),

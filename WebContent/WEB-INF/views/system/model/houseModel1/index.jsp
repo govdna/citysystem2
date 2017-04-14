@@ -89,7 +89,7 @@
         </div>
       </div>    
 
-      <div class="form-group">
+      <div class="form-group" style="height:100px;">
         <label class="col-sm-3 control-label">已选择：</label>
         <div class="col-sm-9">
           <div class="chosen-container chosen-container-multi">
@@ -240,9 +240,11 @@ var  columns=[{
     field: 'infoTypes',
     title: '信息类',
     formatter: 'doFormatter1',
+    sortable:true
 }, {
     field: 'infoName',
-    title: '专项信息名称'
+    title: '专项信息名称',
+    sortable:true
 },{
     field: 'informationResIdForShow',
     title: '信息资源名称'
@@ -266,13 +268,14 @@ function doFormatter1(value, row, index)
   }  
   return html;
 }
-
   //得到查询的参数
   var queryParams = function(params) {
 
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
+      sort:params.sort,
+      order:params.order,
       infoTypes:$('select[name="infoT"]').val(),
     <c:if test="${MyFunction:getMaxScope(\"/backstage/model/houseModel/index\")==1}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
@@ -546,7 +549,7 @@ function openLayer(){
   $(formId).valid();
   layerIndex=layer.open({
     type: 1,
-    area: ['70%', '70%'], //宽高
+    area: ['70%', '80%'], //宽高
     title: '新增',
     scrollbar: false,
     btn: ['保存','关闭'], 
@@ -616,7 +619,7 @@ var TableInit = function () {
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
-            sortable: false,                     //是否启用排序
+            sortable: true,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
             queryParams: queryParams,//传递参数（*）
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）

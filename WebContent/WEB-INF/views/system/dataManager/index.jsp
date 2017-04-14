@@ -186,18 +186,16 @@ var url = '${base}/backstage/dataManager/'; //controller 路径
 
 //bootstrap-table 列数
 var columns = [{
-  field: 'sortManagerIdValue',
-  title: '元数据类型'
+	  field: 'SORT_MANAGER_ID',
+	  title: '元数据类型',
+	  formatter: 'showFormatter1',
+	  sortable:true
 }, {
   field: 'dataName',
-  title: '元素名称'
+  title: '元素名称',
+  formatter: 'longFormatter',
+  sortable:true
 }, {
-  //    field: 'egName',
-  //    title: '英文名称'
-  //}, {
-  //    field: 'define',
-  //    title: '定义'
-  //}, {
   field: 'dataTypeForShow',
   title: '数据类型'
 }, {
@@ -223,9 +221,20 @@ $("select[name='sortManagerId']").change(function() {
     }
   });
 });
-
-
-
+function longFormatter(value, row, index) {
+	  var html = '<span title="' + value + '">';
+	  if (value.length > 8) {
+	    html += value.substring(0, 8) + "...";
+	  } else {
+	    html += value;
+	  }
+	  html += '</span>';
+	  return html;
+	}
+//showFormatter1
+function showFormatter1(value, row, index) {
+  return row.sortManagerIdValue;
+}
 var chosenInited = 0;
 var isDetailed = 0;
 var contentHtml;
@@ -389,6 +398,8 @@ var queryParams = function(params) {
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
+    sort:params.sort,
+    order:params.order,
     dataName: $('input[name="dataN"]').val()
   };
   return temp;
@@ -435,7 +446,7 @@ var TableInit = function() {
       striped: true, //是否显示行间隔色
       cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
       pagination: true, //是否显示分页（*）
-      sortable: false, //是否启用排序
+      sortable: true, //是否启用排序
       sortOrder: "asc", //排序方式
       queryParams: queryParams, //传递参数（*）
       sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）

@@ -7,14 +7,25 @@
 <%@include file="../../common/includeBaseHead.jsp"%>
 </head>
 <body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>">
-   <div class="wrapper wrapper-content animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-        <div class="btn-group hidden-xs" id="toolbar" role="group">
-          <div class="text-center">
-          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/groups/index\") %>">
-            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
-            </c:if>
+        <div id="toolbar">
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" placeholder="输入名称" name="gname" class="form-control col-sm-8">
+              <div class="input-group-btn col-sm-4">
+                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索
+                </button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-left: 5px;">
+	          <div class="text-center">
+	          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/groups/index\") %>">
+	            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
+	            </c:if>
+	          </div>
+            </div>
           </div>
         </div>
         <table id="dicList">
@@ -83,23 +94,38 @@ var columns = [{
   title: '编号'
 }, {
   field: 'name',
-  title: '名称'
+  title: '名称',
+  sortable:true
 }, {
-  field: 'companyIdForShow',
-  title: '所属单位'
+  field: 'COMPANY_ID',
+  title: '所属单位',
+  formatter:'showFormatter',
+  sortable:true
 }, {
   field: 'id',
   title: '操作',
   formatter: 'doFormatter', //对本列数据做格式化
 }];
 
-
+function showFormatter(value, row, index) {
+	  var html = '<span title="' + row.companyIdForShow + '">';
+	  if ( row.companyIdForShow.length > 8) {
+	    html +=  row.companyIdForShow.substring(0, 8) + "...";
+	  } else {
+	    html +=  row.companyIdForShow;
+	  }
+	  html += '</span>';
+	  return html;
+	}
 //得到查询的参数
 var queryParams = function(params) {
 
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
+    sort:params.sort,
+    order:params.order,
+    name:$('input[name="gname"]').val()
   };
   return temp;
 };

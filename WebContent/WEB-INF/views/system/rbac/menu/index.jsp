@@ -22,7 +22,7 @@
             <div class="form-group clearfix">
 
               <label class="control-label  pull-left">菜单模块</label>
-		       <div class=" pull-left" style="margin-left:10px;width:250px;">
+		       <div class=" pull-left" style="margin-left:10px;width:150px;">
 		          <select id="menuT" name="menuT" data-placeholder=" " class="chosen-select select-hook" style="width:350px;" tabindex="4" required>
 		            <option value=""></option>
 		            <option value="">&nbsp;</option>

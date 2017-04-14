@@ -589,7 +589,7 @@ var columns = [ {
 <c:if test="${obj.isShow==1}">
 	<c:choose>
 		<c:when test="${obj.inputType==1}">
-		 	{field: 'value${obj.valueNo}',title: '${obj.name}'}, 
+		 	{field: 'value${obj.valueNo}',title: '${obj.name}',sortable:true,formatter:'longFormatter'}, 
 		</c:when>
 		<c:otherwise>
 			{field: 'value${obj.valueNo}ForShow',title: '${obj.name}'},
@@ -603,7 +603,6 @@ var columns = [ {
   formatter : 'doFormatter',//对本列数据做格式化
 } ];
 
-
 function longFormatter(value, row, index)
 {
   var html='<span title="'+value+'">';
@@ -615,7 +614,6 @@ function longFormatter(value, row, index)
   html+='</span>';
   return html;
 }
-
 
 //---------批量删除开始---------
 $("#dicList").on("click",'#allC',function(){
@@ -662,8 +660,8 @@ var queryParams = function(params) {
     rows : params.limit,
     page : params.offset / params.limit + 1,
     value1:$('input[name="inforn"]').val(),
-    sort:'infor_code',
-    order:'asc',
+    sort:params.sort,
+    order:params.order,
     value2:$('select[name="inforPder"]').val()
   };
   return temp;

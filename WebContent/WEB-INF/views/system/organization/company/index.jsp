@@ -7,14 +7,25 @@
 <%@include file="../../common/includeBaseHead.jsp"%>
 </head>
 <body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>">
-  <div class="wrapper wrapper-content animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-        <div class="btn-group hidden-xs" id="toolbar" role="group">
-          <div class="text-center">
-          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/company/index\") %>">
-            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
-            </c:if>
+        <div id="toolbar">
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" placeholder="输入单位名称" name="companyN" class="form-control col-sm-8">
+              <div class="input-group-btn col-sm-4">
+                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索
+                </button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-left: 5px;">
+	          <div class="text-center">
+	          	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/company/index\") %>">
+	            <a data-toggle="modal" class="btn btn-primary" onclick="openLayer();" href="#">新增</a>
+	            </c:if>
+	          </div>
+            </div>
           </div>
         </div>
         <table id="dicList">
@@ -22,7 +33,6 @@
       </div>
     </div>
   </div>
-
   <div id="layer_form" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="eform">
       <input type="hidden" name="id" class="form-control">
@@ -81,10 +91,13 @@ var url = '${base}/backstage/company/'; //controller 路径
 //bootstrap-table 列数
 var columns = [{
   field: 'companyNumber',
-  title: '单位编号'
+  title: '单位编号',
+  sortable:true
 }, {
   field: 'companyName',
-  title: '单位名称'
+  title: '单位名称',
+  formatter: 'longFormatter',
+  sortable:true
 }, {
   field: 'cityIdForShow',
   title: '所属城市'
@@ -94,13 +107,26 @@ var columns = [{
   formatter: 'doFormatter', //对本列数据做格式化
 }];
 
-
+function longFormatter(value, row, index) {
+	  var html = '<span title="' + value + '">';
+	  if (value.length > 8) {
+	    html += value.substring(0, 8) + "...";
+	  } else {
+	    html += value;
+	  }
+	  html += '</span>';
+	  return html;
+	}
+	
 //得到查询的参数
 var queryParams = function(params) {
 
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
+    sort:params.sort,
+    order:params.order,
+    companyName:$('input[name="companyN"]').val()
   };
   return temp;
 };

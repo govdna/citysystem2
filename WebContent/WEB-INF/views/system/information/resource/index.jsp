@@ -753,10 +753,10 @@ $(".name1").chosen({
   <c:if test="${obj.isShow==1}">
   	<c:choose>
   		<c:when test="${obj.inputType==1}">
-  		 	{field: 'value${obj.valueNo}',title: '${obj.dataName}',formatter : 'longFormatter'}, 
+  		 	{field: 'value${obj.valueNo}',title: '${obj.dataName}',sortable:true,formatter : 'longFormatter'}, 
   		</c:when>
   		<c:when test="${obj.inputType==6}">
-  		 	{field: 'value${obj.valueNo}',title: '${obj.dataName}'}, 
+  		 	{field: 'value${obj.valueNo}',title: '${obj.dataName}',sortable:true}, 
   		</c:when>
   		<c:otherwise>
   			{field: 'value${obj.valueNo}ForShow',title: '${obj.dataName}'},
@@ -823,6 +823,8 @@ $(".name1").chosen({
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
+      sort:params.sort,
+      order:params.order,
       value1 : $('input[name="val1"]').val(),
       value6: $('select[name="val6"]').val(),
       value8: $('select[name="val8"]').val(),
