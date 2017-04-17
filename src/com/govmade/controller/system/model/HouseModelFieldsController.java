@@ -123,11 +123,15 @@ public class HouseModelFieldsController extends GovmadeBaseController<HouseModel
 			HouseModelFields hm=new HouseModelFields();
 			hm.setLevel(1);
 			List<HouseModelFields> hmList=service.find(hm, "model_type", "desc");
-			o.setModelType(hmList.get(0).getModelType()+1);
+			if(hmList!=null && hmList.size()>0){
+				o.setModelType(hmList.get(0).getModelType()+1);
+			}else{
+				o.setModelType(6);
+			}
 		}
 		
 		
-		if(o.getValueNo()!=null){
+		if(o.getValueNo()!=null || o.getFatherId()==0){
 			return;
 		}
 		HouseModelFields sm=new HouseModelFields();

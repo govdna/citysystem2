@@ -391,6 +391,20 @@ $("input[name='value1']").blur(function (){
     }
   },"json");
 });
+$('select[name="value8"]').on('change', function(e, params) {
+	if($("input[name='value1']").val()==""){
+	    return;
+	  }
+	  jQuery.post("${base}/backstage/dataElement/validation",{"classType":1,"chName":$("input[name='value1']").val(),"value8":$("select[name='value8']").val(),"id":$("input[name='id']").val()},function(data){
+	    if(data.results==1){
+	      layer.msg("此中文名称已存在，请重新填写");
+	      $("input[name='value1']").val("");
+	      $("input[name='value2']").val("");
+	    }else{
+	      $("input[name='value2']").val(data.egName);
+	    }
+	  },"json");
+});
 
 var layerIndex;//layer 窗口对象
 var title_name="数据元";
