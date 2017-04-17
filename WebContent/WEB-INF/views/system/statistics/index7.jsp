@@ -37,7 +37,7 @@ list-style: none;
    <c:forEach items="<%=ServiceUtil.getUseCount()%>" var="company" varStatus="i">
 	   	<c:if test="${i.count<=20}">
 	   	<div class="panel-container col-xs-4">
-	        <div class="panel panel-default  panel-item">
+	        <div class="panel panel-default  panel-item echart-show" data-bind="${company.id}" style="cursor:pointer">
 	          <div class="panel-heading text-center text-hidden">${company.value1}</div>
 	          <div class="panel-body content">
 	            <ul>
@@ -61,6 +61,108 @@ list-style: none;
     </div>
   </div>
   </div>
-  
+  <div id="hidden" style="display:none">
+    <div class="echarts" id="main" style="height:500px"></div>
+  </div>
 </body>
 </html>
+
+<%@include file="../common/includeJS.jsp"%>
+<script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
+<script>
+function analyse(id) {
+	  $("#hidden").show();
+	  var myChart = echarts.init(document.getElementById('main'));
+	  $.getJSON('${base}/backstage/dataElement/analyse?id=' + id, function(data) {
+	    var option = {
+	    	    
+	    	    tooltip : {
+	    	        trigger: 'item',
+	    	        formatter: '{a} : {b}'
+	    	    },
+	    	    toolbox: {
+	    	        show : true,
+	    	        feature : {
+	    	            restore : {show: true},
+	    	            magicType: {show: true, type: ['force', 'chord']},
+	    	            saveAsImage : {show: true}
+	    	        }
+	    	    },
+	    	    legend: {
+	    	        x: 'left',
+	    	        data:['数据元','信息资源','部门']
+	    	    },
+	    	    series : [
+	    	        {
+	    	            type:'force',
+	    	            name : "关联分析",
+	    	            ribbonType: false,
+	    	            categories : [
+	    	                {
+	    	                    name: '数据元'
+	    	                },
+	    	                {
+	    	                    name: '信息资源'
+	    	                },
+	    	                {
+	    	                    name:'部门'
+	    	                }
+	    	            ],
+	    	            itemStyle: {
+	    	                normal: {
+	    	                    label: {
+	    	                        show: true,
+	    	                        textStyle: {
+	    	                            color: '#333'
+	    	                        }
+	    	                    },
+	    	                    nodeStyle : {
+	    	                        brushType : 'both',
+	    	                        borderColor : 'rgba(255,215,0,0.4)',
+	    	                        borderWidth : 1
+	    	                    },
+	    	                    linkStyle: {
+	    	                        type: 'curve'
+	    	                    }
+	    	                },
+	    	                emphasis: {
+	    	                    label: {
+	    	                        show: false
+	    	                        // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+	    	                    },
+	    	                    nodeStyle : {
+	    	                        //r: 30
+	    	                    },
+	    	                    linkStyle : {}
+	    	                }
+	    	            },
+	    	            useWorker: false,
+	    	            minRadius : 15,
+	    	            maxRadius : 25,
+	    	            gravity: 1.1,
+	    	            scaling: 1.0,
+	    	            roam: 'move',
+	    	            nodes:data.node,
+	    	            links : data.link
+	    	        }
+	    	    ]
+	    	};
+	    myChart.setOption(option);
+	  });
+	  layer.open({
+	    type: 1,
+	    shade: false,
+	    area: ['96%', '96%'], //宽高
+	    scrollbar: false,
+	    title: false, //不显示标题
+	    content: $("#main"), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+	    cancel: function() {
+	      $("#hidden").hide();
+	    }
+	  });
+	}
+	$('.echart-show').click(function(){
+		var id = $(this).attr("data-bind");
+		analyse(id);
+	})
+	</script>
