@@ -21,7 +21,7 @@
 	    		<div class="icon-container text-center col-xs-4">
 	    			<i class="fa fa-pie-chart"></i>
 	    		</div>
-	    		<div class="content text-center col-xs-8">数据元总数　<b><%=ServiceUtil.getService("DataElementService").count(ServiceUtil.buildBean("DataElement@status=0&isDeleted=0"))%></b></div>
+	    		<div class="content text-center col-xs-8">数据元总数　<b><%=ServiceUtil.getService("DataElementService").count(ServiceUtil.buildBean("DataElement@classType=1&isDeleted=0"))%></b></div>
 	    	</div>
 	    </div>
 	    <div class="col-sm-6"  style="padding: 0 10px;">
