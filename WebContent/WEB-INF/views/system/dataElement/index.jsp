@@ -526,6 +526,10 @@ if(params.sort==null){
 	sort="identifier";
 	order="asc";
 }
+if($('input[name="chN"]').val()!=null&&$('input[name="chN"]').val()!=""){
+	sort="length(trim(value1))";
+	order="asc";
+}
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
