@@ -33,6 +33,7 @@ import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.entity.system.dict.GovmadeDic;
+import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.organization.Company;
 import com.govmade.entity.system.organization.Groups;
 import com.govmade.entity.system.rbac.Scope;
@@ -412,15 +413,26 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 
 	
 	@RequestMapping(value = "updateFields")
-	public void updateFields(GovServer gs,GovTableField gf, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public void updateFields(GovServer gs,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
+		List<GovmadeDic> dicList=ServiceUtil.getDicByDicNum("TABLETODATATYPE");
+		for(GovmadeDic dic:dicList){
+			dic.setDicKey("/"+dic.getDicKey().trim().toUpperCase()+"/");
+		}
+		List<GovmadeDic> dtList=ServiceUtil.getDicByDicNum("DATATYPE");
+		Map<String,String> dtMap=new HashMap<String,String>();
+		for(GovmadeDic d:dtList){
+			dtMap.put(d.getDicValue(), d.getDicKey());
+		}
 		String inforId = gs.getValue2();
 		String tbId = gs.getValue1();
 		DataList dl = new DataList();
+		GovTableField gf = new GovTableField();
 		dl.setDataManagerId(Integer.valueOf(inforId));
 		dataListService.deleteByDataManagerId(dl);
 		gf.setValue3(tbId);
+		gf.setIsDeleted(0);
 		List<GovTableField> fiList = govTableFieldService.find(gf);
 		for(GovTableField field : fiList){
 			DataElement de = new DataElement();
@@ -434,6 +446,14 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 				de.setChName(field.getValue2());
 				de.setSourceType(4);
 				dataElementService.setIdentifier(de);
+				if(StringUtils.isNotEmpty(field.getValue5())){
+					for(GovmadeDic dic:dicList){
+						if(dic.getDicKey().contains("/"+field.getValue5().trim().toUpperCase()+"/")){
+							de.setValue4(dtMap.get(dic.getDicValue()));
+							break;
+						}
+					}
+				}
 				de.setValue2(field.getValue1());
 				de.setValue7(field.getValue6());
 				de.setValue8(""+field.getCompanyId());
@@ -446,6 +466,10 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 			}
 			dataListService.insert(dl);
 		}
+		InformationResource infor = new InformationResource();
+		infor.setId(Integer.valueOf(inforId));
+		infor.setStatus(1);
+		informationResourceService.updateStatus(infor);
 		JSONObject echartjson = new JSONObject();
 		echartjson.put("status", 0);
 		res.getWriter().write(echartjson.toString());
