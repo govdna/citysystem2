@@ -684,6 +684,7 @@ $(".name1").chosen({
       rows : []
     });
     openLayer();
+    initInfortype();
     initDataElements();
   }
 
@@ -1647,6 +1648,18 @@ function updateStatusNew(id,st,text){
 	  });
 	} 
 	
+function initInfortype(){
+	var sel=$('select[name="inforTypes"]').val();
+	var html=$('select[name="inforTypes"]').html();
+	$('select[name="binforTypes"]').html(html);
+	$('select[name="binforTypes"]').find('option[value="'+sel+'"]').remove();
+	$('select[name="binforTypes"]').val('');
+	$('select[name="binforTypes"]').trigger("chosen:updated");
+}	
+
+$('select[name="inforTypes"]').on('change', function(e, params) {
+	initInfortype();
+	});
 	
 	
 
@@ -1660,6 +1673,7 @@ function editRow(id){
      $('#status_div').html('');
    }
   $(formId).form('load',data);
+  initInfortype();
   var val=$('select[name="value8"]').val();
   if(val==2){
     $('input[name="value9"]').parents('div .form-group').show();
