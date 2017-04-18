@@ -112,7 +112,9 @@ background:#18a689;
   </div>
 
   <div id="layer_form" style="display: none;" class="ibox-content">
+   
     <form method="post" class="form-horizontal" id="eform">
+      <div id="fillInfo"></div>
       <input type="hidden" name="id"  class="form-control">
       <input type="hidden" name="idForShow"  class="form-control">
       <input type="hidden" name="identifier"  class="form-control">
@@ -1064,12 +1066,14 @@ function doWithEdit(id, data) {
     $('#child_div').show();
     showChild();
   }
-  if(typeof(data.value3)=="undefined"||data.value3==""||typeof(data.value4)=="undefined"||data.value4==""||typeof(data.value7)=="undefined"||data.value7==""){
-	  jQuery.post('${base}/backstage/dataElement/listAjax',{chName:data.value1,sort:'length(value1)',rows:20,page:1,order:'asc'},function(r){
+  $('#fillInfo').html('');
+  jQuery.post('${base}/backstage/dataElement/listAjax',{chName:data.value1,sort:'length(value1)',rows:20,page:1,order:'asc'},function(r){
 		  var html='';
 		  r=r.rows;
 		  autoRows=r;
 		  if(typeof(r.length)!='undefined'&&r.length>0){
+			 
+			  $('#fillInfo').html(' <div class="alert alert-info">模版中有'+r.length+'条相似数据元可以参考。<a href="javascript:openFillLayer();">查看</a></div>');
 			  for(var i=0;i<r.length;i++){
 				  html += '<tr><td>'
 	                  + r[i].value1
@@ -1081,22 +1085,26 @@ function doWithEdit(id, data) {
 	                  html+='<button type="button" class="btn btn-white btn-sm" onclick="detail(\''+r[i].idForShow+'\')">查看</button><button type="button" class="btn btn-white btn-sm" data-id="'+r[i].id+'" data-idForShow="'+r[i].idForShow+'" data-type="fillDE" onclick="fillRow(this);">填充数据</button>';
 	                  html +='</td></tr>';
 			  }
-			  autoLayer=layer.open({
-	              type : 1,
-	              shade : false,
-	              area: ['450px', '70%'], //宽高
-	              offset: '40px',
-	              scrollbar : false,
-	              title : '提示', //不显示标题
-	              content : $('#autoFill')
-	            });
+			 
 	            $('#autoFill tbody').html(html);
 	          
 		  }
 		 
 	  },'json');
-  }
   
+  
+}
+
+function openFillLayer(){
+	 autoLayer=layer.open({
+         type : 1,
+         shade : false,
+         area: ['450px', '70%'], //宽高
+         offset: '40px',
+         scrollbar : false,
+         title : '提示', //不显示标题
+         content : $('#autoFill')
+       });
 }
 
 function fillRow(t){
