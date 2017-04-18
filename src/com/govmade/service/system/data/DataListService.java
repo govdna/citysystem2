@@ -7,6 +7,7 @@
 */
 package com.govmade.service.system.data;
 
+import java.util.List;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.service.base.BaseService;
 
@@ -25,4 +26,5 @@ public interface DataListService  extends BaseService<DataList>{
 	public void deleteByDataElementId(DataList o);
 
 	public void deleteByCustomizationId(DataList o);
+	public void insertList(List<DataList> list);
 }
