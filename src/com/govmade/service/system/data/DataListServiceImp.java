@@ -1,7 +1,10 @@
 package com.govmade.service.system.data;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.govmade.entity.system.data.DataList;
 import com.govmade.repository.system.data.DataListDao;
@@ -53,6 +56,14 @@ public class DataListServiceImp extends GovmadeBaseServiceImp<DataList> implemen
 	@Override
 	public void deleteByCustomizationId(DataList o) {
 		dataListDao.deleteByCustomizationId(o);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)  
+	@Override
+	public void insertList(List<DataList> list) {
+		for(DataList dl:list){
+			insert(dl);
+		}
 	}
 
 }

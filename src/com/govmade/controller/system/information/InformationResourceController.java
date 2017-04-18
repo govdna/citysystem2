@@ -1186,7 +1186,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	@ResponseBody
 	public AjaxRes importDataElement(@RequestParam(value = "file", required = false) MultipartFile file, Model model,
 			HttpServletRequest request) {
-		String t = request.getParameter("t");
+		long time=System.currentTimeMillis();
 		AjaxRes ar = getAjaxRes();
 		try {
 
@@ -1229,38 +1229,47 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			dataElement.setClassType(1);
 			ExcelUtil nnexcelUtil = new ExcelUtil(nnadapter);
 			nnexcelUtil.excelToList(targetFile.getAbsolutePath(), 1);
-			DataList dl = new DataList();
+
 			if (nnadapter.isError() || adapter.isError()) {
 				ar.setRes(Const.FAIL);
 			} else {
 				try {
 					if (nnadapter.getEntityList() != null) {
+						List<DataList> dlList=new ArrayList<DataList>();
+						List<DataElement> deList=new ArrayList<DataElement>();
 						for (DataElement de : nnadapter.getEntityList()) {
-
-							dataElementService.setIdentifier(de);
+							//dataElementService.setIdentifier(de);
 							if(de.getValue8()==null || de.getValue8()==""){
 								InformationResource im=new InformationResource();
-								im.setId(Integer.valueOf(de.getValue30()));
+								im.setId(de.getCounts());
 								int companyid=service.findById(im).getCompanyId();
 								de.setCompanyId(companyid);
 								de.setValue8(companyid+"");
 							}
-							dl.setDataManagerId(Integer.valueOf(de.getValue30()));
-							de.setValue30(null);
 							de.setIsShare(0);
 							de.setSourceType(2);
 							dataElement.setChName(de.getValue1());
 							List<DataElement> list = dataElementService.findByName(dataElement,
 									" case when t.source_type=2 then -1 end ", "asc");
 							if (list != null && list.size() != 0) {
+								DataList dl = new DataList();
+								dl.setDataManagerId(de.getCounts());
+								dl.setIsShare(0);
 								dl.setDataElementId(list.get(0).getId());
+								dlList.add(dl);
 							} else {
-								dataElementService.insert(de);
-								dl.setDataElementId(de.getId());
+								deList.add(de);
 							}
-							dl.setIsShare(0);
-							dataListService.insert(dl);
 						}
+						dataElementService.insertList(deList, 1);
+						for(DataElement d:deList){
+							DataList dl = new DataList();
+							dl.setDataManagerId(d.getCounts());
+							dl.setIsShare(0);
+							dl.setDataElementId(d.getId());
+							dlList.add(dl);
+						}
+						dataListService.insertList(dlList);
 						ar.setRes(Const.SUCCEED);
 					}
 				} catch (Exception e) {
@@ -1274,7 +1283,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 			e.printStackTrace();
 			ar.setFailMsg(Const.DATA_FAIL);
 		}
-
+		System.out.println(System.currentTimeMillis()-time);
 		return ar;
 	}
 

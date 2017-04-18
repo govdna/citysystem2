@@ -377,6 +377,9 @@ function doFormatter(value, row, index)
 	if(typeof(row.inforResId)=="undefined"||row.inforResId==""){
 		html+='<button type="button" class="btn btn-white" onclick="checkFields('+row.id+',\''+row.idForShow+'\')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成信息资源</button>';
 	}
+	if(row.inforResId!==""){
+		html+='<button type="button" class="btn btn-white" onclick="updateFields('+row.id+',\''+row.inforResId+'\')"><i class="fa fa-paper-plane-o"></i>&nbsp;更新信息资源</button>';
+	}
 	html+='<button type="button" class="btn btn-white" onclick="createSql('+row.id+')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成sql</button>';
 	html+='</div>';
 	return html;
@@ -627,6 +630,21 @@ function shareFormatter(value, row, index) {
 	   
   return html;
 }
+
+function updateFields(tid,inid){
+	 $.ajax({
+         type: "GET",
+         url: url+"updateFields",
+         data: {value1:tid, value2:inid},
+         dataType: "json",
+         success: function(data){
+        	 if(data.status==0){
+                     layer.msg("更新成功!");
+        	 }
+        }
+     });
+}
+
 
 function doFormatter2(value, row, index) {
     var html = '';
