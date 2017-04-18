@@ -51,9 +51,10 @@ h3 {font-size: 16px; font-weight: 600;}
       <div class="tabs-container">
         <div class="item col-sm-12">
     	    <div class="row">
-    	        <div class="col-sm-12 clearfix">
+    	        <div class="col-sm-12 clearfix"style="background: #fff;">
+    	        
                 <h3 class="title pull-left">排行榜</h3>
-                <div class="pull-right multiselect">
+                <div class="pull-right multiselect" style="margin-top: 7px;">
                     <select id="testSelect" class="selectpicker"  multiple data-hide-disabled="true" data-size="5">
                       <c:forEach items="${jsa}" var="company" >
                       <option value="${company.id}">${company.companyName}</option>
@@ -61,6 +62,7 @@ h3 {font-size: 16px; font-weight: 600;}
                     </select>
                     <button class="btn btn-default firstSubmit" type="button">提交</button>
                 </div>
+                
     	            <div class="ibox float-e-margins">
     	                <div class="ibox-content">
     	                    <div class="echarts" id="main1"></div>
@@ -96,9 +98,9 @@ h3 {font-size: 16px; font-weight: 600;}
         <div class="item col-sm-12">
     	    <div class="row">
     	        <div class="col-sm-12">
-                <div class="clearfix">
+                <div class="clearfix" style="background: #fff;">
                 	<h3 class="title pull-left">部门对比</h3>
-                  <div class="pull-right multiselect">
+                  <div class="pull-right multiselect" style="margin-top: 7px;">
                     <select class="selectpicker"  multiple data-hide-disabled="true" data-size="5">
                      <c:forEach items="${jsa}" var="company" >
                       <option value="${company.id}">${company.companyName}</option>
