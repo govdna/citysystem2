@@ -176,24 +176,24 @@ a, a:hover, a:focus {text-decoration: none;}
               </div>
             </a>
             </c:when>
-<%--             <c:when test="${obj==6}">
+            <c:when test="${obj==6}">
             <a href="${base}/backstage/iframeIndex?index=6" class="item item-6">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
               </div>
             </a>
-            </c:when> --%>
+            </c:when> 
       		<c:otherwise>
       		</c:otherwise>
       		</c:choose>
            </c:forEach> 
-              <a href="${base}/backstage/iframeIndex?index=6" class="item item-6">
+<%--               <a href="${base}/backstage/iframeIndex?index=6" class="item item-6">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
               </div>
-            </a>
+            </a> --%>
           </div>
         </div>
       </div>

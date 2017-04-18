@@ -26,7 +26,7 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 	private Map<String,String> dicCompany=new HashMap<String, String>();
 	private DataElementService service;
 	private InformationResourceService informationResourceService;
-	
+	private Map<String,InformationResource> inforMap=new HashMap<String, InformationResource>();
 	private void initDic(){
 		if(dataTypeDic.size()!=0){
 			return;
@@ -61,6 +61,20 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 		return 8;
 	}
 
+	private InformationResource getInfor(String name){
+		if(inforMap.get(name)==null){
+			InformationResource infor=new InformationResource();
+			infor.setValue1(name);
+			List<InformationResource> inforlist=informationResourceService.find(infor);
+			if(inforlist!=null&&inforlist.size()>0){
+				inforMap.put(name, inforlist.get(0));
+				return inforlist.get(0);
+			}
+		}else{
+			return inforMap.get(name);
+		}
+		return null;
+	}
 	@Override
 	public int getStartRow() {
 		return 1;
@@ -74,14 +88,12 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 		DataElement de=new DataElement();
 		
 		//临时存放对应信息资源ID
-		InformationResource infor=new InformationResource();
-		infor.setValue1(clumns[0]);
-		List<InformationResource> inforlist=informationResourceService.find(infor);
-		if(inforlist.size()==0){
+		InformationResource infor=getInfor(clumns[0]);
+		if(infor==null){
 			appendMsg("表二 第"+realNum+"行第1列，信息资源名称不存在！");
 			setError(true);
 		}else{
-			de.setValue30(inforlist.get(0).getId()+"");
+			de.setCounts(infor.getId());
 		}
 		
 		de.setChName(clumns[1]);
