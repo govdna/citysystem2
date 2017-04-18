@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,27 +21,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.govmade.adapter.DBExcelAdapter;
 import com.govmade.adapter.DBSExcelAdapter;
-import com.govmade.adapter.DEtoResourceNNAdapter;
-import com.govmade.adapter.InformationResourceAdapter;
 import com.govmade.common.ajax.AjaxRes;
-import com.govmade.common.utils.ChineseTo;
 import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.DataHandlerUtil;
-import com.govmade.common.utils.SecurityUtil;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.base.Const;
 import com.govmade.common.utils.poi.ExcelUtil;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
-import com.govmade.entity.base.IdBaseEntity;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.entity.system.dict.GovmadeDic;
-import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.organization.Company;
 import com.govmade.entity.system.organization.Groups;
 import com.govmade.entity.system.rbac.Scope;
+import com.govmade.entity.system.server.GovServer;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.entity.system.tablex.GovTableField;
 import com.govmade.service.base.BaseService;
@@ -419,7 +413,48 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 		return null;
 	}
 
-
+	
+	@RequestMapping(value = "updateFields")
+	public void updateFields(GovServer gs,GovTableField gf, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		String inforId = gs.getValue2();
+		String tbId = gs.getValue1();
+		DataList dl = new DataList();
+		dl.setDataManagerId(Integer.valueOf(inforId));
+		dataListService.deleteByDataManagerId(dl);
+		gf.setValue3(tbId);
+		List<GovTableField> fiList = govTableFieldService.find(gf);
+		for(GovTableField field : fiList){
+			DataElement de = new DataElement();
+			String fName = field.getValue2();
+			de.setChName(fName);
+			List<DataElement> deList = dataElementService.find(de);
+			if(deList.size()>0){
+				dl.setDataElementId(deList.get(0).getId());
+			}else{
+				de.setClassType(1);
+				de.setChName(field.getValue2());
+				de.setSourceType(4);
+				dataElementService.setIdentifier(de);
+				de.setValue2(field.getValue1());
+				de.setValue7(field.getValue6());
+				de.setValue8(""+field.getCompanyId());
+				de.setCompanyId(field.getCompanyId());
+				de.setGroupId(field.getGroupId());
+				dataElementService.insert(de);
+				field.setDataElementId(de.getId());
+				govTableFieldService.update(field);
+				dl.setDataElementId(de.getId());
+			}
+			dataListService.insert(dl);
+		}
+		JSONObject echartjson = new JSONObject();
+		echartjson.put("status", 0);
+		res.getWriter().write(echartjson.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+	}
 	@RequestMapping(value = "fields2DataElement")
 	public String fields2DataElement(String id, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("text/html;charset=utf-8");
