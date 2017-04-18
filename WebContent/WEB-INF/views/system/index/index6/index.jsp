@@ -39,7 +39,7 @@ a, a:hover, a:focus {text-decoration: none;}
 .main-container .item:hover .item-body {background-color: #319cdf;}
 .main-container .item h3 {font-size: 28px;margin: 0;line-height: 65px;color: #7b7b7b;}
 .main-container .item:hover h3 {color: #fff;}
-.main-container .item .item-bg {height: 150px;background: url(${base}/static/images/icon/icon-6-5.png);}
+.main-container .item .item-bg {height: 150px;background: url(${base}/static/images/skin/skin-6-icon-big.png);}
 .main-container .item.item-1 .item-bg {background-position: center -177px;}
 .main-container .item.item-1:hover .item-bg {background-position: center -25px;}
 .main-container .item.item-2 .item-bg {background-position: center -503px;}
@@ -50,6 +50,8 @@ a, a:hover, a:focus {text-decoration: none;}
 .main-container .item.item-4:hover .item-bg {background-position: center -1284px;}
 .main-container .item.item-5 .item-bg {background-position: center -1124px;}
 .main-container .item.item-5:hover .item-bg {background-position: center -970px;}
+.main-container .item.item-6 .item-bg {background-position: center -1740px;}
+.main-container .item.item-6:hover .item-bg {background-position: center -1587px;}
 .label-primary, .badge-primary {background-color: #319cdf !important;}
 @media (min-width: 768px) {
   .container {width: 100%}
@@ -174,10 +176,24 @@ a, a:hover, a:focus {text-decoration: none;}
               </div>
             </a>
             </c:when>
+<%--             <c:when test="${obj==6}">
+            <a href="${base}/backstage/iframeIndex?index=6" class="item item-6">
+              <div class="item-body">
+                <div class="item-bg"></div>
+                <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
+              </div>
+            </a>
+            </c:when> --%>
       		<c:otherwise>
       		</c:otherwise>
       		</c:choose>
            </c:forEach> 
+              <a href="${base}/backstage/iframeIndex?index=6" class="item item-6">
+              <div class="item-body">
+                <div class="item-bg"></div>
+                <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -232,7 +248,19 @@ a, a:hover, a:focus {text-decoration: none;}
          paddingBottom: 10
        });
        break;
-    
+     case 6:
+         item.css({
+           width: '14%',
+           marginLeft: '1%',
+           marginRight: '1%'
+         });
+         itemBg.css({
+           height: 170,
+           paddingTop: 10,
+           paddingBottom: 10
+         });
+         break;
+
    }
  }
     function bodyHeight () {
