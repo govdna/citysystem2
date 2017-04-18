@@ -41,6 +41,7 @@ pageContext.setAttribute("jsa", ServiceUtil.getService("CompanyService").find(Se
 }
 .echarts {
     height: 240px;
+    background: #fff;
 }
 h3 {font-size: 16px; font-weight: 600;}
 </style>
@@ -51,8 +52,8 @@ h3 {font-size: 16px; font-weight: 600;}
       <div class="tabs-container">
         <div class="item col-sm-12">
     	    <div class="row">
-    	        <div class="col-sm-12 clearfix"style="background: #fff;">
-    	        
+    	        <div class="col-sm-12 clearfix">
+    	        <div class="clearfix" style="background: #fff;padding-right: 10px;">
                 <h3 class="title pull-left">排行榜</h3>
                 <div class="pull-right multiselect" style="margin-top: 7px;">
                     <select id="testSelect" class="selectpicker"  multiple data-hide-disabled="true" data-size="5">
@@ -61,6 +62,7 @@ h3 {font-size: 16px; font-weight: 600;}
                       </c:forEach>
                     </select>
                     <button class="btn btn-default firstSubmit" type="button">提交</button>
+                </div>
                 </div>
                 
     	            <div class="ibox float-e-margins">
@@ -98,7 +100,7 @@ h3 {font-size: 16px; font-weight: 600;}
         <div class="item col-sm-12">
     	    <div class="row">
     	        <div class="col-sm-12">
-                <div class="clearfix" style="background: #fff;">
+                <div class="clearfix" style="background: #fff;padding-right: 10px;">
                 	<h3 class="title pull-left">部门对比</h3>
                   <div class="pull-right multiselect" style="margin-top: 7px;">
                     <select class="selectpicker"  multiple data-hide-disabled="true" data-size="5">
