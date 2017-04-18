@@ -423,7 +423,8 @@ var columns = [{
   formatter: 'checkFormatter2',
 }, {
   field: 'identifier',
-  title: '内部标识符'
+  title: '内部标识符',
+  sortable:true
 }, {
   field: 'value1',
   title: '中文名称',
