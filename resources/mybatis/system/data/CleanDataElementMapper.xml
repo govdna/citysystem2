@@ -431,7 +431,6 @@
  	<update id="transferByIds" parameterType="CleanDataElement">
 	update gov_clean_data_element 
 	 set father_id=#{param.id},
-	 	value3=#{param.value3,jdbcType=VARCHAR},
 		value4=#{param.value4,jdbcType=VARCHAR},
 		value5=#{param.value5,jdbcType=VARCHAR},
 		value6=#{param.value6,jdbcType=VARCHAR},
@@ -472,7 +471,6 @@
  	<update id="setFatherIdByIds" parameterType="CleanDataElement">
 	update gov_clean_data_element 
 	set father_id=#{param.id} ,
-		value3=#{param.value3,jdbcType=VARCHAR},
 		value4=#{param.value4,jdbcType=VARCHAR},
 		value5=#{param.value5,jdbcType=VARCHAR},
 		value6=#{param.value6,jdbcType=VARCHAR},
