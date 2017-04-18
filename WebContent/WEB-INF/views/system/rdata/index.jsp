@@ -337,6 +337,32 @@ background:#18a689;
   <!-- 导出数据结束 -->
 
 
+<!--提示未导入的数据元开始-->
+  <div id="autoFill" class="form-horizontal"
+    style="overflow: hidden; display: none;">
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <div class="alert alert-info">
+                 选取模版中的数据元快速填充数据。
+        </div>
+        <div class="bootstrap-table">
+		<div class="fixed-table-toolbar"></div>
+		<div class="fixed-table-container" style="padding-bottom: 0px;"><div class="fixed-table-header" style="display: none;"><table></table></div>
+			<table class="table table-striped table-hover">
+            <thead><tr><th style="" data-field="identifier" tabindex="0"><div class="th-inner">中文名称</div><div class="fht-cell"></div></th><th style="" data-field="companyIdForShow" tabindex="0"><div class="th-inner">数据类型</div><div class="fht-cell"></div></th><th style="" data-field="companyIdForShow" tabindex="0"><div class="th-inner">数据长度</div><div class="fht-cell"></div></th><th style="" data-field="id" tabindex="0"><div class="th-inner">操作</div><div class="fht-cell"></div></th></tr></thead>
+									
+            <tbody>
+            </tbody>
+          </table>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+  <!--提示未导入的数据元结束-->
+  
+
 </body>
 </html>
 
@@ -1027,6 +1053,8 @@ function statusAfter(idForShow, id, s) {
   }, 'json');
 }
 
+var autoLayer;
+var autoRows;
 //修改的额外处理覆盖此方法
 function doWithEdit(id, data) {
   initFieldTable();
@@ -1036,7 +1064,58 @@ function doWithEdit(id, data) {
     $('#child_div').show();
     showChild();
   }
+  if(typeof(data.value3)=="undefined"||data.value3==""||typeof(data.value4)=="undefined"||data.value4==""||typeof(data.value7)=="undefined"||data.value7==""){
+	  jQuery.post('${base}/backstage/dataElement/listAjax',{chName:data.value1,sort:'length(value1)',rows:20,page:1,order:'asc'},function(r){
+		  var html='';
+		  r=r.rows;
+		  autoRows=r;
+		  if(typeof(r.length)!='undefined'&&r.length>0){
+			  for(var i=0;i<r.length;i++){
+				  html += '<tr><td>'
+	                  + r[i].value1
+	                  + '</td><td>'
+	                  + r[i].dataTypeForShow
+	                  + '</td><td>'
+	                  + r[i].dataFormat
+	                  + '</td><td>';
+	                  html+='<button type="button" class="btn btn-white btn-sm" onclick="detail(\''+r[i].idForShow+'\')">查看</button><button type="button" class="btn btn-white btn-sm" data-id="'+r[i].id+'" data-idForShow="'+r[i].idForShow+'" data-type="fillDE" onclick="fillRow(this);">填充数据</button>';
+	                  html +='</td></tr>';
+			  }
+			  autoLayer=layer.open({
+	              type : 1,
+	              shade : false,
+	              area: ['450px', '70%'], //宽高
+	              offset: '40px',
+	              scrollbar : false,
+	              title : '提示', //不显示标题
+	              content : $('#autoFill')
+	            });
+	            $('#autoFill tbody').html(html);
+	          
+		  }
+		 
+	  },'json');
+  }
+  
+}
 
+function fillRow(t){
+	for(var i=0;i<autoRows.length;i++){
+		if(autoRows[i].id==$(t).attr('data-id')){
+			if(autoRows[i].value3!=''){
+				$(formId+' input[name="value3"]').val(autoRows[i].value3);
+			}
+			if(autoRows[i].dataType!=''){
+				$(formId+' select[name="value4"]').find('option[value="'+autoRows[i].dataType+'"]').attr("selected",true);
+				$('select[name="value4"]').val(autoRows[i].dataType);
+				$('select[name="value4"]').trigger("chosen:updated");
+			}
+			if(autoRows[i].dataFormat!=''){
+				$(formId+' input[name="value7"]').val(autoRows[i].dataFormat);
+			}
+		}
+	}
+	layer.close(autoLayer);
 }
 
 //查看的额外处理覆盖此方法

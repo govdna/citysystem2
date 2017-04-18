@@ -233,9 +233,7 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 			} else {
 				try {
 					Map<String, GovTable> tableMap = adapter.getTableMap();
-					for (String key : tableMap.keySet()) { 
-						System.out.println("key= " + key + " and value= " + tableMap.get(key)); 
-					}
+
 					// 批量插入数据库
 					
 					Map<String,GovDatabase> dataBaseMap=adapter.getDatabaseMap();
@@ -243,8 +241,7 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 					
 					for (String dbName : dataBaseMap.keySet()) {
 						GovDatabase db =dataBaseMap.get(dbName);
-						db.setValue2(db.getValue1());
-						System.out.println("db cid"+db.getCompanyId());
+						//System.out.println("db cid"+db.getCompanyId());
 						dbList.add(db);
 					}
 					govDatabaseService.insertList(dbList);
@@ -258,7 +255,7 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 					for (String tableName : tableMap.keySet()) {
 						GovTable tb = tableMap.get(tableName);
 						tb.setValue3(dbMap.get(tb.getValue3()) + "");
-						System.out.println("tb cid"+tb.getCompanyId());
+						//System.out.println("tb cid"+tb.getCompanyId());
 						tbList.add(tb);
 					}
 					service.insertList(tbList);
@@ -277,7 +274,7 @@ public class GovTableController extends GovmadeBaseController<GovTable> {
 					for (GovTable tb : tbList) {
 						for (GovTableField tf : tb.getFieldList()) {
 							tf.setValue3(tb.getId() + "");
-							System.out.println("fd cid"+tf.getCompanyId());
+							//System.out.println("fd cid"+tf.getCompanyId());
 							tfList.add(tf);
 							
 						}

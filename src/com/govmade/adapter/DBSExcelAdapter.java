@@ -50,7 +50,7 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 
 	@Override
 	public int getClumnSize() {
-		return 14;
+		return 15;
 	}
 
 	@Override
@@ -76,76 +76,78 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 		GovTableField field = new GovTableField();
 		
 		GovTable gt=new GovTable();
-		gt.setValue1(clumns[1].trim());
-		gt.setValue2(clumns[2].trim());
+		gt.setValue1(clumns[2].trim());
+		gt.setValue2(clumns[3].trim());
 		gt.setValue3(clumns[0].trim());
-		if(StringUtils.isNotEmpty(clumns[13])) {
-			if(companyname.get(clumns[13])==null){
+		if(StringUtils.isNotEmpty(clumns[14])) {
+			if(companyname.get(clumns[14])==null){
 				appendMsg("不存在该部门！");
 				setError(true);
 			}else{
 				if(!databaseMap.containsKey(clumns[0].trim())){
 					GovDatabase base =new GovDatabase();
 					base.setValue1(clumns[0].trim());
-					base.setCompanyId(Integer.valueOf(companyname.get(clumns[13].trim())));
+					base.setValue2(clumns[1].trim()); /// 
+					base.setCompanyId(Integer.valueOf(companyname.get(clumns[14].trim())));
 					databaseMap.put(clumns[0].trim(),base);
 				}
-				gt.setCompanyId(Integer.valueOf(companyname.get(clumns[13].trim())));
+				gt.setCompanyId(Integer.valueOf(companyname.get(clumns[14].trim())));
 			}
 		}else{
 			gt.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
 			if(!databaseMap.containsKey(clumns[0].trim())){
 				GovDatabase base =new GovDatabase();
 				base.setValue1(clumns[0].trim());
+				base.setValue2(clumns[1].trim()); /// 
 				base.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
 				databaseMap.put(clumns[0].trim(),base);
 			}
 		}
 		
-		if(tableMap.get(clumns[0].trim()+"?"+clumns[1].trim())==null){
-			tableMap.put(clumns[0].trim()+"?"+clumns[1].trim(), gt);
+		if(tableMap.get(clumns[0].trim()+"?"+clumns[2].trim())==null){
+			tableMap.put(clumns[0].trim()+"?"+clumns[2].trim(), gt);
 		}
-		field.setValue1(clumns[3].trim());
-		if(StringUtils.isNotEmpty(clumns[4].trim())){
-			field.setValue2(clumns[4].trim());
+		field.setValue1(clumns[4].trim());
+		if(StringUtils.isNotEmpty(clumns[5].trim())){
+			field.setValue2(clumns[5].trim());
 		}else{
-			field.setValue2(clumns[3].trim());
+			field.setValue2(clumns[4].trim());
 		}
-		field.setValue3(clumns[1].trim());
-		field.setValue5(clumns[5].trim());
-		field.setValue6(clumns[6].trim());
-		field.setValue7(clumns[7].trim());
-		field.setValue8(clumns[8].trim());
-		field.setValue8(clumns[8].trim());
-		field.setValue11(clumns[11].trim());
+		field.setValue3(clumns[2].trim());
+		field.setValue5(clumns[6].trim());
+		field.setValue6(clumns[7].trim());
+		field.setValue7(clumns[8].trim());
+		field.setValue8(clumns[9].trim());
+		field.setValue8(clumns[9].trim());
+		field.setValue11(clumns[12].trim());
 		
-		if(StringUtils.isNotEmpty(clumns[13])) {
-			if(companyname.get(clumns[13])==null){
+		if(StringUtils.isNotEmpty(clumns[14])) {
+			if(companyname.get(clumns[14])==null){
 				appendMsg("不存在该部门！");
 				setError(true);
 			}else{
-				field.setCompanyId(Integer.valueOf(companyname.get(clumns[13].trim())));
+				field.setCompanyId(Integer.valueOf(companyname.get(clumns[14].trim())));
 			}
 		}else{
 			field.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
 		}
 		
-		if (StringUtils.isNotEmpty(clumns[9])) {
-			if (yesOrNo.get(clumns[9].trim()) != null) {
-				field.setValue9(yesOrNo.get(clumns[9].trim()));
-			}
-		}
 		if (StringUtils.isNotEmpty(clumns[10])) {
 			if (yesOrNo.get(clumns[10].trim()) != null) {
-				field.setValue10(yesOrNo.get(clumns[10].trim()));
+				field.setValue9(yesOrNo.get(clumns[10].trim()));
 			}
 		}
-		if (StringUtils.isNotEmpty(clumns[12])) {
-			if (yesOrNo.get(clumns[12].trim()) != null) {
-				field.setValue12(yesOrNo.get(clumns[12].trim()));
+		if (StringUtils.isNotEmpty(clumns[11])) {
+			if (yesOrNo.get(clumns[11].trim()) != null) {
+				field.setValue10(yesOrNo.get(clumns[11].trim()));
 			}
 		}
-		addField2Table(clumns[0].trim(),clumns[1].trim(),field);
+		if (StringUtils.isNotEmpty(clumns[13])) {
+			if (yesOrNo.get(clumns[13].trim()) != null) {
+				field.setValue12(yesOrNo.get(clumns[13].trim()));
+			}
+		}
+		addField2Table(clumns[0].trim(),clumns[2].trim(),field);
 		return field;
 	}
 
