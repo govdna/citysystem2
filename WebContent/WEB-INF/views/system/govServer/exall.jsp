@@ -32,7 +32,7 @@ stroke-width: 1.5px;
 
 </style>
 </head>
-<body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>">
+<body class="gray-bg skin-<%=ServiceUtil.getThemeType(10)%>" >
 </body>
 </html>
 
@@ -219,4 +219,3 @@ $(function() {
 });
 
 </script>
-

@@ -17,6 +17,7 @@ import com.govmade.common.ajax.AjaxRes;
 import com.govmade.common.mybatis.Page;
 import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.base.Const;
+import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.common.utils.security.CipherUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.account.Account;
@@ -122,4 +123,49 @@ public class AccountController extends GovmadeBaseController<Account>{
 		return ar;
 	}
 
+	//跳到修改密码页面
+	@RequestMapping("psd")
+	public String psd(){
+		return "/system/account/password/index";
+	}
+	
+	//验证密码是否相同
+	@RequestMapping(value="samepsd")
+	public String samepsd(Account o,HttpServletRequest req, HttpServletResponse res) throws Exception{
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");	
+        o.setSalt(AccountShiroUtil.getCurrentUser().getSalt());
+		String psd=req.getParameter("oldpsd");
+		String results = "";
+		if(null!=psd&&""!=psd){
+			String salt=o.getSalt();
+			String pwrsMD5=CipherUtil.generatePassword(psd);		
+			psd=CipherUtil.createPwdEncrypt(AccountShiroUtil.getCurrentUser().getLoginName(),pwrsMD5,salt);	
+			System.out.println("psd="+psd);
+			if(psd.equals(AccountShiroUtil.getCurrentUser().getPassword())){
+				results = "0";
+			}
+			if(results==""){
+				results = "1";
+			}
+	}	
+		res.getWriter().write(results);
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
+	}
+
+	@RequestMapping(value="updatepsd")
+	public String updatepsd(Account o,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		o=AccountShiroUtil.getCurrentUser();
+		String newpsd=req.getParameter("newpsd");
+		if(null!=newpsd&&""!=newpsd){
+			String salt=CipherUtil.createSalt();
+			String pwrsMD5=CipherUtil.generatePassword(newpsd);		
+			o.setPassword(CipherUtil.createPwdEncrypt(AccountShiroUtil.getCurrentUser().getLoginName(),pwrsMD5,salt));	
+			o.setSalt(salt);
+		}
+		getService().update(o);	
+		return null;
+	}
 }
