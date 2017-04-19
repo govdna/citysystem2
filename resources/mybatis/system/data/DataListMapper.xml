@@ -156,7 +156,16 @@
 		delete from gov_data_list where House_model_id=#{houseModelId}
 	</delete>
 	<delete id="deleteByDataManagerId" parameterType="DataList">
-		delete from gov_data_list where data_manager_id=#{dataManagerId}
+		delete from gov_data_list where 
+		<choose>
+			<when test="dataManagerId != null and dataManagerId==0">
+				data_manager_id>0
+			</when>
+			<otherwise>
+				data_manager_id=#{dataManagerId}
+			</otherwise>
+		</choose>
+		
 	</delete>
 	<delete id="deleteByCustomizationId" parameterType="DataList">
 		delete from gov_data_list where customization_id=#{customizationId}
