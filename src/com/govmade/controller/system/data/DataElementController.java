@@ -339,29 +339,8 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 
 	@Override
 	public void doBeforeInsertUpdate(DataElement o, HttpServletRequest req, HttpServletResponse res) {
-
-//		int objectType = o.getObjectType();
-//		String objectTypes = objectType + "";
-//		while (objectTypes.length() < 2) {
-//			objectTypes = "0" + objectTypes;
-//		}
-		//o.setClassType(0);
-		DataElement d=new DataElement();
-		d.setClassType(0);
-		String i = service.maxIdentifier(d);
-		if (i != null && i != "") {
-			i = Integer.valueOf(i) + 1 + "";
-			while (i.length() < 7) {
-				i = "0" + i;
-			}
-		} else {
-			i = "0000001";
-		}
-
-		if (o.getId() == null) {
-			o.setIdentifier(  i);
-		} 
-
+		o.setClassType(getClassType());
+		service.setIdentifier(o);
 		// 和父数据元标识符保持一致
 		if (o.getFatherId() != null) {
 			DataElement fd = new DataElement();

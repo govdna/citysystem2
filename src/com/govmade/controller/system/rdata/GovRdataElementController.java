@@ -340,32 +340,10 @@ public class GovRdataElementController extends DataElementController {
 
 	@Override
 	public void doBeforeInsertUpdate(DataElement o, HttpServletRequest req, HttpServletResponse res) {
-		// if (o.getStatus() == null || o.getStatus() == 0) {
-		// o.setStatus(2);
-		// }
-		o.setStatus(0);
-//		String objectType = o.getObjectType() + "";
-//		while (objectType.length() < 2) {
-//			objectType = "0" + objectType;
-//		}
-		o.setClassType(1);
-		DataElement d=new DataElement();
-		d.setClassType(1);
-		String i = dataElementservice.maxIdentifier(d);
-		if (i != null && i != "") {
-			i = Integer.valueOf(i) + 1 + "";
-			while (i.length() < 7) {
-				i = "0" + i;
-			}
-		} else {
-			i = "0000001";
-		}
-
 		o.setType(1);
-		if (o.getId() == null) {
-			o.setIdentifier(  i);
-		}
-
+		o.setClassType(getClassType());
+		dataElementservice.setIdentifier(o);
+		o.setStatus(0);
 		// 和父数据元标识符保持一致
 		if (o.getFatherId() != null) {
 			DataElement fd = new DataElement();
