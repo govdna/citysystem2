@@ -938,7 +938,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		}
 		String tinfor4 = "0000";
 		if (o.getInforTypes4() != null) {
-			tinfor4 = sortManagerService.findById(new SortManager(o.getInforTypes3())).getSortCode();
+			tinfor4 = sortManagerService.findById(new SortManager(o.getInforTypes4())).getSortCode();
 		}
 		String i = "";
 		i = service.getMaxCode(o);
