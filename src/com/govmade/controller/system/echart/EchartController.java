@@ -1477,7 +1477,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	
 	@RequestMapping("exall")
 	public String exall() {
-		return "/system/govServer/exall";
+		return "/system/govServer/exall";		
 	}
 	
 }
