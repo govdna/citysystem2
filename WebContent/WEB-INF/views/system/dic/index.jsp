@@ -129,12 +129,17 @@ var columns = [{
 
 //得到查询的参数
 var queryParams = function(params) {
-
+	var sort=params.sort;
+	var order=params.order;
+	if($('input[name="dicN"]').val()!=null&&$('input[name="dicN"]').val()!=""){
+		sort="length(trim(dicName))";
+		order="asc";
+	}
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: 100,
     page: 1,
-    sort:params.sort,
-    order:params.order,
+    sort:sort,
+    order:order,
     level: 1,
     dicName: $('input[name="dicN"]').val()
   };

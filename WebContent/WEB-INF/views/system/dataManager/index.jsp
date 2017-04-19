@@ -394,12 +394,17 @@ function openDetailLayer() {
 
 //得到查询的参数
 var queryParams = function(params) {
-
+	var sort=params.sort;
+	var order=params.order;
+	if($('input[name="dataN"]').val()!=null&&$('input[name="dataN"]').val()!=""){
+		sort="length(trim(dataName))";
+		order="asc";
+	}
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
-    sort:params.sort,
-    order:params.order,
+    sort:sort,
+    order:order,
     dataName: $('input[name="dataN"]').val()
   };
   return temp;

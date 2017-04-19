@@ -114,7 +114,7 @@
 			and t.dic_key=#{param.dicKey}
 		</if>
 		<if test="param.dicValue != null and param.dicValue != '' ">
-			and t.dic_value=#{param.dicValue}
+			and t.dic_value like '%${param.dicValue}%'
 		</if>
 		<if test="param.rootId != null ">
 			and t.root_id=#{param.rootId}

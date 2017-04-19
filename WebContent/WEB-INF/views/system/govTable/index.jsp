@@ -274,11 +274,17 @@ $("select[name='cId']").chosen({
 <%@include file="../common/simpleFieldsColumnsCompany.jsp"%>
   //得到查询的参数
   var queryParams = function(params) {
+	var sort=params.sort;
+	var order=params.order;
+	if($('input[name="tableN"]').val()!=null&&$('input[name="tableN"]').val()!=""){
+		sort="length(trim(value2))";
+		order="asc";
+	}
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
-      sort:params.sort,
-      order:params.order,
+      sort:sort,
+      order:order,
       companyId:$('select[name="cId"]').val(),
       value2:$('input[name="tableN"]').val(),
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govTable/index\")==1}" >
@@ -376,6 +382,9 @@ function doFormatter(value, row, index)
 	html+='<button type="button" class="btn btn-white" onclick="deleteRow(\''+row.idForShow+'\')"><i class="fa fa-trash"></i>&nbsp;删除</button>';
 	if(typeof(row.inforResId)=="undefined"||row.inforResId==""){
 		html+='<button type="button" class="btn btn-white" onclick="checkFields('+row.id+',\''+row.idForShow+'\')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成信息资源</button>';
+	}
+	if(row.inforResId!==""){
+		html+='<button type="button" class="btn btn-white" onclick="updateFields('+row.id+',\''+row.inforResId+'\')"><i class="fa fa-paper-plane-o"></i>&nbsp;更新信息资源</button>';
 	}
 	html+='<button type="button" class="btn btn-white" onclick="createSql('+row.id+')"><i class="fa fa-paper-plane-o"></i>&nbsp;生成sql</button>';
 	html+='</div>';
@@ -627,6 +636,21 @@ function shareFormatter(value, row, index) {
 	   
   return html;
 }
+
+function updateFields(tid,inid){
+	 $.ajax({
+         type: "GET",
+         url: url+"updateFields",
+         data: {value1:tid, value2:inid},
+         dataType: "json",
+         success: function(data){
+        	 if(data.status==0){
+                     layer.msg("更新成功!");
+        	 }
+        }
+     });
+}
+
 
 function doFormatter2(value, row, index) {
     var html = '';
