@@ -1408,6 +1408,9 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		JSONObject ar = new JSONObject();
 		try {
 			service.truncateTable();
+			DataList dl=new DataList();
+			dl.setDataManagerId(0);
+			dataListService.deleteByDataManagerId(dl);
 			ar.put("code", Const.SUCCEED);
 			ar.put("msg", Const.ACTION_SUCCEED);
 		} catch (Exception e) {

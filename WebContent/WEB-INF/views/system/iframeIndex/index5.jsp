@@ -13,8 +13,8 @@
   	<link href="${base}/static/css/style.css?v=4.1.0" rel="stylesheet">
 </head>
 <style>
-  .myclass{max-width: 400px;}
-  .myclass .layui-layer-content {padding: 10px;}
+  .myclass{width: 400px;max-width: 500px; height: 300px;max-height: 400px;overflow-y: auto;}
+  .myclass .layui-layer-content {padding: 20px;}
 </style>
 <body class="skin-<%=ServiceUtil.getThemeType(10)%>">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -48,7 +48,7 @@ var curIndx = 0;
 option = {
     title: {
         text : '海南',
-        subtext : '海南'
+        subtext : ''
     },
     tooltip : {
         trigger: 'item',
@@ -73,40 +73,45 @@ option = {
                 emphasis:{label:{show:true}}
             },
             data:[
-                {name: '三亚市',value: Math.round(Math.random()*1000)},
-                {name: '乐东黎族自治县',value: Math.round(Math.random()*1000)},
-                {name: '儋州市',value: Math.round(Math.random()*1000)},
-                {name: '琼中黎族苗族自治县',value: Math.round(Math.random()*1000)},
-                {name: '东方市',value: Math.round(Math.random()*1000)},
-                {name: '海口市',value: Math.round(Math.random()*1000)},
-                {name: '万宁市',value: Math.round(Math.random()*1000)},
-                {name: '澄迈县',value: Math.round(Math.random()*1000)},
-                {name: '白沙黎族自治县',value: Math.round(Math.random()*1000)},
-                {name: '琼海市',value: Math.round(Math.random()*1000)},
-                {name: '昌江黎族自治县',value: Math.round(Math.random()*1000)},
-                {name: '临高县',value: Math.round(Math.random()*1000)},
-                {name: '陵水黎族自治县',value: Math.round(Math.random()*1000)},
-                {name: '屯昌县',value: Math.round(Math.random()*1000)},
-                {name: '定安县',value: Math.round(Math.random()*1000)},
-                {name: '保亭黎族苗族自治县',value: Math.round(Math.random()*1000)},
-                {name: '文昌市',value: Math.round(Math.random()*1000)},
-                {name: '五指山市',value: Math.round(Math.random()*1000)}
+                {name: '三亚市',value: Math.round(Math.random()*1000), info: '三亚市'},
+                {name: '乐东黎族自治县',value: Math.round(Math.random()*1000), info: 'bbb'},
+                {name: '儋州市',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '琼中黎族苗族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '东方市',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '海口市',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '万宁市',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '澄迈县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '白沙黎族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '琼海市',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '昌江黎族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '临高县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '陵水黎族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '屯昌县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '定安县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '保亭黎族苗族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '文昌市',value: Math.round(Math.random()*1000), info: 'aaa'},
+                {name: '五指山市',value: Math.round(Math.random()*1000), info: 'aaa'}
             ]
         }
     ]
 };
                     
+myChart.setOption(option);
 myChart.on('click', eConsole);
-  myChart.setOption(option);
     function eConsole(param) { 
-      var content = param.name;
+      console.log(param)
+      var name = param.name;
+      var content = param.data.info;
+      var html = name;
+      // var html = name + '<br>' + content
         layer.open({
           type: 1,
           title: false,
           closeBtn: 0,
           shadeClose: true,
           skin: 'myclass',
-          content: content
+          content: html,
+          area: ['70%', '350px']
         });
     }
     </script>
