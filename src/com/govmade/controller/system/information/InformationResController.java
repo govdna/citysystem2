@@ -563,22 +563,7 @@ public class InformationResController extends GovmadeBaseController<InformationR
 						for (DataElement de : nnadapter.getEntityList()) {
 //							int type=de.getObjectType();
 							de.setClassType(0);
-							//dataElement.setObjectType(type);
-							//dataElement.setClassType(0);
-//							String objectTypes = type+"";
-//							while (objectTypes.length() < 2) {
-//								objectTypes = "0" + objectTypes;
-//							}
-							String j = dataElementService.maxIdentifier(dataElement);
-							if (j != null && j != "") {
-								j = Integer.valueOf(j) + 1 + "";
-								while (j.length() < 7) {
-									j = "0" + j;
-								}
-							} else {
-								j = "0000001";
-							}
-							de.setIdentifier( j);
+							dataElementService.setIdentifier(de);
 							dl.setInformationResId(Integer.valueOf(de.getValue30()));
 							de.setValue30(null);
 							
