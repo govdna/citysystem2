@@ -20,6 +20,7 @@
   <link href="${base}/static/fonts/Font-Awesome/css/font-awesome.min.css" rel="stylesheet">
    <link href="${base}/static/css/plugins/iCheck/_all.css" rel="stylesheet">
    <link href="${base}/static/css/animate.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="${base}/static/css/skin/skin-<%=ServiceUtil.getThemeType(10) %>.css">
 </head>
 <style>
 .panel-container {position: relative;width: 70%;max-width: 700px;min-width: 300px;margin: 20px 100px 20px 100px;}
@@ -74,7 +75,7 @@
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-right">
-              <button class="btn btn-default btn-submit" type="submit" onclick="save();">提交</button>
+              <button class="btn btn-primary btn-submit" type="submit" onclick="save();">提交</button>
             </div>
           </div>
           </form>
