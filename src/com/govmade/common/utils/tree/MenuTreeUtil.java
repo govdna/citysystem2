@@ -32,7 +32,7 @@ public class MenuTreeUtil {
 				html.append(buildChildMenuHtml(path,p.getChildren()));
 				html.append("  </ul></li>");
 			}else{
-				html.append("<li ><a class=\"J_menuItem\" href=\"").append(path).append(p.getUrl()).append("\" ><span class=\"nav-label nav-title\">").append(p.getNodeName()).append("</span></a></li>");
+				html.append("<li ><a class=\"J_menuItem\" data-type=\"").append(p.getOpenMethod()).append("\" href=\"").append(path).append(p.getUrl()).append("\" ><span class=\"nav-label nav-title\">").append(p.getNodeName()).append("</span></a></li>");
 			}
 		}
 		return html.toString();
@@ -45,11 +45,11 @@ public class MenuTreeUtil {
 				html.append(" <li><a href=\"#\"><span class=\"nav-label\">").append(p.getNodeName()).append("</span><span class=\"fa arrow\"></span></a>");
 				html.append(" <ul class=\"nav nav-third-level\">");
 				for(Permission c:p.getChildren()){
-					html.append("<li><a class=\"J_menuItem\" href=\"").append(path).append(c.getUrl()).append("\" >").append("<i class=\"fa ").append(c.getIcon()).append("\"></i>").append(c.getNodeName()).append("</a></li>");
+					html.append("<li><a class=\"J_menuItem\" data-type=\"").append(p.getOpenMethod()).append("\" href=\"").append(path).append(c.getUrl()).append("\" >").append("<i class=\"fa ").append(c.getIcon()).append("\"></i>").append(c.getNodeName()).append("</a></li>");
 				}
 				html.append("  </ul></li>");
 			}else{
-				html.append("<li><a class=\"J_menuItem\" href=\"").append(path).append(p.getUrl()).append("\" ><i class=\"fa ").append(p.getIcon()).append("\"></i>").append(p.getNodeName()).append("</a></li>");
+				html.append("<li><a class=\"J_menuItem\" data-type=\"").append(p.getOpenMethod()).append("\" href=\"").append(path).append(p.getUrl()).append("\" ><i class=\"fa ").append(p.getIcon()).append("\"></i>").append(p.getNodeName()).append("</a></li>");
 			}
 		}
 		return html.toString();

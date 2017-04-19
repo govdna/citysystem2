@@ -173,12 +173,18 @@ body.full-height-layout #page-wrapper {height: calc(100vh);background: rgba(255,
 <script src="${base}/static/js/hplus.js?v=4.1.0"></script>
 <script>
 $('.sidebar-collapse .nav li').on('click', function() {
-  var url = $(this).find('a').attr('href');
-  if (url.indexOf('/') != -1) {
-    $('#page-wrapper iframe').attr('src', url);
-    return false;
-  }
-});
+	  var url = $(this).find('a').attr('href');
+	  var openMethod=$(this).find('a').attr('data-type');
+	  if (url.indexOf('/') != -1) {
+		  if(openMethod!='undefined'&&openMethod==2){
+			  window.open(url);
+		  }else{
+			  $('#page-wrapper iframe').attr('src', url);
+		  }
+	    
+	    return false;
+	  }
+	});
 $('#side-menu').slimScroll({
   height: '100%',
   railOpacity: 0.9,
