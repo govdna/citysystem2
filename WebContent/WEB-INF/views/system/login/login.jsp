@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0"/>
 
 <link rel="shortcut icon" href="${base}/favicon.ico">
- <link href="${base}/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="${base}/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 <!-- <link rel="stylesheet" href="${base}/static/css/system/system/login.css" /> -->
 <link href="${base}/static/css/index.css" rel="stylesheet">
 <link rel="stylesheet" href="${base}/static/css/skin/skin-<%=ServiceUtil.getThemeType(10)%>.css">
