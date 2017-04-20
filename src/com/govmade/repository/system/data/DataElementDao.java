@@ -199,4 +199,13 @@ public interface DataElementDao  extends GovmadeBaseDao<DataElement> {
 	*/ 
 	public List<DataElement> getUseCount();
 	
+	/** 
+	* @Title: getCompanyCount 
+	* @Description: TODO(各个机构所属的数据元数量) 
+	* @param @return    设定文件 
+	* @return List<DataElement>    返回类型 
+	* 2017年4月20日    日期   
+	*/ 
+	public List<DataElement> getCompanyCount();
+	
 }

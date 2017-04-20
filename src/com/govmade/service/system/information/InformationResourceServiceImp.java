@@ -165,5 +165,17 @@ public class InformationResourceServiceImp extends GovmadeBaseServiceImp<Informa
 		return map;
 	}
 
+	@Override
+	public Map<String, Integer> getCompanyCount() {
+		Map<String, Integer> map=new HashMap<String, Integer>();
+		List<InformationResource> list= informationResourceDao.getCompanyCount();
+		if(list!=null){
+			for(InformationResource infor:list){
+				map.put(infor.getValue3(), infor.getStatus());
+			}
+		}
+		return map;
+	}
+
 	
 }

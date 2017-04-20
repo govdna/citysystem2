@@ -104,5 +104,6 @@ public interface InformationResourceService extends BaseService<InformationResou
 	
 	public Map<String,Integer> countValue3(InformationResource info);
 	
+	public Map<String,Integer> getCompanyCount();
 	
 }

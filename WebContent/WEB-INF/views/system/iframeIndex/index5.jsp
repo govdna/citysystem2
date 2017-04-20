@@ -57,7 +57,7 @@ option = {
     
     dataRange: {
         min: 0,
-        max: 1000,
+        max: <%=ServiceUtil.getCompanyCountByAddr("")%>,
         color:['orange','yellow'],
         text:['高','低'],// 文本，默认为数值文本
         calculable : false
@@ -73,24 +73,24 @@ option = {
                 emphasis:{label:{show:true}}
             },
             data:[
-                {name: '三亚市',value: Math.round(Math.random()*1000), info: '三亚市'},
-                {name: '乐东黎族自治县',value: Math.round(Math.random()*1000), info: 'bbb'},
-                {name: '儋州市',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '琼中黎族苗族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '东方市',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '海口市',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '万宁市',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '澄迈县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '白沙黎族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '琼海市',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '昌江黎族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '临高县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '陵水黎族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '屯昌县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '定安县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '保亭黎族苗族自治县',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '文昌市',value: Math.round(Math.random()*1000), info: 'aaa'},
-                {name: '五指山市',value: Math.round(Math.random()*1000), info: 'aaa'}
+                {name: '三亚市',value: <%=ServiceUtil.getCompanyCountByAddr("三亚市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("三亚市")%>},
+                {name: '乐东黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("乐东黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("乐东黎族自治县")%>},
+                {name: '儋州市',value: <%=ServiceUtil.getCompanyCountByAddr("儋州市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("儋州市")%>},
+                {name: '琼中黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("琼中黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼中黎族苗族自治县")%>},
+                {name: '东方市',value: <%=ServiceUtil.getCompanyCountByAddr("东方市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("东方市")%>},
+                {name: '海口市',value: <%=ServiceUtil.getCompanyCountByAddr("海口市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("海口市")%>},
+                {name: '万宁市',value: <%=ServiceUtil.getCompanyCountByAddr("万宁市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("万宁市")%>},
+                {name: '澄迈县',value: <%=ServiceUtil.getCompanyCountByAddr("澄迈县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("澄迈县")%>},
+                {name: '白沙黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("白沙黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("白沙黎族自治县")%>},
+                {name: '琼海市',value: <%=ServiceUtil.getCompanyCountByAddr("琼海市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼海市")%>},
+                {name: '昌江黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("昌江黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("昌江黎族自治县")%>},
+                {name: '临高县',value: <%=ServiceUtil.getCompanyCountByAddr("临高县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("临高县")%>},
+                {name: '陵水黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("陵水黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("陵水黎族自治县")%>},
+                {name: '屯昌县',value: <%=ServiceUtil.getCompanyCountByAddr("屯昌县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("屯昌县")%>},
+                {name: '定安县',value: <%=ServiceUtil.getCompanyCountByAddr("定安县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("定安县")%>},
+                {name: '保亭黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("保亭黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("保亭黎族苗族自治县")%>},
+                {name: '文昌市',value: <%=ServiceUtil.getCompanyCountByAddr("文昌市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("文昌市")%>},
+                {name: '五指山市',value: <%=ServiceUtil.getCompanyCountByAddr("五指山市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("五指山市")%>}
             ]
         }
     ]
@@ -99,9 +99,9 @@ option = {
 myChart.setOption(option);
 myChart.on('click', eConsole);
     function eConsole(param) { 
-      console.log(param)
       var name = param.name;
       var content = param.data.info;
+      console.log(content);
       var html = name;
       // var html = name + '<br>' + content
         layer.open({

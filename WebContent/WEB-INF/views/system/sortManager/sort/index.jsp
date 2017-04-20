@@ -344,7 +344,7 @@ $("input[name='sortCode']").blur(function (){
   });
   
   function deleteRow(id){
-    layer.confirm('您确定要删除么？', {
+    layer.confirm('删除的同时将删除它的所有子集，您确定要删除么？', {
         btn: ['确定','取消'] //按钮
       }, function(){
         $.post(url+'deleteAjax',{idForShow:id},function(result){  

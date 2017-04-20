@@ -2,6 +2,7 @@ package com.govmade.service.system.data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -208,4 +209,6 @@ public interface DataElementService extends BaseService<DataElement>{
 	* 2017年4月11日    日期   
 	*/ 
 	public List<DataElement> getUseCount();
+	
+	public Map<String, Integer> getCompanyCount();
 }

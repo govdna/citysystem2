@@ -10,6 +10,10 @@
 		<if test="param.companyNumber != null ">
 			and t.company_number=#{param.companyNumber}
 		</if>
+		<if test="param.address != null ">
+			and t.address like '%${param.address}%'
+		</if>
+		
 		<if test="param.companyName != null ">
 			and t.company_name=#{param.companyName}
 		</if>

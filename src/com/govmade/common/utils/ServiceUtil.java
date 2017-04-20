@@ -48,6 +48,9 @@ import com.govmade.service.system.rbac.ScopeService;
 import com.govmade.service.system.table.GovTableService;
 import com.govmade.service.system.theme.ThemeService;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 public class ServiceUtil implements ApplicationContextAware {
 	private static ApplicationContext applicationContext;
 	private static Map<String, Class<?>> typeMap;
@@ -65,6 +68,11 @@ public class ServiceUtil implements ApplicationContextAware {
 	private static HouseModelFieldsService houseModelFieldsService;
 	private static NoticeService noticeService;
 	private static GovTableService govTableService;
+	
+	private static Map<String,Integer> dataElementCount=new HashMap<String,Integer>();
+	private static Map<String,Integer> informationCount=new HashMap<String,Integer>();
+	private static long lastTime=0;
+	
 	@Override
 	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
 		applicationContext = arg0;
@@ -633,4 +641,40 @@ public class ServiceUtil implements ApplicationContextAware {
 	public static List<DataElement> getUseCount() {
 		return dataElementService.getUseCount();
 	}
+	
+	//根据地址模糊查找
+	public static int getCompanyCountByAddr(String name){
+		Company c=new Company();
+		c.setAddress(name);
+		List<Company> list=companyService.find(c);
+		return list!=null&&list.size()>0?list.size():0;
+	}
+	
+	public static String getCompanyCountByAddrJS(String name){
+		initCountMap();
+		Company c=new Company();
+		c.setAddress(name);
+		List<Company> list=companyService.find(c);
+		if(list!=null){
+			JSONArray ja=new JSONArray();
+			for(Company com:list){
+				JSONObject jo=new JSONObject();
+				jo.put("name", com.getCompanyName());
+				jo.put("dataElement", dataElementCount.get(com.getId())==null?0:dataElementCount.get(com.getId()));
+				jo.put("informationResource", informationCount.get(com.getId())==null?0:informationCount.get(com.getId()));
+				ja.add(jo);
+			}
+			return ja.toString();
+		}
+		return "";
+	}
+	
+	private static void initCountMap(){
+		if(System.currentTimeMillis()-lastTime>2000){
+			lastTime=System.currentTimeMillis();
+			dataElementCount=dataElementService.getCompanyCount();
+			informationCount=informationResourceService.getCompanyCount();
+		}
+	}
+	
 }

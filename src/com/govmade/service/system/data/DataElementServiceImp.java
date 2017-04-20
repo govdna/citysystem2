@@ -1,8 +1,9 @@
 package com.govmade.service.system.data;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import com.govmade.common.utils.base.Const;
 import com.govmade.entity.base.BaseEntity;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
+import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.repository.system.data.DataElementDao;
 import com.govmade.repository.system.data.DataListDao;
@@ -322,6 +324,18 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 			dm.setTimeModified(new Date());
 			dataElementDao.insert(dm);
 		}
+	}
+
+	@Override
+	public Map<String, Integer> getCompanyCount() {
+		Map<String, Integer> map=new HashMap<String, Integer>();
+		List<DataElement> list= dataElementDao.getCompanyCount();
+		if(list!=null){
+			for(DataElement de:list){
+				map.put(de.getValue8(), de.getCounts());
+			}
+		}
+		return map;
 	}
 
 

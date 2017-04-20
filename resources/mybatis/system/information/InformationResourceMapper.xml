@@ -12,6 +12,13 @@
 		ORDER BY address DESC 
 	</select>
 	
+	
+	  <!--  各个机构所属的信息资源数量 -->
+	 <select id="getCompanyCount" resultMap="base" parameterType="DataElement">
+		 select value3,count(id) status from gov_information_resource_main where status=0 and isDeleted=0 group by value3
+ 	 </select>
+     
+     
 	<select id="getInforResByDataElementIds" resultMap="base" parameterType="subscribe">
 		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
 		FROM gov_information_resource_main t,gov_data_list l

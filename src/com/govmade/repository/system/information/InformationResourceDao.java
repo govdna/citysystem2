@@ -193,4 +193,14 @@ public interface InformationResourceDao extends GovmadeBaseDao<InformationResour
 	
 	public  List<InformationResource> countValue3(InformationResource infor);
 	
+	/** 
+	* @Title: getCompanyCount 
+	* @Description: TODO(各个机构所属的信息资源数量) 
+	* @param @return    设定文件 
+	* @return List<DataElement>    返回类型 
+	* 2017年4月20日    日期   
+	*/ 
+	public  List<InformationResource> getCompanyCount();
+	
+	
 }
