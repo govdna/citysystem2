@@ -185,7 +185,7 @@ background:#18a689;
             <option value=""></option>
             <option value="">&nbsp;</option>
             <c:forEach var="obj" items="<%=ServiceUtil.getService(\"GovApplicationSystemService\").find(ServiceUtil.buildBean(\"GovApplicationSystem@isDeleted=0\"),\"id\",\"desc\") %>">
-            <option value="${obj.id}">${obj.value1}</option>
+            <option value="${obj.id}">${obj.value2}</option>
             </c:forEach>
           </select> 
         </div>
