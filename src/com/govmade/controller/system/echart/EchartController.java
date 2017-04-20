@@ -584,13 +584,12 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					"			gov_data_element\n" +
 					"		WHERE\n" +
 					"			isDeleted = 0\n" +
-					"		AND status = 0\n" +
 					"		AND class_type = 1\n" +
 					"		AND value8 > 0\n" +
 					"		GROUP BY\n" +
 					"			value8\n" +
 					"		ORDER BY\n" +
-					"			ids ASC\n" +
+					"			ids DESC\n" +
 					"	)\n" +
 					"WHERE\n" +
 					"	ROWNUM < 9";		
@@ -618,8 +617,8 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 				List<Company> companies = companyservice.find(c,"id","asc");
 				strArray[index] = companies.get(0).getCompanyName();
 				d.setValue8(cid);
-				d.setStatus(0);
 				d.setIsDeleted(0);
+				d.setClassType(1);
 				dataArray[index] = dataElementService.count(d);
 				i.setValue3(cid);
 				i.setIsDeleted(0);
@@ -937,7 +936,6 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					"    FROM\n" +
 					"      gov_company\n" +
 					"    LEFT JOIN gov_data_element ON gov_data_element.value8 = gov_company.id\n" +
-					"    AND gov_data_element.status = 0\n" +
 					"    AND gov_data_element.isDeleted = 0\n" +
 					"    AND gov_data_element.class_type = 1\n" +
 					"    WHERE\n" +
