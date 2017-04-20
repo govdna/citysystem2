@@ -101,8 +101,22 @@ myChart.on('click', eConsole);
     function eConsole(param) { 
       var name = param.name;
       var content = param.data.info;
-      console.log(content);
-      var html = name;
+      var html = '';
+
+      if (!content.length) {
+        html += '<h2 class="text-center" style="color: #aaa">'+name+'数据为空</h2>';
+
+      } else {
+        html += '<b>'+name+'数据表:</b><br><br>';
+        html += '<table class="table table-bordered"><tr><th>部门名称</th><th>数据元</th><th>部门数据元</th></tr>'
+        $.each(content, function (index, value) {
+
+          
+          html += '<tr><td>'+ value.name + '</td><td>'+value.dataElement+'</td><td>'+value.informationResource+'</td>';
+        });
+        html += '</table>';
+      }
+      
       // var html = name + '<br>' + content
         layer.open({
           type: 1,
