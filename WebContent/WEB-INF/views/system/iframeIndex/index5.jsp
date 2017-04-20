@@ -108,7 +108,7 @@ myChart.on('click', eConsole);
 
       } else {
         html += '<h3>'+name+'数据信息:</h3>';
-        html += '<table class="table table-bordered"><tr><th>部门名称</th><th>数据元</th><th>部门数据元</th></tr>'
+        html += '<table class="table table-bordered"><tr><th>部门名称</th><th>数据元数量</th><th>信息资源数量</th></tr>'
         $.each(content, function (index, value) {
 
           

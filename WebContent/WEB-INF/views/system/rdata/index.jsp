@@ -192,11 +192,11 @@ background:#18a689;
         </div>
       </c:forEach>
       
-      <div>
-           
-                <table id="table_fields"></table>
-         
-      </div>
+      <c:if test="<%=ServiceUtil.isHaveScope(9)%>">
+     	 	 <div>           
+                <table id="table_fields"></table>         
+     		 </div>      
+      </c:if>
       
     </form>
   </div>

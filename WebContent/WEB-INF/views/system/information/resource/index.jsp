@@ -1464,26 +1464,38 @@ function doFormatter(value, row, index)
   return html;
 }
 function statusAfter(idForShow,id,title){
-  $.post('${base}/backstage/model/houseModel/isUse',{informationResourceId:id},function(result){ 
-    if(result.code && result.code==1){
-      layer.msg('注销失败！请先删除关联模型库！');
-      }else{
-        backRow(idForShow,4,title);
-    }
-    },'json');
+	if(<%=ServiceUtil.isHaveScope(8)%>){
+		console.log("statusAfter yesssssss");
+		  $.post('${base}/backstage/model/houseModel/isUse',{informationResourceId:id},function(result){ 
+			    if(result.code && result.code==1){
+			      layer.msg('注销失败！请先删除关联模型库！');
+			      }else{
+			        backRow(idForShow,4,title);
+			    }
+			    },'json');
+	}else{
+		console.log("statusAfter noooooooo");
+		backRow(idForShow,4,title);
+	}
+
 }
 
 function deleteAfter(idForShow,id){
-  $.post('${base}/backstage/model/houseModel/isUse',{informationResourceId:id},function(result){ 
-    
-    if(result.code && result.code==1){
-      layer.msg('删除失败！请先删除关联模型库！');
-      }else{
-        //layer.msg('删除！');
-        deleteRow(idForShow);
-      }
+	if(<%=ServiceUtil.isHaveScope(7)%>){
+		console.log("deleteAfter yesssssss");
+		  $.post('${base}/backstage/model/houseModel/isUse',{informationResourceId:id},function(result){     
+			    if(result.code && result.code==1){
+			      layer.msg('删除失败！请先删除关联模型库！');
+			      }else{
+			        //layer.msg('删除！');
+			        deleteRow(idForShow);
+			      }
 
-    },'json');
+			    },'json');
+	}else{
+		console.log("deleteAfter noooooooo");
+		deleteRow(idForShow);
+	}
 }
 
 function openDetailLayer(){

@@ -130,7 +130,6 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 						"    FROM\n" +
 						"      gov_company\n" +
 						"    LEFT JOIN gov_data_element ON gov_data_element.value8 = gov_company.id\n" +
-						"    AND gov_data_element.status = 0\n" +
 						"    AND gov_data_element.isDeleted = 0\n" +
 						"    AND gov_data_element.class_type = 1\n" +
 						"    WHERE\n" +
@@ -1030,7 +1029,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 				list.add(rs.getString(5));
 				jsa.add(json);
 			}
-			String[] arr3=new String[]{"信息资源","数据元","主题库","基础库"};
+			String[] arr3=new String[]{"信息资源","数据元","基础库","主题库"};
 			Ejson.put("sdata", jsa);
 			Ejson.put("keyCity", list);
 			Ejson.put("xpoint", arr3);
@@ -1244,7 +1243,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					for(GovServer gs1 : syslist){
 						JSONObject unitjson = new JSONObject();
 						JSONArray unArray = new JSONArray();
-						String name1 = gs1.getValue1();				
+						String name1 = gs1.getValue2();				
 						unitjson.put("name", name1);
 						if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
 							int dbid = Integer.valueOf(gs1.getValue7());
@@ -1416,7 +1415,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					for(GovServer gs1 : syslist){
 						JSONObject unitjson = new JSONObject();
 						JSONArray unArray = new JSONArray();
-						String name1 = gs1.getValue1();				
+						String name1 = gs1.getValue2();				
 						unitjson.put("name", name1);
 						if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
 							int dbid = Integer.valueOf(gs1.getValue7());

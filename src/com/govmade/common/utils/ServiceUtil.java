@@ -363,6 +363,20 @@ public class ServiceUtil implements ApplicationContextAware {
 		}
 	}
 	
+	// 判断是否具有ScopeId
+	public static boolean isHaveScope(int id) {
+		RolePermission p = new RolePermission();
+		String roles = AccountShiroUtil.getCurrentUser().getRoleId();
+		p.setRoleId(Integer.valueOf(roles));
+		p.setScopeId(id);
+		List<RolePermission> rp = rolePermissionService.find(p);
+		if(rp.size()>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	public static BaseService getService(String name) {
 
 		try {
@@ -690,8 +704,9 @@ public class ServiceUtil implements ApplicationContextAware {
 			for(Company com:list){
 				JSONObject jo=new JSONObject();
 				jo.put("name", com.getCompanyName());
-				jo.put("dataElement", dataElementCount.get(com.getId())==null?0:dataElementCount.get(com.getId()));
-				jo.put("informationResource", informationCount.get(com.getId())==null?0:informationCount.get(com.getId()));
+				String id=com.getId()+"";
+				jo.put("dataElement", dataElementCount.get(id)==null?0:dataElementCount.get(id));
+				jo.put("informationResource", informationCount.get(id)==null?0:informationCount.get(id));
 				ja.add(jo);
 			}
 			return ja.toString();
