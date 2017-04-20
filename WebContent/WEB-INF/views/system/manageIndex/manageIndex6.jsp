@@ -81,6 +81,8 @@ body.full-height-layout #page-wrapper {height: calc(100vh);background: rgba(255,
           <c:set  var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
           <c:if test="${roleid==1}">
           <a href="${base}/backstage/manage?menuType=4" class="btn-signout btn-params" style="margin-right:10px;">参数设置</a>
+          </c:if>
+          <c:if test="<%=!ServiceUtil.haveCheck(\"/backstage/information/resource/index\") %>">
             <div class="dropdown message-group">
             <c:set  var="noticeNum"   value="<%=ServiceUtil.noticeNum() %>"/>
             <c:set  var="deSatausNum"   value="<%=ServiceUtil.deSatausNum() %>"/>
@@ -122,7 +124,7 @@ body.full-height-layout #page-wrapper {height: calc(100vh);background: rgba(255,
               </c:choose>
               </ul>
             </div>
-          </c:if>
+            </c:if>
           <a href="${base}/system_logout" class="btn-signout btn-sign-out"><i class="fa fa-times mr5"></i>退出</a>
           <div class="theme-skin">
             <a href="#" class="btn-signout theme" style="margin-right: 15px;"  data-skin=" skin-<%=ServiceUtil.getThemeType(10)%>">主题</a>

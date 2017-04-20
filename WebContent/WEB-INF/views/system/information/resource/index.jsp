@@ -72,8 +72,10 @@ background:#18a689;
             <c:if test="${status!=null}">
             <div class="form-group" style="margin-left: 15px;">
               <div class="text-center">
+              <c:if test="<%=!ServiceUtil.haveCheck(\"/backstage/information/resource/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="statusPass();" href="#">审核通过</a>
                 <a data-toggle="modal" class="btn btn-primary" onclick="allPass();" href="#">一键审核</a>
+              </c:if>
               </div>
             </div>
             </c:if>
