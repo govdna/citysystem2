@@ -107,7 +107,7 @@ myChart.on('click', eConsole);
         html += '<h2 class="text-center" style="color: #aaa">'+name+'数据为空</h2>';
 
       } else {
-        html += '<b>'+name+'数据表:</b><br><br>';
+        html += '<h3>'+name+'数据信息:</h3>';
         html += '<table class="table table-bordered"><tr><th>部门名称</th><th>数据元</th><th>部门数据元</th></tr>'
         $.each(content, function (index, value) {
 
