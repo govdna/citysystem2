@@ -247,6 +247,21 @@ public class ServiceUtil implements ApplicationContextAware {
 		}
 		return false;
 	}
+	// 获取权限下规则(是否有导入模板权限)
+		public static boolean havemod(String url) {
+			if( AccountShiroUtil.getCurrentUser().getRoleId()!=null){
+				String roles = AccountShiroUtil.getCurrentUser().getRoleId();
+				Permission p = new Permission();
+				p.setUrl(url);
+		        List<Scope> l=scopeService.getScopesByRoleId(roles, p);
+		        for(Scope s:l){
+		        	if(s.getId()==7){
+		        		return true;
+		        	}
+		        }	
+			}
+			return false;
+		}
 	// 获取权限下 规则
 	public static List<Permission> getURLPermisson(HttpServletRequest request) {
 		String url=(String) request.getSession().getAttribute("url");

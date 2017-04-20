@@ -44,6 +44,8 @@ background:#18a689;
               <div class="text-center">
                <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/govRdataElement/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="addNew();" href="#">自定义</a>
+               </c:if>
+               <c:if test="<%=!ServiceUtil.havemod(\"/backstage/govRdataElement/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="openDicLayer();" href="#">选择模板</a>
                </c:if>
                <c:if test="<%=!ServiceUtil.haveImp(\"/backstage/govRdataElement/index\") %>">
