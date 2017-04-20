@@ -56,7 +56,7 @@ public class ItemSortAdapter extends ExcelAdapter<ItemSort>{
 		GovApplicationSystem govApplicationSystem = new GovApplicationSystem();
 		List<GovApplicationSystem> companyapp=(List<GovApplicationSystem>)ServiceUtil.getService("GovApplicationSystemService").find(govApplicationSystem);
 		for(GovApplicationSystem c:companyapp){
-			apps.put(c.getAppsystemName(), c.getId()+"");
+			apps.put(c.getValue2(), c.getId()+"");
 		}
 		List<GovmadeDic> fdic = ServiceUtil.getDicByDicNum("FILETYPE");
 		for(GovmadeDic d:fdic){
@@ -123,7 +123,7 @@ public class ItemSortAdapter extends ExcelAdapter<ItemSort>{
 			de.setFileType(Integer.valueOf(fileTypeDics.get(clumns[7])));
 		}
 		de.setFileName(clumns[8]);
-		if(clumns[9]=="是"){
+		if(clumns[9].equals("是")){
 			de.setYesorno(1);
 			if(apps.get(clumns[10])==null){
 				appendMsg("第"+realNum+"行第10列，数据类型有误！");

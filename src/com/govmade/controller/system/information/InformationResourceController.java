@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -810,117 +811,144 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		res.setContentType("text/html;charset=utf-8");
 		res.setCharacterEncoding("utf-8");
 		InformationResource informationResource = service.find(o).get(0);
-		String[] fileds = ObjectUtil.getFiledName(informationResource);
-		JSONObject jo = new JSONObject();
-		GovmadeDic dic = new GovmadeDic();
-		Company company = new Company();
-		for (String filed : fileds) {
-			Object value = ObjectUtil.getFieldValueByName(filed, informationResource);
-			jo.put(filed, value);
-		}
+		JSONObject echartjson = new JSONObject();
+		JSONArray nodeArray = new JSONArray();
+		JSONArray linkArray = new JSONArray();
+		JSONObject unitjson = new JSONObject();
+		JSONObject linkjson = new JSONObject();
+		List<String> list = new ArrayList<String>();
+		String inforName = informationResource.getValue1();
+		unitjson.put("category", 0);
+		unitjson.put("name", inforName);
+		unitjson.put("value", 10);
+		nodeArray.add(unitjson);
+		list.add("信息资源");
 		// Relation to ItemSort
 		ItemSort itemSortForSearch = new ItemSort();
 		if (informationResource.getValue6() != null && !informationResource.getValue6().isEmpty()) {
 			itemSortForSearch.setId(Integer.valueOf(informationResource.getValue6()));
-			ItemSort itemSort = itemSortService.find(itemSortForSearch).get(0);
-			fileds = ObjectUtil.getFiledName(itemSort);
-			for (String filed : fileds) {
-				Object value = ObjectUtil.getFieldValueByName(filed, itemSort);
-				if (filed == "serObjSort") {
-					dic.setDicNum("SEROBJSORT");
-					dic.setDicKey(value + "");
-					value = govmadeDicService.getDicList(dic).get(0).getDicValue();
-				}
-				if (filed == "serContent") {
-					dic.setDicNum("SERCONTENT");
-					dic.setDicKey(value + "");
-					value = govmadeDicService.getDicList(dic).get(0).getDicValue();
-				}
-				if (filed == "deadline") {
-					dic.setDicNum("DEADLINE");
-					dic.setDicKey(value + "");
-					value = govmadeDicService.getDicList(dic).get(0).getDicValue();
-				}
-				jo.put(filed, value);
-			}
+			ItemSort itemSort = itemSortService.findById(itemSortForSearch);
+			String itemName = itemSort.getItemName();
+			Random random = new Random();
+			int s = random.nextInt(6)%(6-2+1) + 2;		
+			unitjson.put("category", 1);
+			unitjson.put("name", itemName);
+			unitjson.put("value", s);
+			nodeArray.add(unitjson);
+			linkjson.put("source", itemName);	
+			linkjson.put("target", inforName);
+			linkjson.put("weight", s);
+			linkjson.put("name", "业务事项");
+			linkArray.add(linkjson);
+			list.add("业务事项");
 			// Relation to GovApplicationSystem
 			if (itemSort.getBusSystem() != null) {
 				GovApplicationSystem govApplicationSystemForSearch = new GovApplicationSystem();
 				govApplicationSystemForSearch.setId(Integer.valueOf(itemSort.getBusSystem()));
 				GovApplicationSystem govApplicationSystem = govApplicationSystemService
 						.find(govApplicationSystemForSearch).get(0);
-				fileds = ObjectUtil.getFiledName(govApplicationSystem);
-				for (String filed : fileds) {
-					Object value = ObjectUtil.getFieldValueByName(filed, govApplicationSystem);
-					if (filed == "companyId") {
-						company.setId((Integer) value);
-						value = companyService.find(company).get(0).getCompanyName();
-						filed = "acompanyId";
+				String appName = govApplicationSystem.getValue2();
+				int s1 = random.nextInt(6)%(6-2+1) + 2;		
+				unitjson.put("category", 2);
+				unitjson.put("name", appName);
+				unitjson.put("value", s1);
+				nodeArray.add(unitjson);
+				linkjson.put("source", appName);	
+				linkjson.put("target", itemName);
+				linkjson.put("weight", s1);
+				linkjson.put("name", "系统");
+				linkArray.add(linkjson);
+				list.add("系统");
+				int catNum = 2;
+				if(govApplicationSystem.getValue6()!=null && !govApplicationSystem.getValue6().isEmpty()){
+					// Relation to GovMemorizer
+					GovMemorizer govMemorizerForSearch = new GovMemorizer();
+					govMemorizerForSearch.setId(Integer.valueOf(govApplicationSystem.getValue6()));
+					GovMemorizer govMemorizer = govMemorizerService.find(govMemorizerForSearch).get(0);
+					String memName = govMemorizer.getValue1();
+					catNum = catNum+1;
+					int s2 = random.nextInt(6)%(6-2+1) + 2;		
+					unitjson.put("category", catNum);
+					unitjson.put("name", memName);
+					unitjson.put("value", s2);
+					nodeArray.add(unitjson);
+					linkjson.put("source", memName);	
+					linkjson.put("target", appName);
+					linkjson.put("weight", s2);
+					linkjson.put("name", "存储器");
+					linkArray.add(linkjson);
+					list.add("存储器");
+					if(govMemorizer.getValue10()!=null && !govMemorizer.getValue10().isEmpty()){
+						// Relation to GovComputerRoom
+						GovComputerRoom govComputerRoomForSearch = new GovComputerRoom();
+						govComputerRoomForSearch.setId(Integer.valueOf(govMemorizer.getValue10()));
+						GovComputerRoom govComputerRoom = govComputerRoomService.find(govComputerRoomForSearch).get(0);
+						String cpName = govComputerRoom.getValue1();
+						catNum = catNum+1;
+						int s3 = random.nextInt(6)%(6-2+1) + 2;		
+						unitjson.put("category", catNum);
+						unitjson.put("name", cpName);
+						unitjson.put("value", s3);
+						nodeArray.add(unitjson);
+						linkjson.put("source", cpName);	
+						linkjson.put("target", memName);
+						linkjson.put("weight", s3);
+						linkjson.put("name", "机房");
+						linkArray.add(linkjson);
+						list.add("机房");
 					}
-					if (filed == "network") {
-						dic.setDicNum("NETWORK");
-						dic.setDicKey(value + "");
-						value = govmadeDicService.getDicList(dic).get(0).getDicValue();
+				}				
+				if(govApplicationSystem.getValue5()!=null && !govApplicationSystem.getValue5().isEmpty()){
+					// Relation to GovServer
+					GovServer govServerForSearch = new GovServer();
+					govServerForSearch.setId(Integer.valueOf(govApplicationSystem.getValue5()));
+					GovServer govServer = govServerService.find(govServerForSearch).get(0);
+					String serName = govServer.getValue1();
+					catNum = catNum+1;
+					int s4 = random.nextInt(6)%(6-2+1) + 2;		
+					unitjson.put("category", catNum);
+					unitjson.put("name", serName);
+					unitjson.put("value", s4);
+					nodeArray.add(unitjson);
+					linkjson.put("source", serName);	
+					linkjson.put("target", appName);
+					linkjson.put("weight", s4);
+					linkjson.put("name", "服务器");
+					linkArray.add(linkjson);
+					list.add("服务器");
+					if(govServer.getValue9()!=null && !govServer.getValue9().isEmpty()){
+						// Relation to GovComputerRoom
+						GovComputerRoom govComputerRoomForSearch = new GovComputerRoom();
+						govComputerRoomForSearch.setId(Integer.valueOf(govServer.getValue9()));
+						GovComputerRoom govComputerRoom = govComputerRoomService.find(govComputerRoomForSearch).get(0);
+						String cpName = govComputerRoom.getValue1();
+						if(catNum == 5){
+							catNum = 3;
+						}else{
+							catNum = catNum+1;
+							list.add("机房");
+						}
+						
+						int s5 = random.nextInt(6)%(6-2+1) + 2;		
+						unitjson.put("category", catNum);
+						unitjson.put("name", cpName);
+						unitjson.put("value", s5);
+						nodeArray.add(unitjson);
+						linkjson.put("source", cpName);	
+						linkjson.put("target", serName);
+						linkjson.put("weight", s5);
+						linkjson.put("name", "机房");
+						linkArray.add(linkjson);
 					}
-					jo.put(filed, value);
 				}
-				// Relation to GovMemorizer
-				GovMemorizer govMemorizerForSearch = new GovMemorizer();
-				govMemorizerForSearch.setId(Integer.valueOf(govApplicationSystem.getBelongMemorizerId()));
-				GovMemorizer govMemorizer = govMemorizerService.find(govMemorizerForSearch).get(0);
-				fileds = ObjectUtil.getFiledName(govMemorizer);
-				for (String filed : fileds) {
-					Object value = ObjectUtil.getFieldValueByName(filed, govMemorizer);
-					if (filed == "companyId") {
-						company.setId((Integer) value);
-						value = companyService.find(company).get(0).getCompanyName();
-						filed = "mcompanyId";
-					}
-					if (filed == "memorizerBrand") {
-						dic.setDicNum("MEMORIZERBRAND");
-						dic.setDicKey(value + "");
-						value = govmadeDicService.getDicList(dic).get(0).getDicValue();
-					}
-					jo.put(filed, value);
-				}
-				// Relation to GovComputerRoom
-				GovComputerRoom govComputerRoomForSearch = new GovComputerRoom();
-				govComputerRoomForSearch.setId(Integer.valueOf(govMemorizer.getBelongCproomId()));
-				GovComputerRoom govComputerRoom = govComputerRoomService.find(govComputerRoomForSearch).get(0);
-				fileds = ObjectUtil.getFiledName(govComputerRoom);
-				for (String filed : fileds) {
-					Object value = ObjectUtil.getFieldValueByName(filed, govComputerRoom);
-					if (filed == "companyId") {
-						company.setId((Integer) value);
-						value = companyService.find(company).get(0).getCompanyName();
-						filed = "ccompanyId";
-					}
-					jo.put(filed, value);
-				}
-				// Relation to GovServer
-				GovServer govServerForSearch = new GovServer();
-				govServerForSearch.setId(Integer.valueOf(govApplicationSystem.getBelongServerId()));
-				GovServer govServer = govServerService.find(govServerForSearch).get(0);
-				fileds = ObjectUtil.getFiledName(govServer);
-				for (String filed : fileds) {
-					Object value = ObjectUtil.getFieldValueByName(filed, govServer);
-					if (filed == "companyId") {
-						company.setId((Integer) value);
-						value = companyService.find(company).get(0).getCompanyName();
-						filed = "scompanyId";
-					}
-					if (filed == "serverBrand") {
-						dic.setDicNum("SERVERBRAND");
-						dic.setDicKey(value + "");
-						value = govmadeDicService.getDicList(dic).get(0).getDicValue();
-					}
-					jo.put(filed, value);
-				}
+				
 			}
 
 		}
-
-		res.getWriter().write(jo.toString());
+		echartjson.put("cate", list);
+		echartjson.put("node", nodeArray);
+		echartjson.put("link", linkArray);
+		res.getWriter().write(echartjson.toString());
 		res.getWriter().flush();
 		res.getWriter().close();
 		return null;
@@ -938,7 +966,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		}
 		String tinfor4 = "0000";
 		if (o.getInforTypes4() != null) {
-			tinfor4 = sortManagerService.findById(new SortManager(o.getInforTypes3())).getSortCode();
+			tinfor4 = sortManagerService.findById(new SortManager(o.getInforTypes4())).getSortCode();
 		}
 		String i = "";
 		i = service.getMaxCode(o);

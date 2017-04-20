@@ -54,6 +54,8 @@ background:#18a689;
               <div class="text-center">
                <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/information/resource/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="addNew();" href="#">自定义</a>
+               </c:if>
+                <c:if test="<%=!ServiceUtil.havemod(\"/backstage/information/resource/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="chooseInforRes();" href="#">参考模版</a>
                </c:if>
                <c:if test="<%=!ServiceUtil.haveImp(\"/backstage/information/resource/index\") %>">
@@ -822,6 +824,10 @@ $(".name1").chosen({
   var queryParams = function(params) {
     var sort=params.sort;
 	var order=params.order;
+	if(params.sort==null){
+		sort="value2";
+		order="asc";
+	}
 	if($('input[name="val1"]').val()!=null&&$('input[name="val1"]').val()!=""){
 		sort="length(trim(value1))";
 		order="asc";
@@ -834,8 +840,6 @@ $(".name1").chosen({
       value1 : $('input[name="val1"]').val(),
       value6: $('select[name="val6"]').val(),
       value8: $('select[name="val8"]').val(),
-      sort:params.sort,
-      order:params.order,
       <c:choose>
         <c:when test="${status!=null}">
           status:${status},
