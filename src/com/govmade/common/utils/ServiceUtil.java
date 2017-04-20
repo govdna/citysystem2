@@ -689,8 +689,9 @@ public class ServiceUtil implements ApplicationContextAware {
 			for(Company com:list){
 				JSONObject jo=new JSONObject();
 				jo.put("name", com.getCompanyName());
-				jo.put("dataElement", dataElementCount.get(com.getId())==null?0:dataElementCount.get(com.getId()));
-				jo.put("informationResource", informationCount.get(com.getId())==null?0:informationCount.get(com.getId()));
+				String id=com.getId()+"";
+				jo.put("dataElement", dataElementCount.get(id)==null?0:dataElementCount.get(id));
+				jo.put("informationResource", informationCount.get(id)==null?0:informationCount.get(id));
 				ja.add(jo);
 			}
 			return ja.toString();

@@ -12,12 +12,12 @@
 
 	</select>
 	<!--  数据元使用频率 -->
-	 <select id="getUseCount" resultMap="base" parameterType="DataElement">
+	 <select id="getCompanyCount" resultMap="base" parameterType="DataElement">
 		select value8,count(id) counts from gov_data_element where class_type=1 and isDeleted=0 group by value8
      </select>	
      
      <!--  各个机构所属的数据元数量 -->
-	 <select id="getCompanyCount" resultMap="base" parameterType="DataElement">
+	 <select id="getUseCount" resultMap="base" parameterType="DataElement">
 		select t.id,t.value1,count(t.id) counts,count(DISTINCT m.company_id) companyId from GOV_DATA_ELEMENT t,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and m.isDeleted=0 and m.status=0 group by t.value1,t.id HAVING count(t.id) >0   order by counts desc
      </select>
      
