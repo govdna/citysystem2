@@ -37,6 +37,8 @@ background:#18a689;
                 <button id="searchButton" type="searchButton" onclick="searchButton();" href="#" class="btn btn-primary">搜索</button>
                 <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/sortManager/index?type=1\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="addNew();" href="#">新增</a>
+                </c:if>
+                <c:if test="<%=!ServiceUtil.havemod(\"/backstage/sortManager/index?type=1\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="openDicLayer();" href="#">选择模板</a>
                 </c:if>
                 <c:if test="<%=!ServiceUtil.haveImp(\"/backstage/sortManager/index?type=1\") %>">
