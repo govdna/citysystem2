@@ -10,6 +10,9 @@
 		<if test="param.permissionId != null ">
 			and t.permission_id=#{param.permissionId}
 		</if>
+		<if test="param.scopeId != null ">
+			and t.scope_id=#{param.scopeId}
+		</if>		
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
 		</if>

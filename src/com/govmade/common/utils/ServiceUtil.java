@@ -348,6 +348,20 @@ public class ServiceUtil implements ApplicationContextAware {
 		}
 	}
 	
+	// 判断是否具有ScopeId
+	public static boolean isHaveScope(int id) {
+		RolePermission p = new RolePermission();
+		String roles = AccountShiroUtil.getCurrentUser().getRoleId();
+		p.setRoleId(Integer.valueOf(roles));
+		p.setScopeId(id);
+		List<RolePermission> rp = rolePermissionService.find(p);
+		if(rp.size()>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	public static BaseService getService(String name) {
 
 		try {
