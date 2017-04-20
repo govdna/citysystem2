@@ -54,9 +54,11 @@ background:#18a689;
                <c:if test="<%=!ServiceUtil.haveExp(\"/backstage/govRdataElement/index\") %>">
 	            <a data-toggle="modal" class="btn btn-primary" onclick="downloadData();" href="#">导出数据</a>
 	           </c:if>
-                <c:set var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
-                <c:if test="${roleid==1}">
+               <c:if test="<%=!ServiceUtil.haveDel(\"/backstage/govRdataElement/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="deleteAllAfter();" href="#">批量删除</a>
+                </c:if>
+                 <c:set var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+                <c:if test="${roleid==1}">
                 <a data-toggle="modal" class="btn btn-danger" onclick="cleanTable();" href="#">清空所有</a>
                 </c:if>
               </div>
