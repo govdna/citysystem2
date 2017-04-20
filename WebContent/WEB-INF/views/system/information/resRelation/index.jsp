@@ -24,7 +24,7 @@ text-align: left;
 }
 </style>
 </head>
-<body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
+<body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
   <div class="ibox float-e-margins">
     <div class="ibox-content">
@@ -128,7 +128,7 @@ text-align: left;
   </div>
 </div>
 <div id="main5">
-  <div id="main4" class="form-horizontal" style="height:800px;"></div>
+  <div id="main4" class="form-horizontal" style="height:600px;"></div>
 </div>
 
   <!--信息资源模版详情结束-->  
@@ -140,170 +140,86 @@ text-align: left;
 <script>    
     function dshow(id) {
       $.getJSON("relation?id=" + id, function(data) {
+    	  var cats = data.cate;
+    	  var catries = [];
+    	  for(i=0;i<cats.length;i++){
+        	  var unit = {};
+    		  unit.name=cats[i];
+    		  catries.push(unit);
+    	  }
+    	  console.info(data);
+    	  console.info(catries);
         $("#main5").show();
         var myChart4 = echarts.init(document.getElementById('main4'));
-        var labelFromatter = {
-          normal: {
-            label: {
-              show: true,
-              position: 'top',
-              textStyle: {
-                color: '#676a6c',
-                fontSize: 13,
-                fontWeight: 'bolder'
-              }
-            },
-            lineStyle: {
-              color: '#d2d2d3',
-              width: 2,
-              type: 'broken' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
-            }
-          },
-          emphasis: {
-            label: {
-              show: false,
-            }
-          }
-        }
-        var option4 = {
-          tooltip: {
-            trigger: 'item',
-            formatter: "{b}"
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              mark: { show: true },
-              dataView: { show: true, readOnly: false },
-              restore: { show: true },
-              saveAsImage: { show: true }
-            }
-          },
-          calculable: false,
-          series: [{
-            name: '树图',
-            type: 'tree',
-            orient: 'horizontal',
-            rootLocation: { x: 100, y: '20%' },
-            itemStyle: labelFromatter,
-            data: [{
-              name: '资源信息',
-              itemStyle: labelFromatter,
-              children: [{
-                name: data.value1,
-                itemStyle: labelFromatter,
-
-              }, {
-                name: data.value2,
-                itemStyle: labelFromatter
-              }, {
-                name: '业务信息',
-                itemStyle: labelFromatter,
-                children: [{
-                  name: data.itemName,
-                  itemStyle: labelFromatter,
-
-                }, {
-                  name: data.serObjSort,
-                  itemStyle: labelFromatter,
-
-                }, {
-                  name: data.serContent,
-                  itemStyle: labelFromatter,
-
-                }, {
-                  name: data.deadline,
-                  itemStyle: labelFromatter,
-
-                }, {
-                  name: "应用系统",
-                  itemStyle: labelFromatter,
-                  children: [{
-                    name: data.appsystemNum,
-                    itemStyle: labelFromatter,
-
-                  }, {
-                    name: data.appsystemName,
-                    itemStyle: labelFromatter,
-
-                  }, {
-                    name: data.acompanyId,
-                    itemStyle: labelFromatter,
-
-                  }, {
-                    name: data.network,
-                    itemStyle: labelFromatter,
-
-                  }, {
-                    name: "存储器",
-                    itemStyle: labelFromatter,
-                    children: [{
-                      name: data.memorizerNum,
-                      itemStyle: labelFromatter,
-
-                    }, {
-                      name: data.mcompanyId,
-                      itemStyle: labelFromatter,
-
-                    }, {
-                      name: data.memorizerBrand,
-                      itemStyle: labelFromatter,
-
-                    }, {
-                      name: data.memorizerModel,
-                      itemStyle: labelFromatter,
-
-                    }, {
-                      name: "服务器",
-                      itemStyle: labelFromatter,
-                      children: [{
-                          name: data.serverNum,
-                          itemStyle: labelFromatter,
-
-                        }, {
-                          name: data.scompanyId,
-                          itemStyle: labelFromatter,
-
-                        }, {
-                          name: data.serverBrand,
-                          itemStyle: labelFromatter,
-
-                        }, {
-                          name: data.serverModel,
-                          itemStyle: labelFromatter,
-
-                        }, {
-                          name: "所属机房",
-                          itemStyle: labelFromatter,
-                          children: [{
-                            name: data.cproomNum,
-                            itemStyle: labelFromatter,
-
-                          }, {
-                            name: data.ccompanyId,
-                            itemStyle: labelFromatter,
-
-                          }, {
-                            name: data.cproomArea,
-                            itemStyle: labelFromatter,
-
-                          }, {
-                            name: data.upsModel,
-                            itemStyle: labelFromatter,
-
-                          }, ]
-                        }
-
-                      ]
-                    }]
-                  }]
-                }]
-              }]
-            }]
-          }]
-        };
-
-        myChart4.setOption(option4);
+    	   var option = {
+   		        title: {
+   		          // text: '人物关系：乔布斯',
+   		          //subtext: '数据来自人立方',
+   		          x: 'right',
+   		          y: 'bottom'
+   		        },
+   		        tooltip: {
+   		          trigger: 'item',
+   		          formatter: '{a} : {b}'
+   		        },
+   		        toolbox: {
+   		          show: true,
+   		          feature: {
+   		            restore: { show: true },
+   		            magicType: { show: true, type: ['force', 'chord'] },
+   		            saveAsImage: { show: true }
+   		          }
+   		        },
+   		        legend: {
+   		          x: 'left',
+   		          data: data.cate
+   		        },
+   		        series: [{
+   		          type: 'force',
+   		          name: "关系分析",
+   		          ribbonType: false,
+   		          categories: catries,
+   		          itemStyle: {
+   		            normal: {
+   		              label: {
+   		                show: true,
+   		                textStyle: {
+   		                  color: '#333'
+   		                }
+   		              },
+   		              nodeStyle: {
+   		                brushType: 'both',
+   		                borderColor: 'rgba(255,215,0,0.4)',
+   		                borderWidth: 1
+   		              },
+   		              linkStyle: {
+   		                type: 'curve'
+   		              }
+   		            },
+   		            emphasis: {
+   		              label: {
+   		                show: false
+   		                  // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+   		              },
+   		              nodeStyle: {
+   		                //r: 30
+   		              },
+   		              linkStyle: {}
+   		            }
+   		          },
+   		          useWorker: false,
+   		          minRadius: 15,
+   		          maxRadius: 25,
+   		          gravity: 1.1,
+   		          scaling: 1.1,
+   		          roam: 'move',
+   		          nodes: data.node,
+   		          links:data.link
+   		        }]
+   		      };
+       
+       
+		      myChart4.setOption(option);
         layer.open({
           type: 1,
           shade: false,
@@ -434,7 +350,7 @@ text-align: left;
       html += '<div class="btn-group">';
       //html+='<button type="button" class="btn btn-default">按钮 1</button>';
       html += '<button type="button" class="btn btn-white" onclick="dshow(\'' + row.id + '\')"><i class="fa fa-pencil"></i>&nbsp;关系展现</button>';
-      html += '<button type="button" class="btn btn-white" onclick="detail(\'' + row.id + '\')"><i class="fa fa-pencil"></i>&nbsp;查看关系</button>';
+      //html += '<button type="button" class="btn btn-white" onclick="detail(\'' + row.id + '\')"><i class="fa fa-pencil"></i>&nbsp;查看关系</button>';
       html += '</div>';
       return html;
     }
