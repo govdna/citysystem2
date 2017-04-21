@@ -80,7 +80,7 @@ background:#18a689;
             </div>
             </c:if>
           </div>
-                    <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+             <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
 			    <li class="form-group clearfix">	
 				  <label class="pull-left">涉及业务：</label>
 				  <div class="pull-left" style="width: 200px;">
@@ -92,6 +92,27 @@ background:#18a689;
 	                  </c:forEach>
 	                </select>		
 				  </div>	                
+				</li>
+				 <li class="form-group clearfix">	
+				  <label class="pull-left">信息资源提供方：</label>
+				  <div class="pull-left" style="width: 210px;">
+				  <select name="cId" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
+	                 <option value=""></option>
+	                 <option value="">&nbsp;</option>
+	                 <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+	                 <c:if test="${roleid==1}">
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+	                 <c:if test="${roleid!=1}">
+	                 <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+                  </select>		
+				  </div>                
 				</li>
 			    <li class="form-group" style="margin-left: 10px;">			    	    
 				<label class="pull-left">共享类型：</label>		
@@ -534,7 +555,11 @@ $(".name1").chosen({
 	  no_results_text: "没有匹配到这条记录",
 	  width: "100%"
 	});
-	
+$("select[name='cId']").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
   var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
   var dicLayerContent = '#dic_form';
   var title_name="信息资源";
@@ -845,6 +870,7 @@ $(".name1").chosen({
       value1 : $('input[name="val1"]').val(),
       value6: $('select[name="val6"]').val(),
       value8: $('select[name="val8"]').val(),
+      value3: $('select[name="cId"]').val(),
       <c:choose>
         <c:when test="${status!=null}">
           status:${status},

@@ -42,14 +42,23 @@ background:#18a689;
 		   	   <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
 			    <li class="form-group clearfix">	
 				  <label class="pull-left">责任部门：</label>
-				  <div class="pull-left" style="width: 200px;">
-				  	<select name="cId" data-placeholder=" " class="chosen-select name1 form-control" style="width:350px; display:inline-block;" tabindex="4" required>
-	                  <option value=""></option>
-	                  <option value="">&nbsp;</option>
-	                  <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
-	                  <option value="${obj.id}">${obj.companyName}</option>
-	                  </c:forEach>
-	                </select>		
+				  <div class="pull-left" style="width: 210px;">
+				  <select name="cId" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
+	                 <option value=""></option>
+	                 <option value="">&nbsp;</option>
+	                 <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+	                 <c:if test="${roleid==1}">
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+	                 <c:if test="${roleid!=1}">
+	                 <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+                  </select>		
 				  </div>                
 				</li>
 			    <li class="form-group" style="margin-left: 10px;">				    	    
@@ -232,6 +241,11 @@ $('.dropdown-btn').on('click', function() {
 	$('.dropdown-menu1').toggleClass('dn');
 });
 $(".name1").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
+$("select[name='cId']").chosen({
 	  disable_search_threshold: 10,
 	  no_results_text: "没有匹配到这条记录",
 	  width: "100%"
