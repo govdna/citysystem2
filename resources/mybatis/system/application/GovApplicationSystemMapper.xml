@@ -142,10 +142,13 @@
         id = #{param.id,jdbcType=NUMERIC}
       </if>
      <if test="param.value2 != null and param.value2 !=''"> and
-		value2 = #{param.value2,jdbcType=VARCHAR}
+		value2 like '%${param.value2}%'
 	 </if>
 	  <if test="param.value3 != null and param.value3 !=''"> and
 		value3 = #{param.value3,jdbcType=VARCHAR}
+		</if>
+	 <if test="param.value4 != null and param.value4 !=''"> and
+		value4 = #{param.value4,jdbcType=VARCHAR}
 		</if>
 		<if test="param.value8 != null and param.value8 !=''"> and
 		(value5 IS NOT NULL)or
