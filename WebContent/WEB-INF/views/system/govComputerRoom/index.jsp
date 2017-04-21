@@ -25,6 +25,13 @@
                   <option value="${obj.id}">${obj.companyName}</option>
                   </c:forEach>
                   </c:if>
+                  <c:if test="${roleid!=1}">
+                    <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+                     <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+                  <option value="${obj.id}">${obj.companyName}</option>
+                  </c:forEach>
+                 <%--  <option value="${comid}">${comid}</option> --%>
+                  </c:if>
                 </select>
               </div>
               <div class="pull-left"  style="margin-left:10px;">
