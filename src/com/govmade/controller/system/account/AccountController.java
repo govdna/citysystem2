@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.common.utils.security.CipherUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.account.Account;
+import com.govmade.entity.system.item.ItemSort;
 import com.govmade.entity.system.organization.Company;
 import com.govmade.entity.system.organization.Groups;
 import com.govmade.entity.system.rbac.Role;
@@ -155,6 +157,7 @@ public class AccountController extends GovmadeBaseController<Account>{
 		return null;
 	}
 
+	//修改密码
 	@RequestMapping(value="updatepsd")
 	public String updatepsd(Account o,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		o=AccountShiroUtil.getCurrentUser();
@@ -168,4 +171,36 @@ public class AccountController extends GovmadeBaseController<Account>{
 		getService().update(o);	
 		return null;
 	}
+	
+	//验证名称重复
+	@RequestMapping(value="validation")
+	public String validation(Account o,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");		
+		Account c=new Account();
+		String acc=o.getLoginName();
+		c.setLoginName(acc);
+		String results = "";
+		if (o.getId() == null) {
+			if (!service.find(c).isEmpty()&&StringUtils.isNotEmpty(o.getLoginName())) {
+				results = "1";
+			}
+	} else {
+
+			if(service.find(c).size()!=0&&StringUtils.isNotEmpty(o.getLoginName())){
+				if ((int) service.find(c).get(0).getId() != (int) o.getId()) {
+					results = "1";
+				}
+     	}
+	}
+		if(results==""){
+			results = "0";
+		}
+		
+		String str="{\"results\":["+ results +"]}";
+		res.getWriter().write(str);
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
+	}	
 }

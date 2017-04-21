@@ -270,6 +270,21 @@ public class ServiceUtil implements ApplicationContextAware {
 			}
 			return false;
 		}
+		// 获取权限下规则(是否有审核权限)
+		public static boolean haveCheck(String url) {
+			if( AccountShiroUtil.getCurrentUser().getRoleId()!=null){
+			String roles = AccountShiroUtil.getCurrentUser().getRoleId();
+			Permission p = new Permission();
+			p.setUrl(url);
+	        List<Scope> l=scopeService.getScopesByRoleId(roles, p);
+	        for(Scope s:l){
+	        	if(s.getId()==8){
+	        		return true;
+	        	}
+	        }
+			}
+			return false;
+		}
 	// 获取权限下 规则
 	public static List<Permission> getURLPermisson(HttpServletRequest request) {
 		String url=(String) request.getSession().getAttribute("url");
@@ -345,6 +360,20 @@ public class ServiceUtil implements ApplicationContextAware {
 			p.setPermissionId(id);
 			List<RolePermission> rp = rolePermissionService.find(p);
 			return !rp.isEmpty();
+		}
+	}
+	
+	// 判断是否具有ScopeId
+	public static boolean isHaveScope(int id) {
+		RolePermission p = new RolePermission();
+		String roles = AccountShiroUtil.getCurrentUser().getRoleId();
+		p.setRoleId(Integer.valueOf(roles));
+		p.setScopeId(id);
+		List<RolePermission> rp = rolePermissionService.find(p);
+		if(rp.size()>0){
+			return true;
+		}else{
+			return false;
 		}
 	}
 	

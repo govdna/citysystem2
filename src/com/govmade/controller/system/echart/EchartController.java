@@ -1243,7 +1243,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					for(GovServer gs1 : syslist){
 						JSONObject unitjson = new JSONObject();
 						JSONArray unArray = new JSONArray();
-						String name1 = gs1.getValue1();				
+						String name1 = gs1.getValue2();				
 						unitjson.put("name", name1);
 						if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
 							int dbid = Integer.valueOf(gs1.getValue7());
@@ -1415,7 +1415,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					for(GovServer gs1 : syslist){
 						JSONObject unitjson = new JSONObject();
 						JSONArray unArray = new JSONArray();
-						String name1 = gs1.getValue1();				
+						String name1 = gs1.getValue2();				
 						unitjson.put("name", name1);
 						if(gs1.getValue7()!=null&&!gs1.getValue7().equals("")){
 							int dbid = Integer.valueOf(gs1.getValue7());

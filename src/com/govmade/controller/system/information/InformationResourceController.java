@@ -1357,13 +1357,17 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 					String[] newArray = list.toArray(new String[list.size()]);
 					JSONArray ttreeChild = new JSONArray();
 					JSONObject forthTree = new JSONObject();
+					int i =0;
 					for (String unis : newArray) {
-						if (!StringUtils.isEmpty(unis)) {
-							forthTree.put("name", unis);
-						} else {
-							forthTree.put("name", "未定义");
-						}
-						ttreeChild.add(forthTree);
+						if(i<20){
+							if (!StringUtils.isEmpty(unis)) {
+								forthTree.put("name", unis);
+							} else {
+								forthTree.put("name", "未定义");
+							}
+							ttreeChild.add(forthTree);
+							i++;
+						}						
 					}
 					thirdTree.put("children", ttreeChild);
 				}
