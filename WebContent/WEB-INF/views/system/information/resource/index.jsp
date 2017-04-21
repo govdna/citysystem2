@@ -449,7 +449,10 @@ background:#18a689;
 <!-- 导出数据开始 -->
   <div id="download_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="downloadForm">
-      <div class="alert alert-info">
+  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
+       		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
+       </c:if>
+       <div class="alert alert-info">
             如导出数据量大，下载请耐心等待！
         </div>
           信息资源字段：<br/>
@@ -1902,7 +1905,7 @@ $('#downloadForm').form({
     }  
 });
 function downloadData(){
-	  $('#downloadForm').form('clear');
+	  //$('#downloadForm').form('clear');
 	  layerIndex=layer.open({
 	    type: 1,
 	    area: ['60%', '400px'], //宽高
