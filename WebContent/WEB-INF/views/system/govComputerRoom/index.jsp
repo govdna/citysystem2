@@ -19,9 +19,12 @@
               <div class=" pull-left" style="margin-left:10px;width:250px;">
                 <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
                   <option value=""></option>
+                  <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+                  <c:if test="${roleid==1}">
                   <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
                   <option value="${obj.id}">${obj.companyName}</option>
                   </c:forEach>
+                  </c:if>
                 </select>
               </div>
               <div class="pull-left"  style="margin-left:10px;">
