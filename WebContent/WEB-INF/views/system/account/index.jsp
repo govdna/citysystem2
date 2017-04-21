@@ -147,5 +147,15 @@ var queryParams = function(params) {
   return temp;
 };
 
+//验证名称重复
+$("input[name='loginName']").blur(function (){
+	jQuery.post("${base}/backstage/account/validation",{"loginName":$("input[name='loginName']").val(),"id":$("input[name='id']").val()},function(data){
+		data=JSON.parse(data); 
+		if(data.results==1){
+			layer.msg("登录名已存在，请重新填写");
+			$("input[name='loginName']").val("");
+		}
+	});
+});
 </script>
 <%@include file="../common/baseSystemJS.jsp"%>
