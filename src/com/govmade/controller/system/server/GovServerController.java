@@ -298,9 +298,8 @@ public class GovServerController extends GovmadeBaseController<GovServer>{
 	}
 	
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(GovServer de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
-		GovServer de = new GovServer();
 		de.setIsDeleted(0);
 		Server2ExcelAdapter adapter = new Server2ExcelAdapter(service.find(de), xlsFields,
 				getExcelHandler());

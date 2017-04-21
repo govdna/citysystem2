@@ -356,9 +356,8 @@ public class GovApplicationSystemController extends GovmadeBaseController<GovApp
 	}
 	
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(GovApplicationSystem de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
-		GovApplicationSystem de = new GovApplicationSystem();
 		de.setIsDeleted(0);
 		Application2ExcelAdapter adapter = new Application2ExcelAdapter(service.find(de), xlsFields,
 				getExcelHandler());

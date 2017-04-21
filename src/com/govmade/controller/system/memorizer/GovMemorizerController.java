@@ -275,9 +275,8 @@ public class GovMemorizerController extends GovmadeBaseController<GovMemorizer>{
 	}
 	
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(GovMemorizer de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
-		GovMemorizer de = new GovMemorizer();
 		de.setIsDeleted(0);
 		Memorizer2ExcelAdapter adapter = new Memorizer2ExcelAdapter(service.find(de), xlsFields,
 				getExcelHandler());

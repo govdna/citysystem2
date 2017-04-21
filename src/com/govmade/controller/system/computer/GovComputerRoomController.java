@@ -211,9 +211,8 @@ public class GovComputerRoomController extends GovmadeBaseController<GovComputer
 	}
 	
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(GovComputerRoom de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
-		GovComputerRoom de = new GovComputerRoom();
 		de.setIsDeleted(0);
 		Computer2ExcelAdapter adapter = new Computer2ExcelAdapter(service.find(de), xlsFields,
 				getExcelHandler());
