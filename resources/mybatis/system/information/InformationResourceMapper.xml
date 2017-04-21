@@ -664,7 +664,7 @@
 				</if>
 	</select>
 	<select id="tree" resultType="InformationResource" parameterType="InformationResource">
-		SELECT WMSYS.WM_CONCAT(value1) value1  FROM gov_information_resource_main WHERE isDeleted=0 and status = 0
+		SELECT WMSYS.WM_CONCAT(value1) value1  FROM gov_information_resource_main WHERE rownum &lt; 30 AND   isDeleted=0 and status = 0 
 		<if test="inforTypes2 != null  and inforTypes2!=''">
 			and inforTypes2=#{inforTypes2}
 		</if>
