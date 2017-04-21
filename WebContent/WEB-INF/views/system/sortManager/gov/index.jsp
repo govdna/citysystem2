@@ -352,12 +352,7 @@ $("input[name='sortCode']").blur(function (){
           }
           </c:if>
           html+='</div>';
-          if(rowObject.type==1){
-        	  return html;
-          }else{
-        	  return '';
-          }
-          
+          return html;
         }
 
          $(window).resize(function(){   
