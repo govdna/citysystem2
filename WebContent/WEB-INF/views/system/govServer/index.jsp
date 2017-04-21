@@ -56,6 +56,10 @@
   <!-- 导出数据开始 -->
   <div id="download_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="downloadForm">
+       <c:if test="${MyFunction:getMaxScope(\"/backstage/govServer/index\")==1}" >
+       		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
+       </c:if>
+      
       <div class="alert alert-info">
             如导出数据量大，下载请耐心等待！
         </div>
@@ -157,7 +161,7 @@ $('#downloadForm').form({
 
 
 function downloadData(){
-	  $('#downloadForm').form('clear');
+	  //$('#downloadForm').form('clear');
 	  layerIndex=layer.open({
 	    type: 1,
 	    area: ['60%', '300px'], //宽高

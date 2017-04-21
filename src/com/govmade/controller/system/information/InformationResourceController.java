@@ -246,7 +246,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		p.setIsDeleted(0);
 		p.setStatus(0);
 		cp.setIsDeleted(0);
-		List<Company> cpList = companyService.find(cp);
+		List<Company> cpList = companyService.find(cp,"companyNumber","asc");
 		Map<String, Integer> value3Map = service.countValue3(p);
 		if (cpList.size() > 0) {
 			JSONObject unitJson = new JSONObject();
@@ -1532,7 +1532,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 	}
 
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, String[] deFields, HttpServletRequest req,
+	public ResponseEntity<byte[]> downloadData(InformationResource de,String[] xlsFields, String[] deFields, HttpServletRequest req,
 			HttpServletResponse response) throws Exception {
 		if (xlsFields == null) {
 			xlsFields = new String[0];
@@ -1540,8 +1540,6 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		if (deFields == null) {
 			deFields = new String[0];
 		}
-
-		InformationResource de = new InformationResource();
 		InformationResource2ExcelAdapter adapter = new InformationResource2ExcelAdapter(service.find(de), xlsFields,
 				deFields, getExcelHandler());
 		Object2ExcelComplexUtil util = new Object2ExcelComplexUtil(adapter);

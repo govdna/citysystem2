@@ -421,7 +421,7 @@ $('#downloadForm').form({
     }  
 });
 function downloadData(){
-	  $('#downloadForm').form('clear');
+	  //$('#downloadForm').form('clear');
 	  layerIndex=layer.open({
 	    type: 1,
 	    area: ['60%', '300px'], //宽高

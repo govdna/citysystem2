@@ -598,9 +598,8 @@ public class InformationResController extends GovmadeBaseController<InformationR
 
 	
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(InformationRes de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
-		InformationRes de = new InformationRes();
 		de.setIsDeleted(0);
 		InformationRes2ExcelAdapter adapter = new InformationRes2ExcelAdapter(service.find(de), xlsFields,
 				getExcelHandler());

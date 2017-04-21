@@ -577,9 +577,8 @@ public class GovRdataElementController extends DataElementController {
 	}
 
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(DataElement de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
-		DataElement de = new DataElement();
 		de.setClassType(getClassType());
 		DataElement2ExcelAdapter adapter = new DataElement2ExcelAdapter(dataElementservice.find(de), xlsFields,
 				getExcelHandler());
