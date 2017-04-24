@@ -123,6 +123,17 @@
           </select>  
         </div>
       </div>      
+       <div class="form-group">
+        <label class="col-sm-3 control-label">搜索框类型：</label>
+        <div class="col-sm-7">
+          <select name="searchType" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
+            <option value=""></option>
+            <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"SEARCHTYPE\") %>">
+            <option value="${obj.dicKey}">${obj.dicValue}</option>
+            </c:forEach>
+          </select>  
+        </div>
+      </div>      
       <div class="form-group">
         <label class="col-sm-3 control-label">输入框类型：</label>
         <div class="col-sm-7">

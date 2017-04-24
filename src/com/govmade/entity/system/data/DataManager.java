@@ -37,7 +37,7 @@ public class DataManager extends IdBaseEntity {
 	private Integer valueNo;//对应信息资源的哪个字段
 	private Integer listNo;//排序
 	private Integer isShow;
-	
+	private Integer searchType;//0 不加入搜索 1 主要搜索 2 次要搜索
 	public Integer getIsShow() {
 		return isShow;
 	}
@@ -165,6 +165,14 @@ public class DataManager extends IdBaseEntity {
 
 	public void setListNo(Integer listNo) {
 		this.listNo = listNo;
+	}
+
+	public Integer getSearchType() {
+		return searchType;
+	}
+
+	public void setSearchType(Integer searchType) {
+		this.searchType = searchType;
 	}
 
 
