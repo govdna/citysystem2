@@ -207,8 +207,8 @@ $.getJSON('${base}/backstage/echart/systree?companyId=<%=AccountShiroUtil.getCur
 			    toolbox: {
 			        show : true,
 			        feature : {
-			            restore : {show: true},
-			            saveAsImage : {show: true}
+			            restore : {show: false},
+			            saveAsImage : {show: false}
 			        }
 			    },
 			    series : [
