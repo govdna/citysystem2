@@ -79,35 +79,35 @@ h3 {font-size: 16px; font-weight: 600;}
       <div class="item col-sm-12">
         <div class="row">
           <div class="box-wrapper-c clearfix" style="margin-top:10px;">
-            <div class="small-box">
+            <div class="small-box" onClick="window.location.href='${base}/backstage/govApplicationSystem/index'">
               <div class="icon pull-left text-center"><i class="fa fa-window-restore"></i></div>
               <div class="content pull-left">
                 <p class="name ">系统</p>
                 <p class="number">${s1}</p>
               </div>
             </div>
-            <div class="small-box">
+            <div class="small-box" onClick="window.location.href='${base}/backstage/govTable/index'">
               <div class="icon pull-left text-center"><i class="fa fa-table"></i></div>
               <div class="content pull-left">
                 <p class="name ">数据表</p>
                 <p class="number">${s}</p>
               </div>
             </div>
-            <div class="small-box">
+            <div class="small-box" onClick="window.location.href='${base}/backstage/govTableField/index'">
               <div class="icon pull-left text-center"><i class="fa fa-file-text"></i></div>
               <div class="content pull-left">
                 <p class="name ">数据字段</p>
                 <p class="number">${s2}</p>
               </div>
             </div>
-            <div class="small-box">
+            <div class="small-box" onClick="window.location.href='${base}/backstage/information/resource/index'">
               <div class="icon pull-left text-center"><i class="fa fa-list-alt"></i></div>
               <div class="content pull-left">
                 <p class="name ">信息资源</p>
                 <p class="number">${s3}</p>
               </div>
             </div>
-            <div class="small-box">
+            <div class="small-box" onClick="window.location.href='${base}/backstage/govRdataElement/index'">
               <div class="icon pull-left text-center"><i class="fa fa-database"></i></div>
               <div class="content pull-left">
                 <p class="name ">数据元</p>
