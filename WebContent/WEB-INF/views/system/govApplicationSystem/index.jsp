@@ -135,7 +135,11 @@ $('.dropdown-btn').on('click', function() {
 $("select[name='cId']").chosen({
 	  disable_search_threshold: 10,
 	  no_results_text: "没有匹配到这条记录",
+	  search_contains: true,
 	  width: "100%"
+	});
+$("select[name='cId']").on('change', function(e, params) {
+	  value3 = params.selected;
 	});
 $("select[name='innet']").chosen({
 	  disable_search_threshold: 10,
@@ -161,7 +165,7 @@ var formId = '#eform'; //form id
 var url = '${base}/backstage/govApplicationSystem/'; //controller 路径
 var inited=0;
 var BASE_URL = '${base}/static/js/plugins/webuploader';
-
+var value3 = <%=request.getParameter("value3") %>;
 //bootstrap-table 列数
 <%@include file="../common/simpleFieldsColumns.jsp"%>
 function longFormatter(value, row, index) {
@@ -181,7 +185,7 @@ var queryParams = function(params) {
     page: params.offset / params.limit + 1,
     sort:params.sort,
     order:params.order,
-    value3: $('select[name="cId"]').val(),
+    value3: value3,
     value2: $('input[name="val2"]').val(),
     value4: $('select[name="innet"]').val(),
     <c:if test = "${MyFunction:getMaxScope(\"/backstage/govApplicationSystem/index\")==1}" >
