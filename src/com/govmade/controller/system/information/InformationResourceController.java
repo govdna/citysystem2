@@ -1265,6 +1265,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 					if (nnadapter.getEntityList() != null) {
 						List<DataList> dlList=new ArrayList<DataList>();
 						List<DataElement> deList=new ArrayList<DataElement>();
+						List<DataElement> deList2=new ArrayList<DataElement>();
 						for (DataElement de : nnadapter.getEntityList()) {
 							//dataElementService.setIdentifier(de);
 							if(de.getValue8()==null || de.getValue8()==""){
@@ -1277,6 +1278,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 							de.setIsShare(0);
 							de.setSourceType(2);
 							dataElement.setChName(de.getValue1());
+							dataElement.setCompanyId(de.getCompanyId());
 							List<DataElement> list = dataElementService.findByName(dataElement,
 									" case when t.source_type=2 then -1 end ", "asc");
 							if (list != null && list.size() != 0) {
@@ -1286,15 +1288,29 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 								dl.setDataElementId(list.get(0).getId());
 								dlList.add(dl);
 							} else {
-								deList.add(de);
+								if(de.getValue30().equals("1")){
+									de.setValue30(null); // 
+									deList.add(de);
+								}
+								deList2.add(de);
 							}
 						}
 						dataElementService.insertList(deList, 1);
-						for(DataElement d:deList){
+						for(DataElement d:deList2){
 							DataList dl = new DataList();
 							dl.setDataManagerId(d.getCounts());
 							dl.setIsShare(0);
-							dl.setDataElementId(d.getId());
+
+							if(d.getId()!=null){
+								dl.setDataElementId(d.getId());
+							}else{
+								for(DataElement d2:deList2){
+									if(d2.getChName().equals(d.getChName()) && d2.getId()!=null){
+										dl.setDataElementId(d2.getId());
+									}
+								}
+							}
+							
 							dlList.add(dl);
 						}
 						dataListService.insertList(dlList);

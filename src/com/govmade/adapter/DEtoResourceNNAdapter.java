@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.govmade.common.utils.ChineseTo;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.poi.ExcelAdapter;
+import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.dict.GovmadeDic;
 import com.govmade.entity.system.information.InformationRes;
@@ -80,6 +81,25 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 		return 1;
 	}
 
+	private boolean validateName(String name,String company){
+		for(DataElement d:getEntityList()){
+			if(d.getValue8()!=null){
+				if(d.getChName().equals(name) && d.getValue8().equals(company)){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	private boolean validateName(String name){
+		for(DataElement d:getEntityList()){
+			if(d.getChName().equals(name)){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public DataElement doWithRowData(String[] clumns,int rowNum) {
 		int realNum=rowNum+1;
@@ -129,8 +149,26 @@ public class DEtoResourceNNAdapter extends ExcelAdapter<DataElement>{
 			}else{
 				de.setCompanyId(Integer.valueOf(companyname.get(clumns[7])));
 				de.setValue8(companyname.get(clumns[7]));
+				
+				if(!de.getValue8().equals(AccountShiroUtil.getCurrentUser().getCompanyId()+"")){
+					System.out.println("validateName");
+					if(validateName(de.getChName(),de.getValue8())){
+						de.setValue30("1");
+					}else{
+						de.setValue30("0");
+					}
+					return de;
+				}
+
 			}
 		}
+
+		if(validateName(de.getChName())){
+			de.setValue30("1");
+		}else{
+			de.setValue30("0");
+		}
+
 
 		return de;
 	}
