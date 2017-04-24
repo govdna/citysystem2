@@ -1985,7 +1985,15 @@ $('#downloadForm').form({
     url: url+'downloadData',  
     success: function(result){ 
     	 
-    }  
+    },
+    onSubmit: function(param){
+		var qp=queryParams(param);
+		 for(var p in qp){
+			 if(p!='rows'&&p!='page'){
+				 param[p]=qp[p];
+			 }
+	     }
+    }
 });
 function downloadData(){
 	  //$('#downloadForm').form('clear');
