@@ -12,16 +12,23 @@
 <style>
 .form_datetime.input-group[class*=col-]{float: left;padding-right: 15px;padding-left: 15px;}
 </style>
-<body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
+<body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">\
   <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
         <div id="toolbar">
-          <div class="form-inline">
-            <div class="form-group clearfix">
+          <div class="form-inline clearfix">
+            <div class="form-group pull-left">
               <input type="text" placeholder="输入数据库名称" name="dataBN" class="form-control col-sm-8">
-              <div class="pull-left"  style="margin-left:10px;">
-                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索</button> 
+              <div class="btn-group ml5">
+                <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+                <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                  <span class="caret"></span>
+                </button>
+              </div>
+            </div>
+            <div class="form-group pull-left" style="margin-left: 5px;">
+              <div class="text-center">
                 <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/govDatabase/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="openLayer('新增');" href="#">新增</a>
                 </c:if>
@@ -30,14 +37,37 @@
                 </c:if>
                 <a data-toggle="modal" class="btn btn-primary" href="${base}/backstage/sql/index">数据库连接</a>
               </div>
-            </div>
+            </div>  
+		   	   <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+			    <li class="form-group clearfix">	
+				  <label class="pull-left">所属部门：</label>
+				  <div class="pull-left" style="width: 210px;">
+				  <select name="cId" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
+	                 <option value=""></option>
+	                 <option value="">&nbsp;</option>
+	                 <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+	                 <c:if test="${roleid==1}">
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+	                 <c:if test="${roleid!=1}">
+	                 <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+                  </select>		
+				  </div>                
+				</li>
+			  </ul>
           </div>
         </div>
         <table id="dicList">
         </table>
       </div>
     </div>
-  </div>
+  </div>  
   <div id="layer_form" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="eform">
       <input type="hidden" name="id"  class="form-control">
@@ -46,9 +76,7 @@
       <%@include file="../common/simpleFields.jsp"%>
     </form>
   </div>
-  
-  
-  
+
   <!-- excel导入开始 -->
   <div id="import_form" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="importForm">
@@ -91,7 +119,9 @@ var $list=$("#fileList");
 var uploader;
 var inited=0;
 
-
+$('.dropdown-btn').on('click', function() {
+	$('.dropdown-menu1').toggleClass('dn');
+});
 $("select[name='cId']").chosen({
   disable_search_threshold: 10,
   no_results_text: "没有匹配到这条记录",

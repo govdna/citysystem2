@@ -138,6 +138,9 @@
 		<if test="param.value2 != null and param.value2 !='' ">
 			and value2 like '%${param.value2}%'
 		</if>	
+		<if test="param.value3 != null and param.value3 !='' "> and
+			value3 = #{param.value3,jdbcType=VARCHAR}
+		</if>
 		<if test="param.timeCreate != null"> and
 			time_create = #{param.timeCreate,jdbcType=TIMESTAMP}
 		</if>

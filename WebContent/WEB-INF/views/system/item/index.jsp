@@ -73,12 +73,6 @@ background:#18a689;
 		          </select>
 		        </div>				
 			    </li>
-			 <!--    <li class="form-group">
-				    <div class="form-group">
-						<label class="control-label">高级3：</label>
-						<input type="text" class="form-control">
-					</div>
-			    </li> -->
 			  </ul>
           </div>
         </div>
