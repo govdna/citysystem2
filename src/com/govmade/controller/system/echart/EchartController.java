@@ -884,16 +884,20 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 								List<GovServer> fllist = govServerService.fllist(gs);
 								if(fllist.size()>0){
 									for(GovServer gs3 : fllist){
-										String name3 = gs3.getValue1();
+										String name3 = gs3.getValue2();
+										String name4 = gs3.getValue1();
+										if(name3.trim().isEmpty()){
+											name3 = name4;
+										}
 										int s2 = random.nextInt(6)%(6-2+1) + 2; 
 										unitjson.put("category", 4);
-										unitjson.put("name", gs3.getValue2());
+										unitjson.put("name", name3);
 										unitjson.put("value", s2);
 										nodeArray.add(unitjson);
-										linkjson.put("source", gs3.getValue2());	
+										linkjson.put("source", name3);	
 										linkjson.put("target", name2);
 										linkjson.put("weight", s2);
-										linkjson.put("name", gs3.getValue2());
+										linkjson.put("name", name3);
 										linkArray.add(linkjson);
 									}
 								}
