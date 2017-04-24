@@ -998,7 +998,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					"    gov_company\n" +
 					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
 					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.inforTypes = 0\n" +
+					"  AND gov_information_resource_main.inforTypes = 2\n" +
 					"  AND gov_information_resource_main.isDeleted = 0\n" +
 					"  WHERE\n" +
 					"    gov_company.isDeleted = 0\n" +
