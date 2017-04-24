@@ -81,10 +81,12 @@ h3 {font-size: 16px; font-weight: 600;}
           <div class="box-wrapper-c clearfix" style="margin-top:10px;">
             <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-window-restore"></i></div>
+              <a href="${base}/backstage/govApplicationSystem/index?value3=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>">
               <div class="content pull-left">
                 <p class="name ">系统</p>
                 <p class="number">${s1}</p>
               </div>
+              </a>
             </div>
             <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-table"></i></div>
@@ -207,8 +209,8 @@ $.getJSON('${base}/backstage/echart/systree?companyId=<%=AccountShiroUtil.getCur
 			    toolbox: {
 			        show : true,
 			        feature : {
-			            restore : {show: true},
-			            saveAsImage : {show: true}
+			            restore : {show: false},
+			            saveAsImage : {show: false}
 			        }
 			    },
 			    series : [

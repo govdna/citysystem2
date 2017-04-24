@@ -11,18 +11,44 @@
 .form_datetime.input-group[class*=col-]{float: left;padding-right: 15px;padding-left: 15px;}
 </style>
 <body class="white-bg">
-  <div class="wrapper wrapper-content animated fadeInRight">
+ <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
         <div id="toolbar">
-          <div class="form-inline">
-            <div class="form-group clearfix">
-             
-              <div class="pull-left"  style="margin-left:10px;">
-        
+          <div class="form-inline clearfix">
+            <div class="form-group pull-left">
+               <input type="text" placeholder="输入字段名" name="fieldN" class="form-control col-sm-8">
+              <div class="btn-group ml5">
+                <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+                <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                  <span class="caret"></span>
+                </button>
               </div>
             </div>
           </div>
+            <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+			    <li class="form-group clearfix">	
+				  <label class="pull-left">所属部门：</label>
+				  <div class="pull-left" style="width: 210px;">
+				  <select name="cId" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
+	                 <option value=""></option>
+	                 <option value="">&nbsp;</option>
+	                 <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+	                 <c:if test="${roleid==1}">
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+	                 <c:if test="${roleid!=1}">
+	                 <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.companyName}</option>
+	                 </c:forEach>
+	                 </c:if>
+                  </select>		
+				  </div>                
+				</li>
+			  </ul>
         </div>
         <table id="dicList">
         </table>
@@ -49,7 +75,9 @@ var tableId='#dicList';//bootstrap-table id
 var toolbar='#toolbar';//bootstrap-table 工具栏id
 var formId='#eform';//form id
 var url='${base}/backstage/govTableField/';//controller 路径
-
+$('.dropdown-btn').on('click', function() {
+	$('.dropdown-menu1').toggleClass('dn');
+});
 $("select[name='cId']").chosen({
   disable_search_threshold: 10,
   no_results_text: "没有匹配到这条记录",
@@ -63,6 +91,8 @@ $("select[name='cId']").chosen({
       page : params.offset / params.limit + 1,
       sort:params.sort,
       order:params.order,
+      companyId:$('select[name="cId"]').val(),
+      value2:$('input[name="fieldN"]').val(),
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govTableField/index\")==1}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>

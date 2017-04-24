@@ -3,7 +3,7 @@
 <mapper namespace="com.govmade.repository.system.data.DataManagerDao">
 	<resultMap id="base" type="DataManager"></resultMap>
 	<select id="find" resultMap="base" parameterType="DataManager">
-		SELECT  id,sort_manager_id sortManagerId,is_show isShow,cata_number cataNumber,data_name dataName,define,eg_name egName,data_type dataType,ranges,short_name shortName,note,value_case valueCase,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,company_id companyId,
+		SELECT  id,search_type searchType,sort_manager_id sortManagerId,is_show isShow,cata_number cataNumber,data_name dataName,define,eg_name egName,data_type dataType,ranges,short_name shortName,note,value_case valueCase,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,company_id companyId,
 			group_id groupId  FROM gov_data_manager t WHERE 1=1
 		<if test="param.egName != null ">
 			and t.eg_name=#{param.egName}
@@ -11,6 +11,10 @@
 			<if test="param.dataName != null ">
 			and t.data_name=#{param.dataName}
 		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>
+		
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
 		</if>
@@ -41,7 +45,7 @@
 		</choose>
 	</select>
 	<select id="findByPage" resultMap="base">
-		SELECT  id,sort_manager_id sortManagerId,is_show isShow,cata_number cataNumber,data_name dataName,define,eg_name egName,data_type dataType,ranges,short_name shortName,note,value_case valueCase,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,company_id companyId,
+		SELECT  id,sort_manager_id sortManagerId,search_type searchType,is_show isShow,cata_number cataNumber,data_name dataName,define,eg_name egName,data_type dataType,ranges,short_name shortName,note,value_case valueCase,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,company_id companyId,
 			group_id groupId  FROM gov_data_manager t WHERE 1=1
 		<if test="param.egName != null ">
 			and t.eg_name=#{param.egName}
@@ -49,6 +53,10 @@
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
 		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>
+		
 		<if test="param.dataName != null and param.dataName !='' ">
 			and t.data_name like '%${param.dataName}%'
 		</if>
@@ -87,8 +95,8 @@
     </selectKey>  
  	
  	<![CDATA[
-	INSERT INTO gov_data_manager(is_show,sort_manager_id,cata_number,data_name,define,eg_name,data_type,ranges,short_name,note,value_case,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,company_id,group_id) 
-	VALUES (#{isShow,jdbcType=NUMERIC},#{sortManagerId,jdbcType=NUMERIC},#{cataNumber,jdbcType=NUMERIC},#{dataName,jdbcType=VARCHAR},#{define,jdbcType=VARCHAR},#{egName,jdbcType=VARCHAR},#{dataType,jdbcType=NUMERIC},#{ranges,jdbcType=VARCHAR},#{shortName,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{valueCase,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC})
+	INSERT INTO gov_data_manager(search_type,is_show,sort_manager_id,cata_number,data_name,define,eg_name,data_type,ranges,short_name,note,value_case,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,company_id,group_id) 
+	VALUES (#{searchType,jdbcType=NUMERIC},#{isShow,jdbcType=NUMERIC},#{sortManagerId,jdbcType=NUMERIC},#{cataNumber,jdbcType=NUMERIC},#{dataName,jdbcType=VARCHAR},#{define,jdbcType=VARCHAR},#{egName,jdbcType=VARCHAR},#{dataType,jdbcType=NUMERIC},#{ranges,jdbcType=VARCHAR},#{shortName,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{valueCase,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="DataManager">
@@ -123,6 +131,7 @@
 		UPDATE gov_data_manager
 		SET sort_manager_id =#{sortManagerId,jdbcType=NUMERIC},
 		is_show=#{isShow,jdbcType=NUMERIC},
+		search_type=#{searchType,jdbcType=NUMERIC},
 		cata_number=#{cataNumber,jdbcType=NUMERIC},
 		data_name=#{dataName,jdbcType=VARCHAR},
 		define=#{define,jdbcType=VARCHAR},

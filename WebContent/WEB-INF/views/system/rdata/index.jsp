@@ -81,11 +81,20 @@ background:#18a689;
 				<label class="pull-left">来源部门：</label>		
 				 <div class="pull-left" style="width: 200px;">  
 		          <select name="cId" data-placeholder=" " class="chosen-select name1" style="width:350px;" tabindex="4" required>		            
-		            <option value=""></option>
-		            <option value="">&nbsp;</option>
-		            <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"))%>">
-                    <option value="${obj2.id}">${obj2.companyName}</option>
-                    </c:forEach>
+		          <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+                  <c:if test="${roleid==1}">
+                  <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
+                  <option value="${obj.id}">${obj.companyName}</option>
+                  </c:forEach>
+                  </c:if>
+                  <c:if test="${roleid!=1}">
+                    <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+                     <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+                  <option value="${obj.id}">${obj.companyName}</option>
+                  </c:forEach>
+                  </c:if>
 		          </select>
 		        </div>				
 			    </li>
