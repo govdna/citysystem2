@@ -9,23 +9,38 @@
 <link rel="stylesheet" type="text/css" href="${base}/static/css/plugins/webuploader/webuploader.css">
 </head>
 <body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
-  <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="ibox float-e-margins">
-      <div class="ibox-content">
-        <div id="toolbar">
-          <div class="form-inline">
-            <div class="form-group clearfix">
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="ibox float-e-margins">
+    <div class="ibox-content">
+      <div id="toolbar">
+        <div class="form-inline clearfix">
+          <div class="form-group pull-left">
               <label class="control-label  pull-left">责任部门</label>
               <div class=" pull-left" style="margin-left:10px;width:250px;">
-                <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
+                  <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
                   <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+                  <c:if test="${roleid==1}">
                   <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
                   <option value="${obj.id}">${obj.companyName}</option>
                   </c:forEach>
-                </select> 
+                  </c:if>
+                  <c:if test="${roleid!=1}">
+                  <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
+                  <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
+                  <option value="${obj.id}">${obj.companyName}</option>
+                  </c:forEach>
+                  </c:if>
+                </select>
               </div>
               <div class="pull-left"  style="margin-left:10px;">
-              <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索</button> 
+              <div class="btn-group">
+              <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+              <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+              <span class="caret"></span>
+              </button>
+              </div>
               	<c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/govApplicationSystem/index\") %>">
                   <a data-toggle="modal" class="btn btn-primary" onclick="openLayer('新增');" href="#">新增</a>
                 </c:if>
@@ -33,9 +48,29 @@
                   <a data-toggle="modal" class="btn btn-primary" onclick="downloadData();" href="#">导出数据</a>
                 </c:if>
                 <a data-toggle="modal" class="btn btn-primary" onclick="importFromExcel();" href="#">Excel导入</a>
-              </div>
+              </div>    
             </div>
           </div>
+          <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+			    <li class="form-group clearfix">	
+				  <label class="pull-left">应用系统名称：</label>
+				  <div class="pull-left" style="width: 200px;">
+				   <input type="text" placeholder="输入应用系统名称" name="val2" class="form-control col-sm-8">
+				  </div>	                
+				</li> 
+			    <li class="form-group clearfix" style="margin-left: 10px;">			    	    
+				<label class="pull-left">所在网络：</label>		
+				  <div class="pull-left" style="width: 200px;">  
+			         <select name="innet" data-placeholder=" " class="chosen-select" style="width:200px; display:inline-block;" tabindex="4" required>
+	                  <option value=""></option>
+	                  <option value="">&nbsp;</option>
+	                  <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"NETWORK\") %>">
+		              <option value="${obj.dicKey}">${obj.dicValue}</option>
+		              </c:forEach>
+	                </select>
+		        </div>	 			
+			    </li>
+			  </ul>
         </div>
         <table id="dicList">
         </table>
@@ -94,6 +129,19 @@
 <script src="${base}/static/js/plugins/webuploader/webuploader.min.js"></script>
 <script>
 //验证名称重复
+$('.dropdown-btn').on('click', function() {
+	$('.dropdown-menu1').toggleClass('dn');
+});
+$("select[name='cId']").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
+$("select[name='innet']").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
 $("input[name='value2']").blur(function() {
   jQuery.post("${base}/backstage/govApplicationSystem/validation", { "value2": $("input[name='value2']").val(), "id": $("input[name='id']").val() }, function(data) {
     data = JSON.parse(data);
@@ -113,11 +161,7 @@ var formId = '#eform'; //form id
 var url = '${base}/backstage/govApplicationSystem/'; //controller 路径
 var inited=0;
 var BASE_URL = '${base}/static/js/plugins/webuploader';
-$("select[name='cId']").chosen({
-  disable_search_threshold: 10,
-  no_results_text: "没有匹配到这条记录",
-  width: "100%"
-});
+
 //bootstrap-table 列数
 <%@include file="../common/simpleFieldsColumns.jsp"%>
 function longFormatter(value, row, index) {
@@ -138,6 +182,8 @@ var queryParams = function(params) {
     sort:params.sort,
     order:params.order,
     value3: $('select[name="cId"]').val(),
+    value2: $('input[name="val2"]').val(),
+    value4: $('select[name="innet"]').val(),
     <c:if test = "${MyFunction:getMaxScope(\"/backstage/govApplicationSystem/index\")==1}" >
     companyId: <%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
     </c:if>

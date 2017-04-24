@@ -34,7 +34,7 @@ cursor: pointer;
           <ul id="deper" class="clearfix">
             <c:forEach var="obj" items="<%=ServiceUtil.getService(\"GovmadeDicService\").find(ServiceUtil.buildBean(\"GovmadeDic@isDeleted=0&fatherId=320\"))%>">
             <li class="col-sm-4">
-            <span class="label label-success" value="${obj.dicKey}" dt="2">${obj.dicValue}
+            <span class="label label-success es" value="${obj.dicKey}" dt="2">${obj.dicValue}
             <c:set var="pid" scope="session" value="${obj.dicKey}"/>               
             <c:set  var="count"   value="<%=ServiceUtil.getService(\"InformationResourceService\").count(ServiceUtil.buildBean(\"InformationResource@status=0&value8=\"+session.getAttribute(\"pid\")))%>"/>
             <c:if test="${count > 0}">
@@ -236,7 +236,7 @@ cursor: pointer;
 $(".name").click(function(){
   inforTypes2=$(this).attr('value');
 })
-$(".label-success").click(function(){
+$(".label-success.es").click(function(){
   inforTypes3=$(this).attr('value');
 })
 $("#deper").click(function(){

@@ -174,8 +174,7 @@ background:#18a689;
             </c:choose>
               
               </c:forEach>
-			   
-			  </ul>
+			    </ul>
         </div>
         <table id="dicList">
         </table>
@@ -598,7 +597,11 @@ $(".name1").chosen({
 	  no_results_text: "没有匹配到这条记录",
 	  width: "100%"
 	});
-	
+$("select[name='cId']").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
   var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
   var dicLayerContent = '#dic_form';
   var title_name="信息资源";
@@ -924,7 +927,7 @@ $(".name1").chosen({
       
       </c:forEach>
       
-      <c:choose>
+	<c:choose>
         <c:when test="${status!=null}">
           status:${status},
         </c:when>
