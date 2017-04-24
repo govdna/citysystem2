@@ -1027,10 +1027,11 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 			JSONArray jsa = new JSONArray();
 			List<String > list= new ArrayList<String >();
 			while (rs.next()) {	
+				String cpName = rs.getString(5).substring(0,6);
 				int[] arr3=new int[]{Integer.valueOf(rs.getString(1)),Integer.valueOf(rs.getString(2)),Integer.valueOf(rs.getString(3)),Integer.valueOf(rs.getString(4))};
 				json.put("value", arr3);
-				json.put("name", rs.getString(5));
-				list.add(rs.getString(5));
+				json.put("name", cpName);
+				list.add(cpName);
 				jsa.add(json);
 			}
 			String[] arr3=new String[]{"信息资源","数据元","基础库","主题库"};
