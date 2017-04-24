@@ -388,6 +388,7 @@ background:#18a689;
 <%@include file="../common/includeJS.jsp"%>
 <script src="${base}/static/js/plugins/webuploader/webuploader.min.js"></script>
 <script>
+var userCompanyId = <%=request.getParameter("value8") %>;
 $('.dropdown-btn').on('click', function() {
 	$('.dropdown-menu1').toggleClass('dn');
 });
@@ -400,6 +401,9 @@ $("input[name='value1']").blur(function (){
   if($("input[name='value1']").val()==""){
     return;
   }
+  $("select[name='cId']").on('change', function(e, params) {
+		userCompanyId = params.selected;
+		});
   jQuery.post("${base}/backstage/dataElement/validation",{"classType":1,"chName":$("input[name='value1']").val(),"value8":$("select[name='value8']").val(),"id":$("input[name='id']").val()},function(data){
     if(data.results==1){
       layer.msg("此中文名称已存在，请重新填写");
@@ -444,7 +448,7 @@ var $list=$("#fileList");
 var uploader;
 var inited=0;
 var gdata = {"groupId":"<%=AccountShiroUtil.getCurrentUser().getGroupId()%>"};
-var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>","value8":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
+var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
 $("#dm3").on("click",'#allC',function(){
     var isChecked = $(this).prop("checked");
     $("input[name='dmname']").prop("checked", isChecked);   
@@ -703,7 +707,7 @@ function statuserro(id,s){
       order : order,
       chName:$('input[name="chN"]').val(),
       value5:$('select[name="obT"]').val(),
-      value8:$('select[name="cId"]').val(),
+      value8:userCompanyId,
       sourceType:$('select[name="sourceType_sel"]').val(),
       
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==1}" >

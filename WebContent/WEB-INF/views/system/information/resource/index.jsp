@@ -602,6 +602,9 @@ $("select[name='cId']").chosen({
 	  no_results_text: "没有匹配到这条记录",
 	  width: "100%"
 	});
+$("select[name='cId']").on('change', function(e, params) {
+	userCompanyId = params.selected;
+	});
   var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
   var dicLayerContent = '#dic_form';
   var title_name="信息资源";
@@ -623,6 +626,7 @@ $("select[name='cId']").chosen({
   var dataEles;//存放选中的数据元
   var infoLayer;
   var notLayer;
+  var userCompanyId = <%=request.getParameter("companyId") %>;
   function cleanTable(){
         layer.confirm('您确定要清空所有数据么？此操作不可恢复！', {
           btn: ['确定','取消'] //按钮
@@ -909,7 +913,7 @@ $("select[name='cId']").chosen({
       page : params.offset / params.limit + 1,
       sort:sort,
       order:order,
-      
+      companyId:userCompanyId,
       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataManagerService\").find(ServiceUtil.buildBean(\"DataManager@isDeleted=0\"),\"list_no\",\"asc\")%>">
       
       <c:choose>

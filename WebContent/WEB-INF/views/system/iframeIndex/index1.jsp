@@ -79,7 +79,7 @@ h3 {font-size: 16px; font-weight: 600;}
       <div class="item col-sm-12">
         <div class="row">
           <div class="box-wrapper-c clearfix" style="margin-top:10px;">
-            <div class="small-box" onClick="window.location.href='${base}/backstage/govApplicationSystem/index'">
+            <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-window-restore"></i></div>
               <a href="${base}/backstage/govApplicationSystem/index?value3=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>">
               <div class="content pull-left">
@@ -88,33 +88,41 @@ h3 {font-size: 16px; font-weight: 600;}
               </div>
               </a>
             </div>
-            <div class="small-box" onClick="window.location.href='${base}/backstage/govTable/index'">
+            <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-table"></i></div>
+              <a href="${base}/backstage/govTable/index?companyId=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>">
               <div class="content pull-left">
                 <p class="name ">数据表</p>
                 <p class="number">${s}</p>
               </div>
+              </a>
             </div>
-            <div class="small-box" onClick="window.location.href='${base}/backstage/govTableField/index'">
+            <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-file-text"></i></div>
+              <a href="${base}/backstage/govTableField/index?companyId=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>">
               <div class="content pull-left">
                 <p class="name ">数据字段</p>
                 <p class="number">${s2}</p>
               </div>
+              </a>
             </div>
-            <div class="small-box" onClick="window.location.href='${base}/backstage/information/resource/index'">
+            <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-list-alt"></i></div>
+              <a href="${base}/backstage/information/resource/index?companyId=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>">
               <div class="content pull-left">
                 <p class="name ">信息资源</p>
                 <p class="number">${s3}</p>
               </div>
+              </a>
             </div>
-            <div class="small-box" onClick="window.location.href='${base}/backstage/govRdataElement/index'">
+            <div class="small-box">
               <div class="icon pull-left text-center"><i class="fa fa-database"></i></div>
+              <a href="${base}/backstage/govRdataElement/index?value8=<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>">
               <div class="content pull-left">
                 <p class="name ">数据元</p>
                 <p class="number">${s4}</p>
               </div>
+              </a>
             </div>
           </div>
         </div>

@@ -126,7 +126,33 @@
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM gov_table_field WHERE 1=1 and isDeleted = 0
-		<include refid="Base_Where_Clause" />
+		<if test="param.id != null"> and
+			id = #{param.id,jdbcType=NUMERIC}
+		</if>
+		<if test="param.companyId != null"> and
+			company_id = #{param.companyId,jdbcType=NUMERIC}
+		</if>
+		<if test="param.groupId != null"> and
+			group_id = #{param.groupId,jdbcType=NUMERIC}
+		</if>	
+		<if test="param.value1!= null and param.value1 !='' "> and
+			value1 = #{param.value1,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value2 != null and param.value2 !='' ">
+			and value2 like '%${param.value2}%'
+		</if>	
+		<if test="param.value3 != null and param.value3 !='' "> and
+			value3 = #{param.value3,jdbcType=VARCHAR}
+		</if>
+		<if test="param.timeCreate != null"> and
+			time_create = #{param.timeCreate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="param.timeModified != null"> and
+			time_modified = #{param.timeModified,jdbcType=TIMESTAMP}
+		</if>
+		<if test="param.isDeleted != null"> and
+			isDeleted = #{param.isDeleted,jdbcType=NUMERIC}
+		</if>
 		ORDER BY
 		<choose>
 			<when test="sort !=null and sort!=''">
