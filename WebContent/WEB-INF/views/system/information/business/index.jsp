@@ -14,7 +14,43 @@
         <div id="toolbar">
           <div class="form-inline clearfix">
             <div class="form-group pull-left">
-              <input type="text" placeholder="输入业务名称" name="busN" class="form-control col-sm-8">
+               <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=InformationBusiness&searchType=1\"),\"list_no\",\"asc\")%>">      
+              <c:choose>
+              <c:when test="${obj.inputType==1}">
+                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
+                  class="form-control"
+                >
+              </c:when>
+              <c:when test="${obj.inputType==2}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
+                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
+                  </c:forEach>
+                </select>
+                </div>
+              </c:when>
+              <c:when test="${obj.inputType==3}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                  <option value="${obj2.id}">${obj2.itemName}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+            </c:choose>              
+              </c:forEach>
              <div class="btn-group">
                <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
                <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
@@ -34,36 +70,55 @@
             </div>
           </div>
           <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
-			    <li class="form-group clearfix">	
-				  <label class="pull-left">服务对象：</label>
-				  <div class="pull-left" style="width: 200px;">
-				  	<select name="val2" data-placeholder=" " class="chosen-select name1 form-control" style="width:350px; display:inline-block;" tabindex="4" required>
-	                  <option value=""></option>
-	                  <option value="">&nbsp;</option>
-	                  <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"FWDX\") %>">
-		              <option value="${obj.dicKey}">${obj.dicValue}</option>
-		              </c:forEach>
-	                </select>		
-				  </div>	                
-				</li>
-			    <li class="form-group" style="margin-left: 10px;">			    	    
-				<label class="pull-left">服务内容：</label>		
-				 <div class="pull-left" style="width: 200px;">  
-		          <select name="val3" data-placeholder=" " class="chosen-select name1" style="width:350px;" tabindex="4" required>		            
-		            <option value=""></option>
-		            <option value="">&nbsp;</option>
-		            <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"FWNR\") %>">
-			        <option value="${obj.dicKey}">${obj.dicValue}</option>
-			        </c:forEach>
-		          </select>
-		        </div>				
-			    </li>
-			 <!--    <li class="form-group">
-				    <div class="form-group">
-						<label class="control-label">高级3：</label>
-						<input type="text" class="form-control">
-					</div>
-			    </li> -->
+
+		<c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=InformationBusiness&searchType=2\"),\"list_no\",\"asc\")%>">      
+              <c:choose>
+              <c:when test="${obj.inputType==1}">
+               <li class="form-group clearfix" style="margin-left: 10px;">			    	  
+                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
+                  class="form-control"
+                >
+                </li>
+              </c:when>
+              <c:when test="${obj.inputType==2}">
+               <li class="form-group clearfix" style="margin-left: 10px;">			    	  
+               
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
+                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
+                  </c:forEach>
+                </select>
+                </div>
+                </li>
+              </c:when>
+              <c:when test="${obj.inputType==3}">
+               <li class="form-group clearfix" style="margin-left: 10px;">			    	  
+               
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                  <option value="${obj2.id}">${obj2.itemName}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+                 </li>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+            </c:choose>              
+              </c:forEach>
+
 			  </ul>
         </div>
         <table id="dicList">
@@ -128,6 +183,10 @@ function longFormatter(value, row, index) {
   html += '</span>';
   return html;
 }
+
+$(function() {
+    initChosen();
+  });
 
 //---------批量删除开始---------
 $("#dicList").on("click", '#allC', function() {
@@ -213,9 +272,21 @@ var queryParams = function(params) {
     page: params.offset / params.limit + 1,
     sort:sort,
     order:order,
-    value1: $('input[name="busN"]').val(),
-    value2: $('select[name="val2"]').val(),
-    value3: $('select[name="val3"]').val()
+    
+    <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=InformationBusiness\"),\"list_no\",\"asc\")%>">  
+  <c:choose>
+  <c:when test="${obj.inputType==1&&obj.searchType!=null&&obj.searchType!=0}">
+   value${obj.valueNo}: $('input[name="search_value${obj.valueNo}"]').val(),
+  </c:when>
+  <c:when test="${obj.inputType==2&&obj.searchType!=null&&obj.searchType!=0}">
+  	value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+  </c:when>
+  <c:when test="${obj.inputType==3&&obj.searchType!=null&&obj.searchType!=0}">
+		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+</c:when>
+  <c:otherwise></c:otherwise>
+</c:choose>  
+  </c:forEach>
   };
   return temp;
 };
