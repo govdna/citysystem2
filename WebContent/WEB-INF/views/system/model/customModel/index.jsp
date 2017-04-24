@@ -565,6 +565,7 @@ var  columns=${columns};
     oTable2.Init();
     oTable3 = new TableInit3();
     oTable3.Init();
+    initChosen();
   });
 
   var TableInit2 = function() {
