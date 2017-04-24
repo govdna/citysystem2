@@ -282,7 +282,7 @@ var TableInit = function () {
     //初始化Table
     oTableInit.Init = function () {
         $(tableId).bootstrapTable({
-            url: url+'listAjax'+'?'+'<%=request.getQueryString()%>',         //请求后台的URL（*）
+            url: url+'listAjax',         //请求后台的URL（*）
             method: 'post',                      //请求方式（*）
             contentType: "application/x-www-form-urlencoded",
             toolbar:toolbar,//工具按钮用哪个容器
