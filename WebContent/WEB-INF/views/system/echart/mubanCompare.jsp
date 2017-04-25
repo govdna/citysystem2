@@ -4,7 +4,7 @@
 <!DOCTYPE html >
 <html lang="en">
 <head>
-<%@include file="../common/includeBaseLinkHead.jsp"%>
+<%@include file="../common/includeBaseHead.jsp"%>
 </head>
 <style>
   ul,li {
@@ -14,14 +14,18 @@
 <body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
 <div class="container">
     <div class="row">
-    	    <label class="control-label  pull-left">责任部门</label>
+    <div class="clearfix" style="margin:10px 0 0 10px;border-bottom: 1px solid #f6f6f6;">
+    	    <label class="control-label  pull-left" style="line-height: 35px;margin-right:10px;">责任部门</label>
+    	    <div class=" pull-left">
             <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
             <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
             <option value="${obj.id}">${obj.companyName}</option>
             </c:forEach>                  
           </select>
-		 <div class="btn-group">
+          </div>
+		 <div class="btn-group pull-left" style="margin-left: 10px;">
          	<button type="button" class="btn btn-primary" onclick="compare();" style="border-right: rgba(255,255,255,.3);">搜索</button>
+         </div>
          </div>
 	    <div>
 		   	<div class="panel-container col-xs-4">
