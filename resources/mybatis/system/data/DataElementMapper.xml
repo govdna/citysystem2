@@ -551,6 +551,12 @@
 		<if  test="param.value8 !=null and param.value8 != ''">
 			and t.value8=#{param.value8}
 		</if>
+		<if  test="param.value4 !=null and param.value4 != ''">
+			and t.value4=#{param.value4}
+		</if>
+		<if  test="param.value5 !=null and param.value5 != ''">
+			and t.value5=#{param.value5}
+		</if>
 		<choose>
 			<when test="param.systemType !=null">
 				and t.system_type=${param.systemType}

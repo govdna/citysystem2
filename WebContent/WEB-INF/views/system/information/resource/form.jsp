@@ -125,6 +125,7 @@
                   class="chosen-select"
                   <c:if test="${obj.required==1}" >required</c:if>>
                   <option value=""></option>
+                  <option value="">&nbsp;</option>
                   <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
                   <option value="${obj2.id}">${obj2.itemName}</option>
                   </c:forEach>
