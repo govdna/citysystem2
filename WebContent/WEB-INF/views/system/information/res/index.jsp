@@ -37,20 +37,52 @@ background:#18a689;
       <div class="ibox-content">
         <div id="toolbar">
           <div class="form-inline">
-            <label class="control-label  pull-left">信息资源提供方:</label>
-              <div class=" pull-left" style="margin-left:10px;width:200px;">
-                <select name="inforPder" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
+<div class="form-group pull-left">
+               <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=InformationRes&searchType=1\"),\"list_no\",\"asc\")%>">      
+              <c:choose>
+              <c:when test="${obj.inputType==1}">
+                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
+                  class="form-control"
+                >
+              </c:when>
+              <c:when test="${obj.inputType==2}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
                   <option value=""></option>
-                  <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"ZYTGF\") %>">
-                  <option value="${obj.dicKey}">${obj.dicValue}</option>
+                  <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
+                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
                   </c:forEach>
                 </select>
-              </div>
-            <div class="form-group">    
-              <input type="text" placeholder="输入信息资源名称" name="inforn" class="form-control" style="margin-bottom: 5px;width:150px;"> 
-              <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary" style="margin-bottom: 5px;">搜索
-              </button> 
-            </div>
+                </div>
+              </c:when>
+              <c:when test="${obj.inputType==3}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                  <option value="${obj2.id}">${obj2.itemName}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+            </c:choose>              
+              </c:forEach>
+             <div class="btn-group">
+               <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+               <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                 <span class="caret"></span>
+               </button>
+             </div>
+            </div>            
+
             <div class="form-group" style="margin-left: 15px;">
               <div class="text-center">
                  <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/information/res/index\") %>">
@@ -69,6 +101,59 @@ background:#18a689;
                   </c:if>
               </div>
             </div>
+            
+<ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+
+		<c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=InformationRes&searchType=2\"),\"list_no\",\"asc\")%>">      
+              <c:choose>
+              <c:when test="${obj.inputType==1}">
+               <li class="form-group clearfix" style="margin-left: 10px;">			    	  
+                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
+                  class="form-control"
+                >
+                </li>
+              </c:when>
+              <c:when test="${obj.inputType==2}">
+               <li class="form-group clearfix" style="margin-left: 10px;">			    	  
+               
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
+                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
+                  </c:forEach>
+                </select>
+                </div>
+                </li>
+              </c:when>
+              <c:when test="${obj.inputType==3}">
+               <li class="form-group clearfix" style="margin-left: 10px;">			    	  
+               
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                  <option value="${obj2.id}">${obj2.itemName}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+                 </li>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+            </c:choose>              
+              </c:forEach>
+
+			  </ul>            
+            
           </div>
         </div>
         <table id="dicList"></table>
@@ -340,6 +425,14 @@ background:#18a689;
 <%@include file="../../common/includeJS.jsp"%>
 <script src="${base}/static/js/plugins/webuploader/webuploader.min.js"></script>
 <script>
+$('.dropdown-btn').on('click', function() {
+	$('.dropdown-menu1').toggleClass('dn');
+});
+$(".name1").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
 
 var oTable2Inited=0;
 //验证名称重复
@@ -396,6 +489,7 @@ $(function() {
   $('.senior button').on('click', function() {
     $('.senior-search').slideToggle();
   })
+  initChosen();
 });
 var dicLayerContent = '#dic_form';
 var title_name="信息资源模板";
@@ -664,10 +758,23 @@ var queryParams = function(params) {
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows : params.limit,
     page : params.offset / params.limit + 1,
-    value1:$('input[name="inforn"]').val(),
     sort:sort,
     order:order,
-    value2:$('select[name="inforPder"]').val()
+
+    <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=InformationBusiness\"),\"list_no\",\"asc\")%>">  
+  <c:choose>
+  <c:when test="${obj.inputType==1&&obj.searchType!=null&&obj.searchType!=0}">
+   value${obj.valueNo}: $('input[name="search_value${obj.valueNo}"]').val(),
+  </c:when>
+  <c:when test="${obj.inputType==2&&obj.searchType!=null&&obj.searchType!=0}">
+  	value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+  </c:when>
+  <c:when test="${obj.inputType==3&&obj.searchType!=null&&obj.searchType!=0}">
+		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+</c:when>
+  <c:otherwise></c:otherwise>
+</c:choose>  
+  </c:forEach>
   };
   return temp;
 };
