@@ -33,6 +33,7 @@
 			and gs.account_id=#{accountId}
 		</if>
 		and t.isDeleted=0
+		and gs.isDeleted=0
 		order by gs.time_create desc
 		
 	</select>

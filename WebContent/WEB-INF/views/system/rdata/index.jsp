@@ -128,6 +128,7 @@ background:#18a689;
    
     <form method="post" class="form-horizontal" id="eform">
       <div id="fillInfo"></div>
+      <div id="cdInfo"></div>
       <input type="hidden" name="id"  class="form-control">
       <input type="hidden" name="idForShow"  class="form-control">
       <input type="hidden" name="identifier"  class="form-control">
@@ -381,6 +382,32 @@ background:#18a689;
   </div>
   <!--提示未导入的数据元结束-->
   
+  
+  
+<!--提示未导入的数据元开始-->
+  <div id="cleanData" class="form-horizontal"
+    style="overflow: hidden; display: none;">
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+        <div class="alert alert-info">
+                 选取标准数据元池中的数据元快速填充数据。
+        </div>
+        <div class="bootstrap-table">
+		<div class="fixed-table-toolbar"></div>
+		<div class="fixed-table-container" style="padding-bottom: 0px;"><div class="fixed-table-header" style="display: none;"><table></table></div>
+			<table class="table table-striped table-hover">
+            <thead><tr><th style="" data-field="identifier" tabindex="0"><div class="th-inner">中文名称</div><div class="fht-cell"></div></th><th style="" data-field="companyIdForShow" tabindex="0"><div class="th-inner">数据类型</div><div class="fht-cell"></div></th><th style="" data-field="companyIdForShow" tabindex="0"><div class="th-inner">数据长度</div><div class="fht-cell"></div></th><th style="" data-field="id" tabindex="0"><div class="th-inner">操作</div><div class="fht-cell"></div></th></tr></thead>
+									
+            <tbody>
+            </tbody>
+          </table>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+  <!--提示未导入的数据元结束-->
 
 </body>
 </html>
@@ -1083,6 +1110,7 @@ function statusAfter(idForShow, id, s) {
 
 var autoLayer;
 var autoRows;
+var cdRows;
 //修改的额外处理覆盖此方法
 function doWithEdit(id, data) {
   initFieldTable();
@@ -1117,8 +1145,54 @@ function doWithEdit(id, data) {
 		  }
 		 
 	  },'json');
+  $('#cdInfo').html('');
+  jQuery.post('${base}/backstage/cleanDataElement/findExactly',{chName:data.value1,rows:20,page:1},function(r){
+	  var html='';
+	  r=r.rows;
+	  cdRows=r;
+	  if(typeof(r.length)!='undefined'&&r.length>0){
+		 
+		  $('#cdInfo').html(' <div class="alert alert-success">标准数据元池中有'+r.length+'条数据元可以参考。<a href="javascript:openCDLayer();">查看</a></div>');
+		  for(var i=0;i<r.length;i++){
+			  html += '<tr><td>'
+                  + r[i].value1
+                  + '</td><td>'
+                  + r[i].dataTypeForShow
+                  + '</td><td>'
+                  + r[i].dataFormat
+                  + '</td><td>';
+                  html+='<button type="button" class="btn btn-white btn-sm" onclick="cdDetail(\''+r[i].idForShow+'\')">查看</button><button type="button" class="btn btn-white btn-sm" data-id="'+r[i].id+'" data-idForShow="'+r[i].idForShow+'" data-type="fillDE" onclick="fillCDRow(this);">填充数据</button>';
+                  html +='</td></tr>';
+		  }
+		  $('#cleanData tbody').html(html);
+          
+	  }
+	 
+  },'json');
   
-  
+}
+
+function cdDetail(id,la){
+	layer.open({
+	    type: 2,
+	    title: '数据元详情',
+	    shadeClose: true,
+	    shade: 0.1,
+	    area: ['620px', '80%'],
+	    content: base + '/backstage/cleanDataElement/detail?idForShow=' + id
+	  });
+}
+
+function openCDLayer(){
+	 autoLayer=layer.open({
+         type : 1,
+         shade : false,
+         area: ['450px', '70%'], //宽高
+         offset: '40px',
+         scrollbar : false,
+         title : '提示', //不显示标题
+         content : $('#cleanData')
+       });
 }
 
 function openFillLayer(){
@@ -1131,6 +1205,26 @@ function openFillLayer(){
          title : '提示', //不显示标题
          content : $('#autoFill')
        });
+}
+
+
+function fillCDRow(t){
+	for(var i=0;i<cdRows.length;i++){
+		if(cdRows[i].id==$(t).attr('data-id')){
+			if(cdRows[i].value3!=''){
+				$(formId+' input[name="value3"]').val(cdRows[i].value3);
+			}
+			if(cdRows[i].dataType!=''){
+				$(formId+' select[name="value4"]').find('option[value="'+cdRows[i].dataType+'"]').attr("selected",true);
+				$('select[name="value4"]').val(cdRows[i].dataType);
+				$('select[name="value4"]').trigger("chosen:updated");
+			}
+			if(cdRows[i].dataFormat!=''){
+				$(formId+' input[name="value7"]').val(cdRows[i].dataFormat);
+			}
+		}
+	}
+	layer.close(autoLayer);
 }
 
 function fillRow(t){

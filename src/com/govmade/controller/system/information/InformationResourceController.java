@@ -1479,6 +1479,29 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		res.setCharacterEncoding("utf-8");
 		JSONObject ar = new JSONObject();
 		try {
+			InformationResource infor=new InformationResource();
+			infor.setStatus(1);
+			List<InformationResource> list=service.find(infor);
+			if(list!=null){
+				for(InformationResource o:list){
+					Notice notice = new Notice();
+					notice.setInformationResourceId(o.getId());
+					notice.setMsg("更新了信息资源！");
+					notice.setNoticeType(0);
+					notice.setNoticeId(o.getId());
+					noticeService.sendNotice(notice);
+					// 版本控制
+					InformationResource ir = service.findById(o);
+					DataList dl = new DataList();
+					dl.setDataManagerId(o.getId());
+					ir.setDataElementList(dataElementService.getDataElementListByDataList(dl));
+					VersionControl vc = new VersionControl();
+					vc.setSourceId(o.getId());
+					vc.setClassName(InformationResource.class.getSimpleName());
+					vc.setNewVersion(JSONObject.fromObject(ir).toString());
+					versionControlService.insert(vc);
+				}
+			}
 			service.allPass();
 			ar.put("code", Const.SUCCEED);
 			ar.put("msg", Const.ACTION_SUCCEED);

@@ -38,7 +38,7 @@ public interface CleanDataElementDao  extends GovmadeBaseDao<CleanDataElement> {
 	* @return List<CleanDataElement>    返回类型 
 	* 2017年3月24日    日期   
 	*/ 
-	public abstract List<CleanDataElement> getRepeat();
+	public abstract List<CleanDataElement> getRepeat(@Param("param")CleanDataElement o,@Param("sort")String orderBy,@Param("orderBy")String sort);
 	
 	
 	/** 
@@ -162,4 +162,16 @@ public interface CleanDataElementDao  extends GovmadeBaseDao<CleanDataElement> {
 	* 2017年4月1日    日期   
 	*/ 
 	public List<CleanDataElement> findDataElementByResId(@Param("param")CleanDataElement dataElement,Page<CleanDataElement> page);
+	
+
+	/** 
+	* @Title: findExactly 
+	* @Description: TODO(根据名字精确查找) 
+	* @param @param dataElement
+	* @param @return    设定文件 
+	* @return List<CleanDataElement>    返回类型 
+	* 2017年4月24日    日期   
+	*/ 
+	public List<CleanDataElement> findExactly(@Param("param")CleanDataElement o,Page<CleanDataElement> page);
+	
 }

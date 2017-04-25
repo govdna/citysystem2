@@ -49,6 +49,10 @@ cursor: pointer !important;
           <label class="col-sm-3 control-label">申请单位：</label>
           <span class="col-sm-8 edit-span" name="applyCompanyForShow"></span>
         </div>
+         <div class="form-group">
+          <label class="col-sm-3 control-label">申请时间：</label>
+          <span class="col-sm-8 edit-span" name="timeModified"></span>
+        </div>
         <div class="form-group">
           <label class="col-sm-3 control-label">经办人：</label>
           <span class="col-sm-8 edit-span" name="informationCompanyForShow"></span>
@@ -132,6 +136,7 @@ function doWithEdit(id, data) {
   $('span[name="informationIdForShow"]').html(data.informationIdForShow);
   $('span[name="applyCompanyForShow"]').html(data.applyCompanyForShow);
   $('span[name="informationCompanyForShow"]').html(data.informationCompanyForShow);
+  $('span[name="timeModified"]').html(data.timeModified);
 
   if (data.status == 2) {
     $('#status_div').html('<div class="alert alert-danger" >审核不通过：' + data.refuseReason + '</div>');

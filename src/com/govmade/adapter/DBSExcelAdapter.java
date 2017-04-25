@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.poi.ExcelAdapter;
@@ -114,7 +117,14 @@ public class DBSExcelAdapter extends ExcelAdapter<GovTableField> {
 			field.setValue2(clumns[4].trim());
 		}
 		field.setValue3(clumns[2].trim());
-		field.setValue5(clumns[6].trim());
+		if(StringUtils.isNotEmpty(clumns[6])){
+			Pattern pattern = Pattern.compile("([a-zA-Z0-9]+)\\(?(\\d*)\\)?");
+			Matcher matcher = pattern.matcher(clumns[6].trim());
+			if(matcher.find()){
+				field.setValue5(matcher.group(1));
+				field.setValue6(matcher.group(2));
+			}
+		}
 		field.setValue6(clumns[7].trim());
 		field.setValue7(clumns[8].trim());
 		field.setValue8(clumns[9].trim());

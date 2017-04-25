@@ -3,6 +3,7 @@ package com.govmade.controller.system.data;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -241,13 +242,14 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		}
 		return "/system/cleanDataElement/detail";
 	}
-	/*** 
-	* @Description: 数据源子集分析
-	* @author Dearest
-	* @date 2017年2月7日上午9:43:46
-	*/
-	@RequestMapping(value="childrenAna")
-	public void childrenAna(CleanDataElement o,HttpServletRequest req, HttpServletResponse res) throws Exception {
+
+	/***
+	 * @Description: 数据源子集分析
+	 * @author Dearest
+	 * @date 2017年2月7日上午9:43:46
+	 */
+	@RequestMapping(value = "childrenAna")
+	public void childrenAna(CleanDataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
 		JSONObject echartjson = new JSONObject();
@@ -258,9 +260,9 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		o.setIsDeleted(0);
 		o.setId(null);
 		List<CleanDataElement> dal = service.find(o);
-		if(dal!=null&&dal.size()>0){
-		    int leng = dal.size();
-		    String[] chiDataArray = new String[leng];
+		if (dal != null && dal.size() > 0) {
+			int leng = dal.size();
+			String[] chiDataArray = new String[leng];
 			JSONArray nodeArray = new JSONArray();
 			JSONArray linkArray = new JSONArray();
 			JSONObject unitjson = new JSONObject();
@@ -271,9 +273,9 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 			unitjson.put("info", dashow);
 			nodeArray.add(unitjson);
 			int index = 0;
-			for(CleanDataElement d : dal){
+			for (CleanDataElement d : dal) {
 				Random random = new Random();
-				int s = random.nextInt(6)%(6-2+1) + 2; 
+				int s = random.nextInt(6) % (6 - 2 + 1) + 2;
 				JSONObject dshow = DataHandlerUtil.dataFilter(d, getDataHandlers(), true);
 				unitjson.put("category", 1);
 				unitjson.put("name", d.getChName());
@@ -281,27 +283,27 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 				unitjson.put("info", dshow);
 				chiDataArray[index] = d.getChName();
 				nodeArray.add(unitjson);
-				linkjson.put("source", d.getChName());	
+				linkjson.put("source", d.getChName());
 				linkjson.put("target", pname);
 				linkjson.put("weight", s);
 				linkjson.put("name", "子集");
-				 linkArray.add(linkjson);
+				linkArray.add(linkjson);
 				index++;
 			}
-			 for (int i = 0; i < (leng-1); i++) {
-					 Random random = new Random();
-					 int s = random.nextInt(6)%(6-2+1) + 2; 
-					 linkjson.put("source", chiDataArray[i]);	
-					 linkjson.put("target", chiDataArray[i+1]);
-					 linkjson.put("weight", s);
-					 linkjson.put("name", "兄弟集");
-					 linkArray.add(linkjson);
-			 } 			
+			for (int i = 0; i < (leng - 1); i++) {
+				Random random = new Random();
+				int s = random.nextInt(6) % (6 - 2 + 1) + 2;
+				linkjson.put("source", chiDataArray[i]);
+				linkjson.put("target", chiDataArray[i + 1]);
+				linkjson.put("weight", s);
+				linkjson.put("name", "兄弟集");
+				linkArray.add(linkjson);
+			}
 			echartjson.put("node", nodeArray);
 			echartjson.put("link", linkArray);
-		}else{
+		} else {
 			echartjson.put("status", 0);
-		}		
+		}
 		res.getWriter().write(echartjson.toString());
 		res.getWriter().flush();
 		res.getWriter().close();
@@ -385,7 +387,7 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		return null;
 	}
 
-	//解除子父数据元关系
+	// 解除子父数据元关系
 	@RequestMapping(value = "unLink")
 	public String unLink(CleanDataElement dataElement, HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
@@ -458,19 +460,47 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 	// 数据元近义词清洗
 	@RequestMapping(value = "sameFilter")
 	public String sameFilter(Model model, HttpServletRequest req, HttpServletResponse res) throws Exception {
-		List<SameDataElementConfig> sdc = sameDataElementConfigService.getTreeList(new SameDataElementConfig());
-		List<SameDataElementConfig> list = new ArrayList<SameDataElementConfig>();
-		for (SameDataElementConfig config : sdc) {
-			if (config.getChildList() != null && config.getChildList().size() > 0) {
-				List<CleanDataElement> dl = service.findBySameConfig(config.getChildList());
-				if (dl != null && dl.size() > 1) {
-					config.setCounts(dl.size());
-					list.add(config);
+
+		return "/system/cleanDataElement/sameFilter";
+	}
+
+	// 数据元近义词清洗
+	@RequestMapping(value = "sameFilterAjax")
+	public String sameFilterAjax(SameDataElementConfig sdconfig, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		JSONObject ar = new JSONObject();
+		try {
+			List<SameDataElementConfig> sdc = sameDataElementConfigService.getTreeList(sdconfig);
+			List<SameDataElementConfig> list = new ArrayList<SameDataElementConfig>();
+			for (SameDataElementConfig config : sdc) {
+				if((StringUtils.isNotEmpty(sdconfig.getName())&&config.getName().contains(sdconfig.getName()))||StringUtils.isEmpty(sdconfig.getName())){
+					if (config.getChildList() != null && config.getChildList().size() > 0) {
+						List<CleanDataElement> dl = service.findBySameConfig(config.getChildList());
+						if (dl != null && dl.size() > 1) {
+							config.setCounts(dl.size());
+							list.add(config);
+						}
+					}
 				}
 			}
+			//排序
+			if(StringUtils.isNotEmpty(req.getParameter("order"))&&req.getParameter("order").equals("asc")){
+				Collections.sort(list);
+			}else{
+				Collections.reverse(list);
+			}
+			ar.put("rows", DataHandlerUtil.buildJson(list, getDataHandlers(), true));
+			ar.put("total", list.size());
+			ar.put("code", Const.SUCCEED);
+		} catch (Exception e) {
+			ar.put("code", Const.FAIL);
+			e.printStackTrace();
 		}
-		model.addAttribute("list", list);
-		return "/system/cleanDataElement/sameFilter";
+		res.getWriter().write(ar.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
 	}
 
 	// 数据元近义词清洗
@@ -524,9 +554,30 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 	// 数据元重复清洗
 	@RequestMapping(value = "repeatFilter")
 	public String repeatFilter(Model model, HttpServletRequest req, HttpServletResponse res) throws Exception {
-		List<CleanDataElement> list = service.getRepeat();
-		model.addAttribute("list", list);
+
 		return "/system/cleanDataElement/repeatFilter";
+	}
+
+	// 数据元重复清洗
+	@RequestMapping(value = "repeatFilterAjax")
+	public String repeatFilterAjax(CleanDataElement o, HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		JSONObject ar = new JSONObject();
+		try {
+			List<CleanDataElement> list = service.getRepeat(o, req.getParameter("sort"), req.getParameter("order"));
+			ar.put("rows", DataHandlerUtil.buildJson(list, getDataHandlers(), true));
+			ar.put("total", list.size());
+			ar.put("code", Const.SUCCEED);
+		} catch (Exception e) {
+			ar.put("code", Const.FAIL);
+			e.printStackTrace();
+		}
+		res.getWriter().write(ar.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
 	}
 
 	// 数据元重复清洗
@@ -638,10 +689,9 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		return null;
 	}
 
-	
-	
 	@RequestMapping(value = "findDataElementByResId")
-	public String findDataElementByResId(CleanDataElement dataElement, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public String findDataElementByResId(CleanDataElement dataElement, HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
 		res.setContentType("text/html;charset=utf-8");
 		res.setCharacterEncoding("utf-8");
 		JSONObject ar = new JSONObject();
@@ -652,10 +702,10 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		if (StringUtils.isNotEmpty(req.getParameter("rows"))) {
 			page.setPageSize(Integer.valueOf(req.getParameter("rows")));
 		}
-		page =   service.findDataElementByResId(dataElement, page);
+		page = service.findDataElementByResId(dataElement, page);
 		try {
 			ar.put("rows", DataHandlerUtil.buildJson(page.getResults(), getDataHandlers(), true));
-			ar.put("total",page.getTotalRecord() );
+			ar.put("total", page.getTotalRecord());
 			ar.put("code", Const.SUCCEED);
 		} catch (Exception e) {
 			ar.put("code", Const.FAIL);
@@ -666,7 +716,36 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		res.getWriter().close();
 		return null;
 	}
-	
+
+	@RequestMapping(value = "findExactly")
+	public String findExactly(CleanDataElement dataElement, HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		JSONObject ar = new JSONObject();
+		Page<CleanDataElement> page = new Page<CleanDataElement>();
+		if (StringUtils.isNotEmpty(req.getParameter("page"))) {
+			page.setPageNum(Integer.valueOf(req.getParameter("page")));
+		}
+		if (StringUtils.isNotEmpty(req.getParameter("rows"))) {
+			page.setPageSize(Integer.valueOf(req.getParameter("rows")));
+		}
+		page = service.findExactly(dataElement, page);
+
+		try {
+			ar.put("rows", DataHandlerUtil.buildJson(page.getResults(), getDataHandlers(), true));
+			ar.put("total", page.getTotalRecord());
+			ar.put("code", Const.SUCCEED);
+		} catch (Exception e) {
+			ar.put("code", Const.FAIL);
+			e.printStackTrace();
+		}
+		res.getWriter().write(ar.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
+	}
+
 	@Override
 	public BaseService getService() {
 		return service;

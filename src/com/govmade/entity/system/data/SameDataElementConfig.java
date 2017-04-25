@@ -18,7 +18,7 @@ import com.govmade.entity.base.IdBaseEntity;
 * @version V1.0   
 */
 @Alias("SameDataElementConfig")
-public class SameDataElementConfig  extends IdBaseEntity{
+public class SameDataElementConfig  extends IdBaseEntity implements Comparable{
 	private String name;//配置名字
 	private Integer fatherId;//父节点
 	private Integer levels;//层级
@@ -57,6 +57,11 @@ public class SameDataElementConfig  extends IdBaseEntity{
 	}
 	public void setCounts(Integer counts) {
 		this.counts = counts;
+	}
+	@Override
+	public int compareTo(Object arg0) {
+		SameDataElementConfig con = (SameDataElementConfig)arg0;
+		return this.getCounts().compareTo(con.getCounts());
 	}
 
 }

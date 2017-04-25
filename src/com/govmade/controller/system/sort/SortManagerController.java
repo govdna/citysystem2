@@ -88,6 +88,9 @@ public class SortManagerController extends GovmadeBaseController<SortManager> {
 		return map;
 	}
 
+
+
+
 	@RequestMapping("index")
 	public String index(Model model, HttpServletRequest req, HttpServletResponse res) {
 		String url = null;
@@ -130,6 +133,7 @@ public class SortManagerController extends GovmadeBaseController<SortManager> {
 		}
 		return null;
 	}
+	
 	
 	@RequestMapping(value = "search1")
 	public String search1(HttpServletRequest req, HttpServletResponse res) throws Exception {

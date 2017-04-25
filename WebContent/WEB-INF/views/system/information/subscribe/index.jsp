@@ -300,14 +300,49 @@ function doFormatter(value, row, index) {
   var html = '';
   html += '<div class="btn-group">';
   if (row.status == 0) {
-    html += '<button type="button" class="btn btn-white" onclick="datailRow(\'' + row.idForShow + '\')"><i class="fa fa-info-circle"></i>&nbsp;详情</button>';
+    html += '<button type="button" class="btn btn-white" onclick="informationResourceDetail(\'' + row.id + '\')"><i class="fa fa-info-circle"></i>&nbsp;详情</button>';
     html += '<button type="button" class="btn btn-white" onclick="openUpload(\'' + row.idForShow + '\')"><i class="fa fa-cloud-download"></i>&nbsp;查看数据</button>';
   } else {
     html += statusFormatter(row.status, row, index);
   }
+  html += '<button type="button" class="btn btn-white" onclick="removeRow(\'' + row.id + '\')"><i class="fa fa-remove"></i>&nbsp;取消订阅</button>';
+  
   html += '</div>';
   return html;
 }
+
+
+function removeRow(id){
+	layer.confirm('您确定要取消订阅么？', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+			$.post('${base}/backstage/subscribe/deleteSubscribe',{informationResourceId:id},function(result){  
+				if(result.code && result.code==1){
+		    		layer.close(layerIndex);
+		    		 $(tableId).bootstrapTable('refresh');
+		    		 layer.msg('取消成功');
+		    	}else{
+		    		layer.msg('操作失败');
+		    	}
+		    	
+	        },'json');
+		}, function(){
+		    
+		});
+}
+
+
+function informationResourceDetail(id) {
+	  layer.open({
+	    type: 2,
+	    title: '信息资源详情',
+	    shadeClose: true,
+	    shade: 0.1,
+	    area: ['70%', '70%'],
+	    content: base + '/backstage/information/resource/detail?id=' + id
+	  });
+
+	}
 
 function statusFormatter(value, row, index) {
   var st = ['已发布', '待审核', '审核不通过', '已撤回', '注销待审核', '已注销']
@@ -644,72 +679,6 @@ function openDetailLayer() {
 }
 
 
-function datailRow(id, la) {
-  if (!la) {
-    openDetailLayer();
-    layer.title('详情', layerIndex);
-  }
-  $(layerContent + " div").removeClass("has-error");
-  $(layerContent + " div").removeClass("has-success");
-  $(layerContent + " .detail-hide").addClass('div_hidden');
-  var data = $(tableId).bootstrapTable('getRowByUniqueId', id);
-  doBeforDetail(id, data);
-  $(formId).form('load', data);
-  doWithDetail(id, data);
-  //下拉级联显示
-  var cs = $(layerContent + " .chosen-select");
-  if (cs.length) {
-    for (var i = 0; i < cs.length; i++) {
-      if ($(cs[i]).attr('data-bind')) {
-        var cid = $(cs[i]).attr('data-bind');
-        var p = {};
-        p[$(cs[i]).attr("data-param")] = $(cs[i]).val();
-        initAjaxChosen(cid, $(cid).attr('data-url'), p, data[$(cid).attr('name')], true);
-      }
-
-    }
-  }
-  $(".chosen-select").trigger("chosen:updated");
-  //替换input显示
-  var inp = $(layerContent + ' input');
-  if (inp.length) {
-    for (var i = 0; i < inp.length; i++) {
-      if ($(inp[i]).attr('type') != 'hidden' && $(inp[i]).hasClass('form-control')) {
-        var cl = $(inp[i]).parent('div').attr('class');
-        $(inp[i]).parent('div').addClass('div_hidden');
-        var rootDiv = $(inp[i]).parents('.form-group');
-        if ($(rootDiv).find('span .dt-span').length) {
-          $(rootDiv).find('span .dt-span').html(data[$(inp[i]).attr('name')])
-        } else {
-          $(rootDiv).append('<span class="' + cl + ' dt-span">' + data[$(inp[i]).attr('name')] + '</span>');
-        }
-      }
-
-    }
-  }
-  //替换select显示
-  var sel = $(layerContent + ' select');
-  if (sel.length) {
-    for (var i = 0; i < sel.length; i++) {
-      var vl = $(sel[i]).find('option[value="' + data[$(sel[i]).attr('name')] + '"]').html();
-      var cl = $(sel[i]).parent('div').attr('class');
-      $(sel[i]).parent('div').addClass('div_hidden');
-      var rootDiv = $(sel[i]).parents('.form-group');
-      if ($(rootDiv).find('span .dt-span').length) {
-        $(rootDiv).find('span .dt-span').html(vl)
-      } else {
-        if (vl) {
-          $(rootDiv).append('<span class="' + cl + ' dt-span" data-name="' + $(sel[i]).attr('name') + '" data-value="' + data[$(sel[i]).attr('name')] + '">' + vl + '</span>');
-        } else {
-          $(rootDiv).append('<span class="' + cl + ' dt-span" data-name="' + $(sel[i]).attr('name') + '" data-value="' + data[$(sel[i]).attr('name')] + '"></span>');
-        }
-
-      }
-    }
-  }
-
-}
-
 
 
 //初始化下拉框
@@ -871,7 +840,7 @@ $.post(base + '/backstage/notice/listAjax?all=y&readed=0', function(r) {
       html += ' <small class="text-muted">' + r[i].msg + '</small>';
       html += '  <div class="actions">';
       if (r[i].noticeType == 0) {
-        html += '     <a class="btn btn-xs btn-white" onclick="datailRow(\'' + r[i].informationResourceIdForShow.idForShow + '\')"><i class="fa fa-info-circle"></i> 查看 </a>';
+        html += '     <a class="btn btn-xs btn-white" onclick="informationResourceDetail(\'' + r[i].informationResourceIdForShow.id + '\')"><i class="fa fa-info-circle"></i> 查看 </a>';
       } else {
         html += '     <a class="btn btn-xs btn-white" onclick="openUpload(\'' + r[i].informationResourceIdForShow.idForShow + '\')"><i class="fa fa-info-circle"></i> 查看 </a>';
       }

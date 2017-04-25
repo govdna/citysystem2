@@ -38,7 +38,7 @@ public interface CleanDataElementService extends BaseService<CleanDataElement>{
 		* @return List<CleanDataElement>    返回类型 
 		* 2017年3月24日    日期   
 		*/ 
-		public abstract List<CleanDataElement> getRepeat();
+		public abstract List<CleanDataElement> getRepeat(CleanDataElement o,String orderBy,String sort);
 		/** 
 		* @Title: getRepeat 
 		* @Description: TODO(获得该名字的数据元) 
@@ -175,4 +175,16 @@ public interface CleanDataElementService extends BaseService<CleanDataElement>{
 		* 2017年4月1日    日期   
 		*/ 
 		public Page<CleanDataElement> findDataElementByResId(CleanDataElement dataElement,Page<CleanDataElement> page);
+		
+		
+		/** 
+		* @Title: findExactly 
+		* @Description: TODO(根据名字精确查找) 
+		* @param @param dataElement
+		* @param @return    设定文件 
+		* @return List<CleanDataElement>    返回类型 
+		* 2017年4月24日    日期   
+		*/ 
+		public Page<CleanDataElement> findExactly(CleanDataElement dataElement,Page<CleanDataElement> page);
+		
 }

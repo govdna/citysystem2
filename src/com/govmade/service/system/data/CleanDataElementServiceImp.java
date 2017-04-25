@@ -63,10 +63,7 @@ public class CleanDataElementServiceImp extends GovmadeBaseServiceImp<CleanDataE
 			cleanDataElementDao.insertDataElement(dataElement);
 	}
 
-	@Override
-	public List<CleanDataElement> getRepeat() {
-		return cleanDataElementDao.getRepeat();
-	}
+	
 
 	@Override
 	public List<CleanDataElement> findRepeatList(CleanDataElement dataElement) {
@@ -182,6 +179,18 @@ public class CleanDataElementServiceImp extends GovmadeBaseServiceImp<CleanDataE
 	public Page<CleanDataElement> findDataElementByResId(CleanDataElement dataElement, Page<CleanDataElement> page) {
 		page.setResults(cleanDataElementDao.findDataElementByResId(dataElement, page));
 		return page;
+	}
+
+	
+	@Override
+	public Page<CleanDataElement> findExactly(CleanDataElement dataElement, Page<CleanDataElement> page) {
+		page.setResults(cleanDataElementDao.findExactly(dataElement, page));
+		return page;
+	}
+
+	@Override
+	public List<CleanDataElement> getRepeat(CleanDataElement o, String orderBy, String sort) {
+		return cleanDataElementDao.getRepeat(o, orderBy, sort);
 	}
 
 	

@@ -42,28 +42,32 @@ margin-left:5px;
   
   
   <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="ibox float-e-margins">
+   <div class="ibox float-e-margins">
       <div class="ibox-content">
-      <div class="p-xs">
-            <h3>同义词清洗：</h3>
-      </div>         
-       <c:if test="${list==null||list.size()==0}">
-       	  <div class="alert alert-success" style="margin:10px;">
-                   	暂无同义数据元需要清洗。
-          </div>
-       </c:if>
-     
-      
-      <div>
-      	<c:forEach var="obj" items="${list}">
-     	  <div class="pull-left com-count" data-id="${obj.id}" data-value="${obj.name}">
-     	${obj.name}
-     	  <span class="badge">${obj.counts}</span>
-     	  </div>
-      
-      
-      	</c:forEach>
-      	<div class="clearfix"></div>
+      <div class="form-group">
+      <div class="col-sm-4">
+      <div class="input-group">
+            <input type="text" placeholder="输入同义词配置名" name="keyword" class="form-control">
+            <div class="input-group-btn">
+              <button class="btn btn-primary" type="submit" onclick="initList();">
+                    搜索
+              </button>
+            </div>
+     </div>
+      </div>
+      <div class="col-sm-4">
+      	<button class="btn btn-primary" onclick="sort(this);">按次数排序&nbsp;<i class="fa fa-sort-desc"></i></button>
+      </div>
+       <div class="clearfix"></div>
+      </div>
+      <div class="clearfix"></div>
+     <div class="hr-line-dashed" style="margin-top:0px;margin-bottom:0px;"></div>
+     <div class="p-xs">
+          <h3>同义数据元：</h3>
+     </div>         
+       
+      <div id="content">
+      	
       </div>
       
       
@@ -127,7 +131,7 @@ var loadingHtml=' <div class="ibox-content"> <div class="spiner-example"><div cl
 	    validClass: "help-block m-b-none"
 	});
 
-$('.com-count').on('click',function(e){
+$('body').on('click','.com-count',function(e){
 	$('input[name="fatherId"]').val($(this).attr('data-id'));
 	initChild();
 	layerIndex=layer.open({
@@ -523,6 +527,44 @@ function detail(id){
 	  });
 }
 
+
+
+var order="desc";
+function sort(t){
+	if(order=="desc"){
+		order="asc";
+		$(t).html('按次数排序&nbsp;<i class="fa fa-sort-asc"></i>');
+	}else{
+		order="desc";
+		$(t).html('按次数排序&nbsp;<i class="fa fa-sort-desc"></i>');
+	}
+	initList();
+}
+
+initList();
+
+function initList(){
+jQuery.post('${base}/backstage/cleanDataElement/sameFilterAjax',{name:$('input[name="keyword"]').val(),order:order},function(result){
+	if(result.code && result.code==1){
+		var html='';
+		if(typeof(result.rows.length)!='undefined'&&result.rows.length>0){
+			
+			for(var i=0;i<result.rows.length;i++){
+				html+=' <div class="pull-left com-count" data-value="'+result.rows[i].name+'">'+result.rows[i].name;
+				html+=' <span class="badge">'+result.rows[i].counts+'</span></div>';
+			}
+			html+='<div class="clearfix"></div>';
+		}else{
+			html=' <div class="alert alert-success" style="margin:10px;">暂无符合条件的同义数据元需要清洗。 </div>'
+		}
+		$('#content').html(html);
+	     	 
+	}else{
+		layer.msg(result.msg);
+	}
+	
+},'json');
+}
 </script>
 
 

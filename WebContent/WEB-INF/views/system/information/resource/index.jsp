@@ -1077,6 +1077,7 @@ $("select[name='cId']").chosen({
     $(formId).form('clear');
     checkedIds = ",";
     $('input[name="value14"]').val(getNowFormatDate());
+    $('input[name="value14"]').attr("readonly","readonly"); 
     $(formId + ' input[name="sourceType"]').val(1);
     $(formId + ' input[name="value1"]').val(data.inforName);
     $(formId + ' input[name="value5"]').val(data.inforRemark);
@@ -1680,6 +1681,7 @@ function openLayer(){
   initChosen();
   $('div .form-group').show();
   $('input[name="value14"]').val(getNowFormatDate());
+  $('input[name="value14"]').attr("readonly","readonly"); 
   $(formId).form('load',cdata);
   $(".chosen-select").trigger("chosen:updated");
   $(formId).valid();
