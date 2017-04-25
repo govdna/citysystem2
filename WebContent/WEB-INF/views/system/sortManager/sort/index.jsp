@@ -213,7 +213,7 @@ $("input[name='sortCode']").blur(function (){
     }
   });
 });
-
+var scrollTop;
   $(document).ready(function () {
         $.jgrid.defaults.styleUI = 'Bootstrap';
 
@@ -248,7 +248,12 @@ $("input[name='sortCode']").blur(function (){
             rowNum : "-1",     // 显示全部记录
             shrinkToFit:true,  // 控制水平滚动条
             loadComplete:function(data){
-              treeData=data;
+                treeData=data;
+                $('.ui-jqgrid-bdiv').scrollTop(scrollTop);
+              },
+              beforeSelectRow:function(){
+              	scrollTop=$('.ui-jqgrid-bdiv').scrollTop();
+              }
             }
         });
 
