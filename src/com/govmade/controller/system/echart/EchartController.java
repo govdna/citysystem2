@@ -121,12 +121,14 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 						"  dcount,\n" +
 						"  bcount,\n" +
 						"  tcount,\n" +
-						"  t1.cname\n" +
+						"  t1.cname,\n" +
+						"  t1.cid\n" +
 						"FROM\n" +
 						"  (\n" +
 						"    SELECT\n" +
 						"      count(gov_data_element.id) dcount,\n" +
-						"      gov_company.company_name cname\n" +
+						"      gov_company.company_name cname,\n" +
+						"      gov_company.id cid\n" +
 						"    FROM\n" +
 						"      gov_company\n" +
 						"    LEFT JOIN gov_data_element ON gov_data_element.value8 = gov_company.id\n" +
@@ -208,7 +210,8 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 						"  t1.cname,  icount,\n" +
 						"  dcount,\n" +
 						"  bcount,\n" +
-						"  tcount\n" +
+						"  tcount,\n" +
+						"  t1.cid\n" +
 						"ORDER BY\n" +
 						"  icount DESC";
 				ResultSet rs = stmt.executeQuery(sql);
@@ -220,6 +223,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					json.put("bcount", rs.getString(3));
 					json.put("tcount", rs.getString(4));
 					json.put("cname", rs.getString(5));
+					json.put("cid", rs.getString(6));
 					jsa.add(json);
 				}
 				model.addAttribute("jsa",jsa);
@@ -998,7 +1002,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 					"    gov_company\n" +
 					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
 					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.inforTypes = 0\n" +
+					"  AND gov_information_resource_main.inforTypes = 2\n" +
 					"  AND gov_information_resource_main.isDeleted = 0\n" +
 					"  WHERE\n" +
 					"    gov_company.isDeleted = 0\n" +
@@ -1026,11 +1030,15 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 			JSONObject Ejson = new JSONObject();
 			JSONArray jsa = new JSONArray();
 			List<String > list= new ArrayList<String >();
-			while (rs.next()) {	
+			while (rs.next()) {
+				String cpName = rs.getString(5);
+				if(rs.getString(5).length()>6){
+					cpName = rs.getString(5).substring(0,6);
+				}			
 				int[] arr3=new int[]{Integer.valueOf(rs.getString(1)),Integer.valueOf(rs.getString(2)),Integer.valueOf(rs.getString(3)),Integer.valueOf(rs.getString(4))};
 				json.put("value", arr3);
-				json.put("name", rs.getString(5));
-				list.add(rs.getString(5));
+				json.put("name", cpName);
+				list.add(cpName);
 				jsa.add(json);
 			}
 			String[] arr3=new String[]{"信息资源","数据元","基础库","主题库"};
@@ -1479,6 +1487,11 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	@RequestMapping("exall")
 	public String exall() {
 		return "/system/govServer/exall";		
+	}
+	
+	@RequestMapping(value="mubanCompare")
+	public String mubanCompare(Model model,HttpServletRequest req, HttpServletResponse res) throws Exception {
+		return "/system/echart/mubanCompare";		
 	}
 	
 }

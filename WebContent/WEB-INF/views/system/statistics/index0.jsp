@@ -39,31 +39,33 @@
       <h1 class="text-center">没数据了哦，赶紧去添加吧！</h1>
 	</c:if>
    <c:forEach items="${jsa}" var="company" >
-	   	<div class="panel-container col-xs-4">
-	        <div class="panel panel-default  panel-item">
-	          <div class="panel-heading text-center text-hidden">${company.cname}</div>
-	          <div class="panel-body content">
-	            <ul>
-	              <li  >
-	                <p class="col-xs-8 text-right">数据元数量：</p> 
-	                <p class="col-xs-4 text-left"><span>${company.dcount}</span></p>
-	              </li>
-	             <li  >
-	                <p class="col-xs-8 text-right">信息资源数量：</p> 
-	                <p class="col-xs-4 text-left"><span>${company.icount}</span></p>
-	              </li>
-	             <li  >
-	                <p class="col-xs-8 text-right">基础信息资源数量：</p> 
-	                <p class="col-xs-4 text-left"><span>${company.bcount}</span></p>
-	              </li>
-	              <li  >
-	                <p class="col-xs-8 text-right">主题信息资源数量：</p> 
-	                <p class="col-xs-4 text-left"><span>${company.tcount}</span></p>
-	              </li>	              
-	            </ul>
-	          </div>
-	        </div>
-	      </div>
+  		 <a href="${base}/backstage/echart/mubanCompare?cid=${company.cid}&cname=${company.cname}&dcount=${company.dcount}&icount=${company.icount}">
+		   	<div class="panel-container col-xs-4">
+		        <div class="panel panel-default  panel-item">
+		          <div class="panel-heading text-center text-hidden">${company.cname}</div>
+		          <div class="panel-body content">
+		            <ul>
+		              <li  >
+		                <p class="col-xs-8 text-right">数据元数量：</p> 
+		                <p class="col-xs-4 text-left"><span>${company.dcount}</span></p>
+		              </li>
+		             <li  >
+		                <p class="col-xs-8 text-right">信息资源数量：</p> 
+		                <p class="col-xs-4 text-left"><span>${company.icount}</span></p>
+		              </li>
+		             <li  >
+		                <p class="col-xs-8 text-right">基础信息资源数量：</p> 
+		                <p class="col-xs-4 text-left"><span>${company.bcount}</span></p>
+		              </li>
+		              <li  >
+		                <p class="col-xs-8 text-right">主题信息资源数量：</p> 
+		                <p class="col-xs-4 text-left"><span>${company.tcount}</span></p>
+		              </li>	              
+		            </ul>
+		          </div>
+		        </div>
+		      </div>
+		  </a>
 	</c:forEach>
 	    
 	    

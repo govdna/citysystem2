@@ -713,34 +713,38 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 				unitjson.put("name", sname);
 				unitjson.put("value", 10);
 				nodeArray.add(unitjson);
+				int i = 0;
 				for(String inforId : inforIdsArray){
-					Random random = new Random();
-					int s = random.nextInt(6)%(6-2+1) + 2; 
-					InformationResource infor = new InformationResource();
-					infor.setId(Integer.valueOf(inforId));
-					List<InformationResource> inforList = informationResourceService.find(infor);
-					if(inforList.size()>0){
-						unitjson.put("name", inforList.get(0).getValue1());
-						unitjson.put("category", 1);
-						unitjson.put("value", s);
-						nodeArray.add(unitjson);
-						linkjson.put("source", inforList.get(0).getValue1());	
-						linkjson.put("target", sname);
-						linkjson.put("weight", s);
-						linkjson.put("name", "引用");
-						linkArray.add(linkjson);
-						Company c=new Company();
-						c.setId(Integer.valueOf(inforList.get(0).getValue3()));
-						c=companyService.findById(c);
-						unitjson.put("name", c.getCompanyName());
-						unitjson.put("category", 2);
-						unitjson.put("value", s);
-						nodeArray.add(unitjson);
-						linkjson.put("source", c.getCompanyName());	
-						linkjson.put("target", inforList.get(0).getValue1());
-						linkjson.put("weight", s);
-						linkjson.put("name", "引用");
-						linkArray.add(linkjson);
+					if(i<31){
+						Random random = new Random();
+						int s = random.nextInt(6)%(6-2+1) + 2; 
+						InformationResource infor = new InformationResource();
+						infor.setId(Integer.valueOf(inforId));
+						List<InformationResource> inforList = informationResourceService.find(infor);
+						if(inforList.size()>0){
+							unitjson.put("name", inforList.get(0).getValue1());
+							unitjson.put("category", 1);
+							unitjson.put("value", s);
+							nodeArray.add(unitjson);
+							linkjson.put("source", inforList.get(0).getValue1());	
+							linkjson.put("target", sname);
+							linkjson.put("weight", s);
+							linkjson.put("name", "引用");
+							linkArray.add(linkjson);
+							Company c=new Company();
+							c.setId(Integer.valueOf(inforList.get(0).getValue3()));
+							c=companyService.findById(c);
+							unitjson.put("name", c.getCompanyName());
+							unitjson.put("category", 2);
+							unitjson.put("value", s);
+							nodeArray.add(unitjson);
+							linkjson.put("source", c.getCompanyName());	
+							linkjson.put("target", inforList.get(0).getValue1());
+							linkjson.put("weight", s);
+							linkjson.put("name", "引用");
+							linkArray.add(linkjson);
+						}	
+						i++;
 					}					
 				}			
 			}

@@ -318,7 +318,7 @@
 		</if>
 		<choose>
 			<when  test="param.value6 != null and param.value6=='0'.toString() ">
-					and t.value6 IS NOT null and t.value6 != ''
+					and t.value6 > 0
 			</when>
 			<otherwise>
 				<if test="param.value6 != null and param.value6!='' ">

@@ -16,13 +16,105 @@
         <div id="toolbar">
           <div class="form-inline">
             <div class="form-group" style="margin-left: 15px;">
+      <div class="form-group pull-left">      
+      <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&searchType=1\"),\"list_no\",\"asc\")%>">      
+              <c:choose>
+              <c:when test="${obj.inputType==1}">
+                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
+                  class="form-control"
+                >
+              </c:when>
+              <c:when test="${obj.inputType==2}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
+                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
+                  </c:forEach>
+                </select>
+                </div>
+              </c:when>
+              <c:when test="${obj.inputType==3}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                  <option value="${obj2.id}">${obj2.itemName}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+            </c:choose>              
+      </c:forEach>            
+              <div class="btn-group">
+              <button type="button" class="btn btn-primary ml5" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+              <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                <span class="caret"></span>
+              </button>
+            </div>
+		</div>
+             <div class="form-group pull-left" style="margin-left: 5px;">           
               <div class="text-center">
                <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/model/customModel/index?model=6\") %>">
                 <a data-toggle="modal" id="addhm" class="btn btn-primary" onclick="addNew();" href="#">新增</a>
                </c:if>
               </div>
+              </div>
             </div>
           </div>
+          
+                    <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+			 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&searchType=1\"),\"list_no\",\"asc\")%>">      
+              <c:choose>
+              <c:when test="${obj.inputType==1}">
+                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
+                  class="form-control"
+                >
+              </c:when>
+              <c:when test="${obj.inputType==2}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                  <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
+                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
+                  </c:forEach>
+                </select>
+                </div>
+              </c:when>
+              <c:when test="${obj.inputType==3}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">
+              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                  <option value="${obj2.id}">${obj2.itemName}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+              </c:when>
+              <c:otherwise>
+              </c:otherwise>
+            </c:choose>              
+      </c:forEach>
+			    </ul>          
+          
         </div>
         <table id="dicList">
         </table>
@@ -424,7 +516,25 @@ var  columns=${columns};
   var queryParams = function(params) {
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
-      page : params.offset / params.limit + 1
+      page : params.offset / params.limit + 1,
+      
+      <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&level=2\"),\"list_no\",\"asc\")%>">
+    
+    <c:choose>
+    <c:when test="${obj.inputType==1&&obj.searchType!=null&&obj.searchType!=0}">
+     value${obj.valueNo}: $('input[name="search_value${obj.valueNo}"]').val(),
+    </c:when>
+    <c:when test="${obj.inputType==2&&obj.searchType!=null&&obj.searchType!=0}">
+    	value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+    </c:when>
+    <c:when test="${obj.inputType==3&&obj.searchType!=null&&obj.searchType!=0}">
+		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+  </c:when>
+    <c:otherwise></c:otherwise>
+  </c:choose>
+    
+    </c:forEach>
+
     };
     return temp;
   };
@@ -455,6 +565,7 @@ var  columns=${columns};
     oTable2.Init();
     oTable3 = new TableInit3();
     oTable3.Init();
+    initChosen();
   });
 
   var TableInit2 = function() {

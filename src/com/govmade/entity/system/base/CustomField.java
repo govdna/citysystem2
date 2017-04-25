@@ -23,6 +23,14 @@ public class CustomField extends IdBaseEntity {
 	private Integer listNo;//排序
 	private Integer isShow;//是否列表显示字段
 	private String titleText;//鼠标浮上去显示文字
+	private Integer searchType;//0 不加入搜索 1 主要搜索 2 次要搜索
+	
+	public Integer getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(Integer searchType) {
+		this.searchType = searchType;
+	}
 	public String getInputType() {
 		return inputType;
 	}

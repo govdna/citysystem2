@@ -15,6 +15,13 @@
 <style>
   .myclass{width: 400px;max-width: 500px; height: 300px;max-height: 400px;overflow-y: auto;}
   .myclass .layui-layer-content {padding: 20px;}
+  #allmap {
+    width: 100%;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    margin: 0;
+    font-family: "微软雅黑";
+  }
 </style>
 <body class="skin-<%=ServiceUtil.getThemeType(10)%>">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -24,8 +31,8 @@
 	                <div class="ibox-title">
 	                    <h5>分布地图展现</h5>
 	                </div>
-	                <div class="ibox-content">
-	                    <div class="echarts" id="main1" style="height:500px"></div>
+	                <div class="ibox-content" style="padding: 5px;">
+	                    <div id="allmap"></div>
 	                </div>
 	            </div>
 	        </div>
@@ -34,100 +41,58 @@
   <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 	<script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
   <script src="${base}/static/js/plugins/layer/layer.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=oZcrHfndGQ44Bj0ERaAlnnuGkKl8pg2B"></script>
 	<script>
-  $(function() {
-    layer.config({
-      extend: '../extend/layer.ext.js'
-    });
-  })
-        var myChart = echarts.init(document.getElementById('main1'));
-       // var myChart = echarts.init(document.getElementById('main'));
-  
-var curIndx = 0;
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(109.900923, 19.175807), 9);
+	//map.disableDragging();
+	setTimeout(function() {
+	  map.setZoom(9);
+	}, 2000); 
+	map.enableScrollWheelZoom(true);
 
-option = {
-    title: {
-        text : '海南',
-        subtext : ''
-    },
-    tooltip : {
-        trigger: 'item',
-        formatter: '{b}'
-    },
-    
-    dataRange: {
-        min: 0,
-        max: <%=ServiceUtil.getCompanyCountByAddr("")%>,
-        color:['orange','yellow'],
-        text:['高','低'],// 文本，默认为数值文本
-        calculable : false
-    },
-    series : [
-        {
-            name: '随机数据',
-            type: 'map',
-            mapType: '海南',
-            selectedMode : 'single',
-            itemStyle:{
-                normal:{label:{show:true}},
-                emphasis:{label:{show:true}}
-            },
-            data:[
-                {name: '三亚市',value: <%=ServiceUtil.getCompanyCountByAddr("三亚市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("三亚市")%>},
-                {name: '乐东黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("乐东黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("乐东黎族自治县")%>},
-                {name: '儋州市',value: <%=ServiceUtil.getCompanyCountByAddr("儋州市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("儋州市")%>},
-                {name: '琼中黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("琼中黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼中黎族苗族自治县")%>},
-                {name: '东方市',value: <%=ServiceUtil.getCompanyCountByAddr("东方市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("东方市")%>},
-                {name: '海口市',value: <%=ServiceUtil.getCompanyCountByAddr("海口市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("海口市")%>},
-                {name: '万宁市',value: <%=ServiceUtil.getCompanyCountByAddr("万宁市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("万宁市")%>},
-                {name: '澄迈县',value: <%=ServiceUtil.getCompanyCountByAddr("澄迈县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("澄迈县")%>},
-                {name: '白沙黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("白沙黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("白沙黎族自治县")%>},
-                {name: '琼海市',value: <%=ServiceUtil.getCompanyCountByAddr("琼海市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼海市")%>},
-                {name: '昌江黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("昌江黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("昌江黎族自治县")%>},
-                {name: '临高县',value: <%=ServiceUtil.getCompanyCountByAddr("临高县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("临高县")%>},
-                {name: '陵水黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("陵水黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("陵水黎族自治县")%>},
-                {name: '屯昌县',value: <%=ServiceUtil.getCompanyCountByAddr("屯昌县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("屯昌县")%>},
-                {name: '定安县',value: <%=ServiceUtil.getCompanyCountByAddr("定安县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("定安县")%>},
-                {name: '保亭黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("保亭黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("保亭黎族苗族自治县")%>},
-                {name: '文昌市',value: <%=ServiceUtil.getCompanyCountByAddr("文昌市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("文昌市")%>},
-                {name: '五指山市',value: <%=ServiceUtil.getCompanyCountByAddr("五指山市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("五指山市")%>}
-            ]
-        }
-    ]
-};
-                    
-myChart.setOption(option);
-myChart.on('click', eConsole);
-    function eConsole(param) { 
-      var name = param.name;
-      var content = param.data.info;
-      var html = '';
+	// 信息窗口部分
+	var opts = opts = {
+	      width : 250,     // 信息窗口宽度
+	      height: 80,     // 信息窗口高度
+	      title : "" , // 信息窗口标题
+	      enableMessage:true//设置允许信息窗发送短息
+	       };
+	function addClickHandler(content,marker){
+	    marker.addEventListener("click",function(e){
+	      openInfo(content,e)}
+	    );
+	  }
+	  function openInfo(content,e){
+	    var p = e.target;
+	    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+	    var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+	    map.openInfoWindow(infoWindow,point); //开启信息窗口
+	  }
+	  var infos = [
+     	[110.331579, 20.032531, {name: '', dataElement: 0, informationResource: 0}],
+   	    [110.501867, 19.714821, {name: '', dataElement: 0, informationResource: 0}]
+   	  ];
+	  var data_info = [];
+	  
+	  $.each(infos, function(index, value) {
+  	  var info = [];
+      var data = '部门名称:' + value[2].name + '<br>' + '数据元数量:' + value[2].dataElement + '<br>' + '信息资源数量:' + value[2].informationResource
+  		info.push(value[0],value[1], data);
+		  data_info.push(info);
+	  });
+	  
+	    for(var i=0;i<data_info.length;i++){
+	      var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+	      var content = data_info[i][2];
+	      map.addOverlay(marker);               // 将标注添加到地图中
+	      addClickHandler(content,marker);
+	    }
+	 
 
-      if (!content.length) {
-        html += '<h2 class="text-center" style="color: #aaa">'+name+'数据为空</h2>';
 
-      } else {
-        html += '<h3>'+name+'数据信息:</h3>';
-        html += '<table class="table table-bordered"><tr><th>部门名称</th><th>数据元数量</th><th>信息资源数量</th></tr>'
-        $.each(content, function (index, value) {
-
-          
-          html += '<tr><td>'+ value.name + '</td><td>'+value.dataElement+'</td><td>'+value.informationResource+'</td>';
-        });
-        html += '</table>';
-      }
-      
-      // var html = name + '<br>' + content
-        layer.open({
-          type: 1,
-          title: false,
-          closeBtn: 0,
-          shadeClose: true,
-          skin: 'myclass',
-          content: html,
-          area: ['70%', '350px']
-        });
-    }
+	  
     </script>
 </body>
 </html>

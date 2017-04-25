@@ -302,6 +302,7 @@ var checkedIds = ",";
 var checkedEles;
 var dataEles;//存放选中的数据元
 var dicLayerContent = '#dic_form';
+var userCompanyId = <%=request.getParameter("companyId") %>;
 $('.dropdown-btn').on('click', function() {
 	$('.dropdown-menu1').toggleClass('dn');
 });
@@ -314,6 +315,9 @@ $("select[name='datab']").chosen({
 	  disable_search_threshold: 10,
 	  no_results_text: "没有匹配到这条记录",
 	    width: "100%"
+	});
+$("select[name='cId']").on('change', function(e, params) {
+	userCompanyId = params.selected;
 	});
 <%@include file="../common/simpleFieldsColumnsCompany.jsp"%>
   //得到查询的参数
@@ -329,7 +333,7 @@ $("select[name='datab']").chosen({
       page : params.offset / params.limit + 1,
       sort:sort,
       order:order,
-      companyId:$('select[name="cId"]').val(),
+      companyId:userCompanyId,
       value2:$('input[name="tableN"]').val(),
       value3:$('select[name="datab"]').val(),
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govTable/index\")==1}" >

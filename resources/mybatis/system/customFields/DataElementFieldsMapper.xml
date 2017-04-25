@@ -3,10 +3,13 @@
 <mapper namespace="com.govmade.repository.system.data.DataElementFieldsDao">
 	<resultMap id="base" type="DataElementFields"></resultMap>
 	<select id="find" resultMap="base" parameterType="DataElementFields">
-		SELECT  id,name,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,is_show isShow
+		SELECT  id,name,search_type searchType,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,is_show isShow
 		 FROM gov_data_element_fields t WHERE 1=1
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
 		</if>
 		ORDER BY
 
@@ -29,10 +32,13 @@
 		</choose>
 	</select>
 	<select id="findByPage" resultMap="base">
-		SELECT  id,name,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,is_show isShow
+		SELECT  id,name,search_type searchType,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,is_show isShow
 		 FROM gov_data_element_fields t WHERE 1=1
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
 		</if>
 		ORDER BY
 		<choose>
@@ -63,8 +69,8 @@
     </selectKey>  
  	
  	<![CDATA[
-	INSERT INTO gov_data_element_fields(name,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,is_show) 
-	VALUES (#{name,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC}，#{isShow,jdbcType=NUMERIC})
+	INSERT INTO gov_data_element_fields(search_type,name,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,is_show) 
+	VALUES (#{searchType,jdbcType=NUMERIC},#{name,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC}，#{isShow,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="DataElementFields">
@@ -99,6 +105,7 @@
 		UPDATE gov_data_element_fields
 		SET 
 		name=#{name,jdbcType=VARCHAR},
+		search_type=#{searchType,jdbcType=NUMERIC},
         input_type=#{inputType,jdbcType=VARCHAR},
         input_value=#{inputValue,jdbcType=VARCHAR},
         value_no=#{valueNo,jdbcType=NUMERIC},

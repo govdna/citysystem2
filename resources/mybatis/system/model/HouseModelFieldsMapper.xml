@@ -3,7 +3,7 @@
 <mapper namespace="com.govmade.repository.system.model.HouseModelFieldsDao">
 	<resultMap id="base" type="HouseModelFields"></resultMap>
 	<select id="find" resultMap="base" parameterType="HouseModelFields">
-		SELECT  id,model_code modelCode,name,level_s "level",father_id fatherId,model_type modelType,model_name modelName,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,is_show isShow,time_create timeCreate,time_modified timeModified,isDeleted
+		SELECT  id,search_type searchType,model_code modelCode,name,level_s "level",father_id fatherId,model_type modelType,model_name modelName,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,is_show isShow,time_create timeCreate,time_modified timeModified,isDeleted
 		 FROM gov_house_model_fields t WHERE 1=1
 		 <if test="param.modelType != null ">
 			and t.model_type=#{param.modelType}
@@ -11,6 +11,9 @@
 		<if test="param.valueNo != null">
 			and t.value_no=#{param.valueNo}
 		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>		
 		<if test="param.fatherId == 999 ">
 			and t.father_id != 0
 		</if>
@@ -46,7 +49,7 @@
 		</choose>
  	</select>
 	<select id="findByPage" resultMap="base">
-		SELECT  id,model_code modelCode,name,level_s "level",father_id fatherId,model_type modelType,model_name modelName,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,is_show isShow,time_create timeCreate,time_modified timeModified,isDeleted
+		SELECT  id,model_code modelCode,search_type searchType,name,level_s "level",father_id fatherId,model_type modelType,model_name modelName,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,is_show isShow,time_create timeCreate,time_modified timeModified,isDeleted
 		 FROM gov_house_model_fields t WHERE 1=1
 		 <if test="param.modelType != null ">
 			and t.model_type=#{param.modelType}
@@ -54,6 +57,10 @@
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
 		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>
+		
 		ORDER BY
 		<choose>
 			<when  test="sort !=null and sort!=''">
@@ -83,8 +90,8 @@
     </selectKey>  
  	
  	<![CDATA[
-	INSERT INTO gov_house_model_fields(model_code,level_s,father_id,model_type,model_name,name,input_type,input_value,value_no,required,list_no,is_show,time_create,time_modified,isDeleted) 
-	VALUES (#{modelCode,jdbcType=VARCHAR},#{level,jdbcType=NUMERIC},#{fatherId,jdbcType=NUMERIC},#{modelType,jdbcType=NUMERIC},#{modelName,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{isShow,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	INSERT INTO gov_house_model_fields(search_type,model_code,level_s,father_id,model_type,model_name,name,input_type,input_value,value_no,required,list_no,is_show,time_create,time_modified,isDeleted) 
+	VALUES (#{searchType,jdbcType=NUMERIC},#{modelCode,jdbcType=VARCHAR},#{level,jdbcType=NUMERIC},#{fatherId,jdbcType=NUMERIC},#{modelType,jdbcType=NUMERIC},#{modelName,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{isShow,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="HouseModelFields">
@@ -126,6 +133,7 @@
 		UPDATE gov_house_model_fields
 		SET
 		model_code=#{modelCode,jdbcType=VARCHAR},
+		search_type=#{searchType,jdbcType=NUMERIC},
 		level_s=#{level,jdbcType=NUMERIC},
 		father_id=#{fatherId,jdbcType=NUMERIC},
 		model_type=#{modelType,jdbcType=NUMERIC},

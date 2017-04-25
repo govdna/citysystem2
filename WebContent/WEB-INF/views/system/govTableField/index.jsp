@@ -14,10 +14,17 @@
  <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
       <div class="ibox-content">
-        <div id="toolbar">
+      <%--   <div id="toolbar">
           <div class="form-inline clearfix">
             <div class="form-group pull-left">
-               <input type="text" placeholder="输入字段名" name="fieldN" class="form-control col-sm-8">
+            <label class="pull-left">所属表：</label>
+                <select name="tableN" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
+	                 <option value=""></option>
+	                 <option value="">&nbsp;</option>
+	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"GovTableService\").find(ServiceUtil.buildBean(\"GovTable@isDeleted=0\"),\"id\",\"desc\") %>">
+	                 <option value="${obj.id}">${obj.value1}</option>
+	                 </c:forEach>
+                  </select>		
               <div class="btn-group ml5">
                 <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
@@ -49,7 +56,7 @@
 				  </div>                
 				</li>
 			  </ul>
-        </div>
+        </div> --%>
         <table id="dicList">
         </table>
       </div>
@@ -75,6 +82,7 @@ var tableId='#dicList';//bootstrap-table id
 var toolbar='#toolbar';//bootstrap-table 工具栏id
 var formId='#eform';//form id
 var url='${base}/backstage/govTableField/';//controller 路径
+var userCompanyId = <%=request.getParameter("companyId") %>;
 $('.dropdown-btn').on('click', function() {
 	$('.dropdown-menu1').toggleClass('dn');
 });
@@ -83,6 +91,14 @@ $("select[name='cId']").chosen({
   no_results_text: "没有匹配到这条记录",
     width: "100%"
 });
+$("select[name='tableN']").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	    width: "100%"
+	});
+$("select[name='cId']").on('change', function(e, params) {
+	userCompanyId = params.selected;
+	});
 <%@include file="../common/simpleFieldsColumnsCompany.jsp"%>
   //得到查询的参数
   var queryParams = function(params) {
@@ -91,8 +107,8 @@ $("select[name='cId']").chosen({
       page : params.offset / params.limit + 1,
       sort:params.sort,
       order:params.order,
-      companyId:$('select[name="cId"]').val(),
-      value2:$('input[name="fieldN"]').val(),
+      companyId:userCompanyId,
+     // value3:$('select[name="tableN"]').val(),
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govTableField/index\")==1}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
