@@ -254,7 +254,7 @@ var scrollTop;
               beforeSelectRow:function(){
               	scrollTop=$('.ui-jqgrid-bdiv').scrollTop();
               }
-            }
+            
         });
 
       function longFormatter(value, row, index)
