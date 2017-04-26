@@ -18,28 +18,19 @@
         <div id="toolbar">
           <div class="form-inline">
             <div class="form-group clearfix">
-              <label class="control-label  pull-left">责任部门</label>
-              <div class=" pull-left" style="margin-left:10px;width:250px;">
-              <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
-                  <option value=""></option>
-                  <option value="">&nbsp;</option>
-                  <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
-                  <c:if test="${roleid==1}">
-                  <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
-                  <option value="${obj.id}">${obj.companyName}</option>
-                  </c:forEach>
-                  </c:if>
-                  <c:if test="${roleid!=1}">
-                    <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
-                     <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
-                  <option value="${obj.id}">${obj.companyName}</option>
-                  </c:forEach>
-                  </c:if>
-                </select>
-              </div>
-              <div class="pull-left"  style="margin-left:10px;">
-                <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索</button>            
-               <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/govServer/index\") %>">
+            
+              <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovServer&searchType=1\"),\"list_no\",\"asc\")%>">                    
+             			 <%@include file="../common/searchBase.jsp"%>                           
+              </c:forEach>
+             <div class="btn-group">
+               <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+               <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                 <span class="caret"></span>
+               </button>
+             </div>
+              
+              <div class="form-group"  style="margin-left:10px;">
+                <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/govServer/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="openLayer('新增');" href="#">新增</a>
                </c:if>
                <c:if test="<%=!ServiceUtil.haveExp(\"/backstage/govServer/index\") %>">
@@ -49,6 +40,13 @@
               </div>
             </div>
           </div>
+          
+          <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
+			    <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovServer&searchType=2\"),\"list_no\",\"asc\")%>">                    
+						<%@include file="../common/searchBase.jsp"%>         
+              </c:forEach>
+			  </ul>         
+          
         </div>
         <table id="dicList">
         </table>
@@ -106,6 +104,10 @@
 <script src="${base}/static/js/plugins/webuploader/webuploader.min.js"></script>
 
 <script>
+$('.dropdown-btn').on('click', function() {
+	$('.dropdown-menu1').toggleClass('dn');
+});
+
 var cdata = {"companyId":"<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"};
 var layerIndex;//layer 窗口对象
 var title_name="服务器资料";
@@ -122,14 +124,23 @@ $("select[name='cId']").chosen({
     width: "100%"
 });
 <%@include file="../common/simpleFieldsColumns.jsp"%>
-  //得到查询的参数
+
+$(function() {
+    initChosen();
+});
+
+
   var queryParams = function(params) {
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
       sort:params.sort,
       order:params.order,
-      value2:$('select[name="cId"]').val(),
+
+      <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovServer\"),\"list_no\",\"asc\")%>">  
+      <%@include file="../common/searchQueryParams.jsp"%>
+      </c:forEach>
+      
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govServer/index\")==1}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
@@ -165,10 +176,16 @@ function openLayer() {
 $('#downloadForm').form({  
     url: url+'downloadData',  
     success: function(result){ 
-    	 
-    }  
+    },
+    onSubmit: function(param){
+		var qp=queryParams(param);
+		 for(var p in qp){
+			 if(p!='rows'&&p!='page'){
+				 param[p]=qp[p];
+			 }
+	     }
+    }
 });
-
 
 function downloadData(){
 	  //$('#downloadForm').form('clear');

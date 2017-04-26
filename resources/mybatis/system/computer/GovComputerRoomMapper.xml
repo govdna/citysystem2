@@ -174,8 +174,35 @@
 		<if test="param.cproomNum != null"> and
 			cproom_num = #{param.cproomNum,jdbcType=VARCHAR}
 		</if>
-		<if test="param.value3 != null and param.value3 !=''"> and
-		    value3 = #{param.value3,jdbcType=VARCHAR}
+		<if test="param.value1 != null and param.value1 != ''">
+			and value1 = #{param.value1,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value2 != null and param.value2 != ''">
+			and value2 = #{param.value2,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value3 != null and param.value3 != ''">
+			and value3 = #{param.value3,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value4 != null and param.value4 != ''">
+			and value4 = #{param.value4,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value5 != null and param.value5 != ''">
+			and value5 = #{param.value5,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value6 != null and param.value6 != ''">
+			and value6 = #{param.value6,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value7 != null and param.value7 != ''">
+			and value7 = #{param.value7,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value8 != null and param.value8 != ''">
+			and value8 = #{param.value8,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value9 != null and param.value9 != ''">
+			and value9 = #{param.value9,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value10 != null and param.value10 != ''">
+			and value10 = #{param.value10,jdbcType=VARCHAR}
 		</if>
 		<if test="param.companyId != null"> and
 			company_id = #{param.companyId,jdbcType=NUMERIC}
