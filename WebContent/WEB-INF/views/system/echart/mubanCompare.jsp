@@ -10,6 +10,9 @@
   ul,li {
     list-style: none;
   }
+  .chosen-container{
+  	width: 174px !important;
+  }
 </style>
 <body class="white-bg skin-<%=ServiceUtil.getThemeType(10)%>">
 <div class="container">
