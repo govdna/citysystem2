@@ -68,6 +68,7 @@
 				<input type="hidden" name="fatherId">
 				<input type="hidden" name="level">
 				<input type="hidden" name="modelType">
+				<input type="hidden" name="valueNo">
 			<div class="form-group son">
 				<label class="col-sm-3 control-label">字段名称：</label>
 				<div class="col-sm-7">
@@ -344,7 +345,7 @@ $('select[name="inputType"]').on('change', function(e, params) {
 //		$('.father').hide();
 	}
 	
-	function editRow(id,fatherId){
+	function editRow(id,fatherId){console.log("treeData",treeData);
 		if(fatherId==0){
 			openLayer();
 			for(var i=0;i<treeData.length;i++){

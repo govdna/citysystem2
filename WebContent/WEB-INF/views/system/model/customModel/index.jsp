@@ -74,7 +74,7 @@
           </div>
           
                     <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
-			 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&searchType=1\"),\"list_no\",\"asc\")%>">      
+			 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&searchType=2\"),\"list_no\",\"asc\")%>">      
               <c:choose>
               <c:when test="${obj.inputType==1}">
                 <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
@@ -449,6 +449,15 @@
 
 <%@include file="../../common/includeJS.jsp"%>
 <script>
+$('.dropdown-btn').on('click', function() {
+	$('.dropdown-menu1').toggleClass('dn');
+});
+$(".name1").chosen({
+	  disable_search_threshold: 10,
+	  no_results_text: "没有匹配到这条记录",
+	  width: "100%"
+	});
+
 var dicLayerContent = '#dic_form';
 var title_name="";
 var layerIndex;//layer 窗口对象
