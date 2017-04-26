@@ -26,49 +26,21 @@ cursor: pointer !important;
         <div id="toolbar">
           <div class="form-inline clearfix">
             <div class="form-group pull-left">
-               <input type="text" placeholder="输入数据表名称" name="tableN" class="form-control col-sm-8">
-              <div class="btn-group ml5">
-                <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
-                <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
-                  <span class="caret"></span>
-                </button>
-              </div>
+               <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovTable&searchType=1\"),\"list_no\",\"asc\")%>">      
+              	<%@include file="../common/searchBase.jsp"%>         
+              </c:forEach>
+              <div class="btn-group">
+               <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+               <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                 <span class="caret"></span>
+               </button>
+             </div>
             </div>
           </div>
             <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
-			    <li class="form-group clearfix">	
-				  <label class="pull-left">责任部门：</label>
-				  <div class="pull-left" style="width: 210px;">
-				  <select name="cId" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
-	                 <option value=""></option>
-	                 <option value="">&nbsp;</option>
-	                 <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
-	                 <c:if test="${roleid==1}">
-	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
-	                 <option value="${obj.id}">${obj.companyName}</option>
-	                 </c:forEach>
-	                 </c:if>
-	                 <c:if test="${roleid!=1}">
-	                 <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
-	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
-	                 <option value="${obj.id}">${obj.companyName}</option>
-	                 </c:forEach>
-	                 </c:if>
-                  </select>		
-				  </div>                
-				</li>
-			    <li class="form-group" style="margin-left: 10px;">				    	    
-				<label class="pull-left">所属数据库：</label>		
-				 <div class="pull-left" style="width: 200px;">  
-		        <select name="datab" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
-	                 <option value=""></option>
-	                 <option value="">&nbsp;</option>
-	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"GovDatabaseService\").find(ServiceUtil.buildBean(\"GovDatabase@isDeleted=0\"),\"id\",\"desc\") %>">
-	                 <option value="${obj.id}">${obj.value2}</option>
-	                 </c:forEach>
-                  </select>		
-		        </div>				
-			    </li>
+			    <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovTable&searchType=2\"),\"list_no\",\"asc\")%>">      
+            	  <%@include file="../common/searchBase.jsp"%>          
+              </c:forEach>
 			  </ul>
         </div>
         <table id="dicList">
@@ -333,10 +305,12 @@ $("select[name='cId']").on('change', function(e, params) {
       page : params.offset / params.limit + 1,
       sort:sort,
       order:order,
-      companyId:userCompanyId,
-      value2:$('input[name="tableN"]').val(),
-      value3:$('select[name="datab"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govTable/index\")==1}" >
+
+      <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovTable\"),\"list_no\",\"asc\")%>">  
+    	 <%@include file="../common/searchQueryParams.jsp"%>
+   	</c:forEach>
+      
+   	<c:if test="${MyFunction:getMaxScope(\"/backstage/govTable/index\")==1}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };
@@ -591,6 +565,7 @@ $(function () {
 	oTable3 = new TableInit3();
 	oTable3.Init();
     $('#infor_form').validate( {ignore: ""});
+    initChosen();
 });
 
 $('#infor_form').form({  

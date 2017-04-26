@@ -116,6 +116,33 @@
                 </select>
                  </div>
               </c:when>
+              <c:when test="${obj.inputType==12}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"GovDatabaseService\").find(ServiceUtil.buildBean(\"GovDatabase@isDeleted=0\"))%>">
+                    <option value="${obj2.id}">${obj2.value2}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+              </c:when>
+              <c:when test="${obj.inputType==13}">
+              <label class="control-label  pull-left">${obj.name}</label>
+              <div class=" pull-left" style="margin-left:10px;width:250px;">              
+                <select name="search_value${obj.valueNo}" data-placeholder=" "
+                  class="chosen-select">
+                  <option value=""></option>
+                   <option value="">&nbsp;</option>
+                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"GovTableService\").find(ServiceUtil.buildBean(\"GovTable@isDeleted=0\"))%>">
+                    <option value="${obj2.id}">${obj2.value2}</option>
+                  </c:forEach>
+                </select>
+                 </div>
+              </c:when>
+              
               
               <c:otherwise>
               </c:otherwise>

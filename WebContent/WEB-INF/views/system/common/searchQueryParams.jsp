@@ -29,7 +29,16 @@
     <c:when test="${obj.inputType==10&&obj.searchType!=null&&obj.searchType!=0}">
   		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
     </c:when>
-    <c:when test="${obj.inputType==115&&obj.searchType!=null&&obj.searchType!=0}">
+    <c:when test="${obj.inputType==11&&obj.searchType!=null&&obj.searchType!=0}">
+  		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+    </c:when>
+    <c:when test="${obj.inputType==12&&obj.searchType!=null&&obj.searchType!=0}">
+  		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+    </c:when>
+    <c:when test="${obj.inputType==13&&obj.searchType!=null&&obj.searchType!=0}">
+  		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
+    </c:when>
+    <c:when test="${obj.inputType==14&&obj.searchType!=null&&obj.searchType!=0}">
   		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
     </c:when>
     <c:otherwise></c:otherwise>

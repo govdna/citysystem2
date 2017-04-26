@@ -19,13 +19,15 @@
         <div id="toolbar">
           <div class="form-inline clearfix">
             <div class="form-group pull-left">
-              <input type="text" placeholder="输入数据库名称" name="dataBN" class="form-control col-sm-8">
-              <div class="btn-group ml5">
-                <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
-                <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
-                  <span class="caret"></span>
-                </button>
-              </div>
+              <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovDatabase&searchType=1\"),\"list_no\",\"asc\")%>">      
+              	<%@include file="../common/searchBase.jsp"%>         
+              </c:forEach>
+              <div class="btn-group">
+               <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+               <button type="button" class="btn btn-primary dropdown-toggle dropdown-btn">
+                 <span class="caret"></span>
+               </button>
+             </div>
             </div>
             <div class="form-group pull-left" style="margin-left: 5px;">
               <div class="text-center">
@@ -39,27 +41,9 @@
               </div>
             </div>  
 		   	   <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
-			    <li class="form-group clearfix">	
-				  <label class="pull-left">所属部门：</label>
-				  <div class="pull-left" style="width: 210px;">
-				  <select name="cId" data-placeholder=" " class="chosen-select" style="width:210px; display:inline-block;" tabindex="4" required>
-	                 <option value=""></option>
-	                 <option value="">&nbsp;</option>
-	                 <c:set var="roleid" value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
-	                 <c:if test="${roleid==1}">
-	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
-	                 <option value="${obj.id}">${obj.companyName}</option>
-	                 </c:forEach>
-	                 </c:if>
-	                 <c:if test="${roleid!=1}">
-	                 <c:set var="comid"  scope="session" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId() %>"/>
-	                 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0&id=\"+session.getAttribute(\"comid\")),\"id\",\"desc\") %>">
-	                 <option value="${obj.id}">${obj.companyName}</option>
-	                 </c:forEach>
-	                 </c:if>
-                  </select>		
-				  </div>                
-				</li>
+			    <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovDatabase&searchType=2\"),\"list_no\",\"asc\")%>">      
+            	  <%@include file="../common/searchBase.jsp"%>          
+              </c:forEach>
 			  </ul>
           </div>
         </div>
@@ -128,7 +112,11 @@ $("select[name='cId']").chosen({
     width: "100%"
 });
 <%@include file="../common/simpleFieldsColumnsCompany.jsp"%>
-  //得到查询的参数
+
+$(function() {
+	  initChosen();
+});
+
   var queryParams = function(params) {
 	var sort=params.sort;
 	var order=params.order;
@@ -141,8 +129,11 @@ $("select[name='cId']").chosen({
       page : params.offset / params.limit + 1,
       sort:sort,
       order:order,
-      value2:$('input[name="dataBN"]').val(),
-      companyId:$('select[name="cId"]').val(),
+
+      <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovDatabase\"),\"list_no\",\"asc\")%>">  
+    	 <%@include file="../common/searchQueryParams.jsp"%>
+   	</c:forEach>
+      
       <c:if test="${MyFunction:getMaxScope(\"/backstage/govDatabase/index\")==1}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
