@@ -18,9 +18,10 @@
     	    <label class="control-label  pull-left" style="line-height: 35px;margin-right:10px;">责任部门</label>
     	    <div class=" pull-left">
             <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
-            <c:forEach var="obj" items="<%=ServiceUtil.getService(\"CompanyService\").find(ServiceUtil.buildBean(\"Company@isDeleted=0\"),\"id\",\"desc\") %>">
-            <option value="${obj.id}">${obj.companyName}</option>
-            </c:forEach>                  
+            <option value=""></option>
+            <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"ZYTGF\") %>">
+                  <option value="${obj.dicKey}">${obj.dicValue}</option>
+                  </c:forEach>                  
           </select>
           </div>
 		 <div class="btn-group pull-left" style="margin-left: 10px;">
@@ -44,6 +45,9 @@
 		            </ul>
 		          </div>
 		        </div>
+		      </div>
+		      <div class="compare-group">
+		      
 		      </div>	    
 	    </div>
 
@@ -53,7 +57,9 @@
 </html>
 <%@include file="../common/includeJS.jsp"%>
 <script>
-var mid;
+var mid = '';
+var obj = $('.panel-container').clone(true);
+var obj2 = $('.panel-container').clone(true);	
 $("select[name='cId']").chosen({
 	  disable_search_threshold: 10,
 	  no_results_text: "没有匹配到这条记录",
@@ -63,4 +69,28 @@ $("select[name='cId']").chosen({
 $("select[name='cId']").on('change', function(e, params) {
 	  mid = params.selected;
 	});
+	function compare(){	
+		$.ajax({
+            type: "GET",
+            url: "${base}/backstage/echart/mCompare",
+            data: {mid:mid,cid:<%=request.getParameter("cid") %>},
+            dataType: "json",
+            success: function(data){
+            	console.log(mid);
+	            obj = objformat(obj,data[0]);	
+	    		$('.compare-group').html(obj);
+	    		obj2 = objformat(obj2,data[1]);
+	    		$('.compare-group').append(obj2);
+	         }
+        });
+	}
+	
+	function objformat(obj,arr){
+		obj.find('.panel-heading').html(arr.title);
+		obj.find('span').eq(0).html(arr.sp1);
+		obj.find('span').eq(1).html(arr.sp2);
+		obj.find('.text-right').eq(0).html(arr.p1);
+		obj.find('.text-right').eq(1).html(arr.p2);
+		return obj;
+	}
 </script>

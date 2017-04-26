@@ -8,26 +8,29 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.db.DbConfig;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.computer.GovComputerRoom;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.database.GovDatabase;
+import com.govmade.entity.system.dict.GovmadeDic;
 import com.govmade.entity.system.information.InformationRes;
 import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.information.SearchLog;
@@ -43,6 +46,9 @@ import com.govmade.service.system.information.SearchLogService;
 import com.govmade.service.system.organization.CompanyService;
 import com.govmade.service.system.server.GovServerService;
 import com.govmade.service.system.sort.SortManagerService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/backstage/echart/")
@@ -61,6 +67,8 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	private GovDatabaseService govDatabaseService;
 	@Autowired
 	private InformationResourceService informationResourceService;
+	@Autowired
+	private InformationResService informationResService;
 	@Autowired
 	private SearchLogService searchLogService;
 	@Autowired
@@ -1492,6 +1500,88 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	@RequestMapping(value="mubanCompare")
 	public String mubanCompare(Model model,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		return "/system/echart/mubanCompare";		
+	}
+	
+	@RequestMapping(value="mCompare")
+	public void mCompare(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		String cid = req.getParameter("cid");
+		String mid = req.getParameter("mid");
+		Map<String,String> dicCompany=new HashMap<String, String>();
+		List<GovmadeDic> dicc=ServiceUtil.getDicByDicNum("ZYTGF");
+		for(GovmadeDic d:dicc){
+			dicCompany.put(d.getDicKey(),d.getDicValue());
+		}
+		JSONArray artjson = new JSONArray();
+		DataElement mde = new DataElement();
+		DataElement de = new DataElement();
+		InformationResource ir = new InformationResource();
+		InformationRes mir = new InformationRes();
+		mde.setIsDeleted(0);
+		mde.setClassType(0);
+		mde.setValue8(mid);
+		de.setIsDeleted(0);
+		de.setValue8(cid);
+		de.setClassType(1);
+		ir.setIsDeleted(0);
+		mir.setIsDeleted(0);
+		mir.setValue2(mid);
+		ir.setStatus(0);
+		ir.setValue3(cid);
+		List<DataElement> mdeList = dataElementService.find(mde);
+		List<DataElement> deList = dataElementService.find(de);
+		List<InformationRes> mirList = informationResService.find(mir);
+		List<InformationResource> irList = informationResourceService.find(ir);
+		int mdeSize = mdeList.size();
+		int deSize = deList.size();
+		int mirSize = mirList.size();
+		int irSize = irList.size();
+		JSONObject marray = new JSONObject();
+		JSONObject comparray = new JSONObject();
+		marray.put("title", dicCompany.get(mid));
+		marray.put("sp1", mdeSize);
+		marray.put("sp2", mirSize);
+		marray.put("p1", "数据元模板数量：");
+		marray.put("p2", "信息资源模板数量：");
+		comparray.put("title", "资源对比");
+		comparray.put("p1", "数据元匹配度：");
+		comparray.put("p2", "信息资源匹配度：");
+		artjson.add(marray);
+		if(mdeSize>0&&deSize>0){
+			List<String> sameArrayList = new ArrayList<String>();
+			Set<String> tempSet = new HashSet<String>();
+			for(DataElement del:mdeList){
+				tempSet.add(del.getChName());
+			}
+			for(DataElement delg:deList) {
+				if(!tempSet.add(delg.getValue1())) {
+				sameArrayList.add(delg.getValue1());
+				}				
+			}
+			comparray.put("sp1",sameArrayList.size()*100/deSize+"%");
+		}else{
+			comparray.put("sp1",0);
+		}
+		if(mirSize>0&&irSize>0){
+			List<String> sameArrayList = new ArrayList<String>();
+			Set<String> tempSet = new HashSet<String>();
+			for(InformationRes del:mirList){
+				tempSet.add(del.getValue1());
+			}
+			for(InformationResource delg:irList) {
+				if(!tempSet.add(delg.getValue1())) {
+				sameArrayList.add(delg.getValue1());
+				}				
+			}
+			comparray.put("sp2",sameArrayList.size()*100/irSize+"%");
+		}else{
+			comparray.put("sp2",0);
+		}
+		artjson.add(comparray);
+		res.getWriter().write(artjson.toString());
+		res.getWriter().flush();
+		res.getWriter().close();		
 	}
 	
 }
