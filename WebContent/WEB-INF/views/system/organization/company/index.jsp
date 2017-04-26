@@ -62,6 +62,18 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="col-sm-3 control-label">经度：</label>
+        <div class="col-sm-7">
+          <input type="text" name="lng" class="form-control" >
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label">纬度：</label>
+        <div class="col-sm-7">
+          <input type="text" name="lat" class="form-control" >
+        </div>
+      </div>
+      <div class="form-group">
         <label class="col-sm-3 control-label">所属城市：</label>
         <div class="col-sm-7">
           <select name="cityId" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>

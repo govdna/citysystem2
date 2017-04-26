@@ -3,7 +3,7 @@
 <mapper namespace="com.govmade.repository.system.organization.CompanyDAO">
 	<resultMap id="base" type="Company"></resultMap>
 	<select id="find" resultMap="base" parameterType="Company">
-		SELECT id,time_create timeCreate,time_modified timeModified,isDeleted,company_number companyNumber,company_name companyName,company_code companyCode,address,city_id cityId FROM gov_company t WHERE 1=1
+		SELECT id,lng,lat,time_create timeCreate,time_modified timeModified,isDeleted,company_number companyNumber,company_name companyName,company_code companyCode,address,city_id cityId FROM gov_company t WHERE 1=1
 		<if test="param.id != null">
 			and t.id=#{param.id} 
 		</if>
@@ -46,7 +46,7 @@
 	</select>
 	
 	<select id="findByPage" resultMap="base">
-		SELECT id,time_create timeCreate,time_modified timeModified,isDeleted,company_number companyNumber,company_name companyName,company_code companyCode,address,city_id cityId FROM gov_company t WHERE 1=1
+		SELECT id,lng,lat,time_create timeCreate,time_modified timeModified,isDeleted,company_number companyNumber,company_name companyName,company_code companyCode,address,city_id cityId FROM gov_company t WHERE 1=1
 		<if test="param.id != null">
 			and t.id=#{param.id} 
 		</if>
@@ -94,8 +94,8 @@
     </selectKey>  
  	
  	<![CDATA[
-	INSERT INTO gov_company(time_create,time_modified,isDeleted,company_number,company_name,company_code,address,city_id) 
-	VALUES (#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyNumber,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR},#{companyCode,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{cityId,jdbcType=NUMERIC})
+	INSERT INTO gov_company(lng,lat,time_create,time_modified,isDeleted,company_number,company_name,company_code,address,city_id) 
+	VALUES (#{lng,jdbcType=VARCHAR},#{lat,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyNumber,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR},#{companyCode,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{cityId,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="Company">
@@ -134,6 +134,8 @@
 		company_name=#{companyName,jdbcType=VARCHAR},
 		company_code=#{companyCode,jdbcType=VARCHAR},
 		address=#{address,jdbcType=VARCHAR},
+		lng=#{lng,jdbcType=VARCHAR},
+		lat=#{lat,jdbcType=VARCHAR},
 		city_id=#{cityId,jdbcType=NUMERIC}
 	WHERE id=#{id,jdbcType=NUMERIC}
 	</update>
