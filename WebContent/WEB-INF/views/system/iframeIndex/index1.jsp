@@ -147,8 +147,10 @@ h3 {font-size: 16px; font-weight: 600;}
 </html>
 <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
+<script src="${base}/static/js/echartsSkin.js"></script>
 <script>
 $(function() {
+var color = echartSkin.colorIndex;
 var myChart2 = echarts.init(document.getElementById('main2'));
 var labelTop = {
       normal : {
@@ -234,7 +236,7 @@ $.getJSON('${base}/backstage/echart/systree?companyId=<%=AccountShiroUtil.getCur
 			            symbolSize: 10,
 			            itemStyle: {
 			                normal: {
-			                    color: '#4883b4',
+			                    color: color[0],
 			                    label: {
 			                        show: true,
 			                        position: 'right',

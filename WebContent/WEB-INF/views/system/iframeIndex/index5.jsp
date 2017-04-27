@@ -69,18 +69,22 @@
 	    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
 	    var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
 	    map.openInfoWindow(infoWindow,point); //开启信息窗口
-	  }
+	  } 
 	  var infos = [
+
 	     <c:forEach var="obj" items="<%=ServiceUtil.getCompanyCountList()%>">
 	     [${obj.lng}, ${obj.lat}, {name: '${obj.companyName}', dataElement: ${obj.companyId}, informationResource: ${obj.groupId}}],
 	   	    
 	     </c:forEach>
      	  ];
+
 	  var data_info = [];
 	  
 	  $.each(infos, function(index, value) {
   	  var info = [];
-      var data =  value[2].name + '<br>' + '数据元数量:' + value[2].dataElement + '<br>' + '信息资源数量:' + value[2].informationResource
+
+      var data = '<h4>'+ value[2].name+'</h4>'+ '数据元数量 :　' + value[2].dataElement + '<br>' + '信息资源数量 :　' + value[2].informationResource ;
+
   		info.push(value[0],value[1], data);
 		  data_info.push(info);
 	  });
