@@ -450,7 +450,9 @@
 		<if test="param.companyId != null ">
 			and (t.company_id = #{param.companyId} or t.value8= #{param.companyId})
 		</if>
-		
+		<if  test="param.value8 !=null and param.value8 != ''">
+			and t.value8=#{param.value8}
+		</if>
 		
 		<choose>
 			<when  test="param.status==99">

@@ -86,7 +86,7 @@
 			</otherwise>
 		</choose>
       <if test="param.chName != null and param.chName != ''">
-			and c.value1 like #{param.chName}
+			and c.value1 like '%${param.chName}%'
 	  </if>
       
       <if test="param.objectType !=null ">

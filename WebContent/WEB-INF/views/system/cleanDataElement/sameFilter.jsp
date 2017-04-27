@@ -544,6 +544,7 @@ function sort(t){
 initList();
 
 function initList(){
+	$('#content').html('<div style="padding:10px;">加载中......</div>');
 jQuery.post('${base}/backstage/cleanDataElement/sameFilterAjax',{name:$('input[name="keyword"]').val(),order:order},function(result){
 	if(result.code && result.code==1){
 		var html='';

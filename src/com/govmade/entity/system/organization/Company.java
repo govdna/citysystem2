@@ -29,6 +29,8 @@ public class Company extends IdBaseEntity{
 	private String companyCode;//机构代码
 	private String address;//地址
 	private Integer cityId;//所属城市
+	private String lng;//经度
+	private String lat;//纬度
 	public String getCompanyNumber() {
 		return companyNumber;
 	}
@@ -58,6 +60,18 @@ public class Company extends IdBaseEntity{
 	}
 	public void setCityId(Integer cityId) {
 		this.cityId = cityId;
+	}
+	public String getLng() {
+		return lng;
+	}
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
+	public String getLat() {
+		return lat;
+	}
+	public void setLat(String lat) {
+		this.lat = lat;
 	}
 	
 
