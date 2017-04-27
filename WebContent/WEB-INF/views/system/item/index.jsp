@@ -229,9 +229,6 @@ background:#18a689;
   <!-- 导出数据开始 -->
   <div id="download_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="downloadForm">
-  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
-       		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
-       </c:if>
        <div class="alert alert-info">
             如导出数据量大，下载请耐心等待！
         </div>
@@ -248,6 +245,10 @@ background:#18a689;
         <input type="checkbox" name="xlsFields" value="yesorno"/> 是否有应用系统支撑
         <input type="checkbox" name="xlsFields" value="busSystem"/> 业务应用系统名称
         <input type="checkbox" name="xlsFields" value="applicationMaterial"/> 申请材料
+        
+        <input type="hidden" name="itemName" id="itemNameExl">
+        <input type="hidden" name="companyId" id="companyIdExl">
+        <input type="hidden" name="serContent" id="serContentExl">
     </form>
   </div>
   <!-- 导出数据结束 -->
@@ -621,6 +622,11 @@ function downloadData(){
 	    offset: '100px',
 	    btn: ['导出', '关闭'],
 	    yes: function(index, layero) {
+	    	$('#itemNameExl').val($('input[name="itemN"]').val());
+	    	$('#companyIdExl').val($('select[name="cId"]').val());
+	    	$('#serContentExl').val($('select[name="serC"]').val());
+	    	
+	    	
 	    	 $('#downloadForm').submit();
 	    	 layer.close(layerIndex);
 	    },

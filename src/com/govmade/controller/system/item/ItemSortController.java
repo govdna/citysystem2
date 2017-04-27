@@ -414,7 +414,7 @@ public class ItemSortController extends GovmadeBaseController<ItemSort>{
 	public ResponseEntity<byte[]> downloadData(ItemSort de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
 		de.setIsDeleted(0);
-		ItemSort2ExcelAdapter adapter = new ItemSort2ExcelAdapter(service.find(de), xlsFields,
+		ItemSort2ExcelAdapter adapter = new ItemSort2ExcelAdapter(service.findByPage(de,null,null), xlsFields,
 				getExcelHandlers());
 		Object2ExcelUtil util = new Object2ExcelUtil(adapter);
 		String path = req.getSession().getServletContext().getRealPath("upload/excel");
