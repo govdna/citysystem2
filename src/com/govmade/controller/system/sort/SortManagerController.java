@@ -429,7 +429,7 @@ public class SortManagerController extends GovmadeBaseController<SortManager> {
 						if (upsort3.getType() == 1) {
 							upsort3.setIsDeleted(1);
 							System.out.println("upsort3的Type=" + upsort3.getType());
-						} else if (upsort3.getType() == 1) {
+						} else if (upsort3.getType() == 3) {
 							upsort3.setIsDeleted(0);
 							upsort3.setBelong(1);
 						}
@@ -448,7 +448,7 @@ public class SortManagerController extends GovmadeBaseController<SortManager> {
 								if (upsort4.getType() == 1) {
 									upsort4.setIsDeleted(1);
 									System.out.println("upsort4的Type=" + upsort4.getType());
-								} else if (upsort4.getType() == 1) {
+								} else if (upsort4.getType() == 3) {
 									upsort4.setIsDeleted(0);
 									upsort4.setBelong(1);
 								}
@@ -468,11 +468,12 @@ public class SortManagerController extends GovmadeBaseController<SortManager> {
 				sort11.setIsDeleted(1);
 			} else if (sort11.getType() == 3) {
 				sort11.setBelong(1);
+				sort11.setIsDeleted(0);
 			}
 			service.update(sort11);
 		}
-		System.out.println("sort11的Type=" + sort.getType());
-		service.update(sort1);
+		System.out.println("sort11的Type=" + sort11.getType());
+	//	service.update(sort1);
 
 	}
 

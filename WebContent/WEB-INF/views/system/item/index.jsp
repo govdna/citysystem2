@@ -36,6 +36,7 @@ background:#18a689;
               </c:if>
               <c:if test="<%=!ServiceUtil.haveImp(\"/backstage/itemSort/index\") %>">
                 <a data-toggle="modal" class="btn btn-primary" onclick="importFromExcel();" href="#">Excel导入</a>
+                <a data-toggle="modal" class="btn btn-primary" onclick="downloadData();" href="#">导出数据</a>
               </c:if>
               </div>
             </div>  
@@ -224,6 +225,34 @@ background:#18a689;
     </form>
   </div>
   <!-- excel导入结束 -->
+  
+  <!-- 导出数据开始 -->
+  <div id="download_div" style="display: none;" class="ibox-content">
+    <form method="post" class="form-horizontal" id="downloadForm">
+       <div class="alert alert-info">
+            如导出数据量大，下载请耐心等待！
+        </div>
+        <input type="checkbox" name="xlsFields" value="itemName"/>  事项名称
+        <input type="checkbox" name="xlsFields" value="serObjSort"/> 服务对象分类
+        <input type="checkbox" name="xlsFields" value="serContent"/> 服务内容
+        <input type="checkbox" name="xlsFields" value="preApprovalMatter"/> 前置审批事项
+        <input type="checkbox" name="xlsFields" value="deadline"/>  时限
+        <input type="checkbox" name="xlsFields" value="companyId"/> 责任部门
+        <input type="checkbox" name="xlsFields" value="certificateName"/> 所需证件名称
+        <br>
+        <input type="checkbox" name="xlsFields" value="fileType"/> 办件结果文件类型
+        <input type="checkbox" name="xlsFields" value="fileName"/>  办件结果文件名称
+        <input type="checkbox" name="xlsFields" value="yesorno"/> 是否有应用系统支撑
+        <input type="checkbox" name="xlsFields" value="busSystem"/> 业务应用系统名称
+        <input type="checkbox" name="xlsFields" value="applicationMaterial"/> 申请材料
+        
+        <input type="hidden" name="itemName" id="itemNameExl">
+        <input type="hidden" name="companyId" id="companyIdExl">
+        <input type="hidden" name="serContent" id="serContentExl">
+    </form>
+  </div>
+  <!-- 导出数据结束 -->
+  
 </body>
 </html>
 
@@ -577,5 +606,31 @@ function doFormatter(value, row, index)
 function doWithDetail(id,data){
 	$('.aml').remove();	//
 	amDetail(data.id);//
+}
+
+$('#downloadForm').form({  
+    url: url+'downloadData',  
+    success: function(result){ 
+    }
+});
+function downloadData(){
+	  //$('#downloadForm').form('clear');
+	  layerIndex=layer.open({
+	    type: 1,
+	    area: ['60%', '400px'], //宽高
+	    title: '选择导出字段',
+	    offset: '100px',
+	    btn: ['导出', '关闭'],
+	    yes: function(index, layero) {
+	    	$('#itemNameExl').val($('input[name="itemN"]').val());
+	    	$('#companyIdExl').val($('select[name="cId"]').val());
+	    	$('#serContentExl').val($('select[name="serC"]').val());
+	    	
+	    	
+	    	 $('#downloadForm').submit();
+	    	 layer.close(layerIndex);
+	    },
+	    content: $('#download_div') //这里content是一个DOM
+	  });
 }
 </script>

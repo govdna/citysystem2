@@ -129,14 +129,16 @@ h3 {font-size: 16px; font-weight: 600;}
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
 <script src="${base}/static/js/bootstrap-select/js/bootstrap-select.min.js"></script>
 <script src="${base}/static/js/bootstrap-select/js/i18n/defaults-zh_CN.min.js"></script>
+<script src="${base}/static/js/echartsSkin.js"></script>
 <script>
+	var color = echartSkin.colorIndex;
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));  
   var myChart3 = echarts.init(document.getElementById('main3'));
 	var option1,option2,option3;
 	$.getJSON('${base}/backstage/echart/dataInfor', function(data){
 		var option = {
-			    
+			    color: color,
 			    tooltip : {
 			        trigger: 'axis'
 			    },
@@ -191,22 +193,20 @@ h3 {font-size: 16px; font-weight: 600;}
    		myChart1.setOption(option);
     });
 	$.getJSON('${base}/backstage/echart/hotData', function(data){
-		function createRandomItemStyle() {
+		function createRandomItemStyle(i) {
 		    return {
 		        normal: {
-		            color: 'rgb(' + [
-		                Math.round(Math.random() * 160),
-		                Math.round(Math.random() * 160),
-		                Math.round(Math.random() * 160)
-		            ].join(',') + ')'
+		            color: color[i]
 		        }
 		    };
 		}
+		var colorLength = color.length;
 		for(var i=0,l=data.length;i<l;i++){
-			data[i].itemStyle=createRandomItemStyle();
+			var j = i === 0 ? 0 : i % colorLength;
+			data[i].itemStyle=createRandomItemStyle(j);
 		}
 		option3 = {
-		    
+		    color:color,
 		    tooltip: {
 		        show: true
 		    },
@@ -226,20 +226,19 @@ h3 {font-size: 16px; font-weight: 600;}
           myChart3.setOption(option3);        
     });
 	$.getJSON('${base}/backstage/echart/hotres', function(data){
-		function createRandomItemStyle() {
+		function createRandomItemStyle(i) {
 		    return {
 		        normal: {
-		            color: 'rgb(' + [
-		                Math.round(Math.random() * 160),
-		                Math.round(Math.random() * 160),
-		                Math.round(Math.random() * 160)
-		            ].join(',') + ')'
+		            color: color[i]
 		        }
 		    };
 		}
+		var colorLength = color.length;
+	
 		var datar = [];		
 		for(var i=0,l=data.legend.length;i<l;i++){
-			var obj = {itemStyle: createRandomItemStyle()};
+			var j = i === 0 ? 0 : i % colorLength;
+			var obj = {itemStyle: createRandomItemStyle(j)};
 			obj.name=data.legend[i];
 			obj.value=data.data[i];
 			datar.push(obj);
@@ -373,6 +372,7 @@ h3 {font-size: 16px; font-weight: 600;}
 		series.push(unit);
 		}
 	  option.series = series;
+	  option.color = color;
 	  var myChart4 = echarts.init(document.getElementById('main4'));
 		myChart4.setOption(option);
 		});

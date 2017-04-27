@@ -144,12 +144,11 @@
 		SET isDeleted=1
 		WHERE id=#{id} 
 	</update>
-		<update id="delete1" parameterType="SortManager">
+	<update id="delete1" parameterType="SortManager">
 		UPDATE gov_sort_manager
-		SET isDeleted=0,
-		belong=1
+		SET belong=1
 		WHERE id=#{id} 
-	</update>
+	</update> 
 	<update id="deleteBatch" parameterType="java.util.List">
 		UPDATE gov_sort_manager
 		SET isDeleted=1

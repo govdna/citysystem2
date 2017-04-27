@@ -120,8 +120,9 @@ h3 {font-size: 16px; font-weight: 600;}
 </html>
 <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
+<script src="${base}/static/js/echartsSkin.js"></script>
 <script>
-
+var color = echartSkin.colorIndex;
 
 var myChart1 = echarts.init(document.getElementById('main1'));
 var myChart2 = echarts.init(document.getElementById('main2'));
@@ -151,7 +152,8 @@ var option1 = {
             splitNumber:10,
             axisLine: {            // 坐标轴线
                 lineStyle: {       // 属性lineStyle控制线条样式
-                    width: 10
+                    width: 10,
+                    color: [[0.2, color[0]],[0.8, color[2]],[1, color[1]]]
                 }
             },
             axisTick: {            // 坐标轴小标记
@@ -190,7 +192,8 @@ var option1 = {
             splitNumber:10,
             axisLine: {            // 坐标轴线
                 lineStyle: {       // 属性lineStyle控制线条样式
-                    width: 8
+                    width: 8,
+                    color: [[0.2, color[0]],[0.8, color[2]],[1, color[1]]]
                 }
             },
             axisTick: {            // 坐标轴小标记
@@ -228,7 +231,8 @@ var option1 = {
             splitNumber:10,
             axisLine: {            // 坐标轴线
                 lineStyle: {       // 属性lineStyle控制线条样式
-                    width: 8
+                    width: 8,
+                    color: [[0.2, color[0]],[0.8, color[2]],[1, color[1]]]
                 }
             },
             axisTick: {            // 坐标轴小标记
@@ -307,6 +311,7 @@ myChart1.setOption(option1);
 //mychart2
 $.getJSON('${base}/backstage/dataElement/echarts?classType=0', function (data) {
   var option2 = {
+    color: color,
     tooltip: {
       trigger: 'item',
       formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -374,6 +379,7 @@ $.getJSON('${base}/backstage/information/res/basicEcharts', function (data) {
 		legend.push(data[i].name);
 	} 
     var option3 = {
+      color: color,
       legend: {
         x : 'center',
         y : '10',
@@ -416,20 +422,19 @@ $.getJSON('${base}/backstage/information/res/basicEcharts', function (data) {
 
 //myChart4
 $.getJSON('${base}/backstage/echart/muban', function (data) {
-	function createRandomItemStyle() {
+	function createRandomItemStyle(i) {
 	    return {
 	        normal: {
-	            color: 'rgb(' + [
-	                Math.round(Math.random() * 160),
-	                Math.round(Math.random() * 160),
-	                Math.round(Math.random() * 160)
-	            ].join(',') + ')'
+	            color: color[i]
 	        }
 	    };
 	}
+	var colorLength = color.length;
+	
 	var datar = [];
 	for(var i=0,l=data.length;i<l;i++){
-		var obj = {itemStyle: createRandomItemStyle()};
+		var j = i === 0 ? 0 : i % colorLength;
+		var obj = {itemStyle: createRandomItemStyle(j)};
 		obj.name=data[i].name;
 		obj.value=data[i].count;
 		datar.push(obj);
@@ -465,6 +470,7 @@ $.getJSON('${base}/backstage/echart/mrank', function (data) {
 		ddata.push(parseInt(data[i].dcount));
 	}
 	option = {
+    color: color,
 	  		tooltip : {
 	        trigger: 'axis'
 	    },

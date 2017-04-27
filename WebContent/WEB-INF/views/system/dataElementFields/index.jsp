@@ -84,7 +84,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">搜索框类型：</label>
         <div class="col-sm-7">
-          <select name="searchType" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" >
+          <select name="searchType" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
             <option value=""></option>
             <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"SEARCHTYPE\") %>">
             <option value="${obj.dicKey}">${obj.dicValue}</option>
@@ -132,9 +132,21 @@ var columns = [{
 },{
   field: 'id',
   title: '操作',
-  formatter: 'doFormatter', //对本列数据做格式化
+  formatter: 'doFormatterL', //对本列数据做格式化
 }];
-//得到查询的参数
+
+function doFormatterL(value, row, index){
+	var html='';
+	html+='<div class="btn-group">';
+	html+='<button type="button" class="btn btn-white" onclick="datailRow(\''+row.idForShow+'\')"><i class="fa fa-info-circle"></i>&nbsp;详情</button>';
+	html+='<button type="button" class="btn btn-white" id="edit"  onclick="editRow(\''+row.idForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;修改</button>';
+	if(row.valueNo>9){
+		html+='<button type="button" class="btn btn-white" onclick="deleteRow(\''+row.idForShow+'\')"><i class="fa fa-trash"></i>&nbsp;删除</button>';	
+	}	
+	html+='</div>';
+	return html;
+}
+
 var queryParams = function(params) {
 
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
