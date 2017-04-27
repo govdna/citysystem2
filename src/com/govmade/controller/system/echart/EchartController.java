@@ -1113,26 +1113,69 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	public void muban(InformationRes o,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
-		JSONArray unitArray = new JSONArray();
-		SortManager sm = new SortManager();
-		sm.setIsDeleted(0);
-		sm.setLevel(2);
-		sm.setType(3);
-		o.setIsDeleted(0);
-		List<SortManager> smsList = sortManagerService.find(sm);
-		if(smsList.size()>0){
-			JSONObject unitJson = new JSONObject();
-			for(SortManager smsms : smsList){
-				unitJson.put("name", smsms.getSortName());
-				o.setInforTypes2(smsms.getId());
-				unitJson.put("count", inforService.count(o));
-				unitArray.add(unitJson);
-			}					
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName(driver);
+			conn = (Connection) DriverManager.getConnection(dburl,user, pwd);	
+			stmt = (Statement) conn.createStatement();				
+			//注入sql语句
+			String sql ="SELECT\n" +
+					"	*\n" +
+					"FROM\n" +
+					"	(\n" +
+					"		SELECT\n" +
+					"			*\n" +
+					"		FROM\n" +
+					"			(\n" +
+					"				SELECT\n" +
+					"					COUNT (T . ID) SECONDCOUNTS,\n" +
+					"					S.SORT_NAME\n" +
+					"				FROM\n" +
+					"					gov_information_resource T,\n" +
+					"					GOV_SORT_MANAGER S\n" +
+					"				WHERE\n" +
+					"					S. ID = T .INFORTYPES2\n" +
+					"				AND T .isDeleted = 0\n" +
+					"				GROUP BY\n" +
+					"					T .inforTypes2,\n" +
+					"					S.SORT_NAME\n" +
+					"				UNION\n" +
+					"					SELECT\n" +
+					"						COUNT (T . ID) SECONDCOUNTS,\n" +
+					"						S.SORT_NAME\n" +
+					"					FROM\n" +
+					"						gov_information_resource T,\n" +
+					"						GOV_SORT_MANAGER S\n" +
+					"					WHERE\n" +
+					"						S. ID = T .INFORTYPES3\n" +
+					"					AND T .isDeleted = 0\n" +
+					"					GROUP BY\n" +
+					"						T .inforTypes3,\n" +
+					"						S.SORT_NAME\n" +
+					"			)\n" +
+					"		ORDER BY\n" +
+					"			SECONDCOUNTS DESC\n" +
+					"	)\n" +
+					"WHERE\n" +
+					"	ROWNUM < 16";
+			ResultSet rs = stmt.executeQuery(sql);
+			JSONObject json = new JSONObject();
+			JSONArray jsa = new JSONArray();
+			while (rs.next()) {	
+				json.put("name", rs.getString(2));
+				json.put("count", rs.getString(1));
+				jsa.add(json);
+			}
+			res.getWriter().write(jsa.toString());
+			res.getWriter().flush();
+			res.getWriter().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			stmt.close();
+			conn.close();
 		}
-		sort(unitArray, "count", false);
-		res.getWriter().write(unitArray.toString());
-		res.getWriter().flush();
-		res.getWriter().close();
 	}
 	@RequestMapping(value="mrank")
 	public void mrank(HttpServletRequest req, HttpServletResponse res) throws Exception {

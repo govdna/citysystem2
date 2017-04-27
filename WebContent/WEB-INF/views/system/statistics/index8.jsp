@@ -23,9 +23,17 @@ padding: 3px 5px 3px 5px !important;
     <div class="ibox float-e-margins">
       <div class="ibox-content">
         <div id="toolbar">
-        </div>
-        <table id="dicList">
-        </table>
+	        <div class="form-inline clearfix">
+	          <div class="form-group pull-left">
+	            <input type="text" placeholder="请输入中文名称" name="search_value1" class="form-control">
+	            <div class="btn-group">
+	               <button type="button" class="btn btn-primary" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
+	            </div>
+	          </div>
+	        </div>
+	    </div>
+	    <table id="dicList">
+	    </table>
       </div>
     </div>
   </div>
@@ -79,6 +87,7 @@ var queryParams = function(params) {
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
+    value1: $('input[name="search_value1"]').val()
   };
   return temp;
 };
