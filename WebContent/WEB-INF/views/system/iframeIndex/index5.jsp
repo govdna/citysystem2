@@ -69,16 +69,16 @@
 	    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
 	    var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
 	    map.openInfoWindow(infoWindow,point); //开启信息窗口
-	  }
+	  } 
 	  var infos = [
      	[110.331579, 20.032531, {name: '', dataElement: 0, informationResource: 0}],
-   	    [110.501867, 19.714821, {name: '', dataElement: 0, informationResource: 0}]
+   	  [110.501867, 19.714821, {name: '', dataElement: 0, informationResource: 0}]
    	  ];
 	  var data_info = [];
 	  
 	  $.each(infos, function(index, value) {
   	  var info = [];
-      var data = '部门名称:' + value[2].name + '<br>' + '数据元数量:' + value[2].dataElement + '<br>' + '信息资源数量:' + value[2].informationResource
+      var data = '部门名称: ' + value[2].name + '<br>' + '数据元数量: ' + value[2].dataElement + '<br>' + '信息资源数量: ' + value[2].informationResource
   		info.push(value[0],value[1], data);
 		  data_info.push(info);
 	  });

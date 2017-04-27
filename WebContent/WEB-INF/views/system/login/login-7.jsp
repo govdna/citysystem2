@@ -13,7 +13,7 @@
 
 <link rel="shortcut icon" href="${base}/favicon.ico">
 <link href="${base}/static/fonts/Font-Awesome/css/font-awesome.min.css" rel="stylesheet">
- <link href="${base}/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="${base}/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 <!--[if lte IE 8]><script>window.location.href='http://cdn.dmeng.net/upgrade-your-browser.html?referrer='+location.href;</script><![endif]-->
 
 <style>
