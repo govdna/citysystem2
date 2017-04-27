@@ -29,6 +29,10 @@ public class GovTableFieldServiceImp extends GovmadeBaseServiceImp<GovTableField
 			insert(gf);
 		}
 	}
+	@Override
+	public List<GovTableField> findByGovTable(List<GovTable> list) {
+		return govTableField.findByGovTable(list);
+	}
 
 }
 

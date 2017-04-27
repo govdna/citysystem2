@@ -348,10 +348,12 @@ var scrollTop;
           html+='<button type="button" class="btn btn-white" onclick="addSon(\''+rowObject.idForShow+'\')"><i class="fa fa-plus"></i>&nbsp;添加子级</button>';
           </c:if>
           <c:if test="<%=!ServiceUtil.haveEdit(\"/backstage/sortManager/index?type=1\") %>">
-          html+='<button type="button" class="btn btn-white" onclick="editRow(\''+rowObject.idForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;修改</button>';
+          if(rowObject.type!=3){
+        	 html+='<button type="button" class="btn btn-white" onclick="editRow(\''+rowObject.idForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;修改</button>';
+          }
           </c:if>
           <c:if test="<%=!ServiceUtil.haveDel(\"/backstage/sortManager/index?type=1\") %>">
-          if(rowObject.id!=1&&rowObject.id!=2){
+          if(rowObject.id!=1&&rowObject.id!=2&&rowObject.type!=3){
           html+='<button type="button" class="btn btn-white" onclick="deleteRow(\''+rowObject.idForShow+'\')"><i class="fa fa-trash"></i>&nbsp;删除</button>';
           }
           </c:if>

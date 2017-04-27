@@ -38,6 +38,8 @@
                 <a data-toggle="modal" class="btn btn-primary" onclick="importFromExcel();" href="#">Excel导入</a>
                 </c:if>
                 <a data-toggle="modal" class="btn btn-primary" href="${base}/backstage/sql/index">数据库连接</a>
+                <a data-toggle="modal" class="btn btn-primary" onclick="downloadData();" href="#">导出数据</a>
+                
               </div>
             </div>  
 		   	   <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
@@ -84,6 +86,38 @@
     </form>
   </div>
   <!-- excel导入结束 -->
+  
+  
+  
+  
+<!-- 导出数据开始 -->
+  <div id="download_div" style="display: none;" class="ibox-content">
+    <form method="post" class="form-horizontal" id="downloadForm">
+  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
+       		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
+       </c:if>
+       <div class="alert alert-info">
+            如导出数据量大，下载请耐心等待！
+        </div>
+          数据库字段：<br/>
+       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovDatabase\"),\"list_no\",\"asc\")%>">
+      	<input type="checkbox" name="dbFields" value="value${obj.valueNo}"/> ${obj.name}
+       </c:forEach>
+       <br/>
+       <br/>
+       数据表字段：<br/>
+       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovTable\"),\"list_no\",\"asc\")%>">
+       	<input type="checkbox" name="tbFields" value="value${obj.valueNo}"/> ${obj.name}
+       </c:forEach>
+        <br/>
+       <br/>
+          表字段字段：<br/>
+       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovTableField\"),\"list_no\",\"asc\")%>">
+       	<input type="checkbox" name="fdFields" value="value${obj.valueNo}"/> ${obj.name}
+       </c:forEach>
+    </form>
+  </div>
+  <!-- 导出数据结束 -->
   
 </body>
 </html>
@@ -263,5 +297,39 @@ function doFormatter(value, row, index)
 	</c:if>
 	html+='</div>';
 	return html;
+}
+
+
+
+$('#downloadForm').form({  
+    url: url+'downloadData',  
+    success: function(result){ 
+    	 
+    },
+    onSubmit: function(param){
+		var qp=queryParams(param);
+		 for(var p in qp){
+			 if(p!='rows'&&p!='page'){
+				 param[p]=qp[p];
+			 }
+	     }
+    }
+});
+
+
+function downloadData(){
+	  //$('#downloadForm').form('clear');
+	  layerIndex=layer.open({
+	    type: 1,
+	    area: ['60%', '400px'], //宽高
+	    title: '选择导出字段',
+	    offset: '100px',
+	    btn: ['导出', '关闭'],
+	    yes: function(index, layero) {
+	    	 $('#downloadForm').submit();
+	    	 layer.close(layerIndex);
+	    },
+	    content: $('#download_div') //这里content是一个DOM
+	  });
 }
 </script>

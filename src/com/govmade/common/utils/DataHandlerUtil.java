@@ -106,7 +106,9 @@ public class DataHandlerUtil {
 	}
 
 	
-	
+	public static Map<String, DataHandler> buildSimpleFieldsDataHandlers(Map<String, DataHandler> map,Class c) {
+		return buildSimpleFieldsDataHandlers(map,c,false);
+	}
 	/** 
 	* @Title: getDataHandlers 
 	* @Description: TODO(自定义字段生成DataHandlers) 
@@ -115,13 +117,13 @@ public class DataHandlerUtil {
 	* @return Map<String,DataHandler>    返回类型 
 	* 2017年3月1日    日期   
 	*/ 
-	public static Map<String, DataHandler> buildSimpleFieldsDataHandlers(Map<String, DataHandler> map,Class c) {
+	public static Map<String, DataHandler> buildSimpleFieldsDataHandlers(Map<String, DataHandler> map,Class c,boolean isShowAll) {
 		String className=c.getSimpleName();
 		SimpleFields sp=new SimpleFields();
 		sp.setClassName(className);
 		List<SimpleFields> list=getService().find(sp);
 		for(final SimpleFields sf:list){
-			if(sf.getIsShow()!=null&&sf.getIsShow().intValue()==1){
+			if(isShowAll||(sf.getIsShow()!=null&&sf.getIsShow().intValue()==1)){
 				map.put("value"+sf.getValueNo(), new DataHandler() {
 					
 					@Override
@@ -179,7 +181,7 @@ public class DataHandlerUtil {
 								return ls.get(0).getValue1();
 							}
 						}
-						return null;
+						return obj;
 					}
 				});
 			}

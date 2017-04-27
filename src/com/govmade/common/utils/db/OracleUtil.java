@@ -15,10 +15,23 @@ public class OracleUtil {
 		// readFileByLines("D://dc.sql");
 		// System.out.println(mysql2Oracle("'3','0',NULL,'2016-11-08
 		// 15:53:36','2016-12-15 19:44:11','0');"));
-		 System.out.println(getSequence(new String[]{"GOV_API_ACCOUNT"}));
+		 //System.out.println(getSequence(new String[]{"GOV_API_ACCOUNT"}));
 		// alterTable("GOV_COMPUTER_ROOM");
 		//value1_50xml();
+		 whereStr();
 	}
+	
+
+	// 添加value1-50列sql语句
+	public static void whereStr() {
+		for (int i = 1; i <= 50; i++) {
+			System.out.println("<if test=\"param.value"+i+" != null and param.value"+i+" !=''\"> and");
+			System.out.println("value"+i+" = #{param.value"+i+",jdbcType=VARCHAR}");
+			System.out.println("</if>");
+		}
+		
+	}
+	
 
 	// 添加value1-50列sql语句
 	public static void alterTable(String table) {

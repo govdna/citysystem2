@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.repository.system.table.GovTableDAO;
 import com.govmade.service.base.GovmadeBaseServiceImp;
@@ -26,6 +27,10 @@ public class GovTableServiceImp extends GovmadeBaseServiceImp<GovTable> implemen
 		for(GovTable gt:list){
 			insert(gt);
 		}
+	}
+	@Override
+	public List<GovTable> findByGovDatabase(List<GovDatabase> list) {
+		return govTableDAO.findByGovDatabase(list);
 	}
 
 }

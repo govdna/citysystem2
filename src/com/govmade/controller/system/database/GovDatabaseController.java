@@ -1,21 +1,31 @@
 package com.govmade.controller.system.database;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.govmade.adapter.object2excel.GovDatabase2ExcelAdapter;
+import com.govmade.adapter.object2excel.InformationResource2ExcelAdapter;
 import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.DataHandlerUtil;
 import com.govmade.common.utils.ServiceUtil;
+import com.govmade.common.utils.poi.Object2ExcelComplexUtil;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.database.GovDatabase;
+import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.organization.Company;
 import com.govmade.entity.system.organization.Groups;
 import com.govmade.entity.system.rbac.Scope;
@@ -130,4 +140,45 @@ public class GovDatabaseController extends GovmadeBaseController<GovDatabase>{
 		
 	}
 	
+	
+	@RequestMapping("downloadData")
+	public ResponseEntity<byte[]> downloadData(GovDatabase db,String[] dbFields, String[] tbFields, String[] fdFields, HttpServletRequest req,
+			HttpServletResponse response) throws Exception {
+		if (dbFields == null) {
+			dbFields = new String[0];
+		}
+		if (tbFields == null) {
+			tbFields = new String[0];
+		}
+		if (fdFields == null) {
+			fdFields = new String[0];
+		}
+		List<GovDatabase> dbList=service.find(db);
+		List<GovTable> tbList=null;
+		List<GovTableField> tfList=null;
+		if(dbList!=null&&dbList.size()>0){
+			tbList=govTableService.findByGovDatabase(dbList);
+		}
+		if(tbList!=null&&tbList.size()>0){
+			tfList=govTableFieldService.findByGovTable(tbList);
+		}
+		
+		GovDatabase2ExcelAdapter adapter = new GovDatabase2ExcelAdapter(dbList, tbList, tfList, dbFields, tbFields, fdFields);
+		Object2ExcelComplexUtil util = new Object2ExcelComplexUtil(adapter);
+		String path = req.getSession().getServletContext().getRealPath("upload/excel");
+		String fileName = "导出数据.xls";
+		String icon = System.currentTimeMillis() + "/";
+		String fullPath = path + "/" + icon + fileName;
+		File targetFile = new File(path + "/" + icon);
+		if (!targetFile.exists()) {
+			targetFile.mkdirs();
+		}
+		util.object2Excel(fullPath);
+		HttpHeaders headers = new HttpHeaders();
+		String fn = new String(fileName.getBytes("UTF-8"), "iso-8859-1");// 为了解决中文名称乱码问题
+		headers.setContentDispositionFormData("attachment", fn);
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(fullPath)), headers,
+				HttpStatus.CREATED);
+	}
 }
