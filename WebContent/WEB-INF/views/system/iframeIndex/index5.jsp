@@ -83,7 +83,7 @@
 	  $.each(infos, function(index, value) {
   	  var info = [];
 
-      var data =  value[2].name + '<br>' + '数据元数量:' + value[2].dataElement + '<br>' + '信息资源数量:' + value[2].informationResource
+      var data = '<h4>'+ value[2].name+'</h4>'+ '数据元数量 :　' + value[2].dataElement + '<br>' + '信息资源数量 :　' + value[2].informationResource ;
 
   		info.push(value[0],value[1], data);
 		  data_info.push(info);
