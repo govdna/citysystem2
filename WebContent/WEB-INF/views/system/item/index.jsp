@@ -244,7 +244,7 @@ background:#18a689;
         <input type="checkbox" name="xlsFields" value="fileName"/>  办件结果文件名称
         <input type="checkbox" name="xlsFields" value="yesorno"/> 是否有应用系统支撑
         <input type="checkbox" name="xlsFields" value="busSystem"/> 业务应用系统名称
-        <input type="checkbox" name="xlsFields" value="applicationMaterial"/> 申请材料
+        <input type="checkbox" name="deFields" value="applicationMaterial"/> 申请材料
         
         <input type="hidden" name="itemName" id="itemNameExl">
         <input type="hidden" name="companyId" id="companyIdExl">

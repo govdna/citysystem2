@@ -30,6 +30,7 @@ import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.base.Const;
 import com.govmade.common.utils.poi.ExcelUtil;
+import com.govmade.common.utils.poi.Object2ExcelComplexUtil;
 import com.govmade.common.utils.poi.Object2ExcelUtil;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
@@ -411,12 +412,12 @@ public class ItemSortController extends GovmadeBaseController<ItemSort>{
 	    return url;
 	}
 	@RequestMapping("downloadData")
-	public ResponseEntity<byte[]> downloadData(ItemSort de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
+	public ResponseEntity<byte[]> downloadData(ItemSort de,String[] xlsFields,String[] deFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
 		de.setIsDeleted(0);
-		ItemSort2ExcelAdapter adapter = new ItemSort2ExcelAdapter(service.findByPage(de,null,null), xlsFields,
+		ItemSort2ExcelAdapter adapter = new ItemSort2ExcelAdapter(service.findByPage(de,null,null), xlsFields,deFields,
 				getExcelHandlers());
-		Object2ExcelUtil util = new Object2ExcelUtil(adapter);
+		Object2ExcelComplexUtil util = new Object2ExcelComplexUtil(adapter);
 		String path = req.getSession().getServletContext().getRealPath("upload/excel");
 		String fileName = "导出数据.xls";
 		String icon = System.currentTimeMillis() + "/";
