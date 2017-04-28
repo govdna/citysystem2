@@ -24,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.govmade.common.utils.ServiceUtil;
+import com.govmade.common.utils.StringUtil;
 import com.govmade.common.utils.db.DbConfig;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
@@ -1608,12 +1609,8 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		}
 		if(mirSize>0&&irSize>0){
 			List<String> sameArrayList = new ArrayList<String>();
-			Set<String> tempSet = new HashSet<String>();
-			for(InformationRes del:mirList){
-				tempSet.add(del.getValue1());
-			}
 			for(InformationResource delg:irList) {
-				if(!tempSet.add(delg.getValue1())) {
+				if(isMacth(delg,mirList)) {
 				sameArrayList.add(delg.getValue1());
 				}				
 			}
@@ -1625,6 +1622,16 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		res.getWriter().write(artjson.toString());
 		res.getWriter().flush();
 		res.getWriter().close();		
+	}
+	
+	//信息资源名称是否匹配
+	private boolean isMacth(InformationResource info,List<InformationRes> list){
+		for(InformationRes res:list){
+			if(StringUtil.stringMatching(info.getValue1(),res.getValue1())>50){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }
