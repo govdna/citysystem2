@@ -18,9 +18,33 @@ import sun.misc.BASE64Encoder;
 
 public class StringUtil {
 	public static void main(String[] args) {
-		//System.out.println(arrayToString(new String[]{}));
+		System.out.println(stringMatching("女方姓名","男方姓名"));
 	}
-	
+	/** 
+	* @Title: stringMatching 
+	* @Description: TODO(匹配程度 ) 
+	* @param @param m 
+	* @param @param target
+	* @param @return    设定文件 
+	* @return int    返回类型 
+	* 2017年4月28日    日期   
+	*/ 
+	public static int stringMatching(String m,String target){
+		int lastMacth=0;
+		int macthTime=0;
+		if(StringUtils.isEmpty(m)||StringUtils.isEmpty(target)){
+			return 0;
+		}
+		for(int i=0;i<m.length();i++){
+			int c=target.indexOf(m.charAt(i));
+			if(c>-1&&c>lastMacth){
+				lastMacth=c;
+				macthTime++;
+			}
+		}
+		return macthTime*100/m.length();
+	}
+
 	public static String toDateString(String str){
 		String [] d=str.split("-");
 		StringBuffer sb=new StringBuffer();
