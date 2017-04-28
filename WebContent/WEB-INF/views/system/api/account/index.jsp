@@ -72,7 +72,7 @@
 <%@include file="../../common/includeJS.jsp"%>
 <script>
 var layerIndex; //layer 窗口对象
-var title_name = "同义词配置";
+var title_name = "api";
 var layerContent = '#layer_form'; //layer窗口主体内容dom Id
 var dicLayerContent = '#dic_form'; //layer窗口主体内容dom Id
 var tableId = '#dicList'; //bootstrap-table id

@@ -3,7 +3,7 @@
 <mapper namespace="com.govmade.repository.system.theme.ThemeDao">
 	<resultMap id="base" type="Theme"></resultMap>
 	<select id="find" resultMap="base" parameterType="Theme">
-		SELECT  id,theme_type themeType,logo_big logoBig,logo_small logoSmall,title_big titleBig,title_small titleSmall,time_create timeCreate,time_modified timeModified,isDeleted,belong_type belongType FROM gov_theme t WHERE 1=1
+		SELECT  id,theme_type themeType,logo_big logoBig,logo_small logoSmall,title_big titleBig,title_small titleSmall,time_create timeCreate,time_modified timeModified,isDeleted,belong_type belongType,t_color tColor FROM gov_theme t WHERE 1=1
 		<if test="param.id!= null ">
 			and t.id=#{param.id}
 		</if>
@@ -24,13 +24,16 @@
 		</if>
 		<if test="param.belongType!= null ">
 			and t.belong_type=#{param.belongType}
+		</if>
+		<if test="param.tColor!= null ">
+			and t.t_color=#{param.tColor}
 		</if>
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
 		</if>
 	</select>
 	<select id="findByPage" resultMap="base">
-			SELECT  id,theme_type themeType,logo_big logoBig,logo_small logoSmall,title_big titleBig,title_small titleSmall,time_create timeCreate,time_modified timeModified,isDeleted,belong_type belongType FROM gov_theme t WHERE 1=1
+			SELECT  id,theme_type themeType,logo_big logoBig,logo_small logoSmall,title_big titleBig,title_small titleSmall,time_create timeCreate,time_modified timeModified,isDeleted,belong_type belongType,t_color tColor FROM gov_theme t WHERE 1=1
 		<if test="param.id!= null ">
 			and t.id=#{param.id}
 		</if>
@@ -51,6 +54,9 @@
 		</if>
 		<if test="param.belongType!= null ">
 			and t.belong_type=#{param.belongType}
+		</if>
+		<if test="param.tColor!= null ">
+			and t.t_color=#{param.tColor}
 		</if>
 		<if test="param.isDeleted != null ">
 			and t.isDeleted=#{param.isDeleted}
@@ -66,8 +72,8 @@
     </selectKey>  
     
  	<![CDATA[
-	INSERT INTO gov_theme(theme_type,logo_big,logo_small,title_big,title_small,time_create,time_modified,isDeleted,belong_type) 
-	VALUES (#{themeType,jdbcType=NUMERIC},#{logoBig,jdbcType=VARCHAR},#{logoSmall,jdbcType=VARCHAR},#{titleBig,jdbcType=VARCHAR},#{titleSmall,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{belongType,jdbcType=VARCHAR})
+	INSERT INTO gov_theme(theme_type,logo_big,logo_small,title_big,title_small,time_create,time_modified,isDeleted,belong_type,t_color) 
+	VALUES (#{themeType,jdbcType=NUMERIC},#{logoBig,jdbcType=VARCHAR},#{logoSmall,jdbcType=VARCHAR},#{titleBig,jdbcType=VARCHAR},#{titleSmall,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{belongType,jdbcType=VARCHAR},#{tColor,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="Theme">
@@ -108,7 +114,8 @@
 		title_big=#{titleBig,jdbcType=VARCHAR},
 		title_small=#{titleSmall,jdbcType=VARCHAR},
      	time_modified=#{timeModified,jdbcType=TIMESTAMP},
-     	belong_type=#{belongType,jdbcType=VARCHAR}
+     	belong_type=#{belongType,jdbcType=VARCHAR},
+     	t_color=#{tColor,jdbcType=NUMERIC}
 		WHERE id=#{id,jdbcType=NUMERIC}
 	</update>
 

@@ -1,5 +1,6 @@
 package com.govmade.common.utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -466,7 +467,7 @@ public class ServiceUtil implements ApplicationContextAware {
 		return TitleSmall;
 	}
 
-	public static String getLogoBig(Integer id) {
+	public static String getLogoBig(Integer id){
 		Theme dic = new Theme();
 		dic.setId(id);
 		dic = themeService.findById(dic);
@@ -763,4 +764,37 @@ public class ServiceUtil implements ApplicationContextAware {
 		}
 	}
 
+	/*//更换echart皮肤
+	private static String changeEchart(Integer no){		
+		String []a={
+				"['#5d4c4b','#8f7a79','#9d3631','#b68080','#d9d9d9']",
+	    		"['#ca7f28','#e6ad00','#746f5f','#a6a09f','#c6c5c1']",
+	    		"['#b27329','#213863','#405889','#7c91ac','#ced7e0']",
+	    		"['#b7c1dc','#e9e9e9','#c8dced','#5b8ace','#1a4e8f']",
+	    		"['#a29595','#dedede','#d0bbbb','#c40918','#92151c']",
+	    		"['#bfbfbf','#56626f','#3e9cde','#8cc7e6','#cfe1eb']",
+	    		"['#1e323e','#2c445c','#8595a4','#14a4ac','#d2dadb']",
+	    		"['#181e2f','#2c549b','647595','#869ad9','#c3cee3']"
+	    	};
+	  return  a[no];
+	  }*/
+	
+	public static String getEchartColor(Integer id) {
+		Theme dic = new Theme();
+		dic.setId(id);
+		dic = themeService.findById(dic);
+		Integer colorNo = dic.gettColor();
+		String []a={
+				"['#5d4c4b','#8f7a79','#9d3631','#b68080','#d9d9d9']",
+	    		"['#ca7f28','#e6ad00','#746f5f','#a6a09f','#c6c5c1']",
+	    		"['#b27329','#213863','#405889','#7c91ac','#ced7e0']",
+	    		"['#b7c1dc','#e9e9e9','#c8dced','#5b8ace','#1a4e8f']",
+	    		"['#a29595','#dedede','#d0bbbb','#c40918','#92151c']",
+	    		"['#bfbfbf','#56626f','#3e9cde','#8cc7e6','#cfe1eb']",
+	    		"['#1e323e','#2c445c','#8595a4','#14a4ac','#d2dadb']",
+	    		"['#181e2f','#2c549b','647595','#869ad9','#c3cee3']"
+	    	};
+		System.out.println("a[colorNo]="+a[colorNo]);
+		return a[colorNo];
+	}
 }

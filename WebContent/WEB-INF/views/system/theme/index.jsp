@@ -75,6 +75,17 @@
           <input type="text" name="titleSmall" class="form-control" required>
         </div>
       </div>
+       <div class="form-group">
+        <label class="col-sm-3 control-label">Echart颜色类型：</label>
+        <div class="col-sm-7">
+          <select name="tColor" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
+            <option value=""></option>
+            <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"ECOLOR\") %>">
+            <option value="${obj.dicKey}">${obj.dicValue}</option>
+            </c:forEach>
+          </select>
+        </div>
+      </div>
     </form>
   </div>
 </body>
@@ -180,12 +191,14 @@ function disableChosen() {
 function initChosen() {
   disableChosen();
   if (chosenInited == 0) {
-    chosenInited = 1;
+    console.log(1)
   } else {
     $(".chosen-select").val("");
     $(".chosen-select").trigger("chosen:updated");
+    
     return;
   }
+  
   var chosen = $(".chosen-select").chosen({
     disable_search_threshold: 10,
     no_results_text: "没有匹配到这条记录",

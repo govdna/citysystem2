@@ -122,8 +122,8 @@ h3 {font-size: 16px; font-weight: 600;}
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
 <script src="${base}/static/js/echartsSkin.js"></script>
 <script>
-var color = echartSkin.colorIndex;
-
+//var color = echartSkin.colorIndex;
+var color = <%=ServiceUtil.getEchartColor(10) %>
 var myChart1 = echarts.init(document.getElementById('main1'));
 var myChart2 = echarts.init(document.getElementById('main2'));
 var myChart3 = echarts.init(document.getElementById('main3'));
