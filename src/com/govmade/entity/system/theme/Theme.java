@@ -30,14 +30,14 @@ public class Theme extends IdBaseEntity{
 	
 	private String belongType; //1:风格2：模块
 	
-	private Integer tColor; //色系
+	private Integer themeColor; //色系
 
-	public Integer gettColor() {
-		return tColor;
+	public Integer getThemeColor() {
+		return themeColor;
 	}
 
-	public void settColor(Integer tColor) {
-		this.tColor = tColor;
+	public void setThemeColor(Integer themeColor) {
+		this.themeColor = themeColor;
 	}
 
 	public String getBelongType() {

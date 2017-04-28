@@ -783,7 +783,7 @@ public class ServiceUtil implements ApplicationContextAware {
 		Theme dic = new Theme();
 		dic.setId(id);
 		dic = themeService.findById(dic);
-		Integer colorNo = dic.gettColor();
+		Integer colorNo = dic.getThemeColor();
 		String []a={
 				"['#5d4c4b','#8f7a79','#9d3631','#b68080','#d9d9d9']",
 	    		"['#ca7f28','#e6ad00','#746f5f','#a6a09f','#c6c5c1']",

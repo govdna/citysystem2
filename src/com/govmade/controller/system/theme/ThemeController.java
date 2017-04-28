@@ -83,7 +83,25 @@ public class ThemeController extends GovmadeBaseController<Theme>{
 			}
 			
 		});
-		
+		map.put("tColor", new DataHandler() {
+			@Override
+			public Object doHandle(Object obj) {
+				GovmadeDic dic=new GovmadeDic();
+				dic.setDicNum("ECOLOR");
+				dic.setDicKey((Integer)obj+"");			
+				List<GovmadeDic> l=govmadeDicservice.getDicList(dic);
+				if(l!=null&&l.size()>0){
+					return l.get(0).getDicValue();
+				}
+				return "";
+			}
+
+			@Override
+			public int getMode() {
+				return ADD_MODE;
+			}
+			
+		});
 		return map;
 	}
 	

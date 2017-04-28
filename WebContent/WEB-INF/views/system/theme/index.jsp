@@ -78,8 +78,8 @@
        <div class="form-group">
         <label class="col-sm-3 control-label">Echart颜色类型：</label>
         <div class="col-sm-7">
-          <select name="tColor" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
-            <option value=""></option>
+          <select name="themeColor" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="5" required>
+             <option value=""></option>
             <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"ECOLOR\") %>">
             <option value="${obj.dicKey}">${obj.dicValue}</option>
             </c:forEach>
