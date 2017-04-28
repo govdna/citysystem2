@@ -150,7 +150,7 @@ h3 {font-size: 16px; font-weight: 600;}
 <script src="${base}/static/js/echartsSkin.js"></script>
 <script>
 $(function() {
-var color = echartSkin.colorIndex;
+var color = <%=ServiceUtil.getEchartColor(10) %>
 var myChart2 = echarts.init(document.getElementById('main2'));
 var labelTop = {
       normal : {

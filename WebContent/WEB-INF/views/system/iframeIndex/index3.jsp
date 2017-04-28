@@ -131,7 +131,7 @@ h3 {font-size: 16px; font-weight: 600;}
 <script src="${base}/static/js/bootstrap-select/js/i18n/defaults-zh_CN.min.js"></script>
 <script src="${base}/static/js/echartsSkin.js"></script>
 <script>
-	var color = echartSkin.colorIndex;
+var color = <%=ServiceUtil.getEchartColor(10) %>
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));  
   var myChart3 = echarts.init(document.getElementById('main3'));
