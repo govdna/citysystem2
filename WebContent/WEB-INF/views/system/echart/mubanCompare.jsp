@@ -18,7 +18,7 @@
 <div class="container">
     <div class="row">
     <div class="clearfix" style="margin:10px 0 0 10px;border-bottom: 1px solid #f6f6f6;">
-    	    <label class="control-label  pull-left" style="line-height: 35px;margin-right:10px;">责任部门</label>
+    	    <label class="control-label  pull-left" style="line-height: 35px;margin-right:10px;">匹配部门</label>
     	    <div class=" pull-left">
             <select name="cId" data-placeholder=" " class="chosen-select" style="width:350px; display:inline-block;" tabindex="4" required>
             <option value=""></option>
@@ -28,7 +28,7 @@
           </select>
           </div>
 		 <div class="btn-group pull-left" style="margin-left: 10px;">
-         	<button type="button" class="btn btn-primary" onclick="compare();" style="border-right: rgba(255,255,255,.3);">搜索</button>
+         	<button type="button" class="btn btn-primary" onclick="compare();" style="border-right: rgba(255,255,255,.3);">匹配</button>
          </div>
          </div>
 	    <div>
