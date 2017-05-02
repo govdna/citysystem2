@@ -779,7 +779,7 @@
 		WHERE id>0
 	</update>
 	<select id="latestTime" resultType="date" parameterType="InformationResource">
-		<![CDATA[	SELECT time_modified FROM gov_information_resource_main WHERE status = 0 isDeleted = 0 AND value3 = #{cpId}
+		<![CDATA[	SELECT time_modified FROM gov_information_resource_main WHERE status = 0 AND isDeleted = 0 AND value3 = #{cpId}
 		ORDER BY time_modified DESC LIMIT 1 ]]>
 	</select>
 </mapper>

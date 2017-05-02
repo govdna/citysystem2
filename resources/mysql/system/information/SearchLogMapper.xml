@@ -122,20 +122,20 @@
 	<select id="hotres" resultMap="base" parameterType="SearchLog">
 	<![CDATA[
 		SELECT
-			keyWord，COUNT
+	keyWord,COUNT
+FROM
+	(
+		SELECT
+			keyword keyWord,
+			COUNT(keyword) COUNT
 		FROM
-			(
-				SELECT
-					keyword keyWord,
-					COUNT (keyword) COUNT
-				FROM
-					gov_search_log
-				GROUP BY
-					keyword
-				ORDER BY
-					COUNT DESC
-			)
-		LIMIT 10
+			gov_search_log
+		GROUP BY
+			keyword
+		ORDER BY
+			COUNT DESC
+	) as cnm
+LIMIT 10
 	]]>
 	</select>
 </mapper>
