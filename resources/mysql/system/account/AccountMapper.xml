@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.account.AccountDao">
+	<!--  com.govmade.entity.system.account.Account -->
+    <resultMap id="base" type="Account"> 
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="agency_id" property="agencyId" jdbcType="INTEGER" />
+    <result column="time_create" property="timeCreate" jdbcType="TIMESTAMP" />
+    <result column="time_modified" property="timeModified" jdbcType="TIMESTAMP" />
+    <result column="isDeleted" property="isDeleted" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="basePos" type="BasePos"></resultMap>
+
+    <!-- 这方法能获取密码和盐 -->
+    <select id="findFormatByLoginName"  resultMap="base" parameterType="String">
+    	<![CDATA[
+       SELECT a.* FROM city_account a WHERE 1=1 
+       AND a.isvalid='1' 
+       AND a.isDeleted='0' 
+       AND a.login_name=#{loginName,jdbcType=VARCHAR}
+       ]]>  
+    </select>
+
+	<select id="getPoss"  parameterType="string" resultMap="basePos" >
+	  SELECT jbp.* FROM jy_base_account_position jbap 
+	  LEFT JOIN jy_base_position jbp
+	  ON jbp.id=jbap.posId
+	  WHERE jbap.accountId=#{ID}      
+	  ORDER BY jbap.posId
+    </select>
+        
+    
+    <select id="find" resultMap="base" parameterType="Account">
+		SELECT
+			id,
+			login_name loginName,
+			roleId roleId,
+			name name,
+			picUrl picUrl,
+			email email,
+		    isValid isValid,
+			skin skin,
+			description description,
+			time_create timeCreate,
+			time_modified timeModified,
+			isDeleted,
+			tel,
+			agency_id agencyId,
+			company_id companyId,
+			group_id groupId
+		FROM
+			city_account t
+		WHERE
+			1 = 1
+		<if test="param.loginName != null ">
+			and t.login_name=#{param.loginName}
+		</if>
+		<if test="param.name != null ">
+			and t.name=#{param.name}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when test="orderBy != null and orderBy!='' ">
+				${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		<when  test="sort !=null and sort!=''">
+					${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT
+			id,
+			login_name loginName,
+			roleId roleId,
+			name name,
+			picUrl picUrl,
+			email email,
+		  	isValid isValid,
+			skin skin,
+			description description,
+			time_create timeCreate,
+			time_modified timeModified,
+			isDeleted,
+			tel,
+			agency_id agencyId,
+			company_id companyId,
+			group_id groupId
+		FROM
+			city_account t
+		WHERE
+			1 = 1
+		<if test="param.loginName != null ">
+			and t.login_name=#{param.loginName}
+		</if>
+        <if test="param.name != null and param.name !=''">
+			and t.name like '%${param.name}%'
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when test="orderBy != null and orderBy!='' ">
+				${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		<when  test="sort !=null and sort!=''">
+					${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="count" resultType="int" parameterType="Account">
+		SELECT count(*) FROM city_account t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="Account" useGeneratedKeys="true" keyProperty="id">  
+ 	<![CDATA[
+	INSERT INTO city_account(login_name,roleId,name,picUrl,email,isValid,salt,password,description,time_create,time_modified,isDeleted,
+	skin,tel,agency_id,company_id,group_id) 
+	VALUES (#{loginName,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{picUrl,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{isValid,jdbcType=NUMERIC},#{salt,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=VARCHAR},
+	#{skin,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{agencyId,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="Account">
+		UPDATE city_account
+		SET isDeleted =1
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE city_account
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="Account">
+		DELETE FROM city_account
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM city_account
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="Account">
+		UPDATE city_account
+		SET 
+		<if test=" password != null and password !='' ">
+			password =#{password},
+			salt =#{salt},
+		</if>
+		login_name =#{loginName,jdbcType=VARCHAR},
+		roleId=#{roleId,jdbcType=VARCHAR},
+		name=#{name,jdbcType=VARCHAR},
+		picUrl=#{picUrl,jdbcType=VARCHAR},
+		email=#{email,jdbcType=VARCHAR},
+		isValid=#{isValid,jdbcType=NUMERIC},
+		skin =#{skin,jdbcType=VARCHAR},
+		description=#{description,jdbcType=VARCHAR},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		tel=#{tel,jdbcType=VARCHAR},
+		agency_id=#{agencyId,jdbcType=NUMERIC},
+		company_id=#{companyId,jdbcType=NUMERIC},
+		group_id=#{groupId,jdbcType=NUMERIC}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+</mapper>

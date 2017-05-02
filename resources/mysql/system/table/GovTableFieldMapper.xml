@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.table.GovTableFieldDAO">
+	<resultMap id="GovTable" type="GovTable"></resultMap>
+	<resultMap id="base" type="GovTableField">
+		<id column="id" property="id" jdbcType="NUMERIC" />
+		<result column="data_element_id" property="dataElementId" jdbcType="NUMERIC" />
+		<result column="group_id" property="groupId" jdbcType="NUMERIC" />
+		<result column="company_id" property="companyId" jdbcType="NUMERIC" />
+		<result column="time_create" property="timeCreate" jdbcType="TIMESTAMP" />
+		<result column="time_modified" property="timeModified"
+			jdbcType="TIMESTAMP" />
+		<result column="isDeleted" property="isDeleted" jdbcType="NUMERIC" />
+		<result column="value1" property="value1" jdbcType="VARCHAR" />
+		<result column="value2" property="value2" jdbcType="VARCHAR" />
+		<result column="value3" property="value3" jdbcType="VARCHAR" />
+		<result column="value4" property="value4" jdbcType="VARCHAR" />
+		<result column="value5" property="value5" jdbcType="VARCHAR" />
+		<result column="value6" property="value6" jdbcType="VARCHAR" />
+		<result column="value7" property="value7" jdbcType="VARCHAR" />
+		<result column="value8" property="value8" jdbcType="VARCHAR" />
+		<result column="value9" property="value9" jdbcType="VARCHAR" />
+		<result column="value10" property="value10" jdbcType="VARCHAR" />
+		<result column="value11" property="value11" jdbcType="VARCHAR" />
+		<result column="value12" property="value12" jdbcType="VARCHAR" />
+		<result column="value13" property="value13" jdbcType="VARCHAR" />
+		<result column="value14" property="value14" jdbcType="VARCHAR" />
+		<result column="value15" property="value15" jdbcType="VARCHAR" />
+		<result column="value16" property="value16" jdbcType="VARCHAR" />
+		<result column="value17" property="value17" jdbcType="VARCHAR" />
+		<result column="value18" property="value18" jdbcType="VARCHAR" />
+		<result column="value19" property="value19" jdbcType="VARCHAR" />
+		<result column="value20" property="value20" jdbcType="VARCHAR" />
+		<result column="value21" property="value21" jdbcType="VARCHAR" />
+		<result column="value22" property="value22" jdbcType="VARCHAR" />
+		<result column="value23" property="value23" jdbcType="VARCHAR" />
+		<result column="value24" property="value24" jdbcType="VARCHAR" />
+		<result column="value25" property="value25" jdbcType="VARCHAR" />
+		<result column="value26" property="value26" jdbcType="VARCHAR" />
+		<result column="value27" property="value27" jdbcType="VARCHAR" />
+		<result column="value28" property="value28" jdbcType="VARCHAR" />
+		<result column="value29" property="value29" jdbcType="VARCHAR" />
+		<result column="value30" property="value30" jdbcType="VARCHAR" />
+		<result column="value31" property="value31" jdbcType="VARCHAR" />
+		<result column="value32" property="value32" jdbcType="VARCHAR" />
+		<result column="value33" property="value33" jdbcType="VARCHAR" />
+		<result column="value34" property="value34" jdbcType="VARCHAR" />
+		<result column="value35" property="value35" jdbcType="VARCHAR" />
+		<result column="value36" property="value36" jdbcType="VARCHAR" />
+		<result column="value37" property="value37" jdbcType="VARCHAR" />
+		<result column="value38" property="value38" jdbcType="VARCHAR" />
+		<result column="value39" property="value39" jdbcType="VARCHAR" />
+		<result column="value40" property="value40" jdbcType="VARCHAR" />
+		<result column="value41" property="value41" jdbcType="VARCHAR" />
+		<result column="value42" property="value42" jdbcType="VARCHAR" />
+		<result column="value43" property="value43" jdbcType="VARCHAR" />
+		<result column="value44" property="value44" jdbcType="VARCHAR" />
+		<result column="value45" property="value45" jdbcType="VARCHAR" />
+		<result column="value46" property="value46" jdbcType="VARCHAR" />
+		<result column="value47" property="value47" jdbcType="VARCHAR" />
+		<result column="value48" property="value48" jdbcType="VARCHAR" />
+		<result column="value49" property="value49" jdbcType="VARCHAR" />
+		<result column="value50" property="value50" jdbcType="VARCHAR" />		
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,  company_id,  time_create,
+		time_modified,data_element_id,
+		isDeleted,group_id,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,value31,value32,value33,value34,value35,value36,value37,value38,value39,value40,value41,value42,value43,value44,value45,value46,value47,value48,value49,value50
+
+	</sql>
+	<sql id="Base_Where_Clause">
+		<if test="param.id != null"> and
+			id = #{param.id,jdbcType=NUMERIC}
+		</if>
+		<if test="param.dataElementId != null"> and
+			data_element_id = #{param.dataElementId,jdbcType=NUMERIC}
+		</if>
+		<if test="param.companyId != null"> and
+			company_id = #{param.companyId,jdbcType=NUMERIC}
+		</if>
+		<if test="param.groupId != null"> and
+			group_id = #{param.groupId,jdbcType=NUMERIC}
+		</if>
+		<if test="param.timeCreate != null"> and
+			time_create = #{param.timeCreate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="param.timeModified != null"> and
+			time_modified = #{param.timeModified,jdbcType=TIMESTAMP}
+		</if>
+		<if test="param.isDeleted != null"> and
+			isDeleted = #{param.isDeleted,jdbcType=NUMERIC}
+		</if>
+		<if test="param.value1 != null and param.value1!=''"> and
+			value1 like '%${param.value1}%'
+		</if>
+		<if test="param.value2 != null and param.value2!=''"> and
+			value2 like '%${param.value2}%'
+		</if>
+		<if test="param.value3 != null and param.value3 !=''"> and
+			value3 = #{param.value3,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value4 != null and param.value4 !=''"> and
+			value4 = #{param.value4,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value5 != null and param.value5 !=''"> and
+			value5 = #{param.value5,jdbcType=VARCHAR}
+		</if>
+
+		<if test="param.value6 != null and param.value6 !=''"> and
+			value6 = #{param.value6,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value7 != null and param.value7 !=''"> and
+			value7 = #{param.value7,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value8 != null and param.value8 !=''"> and
+			value8 = #{param.value8,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value9 != null and param.value9 !=''"> and
+			value9 = #{param.value9,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value10 != null and param.value10 !=''"> and
+			value10 = #{param.value10,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value11 != null and param.value11 !=''"> and
+			value11 = #{param.value11,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value12 != null and param.value12 !=''"> and
+			value12 = #{param.value12,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value13 != null and param.value13 !=''"> and
+			value13 = #{param.value13,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value14 != null and param.value14 !=''"> and
+			value14 = #{param.value14,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value15 != null and param.value15 !=''"> and
+			value15 = #{param.value15,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value16 != null and param.value16 !=''"> and
+			value16 = #{param.value16,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value17 != null and param.value17 !=''"> and
+			value17 = #{param.value17,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value18 != null and param.value18 !=''"> and
+			value18 = #{param.value18,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value19 != null and param.value19 !=''"> and
+			value19 = #{param.value19,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value20 != null and param.value20 !=''"> and
+			value20 = #{param.value20,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value21 != null and param.value21 !=''"> and
+			value21 = #{param.value21,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value22 != null and param.value22 !=''"> and
+			value22 = #{param.value22,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value23 != null and param.value23 !=''"> and
+			value23 = #{param.value23,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value24 != null and param.value24 !=''"> and
+			value24 = #{param.value24,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value25 != null and param.value25 !=''"> and
+			value25 = #{param.value25,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value26 != null and param.value26 !=''"> and
+			value26 = #{param.value26,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value27 != null and param.value27 !=''"> and
+			value27 = #{param.value27,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value28 != null and param.value28 !=''"> and
+			value28 = #{param.value28,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value29 != null and param.value29 !=''"> and
+			value29 = #{param.value29,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value30 != null and param.value30 !=''"> and
+			value30 = #{param.value30,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value31 != null and param.value31 !=''"> and
+			value31 = #{param.value31,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value32 != null and param.value32 !=''"> and
+			value32 = #{param.value32,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value33 != null and param.value33 !=''"> and
+			value33 = #{param.value33,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value34 != null and param.value34 !=''"> and
+			value34 = #{param.value34,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value35 != null and param.value35 !=''"> and
+			value35 = #{param.value35,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value36 != null and param.value36 !=''"> and
+			value36 = #{param.value36,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value37 != null and param.value37 !=''"> and
+			value37 = #{param.value37,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value38 != null and param.value38 !=''"> and
+			value38 = #{param.value38,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value39 != null and param.value39 !=''"> and
+			value39 = #{param.value39,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value40 != null and param.value40 !=''"> and
+			value40 = #{param.value40,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value41 != null and param.value41 !=''"> and
+			value41 = #{param.value41,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value42 != null and param.value42 !=''"> and
+			value42 = #{param.value42,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value43 != null and param.value43 !=''"> and
+			value43 = #{param.value43,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value44 != null and param.value44 !=''"> and
+			value44 = #{param.value44,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value45 != null and param.value45 !=''"> and
+			value45 = #{param.value45,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value46 != null and param.value46 !=''"> and
+			value46 = #{param.value46,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value47 != null and param.value47 !=''"> and
+			value47 = #{param.value47,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value48 != null and param.value48 !=''"> and
+			value48 = #{param.value48,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value49 != null and param.value49 !=''"> and
+			value49 = #{param.value49,jdbcType=VARCHAR}
+		</if>
+		<if test="param.value50 != null and param.value50 !=''"> and
+			value50 = #{param.value50,jdbcType=VARCHAR}
+		</if>
+
+	</sql>
+	
+	
+	
+	
+	<select id="findByGovTable" resultMap="base" parameterType="GovTable">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM gov_table_field WHERE  isDeleted = 0
+		and value3 in 
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+	</select>
+	
+	
+	<select id="find" resultMap="base" parameterType="GovTableField">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM gov_table_field WHERE 1=1 and isDeleted = 0
+		<include refid="Base_Where_Clause" />
+		ORDER BY
+		<choose>
+			<when test="sort !=null and sort!=''">
+				${sort}
+			</when>
+			<otherwise>
+				time_create
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc,id
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM gov_table_field WHERE 1=1 and isDeleted = 0
+		<include refid="Base_Where_Clause" />
+		ORDER BY
+		<choose>
+			<when test="sort !=null and sort!=''">
+				${sort}
+			</when>
+			<otherwise>
+				time_create
+			</otherwise>
+		</choose>
+		<choose>
+
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc,id
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="GovTableField">
+		SELECT
+		count(*) FROM gov_table_field t WHERE 1=1
+		<if test="isDeleted != null" >  and
+        isDeleted = #{isDeleted,jdbcType=NUMERIC}
+      </if>
+      <if test="companyId != null"> and
+			company_id = #{companyId,jdbcType=NUMERIC}
+		</if>
+	</select>
+	<insert id="insert" parameterType="GovTableField" useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+		insert into gov_table_field (id, data_element_id,group_id,company_id, 
+      time_create, time_modified, 
+      	isDeleted,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,value31,value32,value33,value34,value35,value36,value37,value38,value39,value40,value41,value42,value43,value44,value45,value46,value47,value48,value49,value50
+      	)
+	    values (#{id,jdbcType=NUMERIC}, #{dataElementId,jdbcType=NUMERIC}, #{groupId,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},  
+	    #{timeCreate,jdbcType=TIMESTAMP}, #{timeModified,jdbcType=TIMESTAMP}, 
+	    #{isDeleted,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{value31,jdbcType=VARCHAR},#{value32,jdbcType=VARCHAR},#{value33,jdbcType=VARCHAR},#{value34,jdbcType=VARCHAR},#{value35,jdbcType=VARCHAR},#{value36,jdbcType=VARCHAR},#{value37,jdbcType=VARCHAR},#{value38,jdbcType=VARCHAR},#{value39,jdbcType=VARCHAR},#{value40,jdbcType=VARCHAR},#{value41,jdbcType=VARCHAR},#{value42,jdbcType=VARCHAR},#{value43,jdbcType=VARCHAR},#{value44,jdbcType=VARCHAR},#{value45,jdbcType=VARCHAR},#{value46,jdbcType=VARCHAR},#{value47,jdbcType=VARCHAR},#{value48,jdbcType=VARCHAR},#{value49,jdbcType=VARCHAR},#{value50,jdbcType=VARCHAR}
+	    )
+	]]>
+	</insert>
+	<update id="delete" parameterType="GovTableField">
+		UPDATE gov_table_field
+		SET
+		isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_table_field
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+
+	<delete id="deletePhysically" parameterType="GovTableField">
+		DELETE FROM
+		gov_table_field
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_table_field
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="GovTableField">
+		update gov_table_field
+		set 
+		time_modified = #{timeModified,jdbcType=TIMESTAMP},
+		data_element_id=#{dataElementId,jdbcType=NUMERIC},
+		value1=#{value1,jdbcType=VARCHAR},
+		value2=#{value2,jdbcType=VARCHAR},
+		value3=#{value3,jdbcType=VARCHAR},
+		value4=#{value4,jdbcType=VARCHAR},
+		value5=#{value5,jdbcType=VARCHAR},
+		value6=#{value6,jdbcType=VARCHAR},
+		value7=#{value7,jdbcType=VARCHAR},
+		value8=#{value8,jdbcType=VARCHAR},
+		value9=#{value9,jdbcType=VARCHAR},
+		value10=#{value10,jdbcType=VARCHAR},
+		value11=#{value11,jdbcType=VARCHAR},
+		value12=#{value12,jdbcType=VARCHAR},
+		value13=#{value13,jdbcType=VARCHAR},
+		value14=#{value14,jdbcType=VARCHAR},
+		value15=#{value15,jdbcType=VARCHAR},
+		value16=#{value16,jdbcType=VARCHAR},
+		value17=#{value17,jdbcType=VARCHAR},
+		value18=#{value18,jdbcType=VARCHAR},
+		value19=#{value19,jdbcType=VARCHAR},
+		value20=#{value20,jdbcType=VARCHAR},
+		value21=#{value21,jdbcType=VARCHAR},
+		value22=#{value22,jdbcType=VARCHAR},
+		value23=#{value23,jdbcType=VARCHAR},
+		value24=#{value24,jdbcType=VARCHAR},
+		value25=#{value25,jdbcType=VARCHAR},
+		value26=#{value26,jdbcType=VARCHAR},
+		value27=#{value27,jdbcType=VARCHAR},
+		value28=#{value28,jdbcType=VARCHAR},
+		value29=#{value29,jdbcType=VARCHAR},
+		value30=#{value30,jdbcType=VARCHAR},
+		value31=#{value31,jdbcType=VARCHAR},
+		value32=#{value32,jdbcType=VARCHAR},
+		value33=#{value33,jdbcType=VARCHAR},
+		value34=#{value34,jdbcType=VARCHAR},
+		value35=#{value35,jdbcType=VARCHAR},
+		value36=#{value36,jdbcType=VARCHAR},
+		value37=#{value37,jdbcType=VARCHAR},
+		value38=#{value38,jdbcType=VARCHAR},
+		value39=#{value39,jdbcType=VARCHAR},
+		value40=#{value40,jdbcType=VARCHAR},
+		value41=#{value41,jdbcType=VARCHAR},
+		value42=#{value42,jdbcType=VARCHAR},
+		value43=#{value43,jdbcType=VARCHAR},
+		value44=#{value44,jdbcType=VARCHAR},
+		value45=#{value45,jdbcType=VARCHAR},
+		value46=#{value46,jdbcType=VARCHAR},
+		value47=#{value47,jdbcType=VARCHAR},
+		value48=#{value48,jdbcType=VARCHAR},
+		value49=#{value49,jdbcType=VARCHAR},
+		value50=#{value50,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=NUMERIC}
+	</update>
+
+	<update id="clearColumn" parameterType="GovTableField">
+		UPDATE gov_table_field
+		SET value${valueNo}=''
+
+	</update>
+</mapper>

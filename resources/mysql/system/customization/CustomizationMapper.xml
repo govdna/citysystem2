@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.govmade.repository.system.customization.CustomizationDao" >
+  <resultMap id="base" type="Customization" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="meanting" property="meanting" jdbcType="VARCHAR" />
+    <result column="application" property="application" jdbcType="VARCHAR" />
+    <result column="effect" property="effect" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="time_create" property="timeCreate" jdbcType="TIMESTAMP" />
+    <result column="time_modified" property="timeModified" jdbcType="TIMESTAMP" />
+    <result column="isDeleted" property="isDeleted" jdbcType="INTEGER" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, cname, meanting, application, effect, data_element_id, company_id, group_id, 
+    time_create, time_modified, isDeleted
+  </sql> 
+  <sql id="Base_Where_Clause" >
+  		<if test="param.id != null" >  and
+        id = #{param.id,jdbcType=NUMERIC}
+      </if>
+      <if test="param.cname != null" >  and
+        cname = #{param.cname,jdbcType=VARCHAR}
+      </if>
+      <if test="param.meanting != null" >  and
+        meanting = #{param.meanting,jdbcType=VARCHAR}
+      </if>
+      <if test="param.application != null" >  and
+        application = #{param.application,jdbcType=VARCHAR}
+      </if>
+      <if test="param.effect != null" >  and
+        effect = #{param.effect,jdbcType=VARCHAR}
+      </if>
+       <if test="param.companyId != null" >  and
+        company_id = #{param.companyId,jdbcType=NUMERIC}
+      </if>      
+      <if test="param.groupId != null" >  and
+        group_id = #{param.groupId,jdbcType=NUMERIC}
+      </if>
+      <if test="param.timeCreate != null" >  and
+        time_create = #{param.timeCreate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="param.timeModified != null" >  and
+        time_modified = #{param.timeModified,jdbcType=TIMESTAMP}
+      </if>
+      <if test="param.isDeleted != null" >  and
+        isDeleted = #{param.isDeleted,jdbcType=NUMERIC}
+      </if>
+  	</sql>
+  
+  	 <select id="find" resultMap="base" parameterType="Customization">
+		SELECT  <include refid="Base_Column_List" />
+		FROM gov_customization  WHERE 1=1 and isDeleted = 0		
+		<include refid="Base_Where_Clause" />
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				time_create
+			</otherwise>
+		</choose>
+		<choose>		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+   	 <select id="findByPage" resultMap="base" parameterType="Customization">
+		SELECT  <include refid="Base_Column_List" />
+		FROM gov_customization  WHERE 1=1 and isDeleted = 0		
+		<include refid="Base_Where_Clause" />
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				time_create
+			</otherwise>
+		</choose>
+		<choose>		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>   
+ 
+   <select id="count" parameterType="Customization" resultType="java.lang.Integer" >
+    select count(*) from gov_customization
+       <include refid="Base_Where_Clause" />
+   </select>
+
+  <insert id="insert" parameterType="Customization"  useGeneratedKeys="true" keyProperty="id">  
+
+  <![CDATA[
+    insert into gov_customization (id, cname, meanting, 
+      application, effect, 
+      company_id, group_id, time_create, 
+      time_modified, isDeleted)
+    values (#{id,jdbcType=NUMERIC}, #{cname,jdbcType=VARCHAR}, #{meanting,jdbcType=VARCHAR}, 
+      #{application,jdbcType=VARCHAR}, #{effect,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=NUMERIC}, #{groupId,jdbcType=NUMERIC}, #{timeCreate,jdbcType=TIMESTAMP}, 
+      #{timeModified,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=NUMERIC})
+   ]]>   
+  </insert> 
+  
+  	<update id="delete" parameterType="Customization">
+		UPDATE gov_customization
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+
+  <update id="update" parameterType="Customization" >
+    update gov_customization 
+    set cname = #{cname,jdbcType=VARCHAR},
+      meanting = #{meanting,jdbcType=VARCHAR},
+      application = #{application,jdbcType=VARCHAR},
+      effect = #{effect,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=NUMERIC},
+      group_id = #{groupId,jdbcType=NUMERIC},
+      time_modified = #{timeModified,jdbcType=TIMESTAMP},
+      isDeleted = #{isDeleted,jdbcType=NUMERIC} 
+    where id = #{id,jdbcType=NUMERIC}
+  </update>
+</mapper>

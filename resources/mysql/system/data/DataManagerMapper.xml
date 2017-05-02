@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.data.DataManagerDao">
+	<resultMap id="base" type="DataManager"></resultMap>
+	<select id="find" resultMap="base" parameterType="DataManager">
+		SELECT  id,search_type searchType,sort_manager_id sortManagerId,is_show isShow,cata_number cataNumber,data_name dataName,define,eg_name egName,data_type dataType,ranges,short_name shortName,note,value_case valueCase,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,company_id companyId,
+			group_id groupId  FROM gov_data_manager t WHERE 1=1
+		<if test="param.egName != null ">
+			and t.eg_name=#{param.egName}
+		</if>
+			<if test="param.dataName != null ">
+			and t.data_name=#{param.dataName}
+		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.groupId != null ">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null ">
+			and t.company_id=#{param.companyId}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,sort_manager_id sortManagerId,search_type searchType,is_show isShow,cata_number cataNumber,data_name dataName,define,eg_name egName,data_type dataType,ranges,short_name shortName,note,value_case valueCase,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,company_id companyId,
+			group_id groupId  FROM gov_data_manager t WHERE 1=1
+		<if test="param.egName != null ">
+			and t.eg_name=#{param.egName}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>
+		
+		<if test="param.dataName != null and param.dataName !='' ">
+			and t.data_name like '%${param.dataName}%'
+		</if>
+	    <if test="param.groupId != null ">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null ">
+			and t.company_id=#{param.companyId}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="DataManager">
+		SELECT count(*) FROM gov_data_manager t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="DataManager"  useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_data_manager(search_type,is_show,sort_manager_id,cata_number,data_name,define,eg_name,data_type,ranges,short_name,note,value_case,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,company_id,group_id) 
+	VALUES (#{searchType,jdbcType=NUMERIC},#{isShow,jdbcType=NUMERIC},#{sortManagerId,jdbcType=NUMERIC},#{cataNumber,jdbcType=NUMERIC},#{dataName,jdbcType=VARCHAR},#{define,jdbcType=VARCHAR},#{egName,jdbcType=VARCHAR},#{dataType,jdbcType=NUMERIC},#{ranges,jdbcType=VARCHAR},#{shortName,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{valueCase,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="DataManager">
+		UPDATE gov_data_manager
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_data_manager
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="DataManager">
+		DELETE FROM gov_data_manager
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_data_manager
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+    </delete>
+	<update id="update" parameterType="DataManager">
+		UPDATE gov_data_manager
+		SET sort_manager_id =#{sortManagerId,jdbcType=NUMERIC},
+		is_show=#{isShow,jdbcType=NUMERIC},
+		search_type=#{searchType,jdbcType=NUMERIC},
+		cata_number=#{cataNumber,jdbcType=NUMERIC},
+		data_name=#{dataName,jdbcType=VARCHAR},
+		define=#{define,jdbcType=VARCHAR},
+		eg_name=#{egName,jdbcType=VARCHAR},
+		data_type=#{dataType,jdbcType=NUMERIC},
+		ranges=#{ranges,jdbcType=VARCHAR},
+		short_name=#{shortName,jdbcType=VARCHAR},
+        note=#{note,jdbcType=VARCHAR},
+        value_case=#{valueCase,jdbcType=VARCHAR},
+        input_type=#{inputType,jdbcType=VARCHAR},
+        input_value=#{inputValue,jdbcType=VARCHAR},
+        value_no=#{valueNo,jdbcType=NUMERIC},
+        required=#{required,jdbcType=VARCHAR},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		list_no=#{listNo,jdbcType=NUMERIC},
+		company_id=#{companyId,jdbcType=NUMERIC},
+		group_id=#{groupId,jdbcType=NUMERIC}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

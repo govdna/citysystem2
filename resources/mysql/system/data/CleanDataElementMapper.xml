@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.data.CleanDataElementDao">
+	<resultMap id="base" type="CleanDataElement"></resultMap>
+	
+	<select id="getRepeat" resultMap="base" parameterType="CleanDataElement">
+      SELECT value1,count(value1) counts
+   FROM gov_clean_data_element  where isDeleted=0
+   <if test="param.value1 != null and param.value1!='' ">
+		and value1 like '%${param.value1}%'
+   </if>
+   GROUP BY value1 HAVING count(value1) >1  
+   ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				counts
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findDataElementByResId" resultMap="base" parameterType="CleanDataElement">
+      SELECT c.id,c.identifier,c.class_type classType,c.source_type sourceType,c.system_type systemType,c.imported,c.source_id sourceId,c.father_id fatherId,c.value1,c.value2,c.value3,c.value4,c.value5,c.value6,c.value7,c.value8,c.value9,c.value10,c.value11,c.value12,c.value13,c.value14,c.value15,c.value16,c.value17,c.value18,c.value19,c.value20,c.value21,c.value22,c.value23,c.value24,c.value25,c.value26,c.value27,c.value28,c.value29,c.value30,c.company_id companyId,c.group_id groupId,c.time_create timeCreate,c.time_modified timeModified,c.isDeleted,c.status,c.reason
+    FROM gov_clean_data_element c
+    where  1=1
+       <if test="param.id != null ">
+    and c.id in (
+    
+    select c.id from gov_clean_data_element c,gov_information_resource_main t,gov_data_list l,gov_data_element de
+    where  de.isDeleted=0 and t.isDeleted=0 and  l.data_manager_id=t.id 
+    and de.id=l.data_element_id and 
+    ( l.data_element_id =c.source_id or (c.source_id is null and de.imported=1 and de.value1=c.value1)) and t.id=#{param.id})
+ 
+		</if>
+		<if test="param.isDeleted != null ">
+			and c.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and c.value1 like '%${param.chName}%'
+		</if>
+		
+		<choose>
+			<when test="param.systemType !=null and param.systemType !=0">
+				and c.system_type=${param.systemType}
+			</when>
+			<when test="param.systemType !=null and param.systemType ==0">
+				and c.system_type is null
+			</when>
+			<otherwise>
+				
+			</otherwise>
+		</choose>
+			
+		<if  test="param.objectType !=null ">
+			and c.value5=#{param.value5,jdbcType=VARCHAR}
+		</if>
+		
+	</select>
+	
+	
+	
+	<select id="findUseCountByPage" resultMap="base" parameterType="CleanDataElement">
+      select c.id,c.value1,count(c.id) counts,count(DISTINCT m.company_id) companyId from GOV_DATA_ELEMENT t,gov_clean_data_element c,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and c.isDeleted=0 and ((t.id=c.source_id) or (c.source_id is null and c.value1=t.value1))
+      <choose>
+			<when test="param.systemType !=null and param.systemType !=0">
+				and c.system_type=${param.systemType}
+			</when>
+			<when test="param.systemType !=null and param.systemType ==0">
+				and c.system_type is null
+			</when>
+			<otherwise>
+				
+			</otherwise>
+		</choose>
+      <if test="param.chName != null and param.chName != ''">
+			and c.value1 like '%${param.chName}%'
+	  </if>
+      
+      <if test="param.objectType !=null ">
+			and c.value5=#{param.value5}
+	  </if>
+	  
+	  <if  test="param.value8 !=null and  param.value8 != ''">
+			and c.value8=#{param.value8}
+	  </if>
+	  
+      group by c.value1,c.id HAVING count(c.id) >1  
+	</select>
+	
+	<select id="findExactly" resultMap="base" parameterType="CleanDataElement">
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+       WHERE t.isDeleted=0
+		
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 = #{param.chName}
+		</if>
+	
+	</select>
+	
+	
+	<select id="findRepeatList" resultMap="base" parameterType="CleanDataElement">
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+       WHERE father_id is null
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 = #{param.chName}
+		</if>
+	
+	</select>
+	
+	
+	<select id="findBySameConfig" resultMap="base" parameterType="SameDataElementConfig">
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+       WHERE  t.isDeleted=0 and father_id is null and 
+	   <foreach item="o" collection="list" open="(" separator=" or "
+			close=")">
+			t.value1 like #{o.SQLName}
+	   </foreach>
+	
+	</select>
+	
+	<select id="findByIds" resultMap="base" >
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+       WHERE  t.isDeleted=0 and t.id in
+	   <foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			 #{o}
+	   </foreach>
+	
+	</select>
+	
+	
+	<select id="findSingleDataElementByPage" resultMap="base">
+
+		SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+		WHERE father_id IS NULL 
+		AND t.id NOT IN (  SELECT  father_id FROM gov_clean_data_element WHERE father_id IS NOT NULL GROUP BY father_id)
+	
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.companyId != null ">
+			and t.company_id = #{param.companyId}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 like '%${param.chName}%'
+		</if>
+		<if  test="param.objectType !=null ">
+			and value5=#{param.value5}
+		</if>
+		
+	
+		ORDER BY t.time_create desc
+			
+	</select>
+	
+	
+	<select id="find" resultMap="base" parameterType="CleanDataElement">
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+       WHERE 1=1
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 like '%${param.chName}%'
+		</if>
+		<if  test="param.systemType !=null ">
+			and t.system_type=${param.systemType}
+		</if>			
+		<if  test="param.objectType !=null ">
+			and t.value5=#{param.value5,jdbcType=VARCHAR}
+		</if>
+		<if test="param.companyId != null ">
+			and (t.company_id = #{param.companyId} or t.value8= #{param.companyId})
+		</if>
+		
+		<choose>
+			<when  test="param.status==99">
+					and t.id NOT IN ( SELECT id FROM gov_clean_data_element g WHERE  g.father_id IS NOT NULL AND g.status!=0 )
+			</when>
+			<when  test="param.status==111">
+					and t.id in (SELECT DISTINCT father_id from gov_clean_data_element WHERE status=0)
+			</when>
+			<when  test="param.status==113">
+					and t.id in (SELECT DISTINCT data_element_id FROM `gov_data_list` WHERE `data_manager_id` IS NOT NULL AND `data_element_id` IS NOT NULL AND `data_element_id` != 0)
+			</when>
+			<otherwise>
+				<if test="param.status != null ">
+					and t.status=#{param.status}
+				</if>
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when  test="param.fatherId==0">
+					and t.father_id is null
+			</when>
+			<otherwise>
+				<if test="param.fatherId != null ">
+					and t.father_id=#{param.fatherId}
+				</if>
+			</otherwise>
+		</choose>
+		<choose>
+			<when  test="param.imported==0">
+					and t.imported is null
+			</when>
+			<otherwise>
+				<if test="param.imported != null ">
+					and t.imported=#{param.imported}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="param.sourceId != null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType}
+		</if>
+	
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+
+		SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_clean_data_element t 
+		WHERE 1=1
+	
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.companyId != null ">
+			and (t.company_id = #{param.companyId} or t.value8= #{param.companyId})
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 like '%${param.chName}%'
+		</if>
+
+		<if  test="param.objectType !=null ">
+			and t.value5=#{param.value5,jdbcType=VARCHAR}
+		</if>
+		<if  test="param.value8 !=null and param.value8 != ''">
+			and t.value8=#{param.value8}
+		</if>
+		<choose>
+			<when test="param.systemType !=null and param.systemType !=0">
+				and t.system_type=${param.systemType}
+			</when>
+			<when test="param.systemType !=null and param.systemType ==0">
+				and t.system_type is null
+			</when>
+			<otherwise>
+				
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when  test="param.status==99">
+					and t.id NOT IN ( SELECT id FROM gov_clean_data_element g WHERE  g.father_id IS NOT NULL AND g.status!=0 )
+			</when>
+			<when  test="param.status==123">
+					and t.status in (1,2,5)
+			</when>
+			<when  test="param.status==111">
+					and t.id in (SELECT DISTINCT father_id from gov_clean_data_element WHERE isDeleted=0)
+			</when>
+			<when  test="param.status==113">
+					and t.id in (SELECT DISTINCT data_element_id FROM `gov_data_list` WHERE `data_manager_id` IS NOT NULL AND `data_element_id` IS NOT NULL AND `data_element_id` != 0)
+			</when>
+			<otherwise>
+				<if test="param.status != null ">
+					and t.status=#{param.status}
+				</if>
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when  test="param.fatherId==0">
+					and t.father_id is null
+			</when>
+			<otherwise>
+				<if test="param.fatherId != null ">
+					and t.father_id=#{param.fatherId}
+				</if>
+			</otherwise>
+		</choose>
+		<choose>
+			<when  test="param.imported==0">
+					and t.imported is null
+			</when>
+			<otherwise>
+				<if test="param.imported != null ">
+					and t.imported=#{param.imported}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="param.sourceId != null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType,jdbcType=VARCHAR}
+		</if>
+	
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		ORDER BY
+		<choose>		
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>			
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="count" resultType="int" parameterType="CleanDataElement">
+		SELECT count(*) FROM gov_clean_data_element t WHERE 1 = 1
+		<if test="companyId != null ">
+			and t.company_id = #{companyId}
+		</if>
+		<if test="value8 != null ">
+			and t.value8 = #{value8}
+		</if>		
+		<choose>
+			<when  test="status==25">
+					and t.status in (2,5)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		<if test="isDeleted != null ">
+			and t.isDeleted=#{isDeleted}
+		</if>
+		<if test="classType != null ">
+			and t.class_type=#{classType}
+		</if>
+	</select>
+	
+	
+	<select id="maxIdentifier" resultType="String" parameterType="CleanDataElement">
+		SELECT MAX(identifier) from gov_clean_data_element where 1=1
+		<if test="objectType != null ">
+			and value5=#{value5}
+		</if>	
+		<if test="classType != null ">
+			and class_type=#{classType}
+		</if>	
+		<if  test="systemType !=null ">
+			and system_type=${systemType}
+		</if>	
+		
+	</select>
+	
+	
+	<insert id="insert" parameterType="CleanDataElement" useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_clean_data_element(source_type,identifier,class_type,system_type,imported,source_id,father_id,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id,group_id,time_create,time_modified,isDeleted,status,reason) 
+	VALUES (#{sourceType,jdbcType=NUMERIC},#{identifier,jdbcType=VARCHAR},#{classType,jdbcType=NUMERIC},#{systemType,jdbcType=NUMERIC},#{imported,jdbcType=NUMERIC},#{sourceId,jdbcType=NUMERIC},#{fatherId,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{status,jdbcType=NUMERIC},#{reason,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	
+	<insert id="insertDataElement" parameterType="DataElement" useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_clean_data_element(source_type,identifier,class_type,system_type,imported,source_id,father_id,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id,group_id,time_create,time_modified,isDeleted,status,reason) 
+	VALUES (#{sourceType,jdbcType=NUMERIC},#{identifier,jdbcType=VARCHAR},#{classType,jdbcType=NUMERIC},#{systemType,jdbcType=NUMERIC},#{imported,jdbcType=NUMERIC},#{sourceId,jdbcType=NUMERIC},#{fatherId,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{status,jdbcType=NUMERIC},#{reason,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	
+	<update id="delete" parameterType="CleanDataElement">
+		UPDATE gov_clean_data_element
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_clean_data_element
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	<update id="deleteByName" parameterType="CleanDataElement">
+		UPDATE gov_clean_data_element
+		SET isDeleted =1
+		WHERE value1=#{value1} and id!=#{id}
+	</update>
+	
+	<update id="deleteByNameInIds" parameterType="CleanDataElement">
+	 update gov_clean_data_element 
+	 set isDeleted =1
+	 where value1=#{param.value1} and id in (${ids})
+ 	</update>
+ 	
+ 	
+	<update id="transferFather" parameterType="CleanDataElement">
+	update gov_clean_data_element set father_id=#{id} where father_id in ( select id from gov_clean_data_element
+ WHERE value1=#{value1} and id!=#{id})
+ 	</update>
+ 
+ 
+ 	<update id="transferByIds" parameterType="CleanDataElement">
+	update gov_clean_data_element 
+	 set father_id=#{param.id},
+		value4=#{param.value4,jdbcType=VARCHAR},
+		value5=#{param.value5,jdbcType=VARCHAR},
+		value6=#{param.value6,jdbcType=VARCHAR},
+		value7=#{param.value7,jdbcType=VARCHAR},
+		
+		value9=#{param.value9,jdbcType=VARCHAR},
+		value10=#{param.value10,jdbcType=VARCHAR},
+		value11=#{param.value11,jdbcType=VARCHAR},
+		value12=#{param.value12,jdbcType=VARCHAR},
+		value13=#{param.value13,jdbcType=VARCHAR},
+		value14=#{param.value14,jdbcType=VARCHAR},
+		value15=#{param.value15,jdbcType=VARCHAR},
+		value16=#{param.value16,jdbcType=VARCHAR},
+		value17=#{param.value17,jdbcType=VARCHAR},
+		value18=#{param.value18,jdbcType=VARCHAR},
+		value19=#{param.value19,jdbcType=VARCHAR},
+		value20=#{param.value20,jdbcType=VARCHAR},
+		value21=#{param.value21,jdbcType=VARCHAR},
+		value22=#{param.value22,jdbcType=VARCHAR},
+		value23=#{param.value23,jdbcType=VARCHAR},
+		value24=#{param.value24,jdbcType=VARCHAR},
+		value25=#{param.value25,jdbcType=VARCHAR},
+		value26=#{param.value26,jdbcType=VARCHAR},
+		value27=#{param.value27,jdbcType=VARCHAR},
+		value28=#{param.value28,jdbcType=VARCHAR},
+		value29=#{param.value29,jdbcType=VARCHAR},
+		value30=#{param.value30,jdbcType=VARCHAR},
+		time_modified=#{param.timeModified,jdbcType=TIMESTAMP},
+		identifier=#{param.identifier,jdbcType=VARCHAR}
+	 where father_id in (${ids})
+ 	</update>
+ 	
+ 	
+ 
+ 	
+ 	
+ 	
+ 	<update id="setFatherIdByIds" parameterType="CleanDataElement">
+	update gov_clean_data_element 
+	set father_id=#{param.id} ,
+		value4=#{param.value4,jdbcType=VARCHAR},
+		value5=#{param.value5,jdbcType=VARCHAR},
+		value6=#{param.value6,jdbcType=VARCHAR},
+		value7=#{param.value7,jdbcType=VARCHAR},
+	
+		value9=#{param.value9,jdbcType=VARCHAR},
+		value10=#{param.value10,jdbcType=VARCHAR},
+		value11=#{param.value11,jdbcType=VARCHAR},
+		value12=#{param.value12,jdbcType=VARCHAR},
+		value13=#{param.value13,jdbcType=VARCHAR},
+		value14=#{param.value14,jdbcType=VARCHAR},
+		value15=#{param.value15,jdbcType=VARCHAR},
+		value16=#{param.value16,jdbcType=VARCHAR},
+		value17=#{param.value17,jdbcType=VARCHAR},
+		value18=#{param.value18,jdbcType=VARCHAR},
+		value19=#{param.value19,jdbcType=VARCHAR},
+		value20=#{param.value20,jdbcType=VARCHAR},
+		value21=#{param.value21,jdbcType=VARCHAR},
+		value22=#{param.value22,jdbcType=VARCHAR},
+		value23=#{param.value23,jdbcType=VARCHAR},
+		value24=#{param.value24,jdbcType=VARCHAR},
+		value25=#{param.value25,jdbcType=VARCHAR},
+		value26=#{param.value26,jdbcType=VARCHAR},
+		value27=#{param.value27,jdbcType=VARCHAR},
+		value28=#{param.value28,jdbcType=VARCHAR},
+		value29=#{param.value29,jdbcType=VARCHAR},
+		value30=#{param.value30,jdbcType=VARCHAR},
+		time_modified=#{param.timeModified,jdbcType=TIMESTAMP},
+		identifier=#{param.identifier,jdbcType=VARCHAR}
+		where id in (${ids})
+ 	</update>
+ 	
+	
+	
+	<delete id="deletePhysically" parameterType="CleanDataElement">
+		DELETE FROM gov_clean_data_element
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_clean_data_element
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+	</delete>
+		
+	<delete id="deleteAll" parameterType="CleanDataElement">
+		DELETE FROM gov_clean_data_element
+	</delete>
+	
+	
+	<update id="update" parameterType="CleanDataElement">
+		UPDATE gov_clean_data_element
+		SET value1=#{value1,jdbcType=VARCHAR},
+		value2=#{value2,jdbcType=VARCHAR},
+		value3=#{value3,jdbcType=VARCHAR},
+		value4=#{value4,jdbcType=VARCHAR},
+		value5=#{value5,jdbcType=VARCHAR},
+		value6=#{value6,jdbcType=VARCHAR},
+		value7=#{value7,jdbcType=VARCHAR},
+		value8=#{value8,jdbcType=VARCHAR},
+		value9=#{value9,jdbcType=VARCHAR},
+		value10=#{value10,jdbcType=VARCHAR},
+		value11=#{value11,jdbcType=VARCHAR},
+		value12=#{value12,jdbcType=VARCHAR},
+		value13=#{value13,jdbcType=VARCHAR},
+		value14=#{value14,jdbcType=VARCHAR},
+		value15=#{value15,jdbcType=VARCHAR},
+		value16=#{value16,jdbcType=VARCHAR},
+		value17=#{value17,jdbcType=VARCHAR},
+		value18=#{value18,jdbcType=VARCHAR},
+		value19=#{value19,jdbcType=VARCHAR},
+		value20=#{value20,jdbcType=VARCHAR},
+		value21=#{value21,jdbcType=VARCHAR},
+		value22=#{value22,jdbcType=VARCHAR},
+		value23=#{value23,jdbcType=VARCHAR},
+		value24=#{value24,jdbcType=VARCHAR},
+		value25=#{value25,jdbcType=VARCHAR},
+		value26=#{value26,jdbcType=VARCHAR},
+		value27=#{value27,jdbcType=VARCHAR},
+		value28=#{value28,jdbcType=VARCHAR},
+		value29=#{value29,jdbcType=VARCHAR},
+		value30=#{value30,jdbcType=VARCHAR},
+		company_id=#{companyId,jdbcType=NUMERIC},	
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		identifier=#{identifier,jdbcType=VARCHAR},
+		class_type=#{classType,jdbcType=NUMERIC},
+		system_type=#{systemType,jdbcType=NUMERIC},
+		imported=#{imported,jdbcType=NUMERIC},
+	    source_id=#{sourceId,jdbcType=NUMERIC},
+	    father_id=#{fatherId,jdbcType=NUMERIC}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	
+	<update id="updateSystemType" parameterType="CleanDataElement">
+		UPDATE gov_clean_data_element
+		SET 
+		system_type=#{systemType,jdbcType=NUMERIC}
+		WHERE id in <foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o}
+		</foreach>
+	</update>
+	
+	<update id="clearColumn" parameterType="CleanDataElement">
+		UPDATE gov_clean_data_element
+		SET value${valueNo}=''
+		WHERE id>0 and class_type=1
+	</update>
+	
+</mapper>

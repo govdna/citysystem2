@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.information.DataFileDao">
+	<resultMap id="base" type="DataFile"></resultMap>
+	
+	
+	<select id="find" resultMap="base" parameterType="DataFile">
+		SELECT  id,information_resource_id informationResourceId,file_name fileName,note,real_path realPath,show_json showJson,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_data_file t WHERE 1=1
+		<if test="param.informationResourceId != null ">
+			and t.information_resource_id=#{param.informationResourceId}
+		</if>
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,information_resource_id informationResourceId,file_name fileName,note,real_path realPath,show_json showJson,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_data_file t WHERE 1=1
+		<if test="param.informationResourceId != null ">
+			and t.information_resource_id=#{param.informationResourceId}
+		</if>
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="DataFile">
+		SELECT count(*) FROM gov_data_file t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="DataFile"  useGeneratedKeys="true" keyProperty="id">  
+ 	<![CDATA[
+	INSERT INTO gov_data_file(information_resource_id,file_name,note,real_path,show_json,time_create,time_modified,isDeleted) 
+	VALUES (#{informationResourceId,jdbcType=NUMERIC},#{fileName,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{realPath,jdbcType=VARCHAR},#{showJson,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="DataFile">
+		UPDATE gov_data_file
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_data_file
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="DataFile">
+		DELETE FROM gov_data_file
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_data_file
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="DataFile">
+		UPDATE gov_data_file
+		SET 
+		show_json=#{showJson,jdbcType=VARCHAR},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

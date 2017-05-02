@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.information.SubscribeDao">
+	<resultMap id="base" type="Subscribe"></resultMap>
+	
+	
+	<select id="find" resultMap="base" parameterType="Subscribe">
+		SELECT  id,information_resource_id informationResourceId,account_id accountId,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_subscribe t WHERE 1=1
+		<if test="param.informationResourceId != null ">
+			and t.information_resource_id=#{param.informationResourceId}
+		</if>
+		<if test="param.accountId!= null ">
+			and t.account_id=#{param.accountId}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,information_resource_id informationResourceId,account_id accountId,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_subscribe t WHERE 1=1
+		<if test="param.informationResourceId != null ">
+			and t.information_resource_id=#{param.informationResourceId}
+		</if>
+		<if test="param.accountId!= null ">
+			and t.account_id=#{param.accountId}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="Subscribe">
+		SELECT count(*) FROM gov_subscribe t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="Subscribe"  useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_subscribe(information_resource_id,account_id,time_create,time_modified,isDeleted) 
+	VALUES (#{informationResourceId,jdbcType=NUMERIC},#{accountId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="Subscribe">
+		UPDATE gov_subscribe
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_subscribe
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="Subscribe">
+		DELETE FROM gov_subscribe
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_subscribe
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="Subscribe">
+		UPDATE gov_subscribe
+		SET 
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>
