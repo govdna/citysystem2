@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.govmade.common.mybatis.PageInterceptor;
 import com.govmade.common.utils.ServiceUtil;
 import com.govmade.common.utils.StringUtil;
 import com.govmade.common.utils.db.DbConfig;
@@ -1114,6 +1115,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	public void muban(InformationRes o,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
+		System.out.println(PageInterceptor.getDatabaseType());
 		Connection conn = null;
 		Statement stmt = null;
 		try {
