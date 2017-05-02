@@ -175,7 +175,7 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 		String str = StringUtil.toSQLArray(o.getDataElementId());
 		//System.out.println("str=  "+str);
 		int infoResId = o.getId();		
-//		if (str != null && str != "") {
+		if (str != null && str != "") {
 			String[] strs = str.split(",");
 			DataList dl = new DataList();			
 			dl.setHouseModelId(infoResId);
@@ -186,7 +186,7 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 					dataListService.insert(dl);
 				}				
 			}
-//		}		
+		}		
 	}
 	
 	@RequestMapping(value = "listAjax")
