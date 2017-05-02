@@ -126,7 +126,7 @@ public class HouseModelFieldsController extends GovmadeBaseController<HouseModel
 			if(hmList!=null && hmList.size()>0){
 				o.setModelType(hmList.get(0).getModelType()+1);
 			}else{
-				o.setModelType(6);
+				o.setModelType(1);
 			}
 		}
 		
