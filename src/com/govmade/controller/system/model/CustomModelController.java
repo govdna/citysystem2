@@ -240,9 +240,16 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 		String gdb=houseModelFieldsService.find(hmf).get(0).getModelCode();
 
 		//表
-		hmf.setLevel(2);
-		hmf.setValueNo(1); /// ///
-		String tables=houseModelFieldsService.find(hmf).get(0).getModelCode();
+		hmf.setLevel(2);		
+		String tables="";
+		for(int i=1;i<31;i++){
+			hmf.setValueNo(i); /// ///
+			List<HouseModelFields> HMlist=houseModelFieldsService.find(hmf);
+			if(HMlist!=null && HMlist.size()>0){
+				tables=HMlist.get(0).getModelCode();
+				break;
+			}
+		}
 		
 		//字段
 		List<DataElement> list=dataElementService.getDataElementListByHouseModelId(g.getId());
@@ -250,19 +257,28 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 		
 		String oracle="CREATE TABLE \""+tables+"\" ( \n"+
 		"  \"ID\" NUMBER(12) NOT NULL , \n";
-
+		
+		String mysql="CREATE TABLE `"+tables+"` ( \n"+
+		"  `id` int(11) NOT NULL AUTO_INCREMENT, \n";
+		
 		String oracleFields="";
+		String mysqlFields="";
 		for(DataElement t:list){
 			oracleFields=oracleFields+"  \""+t.getValue2()+"\"";
+			mysqlFields=mysqlFields+"  `"+t.getValue2()+"`";
 			if(t.getValue4().equals("3") || t.getValue4().equals("5")){
 				oracleFields=oracleFields+" DATE ";
+				mysqlFields=mysqlFields+" date";
 			}else{
 				oracleFields=oracleFields+" VARCHAR2";
+				mysqlFields=mysqlFields+" varchar";
 			}
 			if(t.getValue7()!=null&&t.getValue7()!=""){
 				oracleFields=oracleFields+"("+t.getValue7()+" BYTE)";
+				mysqlFields=mysqlFields+"("+t.getValue7()+")";
 			}
 			oracleFields=oracleFields+" DEFAULT NULL NULL , \n";
+			mysqlFields=mysqlFields+" DEFAULT NULL COMMENT '"+t.getValue1()+"' , \n";
 		}
 
 		oracleFields=oracleFields+
@@ -272,19 +288,26 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 		"  PRIMARY KEY (\"ID\") \n"+		//主键
 		"); \n";
 		
+		mysqlFields=mysqlFields+
+				"  `time_create` datetime DEFAULT NULL, \n"+
+				"  `time_modified` datetime DEFAULT NULL, \n"+
+				"  `isdeleted` varchar(2) DEFAULT NULL, \n"+
+				"  PRIMARY KEY (`id`) \n"+		//主键
+				") ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC; \n";
+		
 		String notes="";
 		for(DataElement t:list){
 			notes=notes+"COMMENT ON COLUMN \""+tables+"\".\""+t.getValue2()+"\" IS '"+t.getValue1()+"'; \n";
 		}
 
 		oracle=oracle+oracleFields+notes;
-		
+		mysql=mysql+mysqlFields;
 
 //		System.out.println("-------------");
 //		System.out.println(oracle);
 		
 		ar.put("oracle", oracle);
-		ar.put("mySql", "");
+		ar.put("mySql", mysql);
 		ar.put("tables", tables);
 		
 		res.getWriter().write(ar.toString());
@@ -295,12 +318,23 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 		String oraclefile = "oracle-"+tables+".sql";
 		String oraclefullPath = path + "/" +  oraclefile;
 		
+		String mySqlfile = "mySql-"+tables+".sql";
+		String mySqlfullPath = path + "/" +  mySqlfile;
+		
 		FileOutputStream ff1=null;
 		File f1=new File(oraclefullPath);  
 		ff1=new FileOutputStream(f1);
 		byte[] b=oracle.getBytes("UTF-8");
+		
+		FileOutputStream ff2=null;
+		File f2=new File(mySqlfullPath);  
+		ff2=new FileOutputStream(f2);
+		byte[] b2=mysql.getBytes("UTF-8");
+		
 		ff1.write(b);
-		ff1.close();				
+		ff2.write(b2);
+		ff1.close();
+		ff2.close();
 		
 		return null;
 	}

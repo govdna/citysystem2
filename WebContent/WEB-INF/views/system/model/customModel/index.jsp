@@ -430,11 +430,11 @@
               <div class="tab-container-c">
                 <nav class="tab-nav clearfix">
                   <a href="javascript:void(0);" class="pull-left active">oracle</a>
-<!--              	  <a href="javascript:void(0);" class="pull-left">mySql</a>  --> 
+              	  <a href="javascript:void(0);" class="pull-left">mySql</a>
                 </nav>
                 <div class="tab-wrapper text-left">
                   <div class="item">oracle</div>
-<!--                   <div class="item">mySql</div>  --> 
+                  <div class="item">mySql</div>  
                 </div>
               </div>
             </div>
@@ -1003,7 +1003,7 @@ function createSql(id){
       data.mySql = data.mySql.replace('`id` int(12) NOT NULL', '<br>`id` int(12) NOT NULL');
       data.mySql = data.mySql.replace('PRIMARY KEY (`id`)', 'PRIMARY KEY (`id`)<br> ');
       $("#spansql .tab-wrapper .item").eq(0).html(data.oracle);
-//			$("#spansql .tab-wrapper .item").eq(1).html(data.mySql);
+	  $("#spansql .tab-wrapper .item").eq(1).html(data.mySql);
 	  },'json');
 }	
 
