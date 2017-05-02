@@ -75,7 +75,7 @@
 		<result column="value3" property="value3" jdbcType="VARCHAR" />
 	</resultMap>
 	  <sql id="Base_Column_List" >
-	    id, server_num, company_id,group_id, server_brand, server_model, number_s, server_type, operating_system, 
+	    id, server_num, company_id,group_id, server_brand, server_model,  server_type, operating_system, 
 	    buying_time, remark, belong_cproom_id, time_create, time_modified, isDeleted,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,value31,value32,value33,value34,value35,value36,value37,value38,value39,value40,value41,value42,value43,value44,value45,value46,value47,value48,value49,value50
   	
 	  </sql>
@@ -397,7 +397,7 @@
 		WHERE
 			t2.ID = t1.value3
 	</select>
-	<select id="applist" resultMap="base">
+	<select id="applist" resultMap="basee">
 		SELECT ID,VALUE1,Value2,VALUE7 FROM gov_application_system WHERE ISDELETED = 0 AND ID IN 
 		<foreach collection="array" item="employeeId" index="index"
             open="(" close=")" separator=",">

@@ -18,7 +18,7 @@
      
      <!--  各个机构所属的数据元数量 -->
 	 <select id="getUseCount" resultMap="base" parameterType="DataElement">
-		select t.id,t.value1,count(t.id) counts,count(DISTINCT m.company_id) companyId from GOV_DATA_ELEMENT t,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and m.isDeleted=0 and m.status=0 group by t.value1,t.id HAVING count(t.id) >0   order by counts desc
+		select t.id,t.value1,count(t.id) counts,count(DISTINCT m.company_id) companyId from gov_data_element t,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and m.isDeleted=0 and m.status=0 group by t.value1,t.id HAVING count(t.id) >0   order by counts desc
      </select>
      
 	<!--  根据tableId获取DataElement -->
@@ -889,7 +889,7 @@
 	</select>
 	<select id="findInforx" resultType="String" parameterType="DataElement">
 	<![CDATA[
-	SELECT WMSYS.WM_CONCAT(distinct data_manager_id) FROM gov_data_list WHERE data_manager_id > 0 AND data_element_id = #{id}
+	SELECT group_concat(distinct data_manager_id) FROM gov_data_list WHERE data_manager_id > 0 AND data_element_id = #{id}
 	]]>
 	</select>
 	<select id="latestTime" resultType="date" parameterType="DataElement">
