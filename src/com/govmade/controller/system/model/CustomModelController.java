@@ -259,7 +259,7 @@ public class CustomModelController extends GovmadeBaseController<HouseModel>{
 		"  \"ID\" NUMBER(12) NOT NULL , \n";
 		
 		String mysql="CREATE TABLE `"+tables+"` ( \n"+
-		"  `id` int(11) NOT NULL AUTO_INCREMENT, \n";
+		"  `id` int(12) NOT NULL AUTO_INCREMENT, \n";
 		
 		String oracleFields="";
 		String mysqlFields="";

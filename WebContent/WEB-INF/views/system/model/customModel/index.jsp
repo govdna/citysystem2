@@ -974,7 +974,8 @@ function createSql(id){
 
 	var data=$(tableId).bootstrapTable('getRowByUniqueId', id);
 	  jQuery.post(url+"createSql",{"id":id},function(data){
-		     console.log(data.oracle);
+		    //console.log(data.oracle);
+		    //console.log(data.mySql);
 
 			layerIndex=layer.open({
 			  type: 1,
