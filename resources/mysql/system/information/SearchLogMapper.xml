@@ -4,13 +4,12 @@
 	<resultMap id="base" type="SearchLog"></resultMap>
 	
 	<select id="getHotKeyWord" resultMap="base" parameterType="SearchLog">
-		<![CDATA[SELECT keyword ,COUNT(keyword) accountId FROM gov_search_log 
+		SELECT keyword ,COUNT(keyword) AS accountId FROM gov_search_log 
 		WHERE 
-		 
-		 time_modified>=(sysdate-7) 
+		<![CDATA[ TO_DAYS( NOW( ) ) - TO_DAYS( time_modified) <= 1 ]]> 
 		GROUP BY keyword 
-		ORDER BY accountId DESC  LIMIT 5
-		 ]]> 
+		ORDER BY accountId DESC 
+		LIMIT 0,5
 	</select>
 	
 	<select id="find" resultMap="base" parameterType="SearchLog">
