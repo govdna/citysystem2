@@ -585,27 +585,49 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 			Class.forName(driver);
 			conn = (Connection) DriverManager.getConnection(dburl,user, pwd);	
 			stmt = (Statement) conn.createStatement();
-			//注入sql语句
-			String sql = "SELECT\n" +
-					"	*\n" +
-					"FROM\n" +
-					"	(\n" +
-					"		SELECT\n" +
-					"			COUNT (ID) ids,\n" +
-					"			value8\n" +
-					"		FROM\n" +
-					"			gov_data_element\n" +
-					"		WHERE\n" +
-					"			isDeleted = 0\n" +
-					"		AND class_type = 1\n" +
-					"		AND value8 > 0\n" +
-					"		GROUP BY\n" +
-					"			value8\n" +
-					"		ORDER BY\n" +
-					"			ids DESC\n" +
-					"	)\n" +
-					"WHERE\n" +
-					"	ROWNUM < 9";		
+			String sql = "";
+			if(PageInterceptor.getDatabaseType().equals("mysql")){
+				sql = "SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			COUNT(ID) ids,\n" +
+						"			value8\n" +
+						"		FROM\n" +
+						"			gov_data_element\n" +
+						"		WHERE\n" +
+						"			isDeleted = 0\n" +
+						"		AND class_type = 1\n" +
+						"		AND value8 > 0\n" +
+						"		GROUP BY\n" +
+						"			value8\n" +
+						"		ORDER BY\n" +
+						"			ids DESC\n" +
+						"	) AS cnm\n" +
+						"LIMIT 9";		
+			}else{
+				sql = "SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			COUNT (ID) ids,\n" +
+						"			value8\n" +
+						"		FROM\n" +
+						"			gov_data_element\n" +
+						"		WHERE\n" +
+						"			isDeleted = 0\n" +
+						"		AND class_type = 1\n" +
+						"		AND value8 > 0\n" +
+						"		GROUP BY\n" +
+						"			value8\n" +
+						"		ORDER BY\n" +
+						"			ids DESC\n" +
+						"	)\n" +
+						"WHERE\n" +
+						"	ROWNUM < 9";		
+			}
 			ResultSet rs = stmt.executeQuery(sql);
 			//数组循环获得sql数据
 			while (rs.next()) {	
@@ -939,102 +961,208 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 			conn = (Connection) DriverManager.getConnection(dburl,user, pwd);	
 			stmt = (Statement) conn.createStatement();				
 			//注入sql语句
-			String sql ="SELECT * FROM(SELECT\n" +
-					"  icount,\n" +
-					"  dcount,\n" +
-					"  bcount,\n" +
-					"  tcount,\n" +
-					"  t1.cname\n" +
-					"FROM\n" +
-					"  (\n" +
-					"    SELECT\n" +
-					"      count(gov_data_element.id) dcount,\n" +
-					"      gov_company.company_name cname\n" +
-					"    FROM\n" +
-					"      gov_company\n" +
-					"    LEFT JOIN gov_data_element ON gov_data_element.value8 = gov_company.id\n" +
-					"    AND gov_data_element.isDeleted = 0\n" +
-					"    AND gov_data_element.class_type = 1\n" +
-					"    WHERE\n" +
-					"      gov_company.isDeleted = 0\n" +
-					"    GROUP BY\n" +
-					"      gov_company.id,\n" +
-					"      gov_company.company_name\n" +
-					"    ORDER BY\n" +
-					"      gov_company.id ASC\n" +
-					"  ) t1\n" +
-					"JOIN (\n" +
-					"  SELECT\n" +
-					"    count(\n" +
-					"      gov_information_resource_main.id\n" +
-					"    ) icount,\n" +
-					"    gov_company.company_name cname\n" +
-					"  FROM\n" +
-					"    gov_company\n" +
-					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
-					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.isDeleted = 0\n" +
-					"  WHERE\n" +
-					"    gov_company.isDeleted = 0\n" +
-					"  GROUP BY\n" +
-					"    gov_company.id,\n" +
-					"    gov_company.company_name\n" +
-					"  ORDER BY\n" +
-					"    gov_company.id ASC\n" +
-					") t2 ON  t1.cname = t2.cname\n" +
-					"JOIN (\n" +
-					"  SELECT\n" +
-					"    count(\n" +
-					"      gov_information_resource_main.id\n" +
-					"    ) bcount,\n" +
-					"    gov_company.company_name cname\n" +
-					"  FROM\n" +
-					"    gov_company\n" +
-					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
-					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.inforTypes = 1\n" +
-					"  AND gov_information_resource_main.isDeleted = 0\n" +
-					"  WHERE\n" +
-					"    gov_company.isDeleted = 0\n" +
-					"  GROUP BY\n" +
-					"    gov_company.id,\n" +
-					"    gov_company.company_name\n" +
-					"  ORDER BY\n" +
-					"    gov_company.id ASC\n" +
-					") t3  ON  t2.cname = t3.cname\n" +
-					"JOIN (\n" +
-					"  SELECT\n" +
-					"    count(\n" +
-					"      gov_information_resource_main.id\n" +
-					"    ) tcount,\n" +
-					"    gov_company.company_name cname\n" +
-					"  FROM\n" +
-					"    gov_company\n" +
-					"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
-					"  AND gov_information_resource_main.status = 0\n" +
-					"  AND gov_information_resource_main.inforTypes = 2\n" +
-					"  AND gov_information_resource_main.isDeleted = 0\n" +
-					"  WHERE\n" +
-					"    gov_company.isDeleted = 0\n" +
-					"  GROUP BY\n" +
-					"    gov_company.id,\n" +
-					"    gov_company.company_name\n" +
-					"  ORDER BY\n" +
-					"    gov_company.id ASC\n" +
-					") t4  ON  t3.cname = t4.cname\n" +
-					"where\n" +
-					"  t1.dcount > 0\n" +
-					"  OR t3.bcount > 0\n" +
-					"  OR t2.icount > 0\n" +
-					"  OR t4.tcount > 0\n" +
-					"GROUP BY\n" +
-					"  t1.cname,  icount,\n" +
-					"  dcount,\n" +
-					"  bcount,\n" +
-					"  tcount\n" +
-					"ORDER BY\n" +
-					"  dcount DESC)\n" +
-					"WHERE ROWNUM < 11";
+			String sql = "";
+			if(PageInterceptor.getDatabaseType().equals("mysql")){
+				sql ="SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			icount,\n" +
+						"			dcount,\n" +
+						"			bcount,\n" +
+						"			tcount,\n" +
+						"			t1.cname\n" +
+						"		FROM\n" +
+						"			(\n" +
+						"				SELECT\n" +
+						"					count(gov_data_element.id) dcount,\n" +
+						"					gov_company.company_name cname\n" +
+						"				FROM\n" +
+						"					gov_company\n" +
+						"				LEFT JOIN gov_data_element ON gov_data_element.value8 = gov_company.id\n" +
+						"				AND gov_data_element.isDeleted = 0\n" +
+						"				AND gov_data_element.class_type = 1\n" +
+						"				WHERE\n" +
+						"					gov_company.isDeleted = 0\n" +
+						"				GROUP BY\n" +
+						"					gov_company.id,\n" +
+						"					gov_company.company_name\n" +
+						"				ORDER BY\n" +
+						"					gov_company.id ASC\n" +
+						"			) t1\n" +
+						"		JOIN (\n" +
+						"			SELECT\n" +
+						"				count(\n" +
+						"					gov_information_resource_main.id\n" +
+						"				) icount,\n" +
+						"				gov_company.company_name cname\n" +
+						"			FROM\n" +
+						"				gov_company\n" +
+						"			LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
+						"			AND gov_information_resource_main. STATUS = 0\n" +
+						"			AND gov_information_resource_main.isDeleted = 0\n" +
+						"			WHERE\n" +
+						"				gov_company.isDeleted = 0\n" +
+						"			GROUP BY\n" +
+						"				gov_company.id,\n" +
+						"				gov_company.company_name\n" +
+						"			ORDER BY\n" +
+						"				gov_company.id ASC\n" +
+						"		) t2 ON t1.cname = t2.cname\n" +
+						"		JOIN (\n" +
+						"			SELECT\n" +
+						"				count(\n" +
+						"					gov_information_resource_main.id\n" +
+						"				) bcount,\n" +
+						"				gov_company.company_name cname\n" +
+						"			FROM\n" +
+						"				gov_company\n" +
+						"			LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
+						"			AND gov_information_resource_main. STATUS = 0\n" +
+						"			AND gov_information_resource_main.inforTypes = 1\n" +
+						"			AND gov_information_resource_main.isDeleted = 0\n" +
+						"			WHERE\n" +
+						"				gov_company.isDeleted = 0\n" +
+						"			GROUP BY\n" +
+						"				gov_company.id,\n" +
+						"				gov_company.company_name\n" +
+						"			ORDER BY\n" +
+						"				gov_company.id ASC\n" +
+						"		) t3 ON t2.cname = t3.cname\n" +
+						"		JOIN (\n" +
+						"			SELECT\n" +
+						"				count(\n" +
+						"					gov_information_resource_main.id\n" +
+						"				) tcount,\n" +
+						"				gov_company.company_name cname\n" +
+						"			FROM\n" +
+						"				gov_company\n" +
+						"			LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
+						"			AND gov_information_resource_main. STATUS = 0\n" +
+						"			AND gov_information_resource_main.inforTypes = 2\n" +
+						"			AND gov_information_resource_main.isDeleted = 0\n" +
+						"			WHERE\n" +
+						"				gov_company.isDeleted = 0\n" +
+						"			GROUP BY\n" +
+						"				gov_company.id,\n" +
+						"				gov_company.company_name\n" +
+						"			ORDER BY\n" +
+						"				gov_company.id ASC\n" +
+						"		) t4 ON t3.cname = t4.cname\n" +
+						"		WHERE\n" +
+						"			t1.dcount > 0\n" +
+						"		OR t3.bcount > 0\n" +
+						"		OR t2.icount > 0\n" +
+						"		OR t4.tcount > 0\n" +
+						"		GROUP BY\n" +
+						"			t1.cname,\n" +
+						"			icount,\n" +
+						"			dcount,\n" +
+						"			bcount,\n" +
+						"			tcount\n" +
+						"		ORDER BY\n" +
+						"			dcount DESC\n" +
+						"	) AS cnm\n" +
+						"LIMIT 10";
+			}else{
+				sql ="SELECT * FROM(SELECT\n" +
+						"  icount,\n" +
+						"  dcount,\n" +
+						"  bcount,\n" +
+						"  tcount,\n" +
+						"  t1.cname\n" +
+						"FROM\n" +
+						"  (\n" +
+						"    SELECT\n" +
+						"      count(gov_data_element.id) dcount,\n" +
+						"      gov_company.company_name cname\n" +
+						"    FROM\n" +
+						"      gov_company\n" +
+						"    LEFT JOIN gov_data_element ON gov_data_element.value8 = gov_company.id\n" +
+						"    AND gov_data_element.isDeleted = 0\n" +
+						"    AND gov_data_element.class_type = 1\n" +
+						"    WHERE\n" +
+						"      gov_company.isDeleted = 0\n" +
+						"    GROUP BY\n" +
+						"      gov_company.id,\n" +
+						"      gov_company.company_name\n" +
+						"    ORDER BY\n" +
+						"      gov_company.id ASC\n" +
+						"  ) t1\n" +
+						"JOIN (\n" +
+						"  SELECT\n" +
+						"    count(\n" +
+						"      gov_information_resource_main.id\n" +
+						"    ) icount,\n" +
+						"    gov_company.company_name cname\n" +
+						"  FROM\n" +
+						"    gov_company\n" +
+						"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
+						"  AND gov_information_resource_main.status = 0\n" +
+						"  AND gov_information_resource_main.isDeleted = 0\n" +
+						"  WHERE\n" +
+						"    gov_company.isDeleted = 0\n" +
+						"  GROUP BY\n" +
+						"    gov_company.id,\n" +
+						"    gov_company.company_name\n" +
+						"  ORDER BY\n" +
+						"    gov_company.id ASC\n" +
+						") t2 ON  t1.cname = t2.cname\n" +
+						"JOIN (\n" +
+						"  SELECT\n" +
+						"    count(\n" +
+						"      gov_information_resource_main.id\n" +
+						"    ) bcount,\n" +
+						"    gov_company.company_name cname\n" +
+						"  FROM\n" +
+						"    gov_company\n" +
+						"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
+						"  AND gov_information_resource_main.status = 0\n" +
+						"  AND gov_information_resource_main.inforTypes = 1\n" +
+						"  AND gov_information_resource_main.isDeleted = 0\n" +
+						"  WHERE\n" +
+						"    gov_company.isDeleted = 0\n" +
+						"  GROUP BY\n" +
+						"    gov_company.id,\n" +
+						"    gov_company.company_name\n" +
+						"  ORDER BY\n" +
+						"    gov_company.id ASC\n" +
+						") t3  ON  t2.cname = t3.cname\n" +
+						"JOIN (\n" +
+						"  SELECT\n" +
+						"    count(\n" +
+						"      gov_information_resource_main.id\n" +
+						"    ) tcount,\n" +
+						"    gov_company.company_name cname\n" +
+						"  FROM\n" +
+						"    gov_company\n" +
+						"  LEFT JOIN gov_information_resource_main ON gov_information_resource_main.value3 = gov_company.id\n" +
+						"  AND gov_information_resource_main.status = 0\n" +
+						"  AND gov_information_resource_main.inforTypes = 2\n" +
+						"  AND gov_information_resource_main.isDeleted = 0\n" +
+						"  WHERE\n" +
+						"    gov_company.isDeleted = 0\n" +
+						"  GROUP BY\n" +
+						"    gov_company.id,\n" +
+						"    gov_company.company_name\n" +
+						"  ORDER BY\n" +
+						"    gov_company.id ASC\n" +
+						") t4  ON  t3.cname = t4.cname\n" +
+						"where\n" +
+						"  t1.dcount > 0\n" +
+						"  OR t3.bcount > 0\n" +
+						"  OR t2.icount > 0\n" +
+						"  OR t4.tcount > 0\n" +
+						"GROUP BY\n" +
+						"  t1.cname,  icount,\n" +
+						"  dcount,\n" +
+						"  bcount,\n" +
+						"  tcount\n" +
+						"ORDER BY\n" +
+						"  dcount DESC)\n" +
+						"WHERE ROWNUM < 11";
+			}
 			ResultSet rs = stmt.executeQuery(sql);
 			JSONObject json = new JSONObject();
 			JSONObject Ejson = new JSONObject();
@@ -1115,7 +1243,6 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	public void muban(InformationRes o,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
-		System.out.println(PageInterceptor.getDatabaseType());
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -1123,45 +1250,87 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 			conn = (Connection) DriverManager.getConnection(dburl,user, pwd);	
 			stmt = (Statement) conn.createStatement();				
 			//注入sql语句
-			String sql ="SELECT\n" +
-					"	*\n" +
-					"FROM\n" +
-					"	(\n" +
-					"		SELECT\n" +
-					"			*\n" +
-					"		FROM\n" +
-					"			(\n" +
-					"				SELECT\n" +
-					"					COUNT (T . ID) SECONDCOUNTS,\n" +
-					"					S.SORT_NAME\n" +
-					"				FROM\n" +
-					"					gov_information_resource T,\n" +
-					"					GOV_SORT_MANAGER S\n" +
-					"				WHERE\n" +
-					"					S. ID = T .INFORTYPES2\n" +
-					"				AND T .isDeleted = 0\n" +
-					"				GROUP BY\n" +
-					"					T .inforTypes2,\n" +
-					"					S.SORT_NAME\n" +
-					"				UNION\n" +
-					"					SELECT\n" +
-					"						COUNT (T . ID) SECONDCOUNTS,\n" +
-					"						S.SORT_NAME\n" +
-					"					FROM\n" +
-					"						gov_information_resource T,\n" +
-					"						GOV_SORT_MANAGER S\n" +
-					"					WHERE\n" +
-					"						S. ID = T .INFORTYPES3\n" +
-					"					AND T .isDeleted = 0\n" +
-					"					GROUP BY\n" +
-					"						T .inforTypes3,\n" +
-					"						S.SORT_NAME\n" +
-					"			)\n" +
-					"		ORDER BY\n" +
-					"			SECONDCOUNTS DESC\n" +
-					"	)\n" +
-					"WHERE\n" +
-					"	ROWNUM < 16";
+			String sql = "";
+			if(PageInterceptor.getDatabaseType().equals("mysql")){
+				sql ="SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			*\n" +
+						"		FROM\n" +
+						"			(\n" +
+						"				SELECT\n" +
+						"					COUNT(T.ID) SECONDCOUNTS,\n" +
+						"					S.SORT_NAME\n" +
+						"				FROM\n" +
+						"					gov_information_resource T,\n" +
+						"					gov_sort_manager S\n" +
+						"				WHERE\n" +
+						"					S.ID = T.INFORTYPES2\n" +
+						"				AND T.isDeleted = 0\n" +
+						"				GROUP BY\n" +
+						"					T.inforTypes2,\n" +
+						"					S.SORT_NAME\n" +
+						"				UNION\n" +
+						"					SELECT\n" +
+						"						COUNT(T.ID) SECONDCOUNTS,\n" +
+						"						S.SORT_NAME\n" +
+						"					FROM\n" +
+						"						gov_information_resource T,\n" +
+						"						gov_sort_manager S\n" +
+						"					WHERE\n" +
+						"						S.ID = T.INFORTYPES3\n" +
+						"					AND T.isDeleted = 0\n" +
+						"					GROUP BY\n" +
+						"						T.inforTypes3,\n" +
+						"						S.SORT_NAME\n" +
+						"			) AS cc\n" +
+						"		ORDER BY\n" +
+						"			SECONDCOUNTS DESC\n" +
+						"	) AS cnm\n" +
+						"LIMIT 6";
+			}else{
+				sql ="SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			*\n" +
+						"		FROM\n" +
+						"			(\n" +
+						"				SELECT\n" +
+						"					COUNT (T . ID) SECONDCOUNTS,\n" +
+						"					S.SORT_NAME\n" +
+						"				FROM\n" +
+						"					gov_information_resource T,\n" +
+						"					GOV_SORT_MANAGER S\n" +
+						"				WHERE\n" +
+						"					S. ID = T .INFORTYPES2\n" +
+						"				AND T .isDeleted = 0\n" +
+						"				GROUP BY\n" +
+						"					T .inforTypes2,\n" +
+						"					S.SORT_NAME\n" +
+						"				UNION\n" +
+						"					SELECT\n" +
+						"						COUNT (T . ID) SECONDCOUNTS,\n" +
+						"						S.SORT_NAME\n" +
+						"					FROM\n" +
+						"						gov_information_resource T,\n" +
+						"						GOV_SORT_MANAGER S\n" +
+						"					WHERE\n" +
+						"						S. ID = T .INFORTYPES3\n" +
+						"					AND T .isDeleted = 0\n" +
+						"					GROUP BY\n" +
+						"						T .inforTypes3,\n" +
+						"						S.SORT_NAME\n" +
+						"			)\n" +
+						"		ORDER BY\n" +
+						"			SECONDCOUNTS DESC\n" +
+						"	)\n" +
+						"WHERE\n" +
+						"	ROWNUM < 16";
+			}
 			ResultSet rs = stmt.executeQuery(sql);
 			JSONObject json = new JSONObject();
 			JSONArray jsa = new JSONArray();
@@ -1189,83 +1358,159 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 		try {
 			Class.forName(driver);
 			conn = (Connection) DriverManager.getConnection(dburl,user, pwd);	
-			stmt = (Statement) conn.createStatement();				
+			stmt = (Statement) conn.createStatement();	
+			String sql = "";
 			//注入sql语句
-			String sql ="SELECT\n" +
-					"	*\n" +
-					"FROM\n" +
-					"	(\n" +
-					"		SELECT\n" +
-					"			icount,\n" +
-					"			dcount,\n" +
-					"			t1.cname\n" +
-					"		FROM\n" +
-					"			(\n" +
-					"				SELECT\n" +
-					"					COUNT (gov_data_element. ID) dcount,\n" +
-					"					govmade_dic.DIC_VALUE cname\n" +
-					"				FROM\n" +
-					"					govmade_dic\n" +
-					"				LEFT JOIN gov_data_element ON gov_data_element.value8 = govmade_dic.dic_key\n" +
-					"				AND GOV_DATA_ELEMENT.CLASS_TYPE = 0\n" +
-					"				AND gov_data_element.isDeleted = 0\n" +
-					"				WHERE\n" +
-					"					govmade_dic.isDeleted = 0\n" +
-					"				AND govmade_dic.father_id IN (\n" +
-					"					SELECT\n" +
-					"						ID\n" +
-					"					FROM\n" +
-					"						govmade_dic\n" +
-					"					WHERE\n" +
-					"						dic_num = 'ZYTGF'\n" +
-					"				)\n" +
-					"				GROUP BY\n" +
-					"					govmade_dic.dic_key,\n" +
-					"					govmade_dic.dic_value\n" +
-					"				ORDER BY\n" +
-					"					govmade_dic.dic_key ASC\n" +
-					"			) t1\n" +
-					"		JOIN (\n" +
-					"			SELECT\n" +
-					"				COUNT (\n" +
-					"					gov_information_resource. ID\n" +
-					"				) icount,\n" +
-					"				govmade_dic.dic_value cname\n" +
-					"			FROM\n" +
-					"				govmade_dic\n" +
-					"			LEFT JOIN gov_information_resource ON gov_information_resource.value2 = govmade_dic.dic_key\n" +
-					"			AND gov_information_resource.isDeleted = 0\n" +
-					"			WHERE\n" +
-					"				govmade_dic.isDeleted = 0\n" +
-					"			AND govmade_dic.father_id IN (\n" +
-					"				SELECT\n" +
-					"					ID\n" +
-					"				FROM\n" +
-					"					govmade_dic\n" +
-					"				WHERE\n" +
-					"					dic_num = 'ZYTGF'\n" +
-					"			)\n" +
-					"			GROUP BY\n" +
-					"				govmade_dic.dic_key,\n" +
-					"				govmade_dic.dic_value\n" +
-					"			ORDER BY\n" +
-					"				govmade_dic.dic_key ASC\n" +
-					"		) t2 ON t1.cname = t2.cname\n" +
-					"		WHERE\n" +
-					"			t1.dcount > 0\n" +
-					"		OR t2.icount > 0\n" +
-					"		GROUP BY\n" +
-					"			t1.cname,\n" +
-					"			icount,\n" +
-					"			dcount\n" +
-					"		ORDER BY\n" +
-					"			icount DESC\n" +
-					"	)\n" +
-					"WHERE\n" +
-					"	ROWNUM < 6\n" +
-					"ORDER BY\n" +
-					"	icount ASC";
-			System.out.println(sql);
+			if(PageInterceptor.getDatabaseType().equals("mysql")){
+				sql ="SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			icount,\n" +
+						"			dcount,\n" +
+						"			t1.cname\n" +
+						"		FROM\n" +
+						"			(\n" +
+						"				SELECT\n" +
+						"					COUNT(gov_data_element.ID) dcount,\n" +
+						"					govmade_dic.DIC_VALUE cname\n" +
+						"				FROM\n" +
+						"					govmade_dic\n" +
+						"				LEFT JOIN gov_data_element ON gov_data_element.value8 = govmade_dic.dic_key\n" +
+						"				AND gov_data_element.CLASS_TYPE = 0\n" +
+						"				AND gov_data_element.isDeleted = 0\n" +
+						"				WHERE\n" +
+						"					govmade_dic.isDeleted = 0\n" +
+						"				AND govmade_dic.father_id IN (\n" +
+						"					SELECT\n" +
+						"						ID\n" +
+						"					FROM\n" +
+						"						govmade_dic\n" +
+						"					WHERE\n" +
+						"						dic_num = 'ZYTGF'\n" +
+						"				)\n" +
+						"				GROUP BY\n" +
+						"					govmade_dic.dic_key,\n" +
+						"					govmade_dic.dic_value\n" +
+						"				ORDER BY\n" +
+						"					govmade_dic.dic_key ASC\n" +
+						"			) t1\n" +
+						"		JOIN (\n" +
+						"			SELECT\n" +
+						"				COUNT(\n" +
+						"					gov_information_resource.ID\n" +
+						"				) icount,\n" +
+						"				govmade_dic.dic_value cname\n" +
+						"			FROM\n" +
+						"				govmade_dic\n" +
+						"			LEFT JOIN gov_information_resource ON gov_information_resource.value2 = govmade_dic.dic_key\n" +
+						"			AND gov_information_resource.isDeleted = 0\n" +
+						"			WHERE\n" +
+						"				govmade_dic.isDeleted = 0\n" +
+						"			AND govmade_dic.father_id IN (\n" +
+						"				SELECT\n" +
+						"					ID\n" +
+						"				FROM\n" +
+						"					govmade_dic\n" +
+						"				WHERE\n" +
+						"					dic_num = 'ZYTGF'\n" +
+						"			)\n" +
+						"			GROUP BY\n" +
+						"				govmade_dic.dic_key,\n" +
+						"				govmade_dic.dic_value\n" +
+						"			ORDER BY\n" +
+						"				govmade_dic.dic_key ASC\n" +
+						"		) t2 ON t1.cname = t2.cname\n" +
+						"		WHERE\n" +
+						"			t1.dcount > 0\n" +
+						"		OR t2.icount > 0\n" +
+						"		GROUP BY\n" +
+						"			t1.cname,\n" +
+						"			icount,\n" +
+						"			dcount\n" +
+						"		ORDER BY\n" +
+						"			icount DESC\n" +
+						"	) as cnm\n" +
+						"ORDER BY\n" +
+						"	icount ASC\n" +
+						"LIMIT 6";
+			}else{
+				sql ="SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			icount,\n" +
+						"			dcount,\n" +
+						"			t1.cname\n" +
+						"		FROM\n" +
+						"			(\n" +
+						"				SELECT\n" +
+						"					COUNT (gov_data_element. ID) dcount,\n" +
+						"					govmade_dic.DIC_VALUE cname\n" +
+						"				FROM\n" +
+						"					govmade_dic\n" +
+						"				LEFT JOIN gov_data_element ON gov_data_element.value8 = govmade_dic.dic_key\n" +
+						"				AND GOV_DATA_ELEMENT.CLASS_TYPE = 0\n" +
+						"				AND gov_data_element.isDeleted = 0\n" +
+						"				WHERE\n" +
+						"					govmade_dic.isDeleted = 0\n" +
+						"				AND govmade_dic.father_id IN (\n" +
+						"					SELECT\n" +
+						"						ID\n" +
+						"					FROM\n" +
+						"						govmade_dic\n" +
+						"					WHERE\n" +
+						"						dic_num = 'ZYTGF'\n" +
+						"				)\n" +
+						"				GROUP BY\n" +
+						"					govmade_dic.dic_key,\n" +
+						"					govmade_dic.dic_value\n" +
+						"				ORDER BY\n" +
+						"					govmade_dic.dic_key ASC\n" +
+						"			) t1\n" +
+						"		JOIN (\n" +
+						"			SELECT\n" +
+						"				COUNT (\n" +
+						"					gov_information_resource. ID\n" +
+						"				) icount,\n" +
+						"				govmade_dic.dic_value cname\n" +
+						"			FROM\n" +
+						"				govmade_dic\n" +
+						"			LEFT JOIN gov_information_resource ON gov_information_resource.value2 = govmade_dic.dic_key\n" +
+						"			AND gov_information_resource.isDeleted = 0\n" +
+						"			WHERE\n" +
+						"				govmade_dic.isDeleted = 0\n" +
+						"			AND govmade_dic.father_id IN (\n" +
+						"				SELECT\n" +
+						"					ID\n" +
+						"				FROM\n" +
+						"					govmade_dic\n" +
+						"				WHERE\n" +
+						"					dic_num = 'ZYTGF'\n" +
+						"			)\n" +
+						"			GROUP BY\n" +
+						"				govmade_dic.dic_key,\n" +
+						"				govmade_dic.dic_value\n" +
+						"			ORDER BY\n" +
+						"				govmade_dic.dic_key ASC\n" +
+						"		) t2 ON t1.cname = t2.cname\n" +
+						"		WHERE\n" +
+						"			t1.dcount > 0\n" +
+						"		OR t2.icount > 0\n" +
+						"		GROUP BY\n" +
+						"			t1.cname,\n" +
+						"			icount,\n" +
+						"			dcount\n" +
+						"		ORDER BY\n" +
+						"			icount DESC\n" +
+						"	)\n" +
+						"WHERE\n" +
+						"	ROWNUM < 6\n" +
+						"ORDER BY\n" +
+						"	icount ASC";
+			}
 			ResultSet rs = stmt.executeQuery(sql);
 			JSONObject json = new JSONObject();
 			JSONArray jsa = new JSONArray();
@@ -1373,32 +1618,60 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 			stmt = (Statement) conn.createStatement();
 			JSONObject echartjson = new JSONObject();
 			JSONArray jsa = new JSONArray();
+			String sql = "";
 			//注入sql语句
-			String sql = "SELECT\n" +
-					"	*\n" +
-					"FROM\n" +
-					"	(\n" +
-					"		SELECT\n" +
-					"			GOV_DATA_LIST.DATA_ELEMENT_ID,\n" +
-					"			GOV_DATA_ELEMENT.VALUE1,\n" +
-					"			COUNT (\n" +
-					"				GOV_DATA_LIST.DATA_ELEMENT_ID\n" +
-					"			) COUNS\n" +
-					"		FROM\n" +
-					"			GOV_DATA_LIST\n" +
-					"		JOIN GOV_DATA_ELEMENT ON GOV_DATA_LIST.DATA_ELEMENT_ID = GOV_DATA_ELEMENT. ID\n" +
-					"		WHERE\n" +
-					"			GOV_DATA_LIST.DATA_MANAGER_ID > 0\n" +
-					"		AND GOV_DATA_LIST.DATA_ELEMENT_ID > 0\n" +
-					"		AND GOV_DATA_ELEMENT.ISDELETED = 0\n" +
-					"		GROUP BY\n" +
-					"			GOV_DATA_LIST.DATA_ELEMENT_ID,\n" +
-					"			GOV_DATA_ELEMENT.VALUE1\n" +
-					"		ORDER BY\n" +
-					"			COUNS DESC\n" +
-					"	)\n" +
-					"WHERE\n" +
-					"	ROWNUM < 20";		
+			if(PageInterceptor.getDatabaseType().equals("mysql")){
+				sql = "SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			gov_data_list.DATA_ELEMENT_ID,\n" +
+						"			gov_data_element.VALUE1,\n" +
+						"			count(\n" +
+						"				gov_data_list.DATA_ELEMENT_ID\n" +
+						"			) COUNS\n" +
+						"		FROM\n" +
+						"			gov_data_list\n" +
+						"		JOIN gov_data_element ON gov_data_list.DATA_ELEMENT_ID = gov_data_element.ID\n" +
+						"		WHERE\n" +
+						"			gov_data_list.DATA_MANAGER_ID > 0\n" +
+						"		AND gov_data_list.DATA_ELEMENT_ID > 0\n" +
+						"		AND gov_data_element.ISDELETED = 0\n" +
+						"		GROUP BY\n" +
+						"			gov_data_list.DATA_ELEMENT_ID,\n" +
+						"			gov_data_element.VALUE1\n" +
+						"		ORDER BY\n" +
+						"			COUNS DESC\n" +
+						"	) AS cnm\n" +
+						"LIMIT 20";		
+			}else{
+				sql = "SELECT\n" +
+						"	*\n" +
+						"FROM\n" +
+						"	(\n" +
+						"		SELECT\n" +
+						"			GOV_DATA_LIST.DATA_ELEMENT_ID,\n" +
+						"			GOV_DATA_ELEMENT.VALUE1,\n" +
+						"			COUNT (\n" +
+						"				GOV_DATA_LIST.DATA_ELEMENT_ID\n" +
+						"			) COUNS\n" +
+						"		FROM\n" +
+						"			GOV_DATA_LIST\n" +
+						"		JOIN GOV_DATA_ELEMENT ON GOV_DATA_LIST.DATA_ELEMENT_ID = GOV_DATA_ELEMENT. ID\n" +
+						"		WHERE\n" +
+						"			GOV_DATA_LIST.DATA_MANAGER_ID > 0\n" +
+						"		AND GOV_DATA_LIST.DATA_ELEMENT_ID > 0\n" +
+						"		AND GOV_DATA_ELEMENT.ISDELETED = 0\n" +
+						"		GROUP BY\n" +
+						"			GOV_DATA_LIST.DATA_ELEMENT_ID,\n" +
+						"			GOV_DATA_ELEMENT.VALUE1\n" +
+						"		ORDER BY\n" +
+						"			COUNS DESC\n" +
+						"	)\n" +
+						"WHERE\n" +
+						"	ROWNUM < 20";		
+			}
 			ResultSet rs = stmt.executeQuery(sql);
 			//数组循环获得sql数据
 			while (rs.next()) {	
@@ -1420,7 +1693,6 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom>{
 	public void listAllTables(GovComputerRoom c,HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
-		System.out.println("测试");
 		Connection con = null;// 创建一个数据库连接
 		PreparedStatement pre = null;// 创建预编译语句对象，一般都是用这个而不用Statement
 		ResultSet result = null;// 创建一个结果集对象

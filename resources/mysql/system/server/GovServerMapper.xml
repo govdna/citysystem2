@@ -160,7 +160,7 @@
         id = #{param.id,jdbcType=NUMERIC}
       </if>
       <if test="param.serverNum == 1" >  and
-        id in (SELECT DISTINCT VALUE5 FROM GOV_APPLICATION_SYSTEM WHERE VALUE5 > 0)
+        id in (SELECT DISTINCT VALUE5 FROM gov_application_system WHERE VALUE5 > 0)
       </if>
       <if test="param.companyId != null" >  and
         company_id = #{param.companyId,jdbcType=NUMERIC}
@@ -363,13 +363,13 @@
 
 	</update>
 	<select id="tblist" resultMap="basee" parameterType="GovServer">
-		SELECT ID,VALUE1,VALUE2 FROM GOV_TABLE WHERE VALUE3 = #{value3} AND ISDELETED = 0
+		SELECT ID,VALUE1,VALUE2 FROM gov_table WHERE VALUE3 = #{value3} AND ISDELETED = 0
 	</select>
 	<select id="fllist" resultMap="basee" parameterType="GovServer">
-		SELECT VALUE1,VALUE2 FROM GOV_TABLE_FIELD WHERE VALUE3 =  #{value3} AND ISDELETED = 0
+		SELECT VALUE1,VALUE2 FROM gov_table_field WHERE VALUE3 =  #{value3} AND ISDELETED = 0
 	</select>
 	<select id="syslist" resultMap="basee" parameterType="GovServer">
-		SELECT ID,VALUE1,Value2,VALUE7 FROM GOV_APPLICATION_SYSTEM WHERE ISDELETED = 0 
+		SELECT ID,VALUE1,Value2,VALUE7 FROM gov_application_system WHERE ISDELETED = 0 
 		<if test="value3 != null" >
 		AND VALUE3 = #{value3} 
 		</if>
@@ -385,20 +385,20 @@
 			(
 				SELECT
 					VALUE3,
-					WM_CONCAT (ID) VALUE2
+					group_concat(ID) VALUE2
 				FROM
-					GOV_APPLICATION_SYSTEM
+					gov_application_system
 				WHERE
 					ISDELETED = 0
 				GROUP BY
 					VALUE3
 			) t1,
-			GOV_COMPANY t2
+			gov_company t2
 		WHERE
-			t2. ID = t1.value3
+			t2.ID = t1.value3
 	</select>
 	<select id="applist" resultMap="base">
-		SELECT ID,VALUE1,Value2,VALUE7 FROM GOV_APPLICATION_SYSTEM WHERE ISDELETED = 0 AND ID IN 
+		SELECT ID,VALUE1,Value2,VALUE7 FROM gov_application_system WHERE ISDELETED = 0 AND ID IN 
 		<foreach collection="array" item="employeeId" index="index"
             open="(" close=")" separator=",">
             #{employeeId}
