@@ -73,7 +73,7 @@
 	
 	
 	<select id="findUseCountByPage" resultMap="base" parameterType="CleanDataElement">
-      select c.id,c.value1,count(c.id) counts,count(DISTINCT m.company_id) companyId from GOV_DATA_ELEMENT t,gov_clean_data_element c,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and c.isDeleted=0 and ((t.id=c.source_id) or (c.source_id is null and c.value1=t.value1))
+      select c.id,c.value1,count(c.id) counts,count(DISTINCT m.company_id) companyId from gov_data_element t,gov_clean_data_element c,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and c.isDeleted=0 and ((t.id=c.source_id) or (c.source_id is null and c.value1=t.value1))
       <choose>
 			<when test="param.systemType !=null and param.systemType !=0">
 				and c.system_type=${param.systemType}
