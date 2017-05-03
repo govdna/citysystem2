@@ -142,7 +142,7 @@ a, a:hover, a:focus {text-decoration: none;}
             <a href="${base}/backstage/manage?menuType=0" class="item item-1">
               <div class="item-body">
                 <div class="item-bg"></div>
-                <h3 class="text-center"><%=ServiceUtil.modRename(0)%></h3>
+                <h3 class="text-center"><%=ServiceUtil.modRename(0) %></h3>
               </div>
             </a>
             </c:when>
