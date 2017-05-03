@@ -64,7 +64,7 @@
         <!-- 显式指定Mapper文件位置  -->
         <property name="mapperLocations">
             <list>
-                 <!--<value>classpath:/mysql/**/**/*Mapper.xml</value>--> 
+                <!--<value>classpath:/mysql/**/**/*Mapper.xml</value>--> 
                <value>classpath:/mybatis/**/**/*Mapper.xml</value> 
             </list>
         </property>
