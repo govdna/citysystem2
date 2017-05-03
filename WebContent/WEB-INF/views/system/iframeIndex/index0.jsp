@@ -120,7 +120,7 @@ h3 {font-size: 16px; font-weight: 600;}
 </html>
 <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
-<script src="${base}/static/js/echartsSkin.js"></script>
+
 <script>
 var color = <%=ServiceUtil.getEchartColor(10) %>;
 var myChart1 = echarts.init(document.getElementById('main1'));
