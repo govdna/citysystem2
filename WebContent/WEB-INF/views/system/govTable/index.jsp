@@ -303,9 +303,9 @@ $("select[name='cId']").on('change', function(e, params) {
     var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
       rows : params.limit,
       page : params.offset / params.limit + 1,
+  	  companyId:userCompanyId,
       sort:sort,
       order:order,
-
       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=GovTable\"),\"list_no\",\"asc\")%>">  
     	 <%@include file="../common/searchQueryParams.jsp"%>
    	</c:forEach>

@@ -122,7 +122,7 @@ h3 {font-size: 16px; font-weight: 600;}
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
 <script src="${base}/static/js/echartsSkin.js"></script>
 <script>
-var color = <%=ServiceUtil.getEchartColor(10) %>
+var color = <%=ServiceUtil.getEchartColor(10) %>;
 var myChart1 = echarts.init(document.getElementById('main1'));
 var myChart2 = echarts.init(document.getElementById('main2'));
 var myChart3 = echarts.init(document.getElementById('main3'));
@@ -152,7 +152,7 @@ var option1 = {
             axisLine: {            // 坐标轴线
                 lineStyle: {       // 属性lineStyle控制线条样式
                     width: 10,
-                    color: [[0.2, color[0]],[0.8, color[2]],[1, color[1]]]
+                    color: [[1, color[0]],[1, color[1]],[1, color[2]]]
                 }
             },
             axisTick: {            // 坐标轴小标记

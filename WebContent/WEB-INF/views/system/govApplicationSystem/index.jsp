@@ -109,7 +109,7 @@ $("select[name='cId']").chosen({
 	  width: "100%"
 	});
 $("select[name='cId']").on('change', function(e, params) {
-	  value3 = params.selected;
+	userCompanyId = params.selected;
 	});
 $("select[name='innet']").chosen({
 	  disable_search_threshold: 10,
@@ -135,7 +135,7 @@ var formId = '#eform'; //form id
 var url = '${base}/backstage/govApplicationSystem/'; //controller 路径
 var inited=0;
 var BASE_URL = '${base}/static/js/plugins/webuploader';
-var value3 = <%=request.getParameter("value3") %>;
+var userCompanyId = <%=request.getParameter("value3") %>;
 //bootstrap-table 列数
 <%@include file="../common/simpleFieldsColumns.jsp"%>
 function longFormatter(value, row, index) {
@@ -158,6 +158,7 @@ var queryParams = function(params) {
   var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
     rows: params.limit,
     page: params.offset / params.limit + 1,
+    value3:userCompanyId,
     sort:params.sort,
     order:params.order,
 
