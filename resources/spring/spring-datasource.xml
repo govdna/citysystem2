@@ -64,7 +64,9 @@
         <!-- 显式指定Mapper文件位置  -->
         <property name="mapperLocations">
             <list>
-                <value>classpath:/mysql/**/**/*Mapper.xml</value>
+             <!-- mybatis版  classpath:/mybatis/**/**/*Mapper.xml-->
+             <!-- mysql版  classpath:/mysql/**/**/*Mapper.xml-->
+                <value>classpath:/mybatis/**/**/*Mapper.xml</value>
             </list>
         </property>
         <property name="plugins"><array><ref bean="pagePlugin" /></array></property>
@@ -73,7 +75,8 @@
     <bean id="pagePlugin" class="com.govmade.common.mybatis.PageInterceptor">
 		<property name="properties">
 			<props>
-				<prop key="databaseType">mysql</prop>
+			 <!-- oracle  mysql-->
+				<prop key="databaseType">oracle</prop>
 			</props>
 		</property>
 	</bean>
