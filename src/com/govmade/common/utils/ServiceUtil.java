@@ -763,21 +763,6 @@ public class ServiceUtil implements ApplicationContextAware {
 			informationCount = informationResourceService.getCompanyCount();
 		}
 	}
-
-	/*//更换echart皮肤
-	private static String changeEchart(Integer no){		
-		String []a={
-				"['#5d4c4b','#8f7a79','#9d3631','#b68080','#d9d9d9']",
-	    		"['#ca7f28','#e6ad00','#746f5f','#a6a09f','#c6c5c1']",
-	    		"['#b27329','#213863','#405889','#7c91ac','#ced7e0']",
-	    		"['#b7c1dc','#e9e9e9','#c8dced','#5b8ace','#1a4e8f']",
-	    		"['#a29595','#dedede','#d0bbbb','#c40918','#92151c']",
-	    		"['#bfbfbf','#56626f','#3e9cde','#8cc7e6','#cfe1eb']",
-	    		"['#1e323e','#2c445c','#8595a4','#14a4ac','#d2dadb']",
-	    		"['#181e2f','#2c549b','647595','#869ad9','#c3cee3']"
-	    	};
-	  return  a[no];
-	  }*/
 	
 	public static String getEchartColor(Integer id) {
 		Theme dic = new Theme();
@@ -785,13 +770,13 @@ public class ServiceUtil implements ApplicationContextAware {
 		dic = themeService.findById(dic);
 		Integer colorNo = dic.getThemeColor();
 		String []a={
-				"['#5d4c4b','#8f7a79','#9d3631','#b68080','#d9d9d9']",
-	    		"['#ca7f28','#e6ad00','#746f5f','#a6a09f','#c6c5c1']",
-	    		"['#b27329','#213863','#405889','#7c91ac','#ced7e0']",
-	    		"['#b7c1dc','#e9e9e9','#c8dced','#5b8ace','#1a4e8f']",
-	    		"['#a29595','#dedede','#d0bbbb','#c40918','#92151c']",
-	    		"['#bfbfbf','#56626f','#3e9cde','#8cc7e6','#cfe1eb']",
-	    		"['#1e323e','#2c445c','#8595a4','#14a4ac','#d2dadb']",
+				"['#757575', '#c7c7c7', '#dadada', '#8b8b8b', '#b5b5b5', '#e9e9e9']",
+	    		"['#c12e34', '#e6b600', '#0098d9', '#2b821d','#005eaa', '#339ca8', '#cda819', '#32a487']",
+	    		"['#408829', '#68a54a', '#a9cba2', '#86b379','#397b29', '#8abb6f', '#759c6a', '#bfd3b7']",
+	    		"['#1790cf', '#1bb2d8', '#99d2dd', '#88b0bb','#1c7099', '#038cc4', '#75abd0', '#afd6dd']",
+	    		"['#d8361b', '#f16b4c', '#f7b4a9', '#d26666','#99311c', '#c42703', '#d07e75']",
+	    		"['#E01F54', '#b8d2c7', '#f5e8c8', '#001852', '#c6b38e','#a4d8c2', '#f3d999', '#d3758f', '#dcc392', '#2e4783','#82b6e9', '#ff6347', '#a092f1', '#0a915d', '#eaf889','#6699FF', '#ff6666', '#3cb371', '#d5b158', '#38b6b6']",
+	    		"['#e52c3c', '#f7b1ab', '#fa506c', '#f59288', '#f8c4d8','#e54f5c', '#f06d5c', '#e54f80', '#f29c9f', '#eeb5b7']",
 	    		"['#181e2f','#2c549b','647595','#869ad9','#c3cee3']"
 	    	};
 		System.out.println("a[colorNo]="+a[colorNo]);

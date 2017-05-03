@@ -64,10 +64,11 @@
         <!-- 显式指定Mapper文件位置  -->
         <property name="mapperLocations">
             <list>
+
              <!-- mybatis版  classpath:/mybatis/**/**/*Mapper.xml-->
              <!-- mysql版  classpath:/mysql/**/**/*Mapper.xml-->
                 <value>classpath:/mybatis/**/**/*Mapper.xml</value>
-            </list>
+ 			</list>
         </property>
         <property name="plugins"><array><ref bean="pagePlugin" /></array></property>
     </bean>

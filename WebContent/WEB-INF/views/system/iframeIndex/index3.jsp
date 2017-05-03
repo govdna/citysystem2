@@ -129,7 +129,7 @@ h3 {font-size: 16px; font-weight: 600;}
 <script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
 <script src="${base}/static/js/bootstrap-select/js/bootstrap-select.min.js"></script>
 <script src="${base}/static/js/bootstrap-select/js/i18n/defaults-zh_CN.min.js"></script>
-<script src="${base}/static/js/echartsSkin.js"></script>
+
 <script>
 var color = <%=ServiceUtil.getEchartColor(10) %>
   var myChart1 = echarts.init(document.getElementById('main1'));
