@@ -261,6 +261,19 @@ body .layui-layer-btn0 {
 </script>
 <%@include file="../../common/baseSystemJS.jsp"%>
 <script>
+function doFormatter(value, row, index)
+{
+	var html='';
+	html+='<div class="btn-group">';
+	html+='<button type="button" class="btn btn-white" onclick="datailRow(\''+row.idForShow+'\')"><i class="fa fa-info-circle"></i>&nbsp;详情</button>';
+	html+='<button type="button" class="btn btn-white" id="edit"  onclick="editRow(\''+row.idForShow+'\')"><i class="fa fa-pencil"></i>&nbsp;修改</button>';
+    if(row.id!=1){
+	html+='<button type="button" class="btn btn-white" onclick="deleteRow(\''+row.idForShow+'\')"><i class="fa fa-trash"></i>&nbsp;删除</button>';
+    }
+	html+='</div>';
+	return html;
+}
+
 var treeInited=0;
 function addNew(){
   openLayer();
