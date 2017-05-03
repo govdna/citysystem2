@@ -107,6 +107,14 @@ public class PageInterceptor implements Interceptor {
 		return Plugin.wrap(target, this);
 	}
 
+	public static String getDatabaseType() {
+		return databaseType;
+	}
+
+	public static void setDatabaseType(String databaseType) {
+		PageInterceptor.databaseType = databaseType;
+	}
+
 	public void setProperties(Properties p) {
 		databaseType = p.getProperty("databaseType");
 		if (StringUtils.isEmpty(databaseType)) {

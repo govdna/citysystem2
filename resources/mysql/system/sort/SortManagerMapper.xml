@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.sort.SortManagerDao">
+	<resultMap id="base" type="SortManager"></resultMap>
+	<select id="find" resultMap="base" parameterType="SortManager">
+		SELECT id,time_create timeCreate,time_modified timeModified,isDeleted,sort_code sortCode,sort_name sortName,sort_id sortId,level_s "level",type,belong FROM gov_sort_manager t WHERE 1=1
+		<if test="param.id != null">
+			and t.id=#{param.id} 
+		</if>
+		<if test="param.type != null">
+			and t.type=#{param.type} 
+		</if>
+		<if test="param.sortId != null">
+			and t.sort_id=#{param.sortId} 
+		</if>
+		<if test="param.level != null">
+			and t.level_s=#{param.level} 
+		</if>
+		<if test="param.sortCode != null and param.sortCode!=''">
+			and t.sort_code=#{param.sortCode}
+		</if>
+		<if test="param.sortName != null and param.sortName!=''">
+			and t.sort_name=#{param.sortName}
+		</if>
+			<if test="param.belong!= null">
+			and t.belong=#{param.belong} 
+		</if>
+		<if test="param.isDeleted != null">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		
+	   ORDER BY	sort_code ASC
+	<!--  	ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>          -->
+	</select>
+	
+	<select id="findByPage" resultMap="base">
+		SELECT id,time_create timeCreate,time_modified timeModified,isDeleted,sort_code sortCode,sort_name sortName,sort_id sortId,level_s "level",type,belong FROM gov_sort_manager t WHERE 1=1
+			<if test="param.id != null">
+			and t.id=#{param.id} 
+		</if>
+		<if test="param.type != null">
+			and t.type=#{param.type} 
+		</if>
+		<if test="param.sortId != null">
+			and t.sort_id=#{param.sortId} 
+		</if>	
+		<if test="param.level != null">
+			and t.level_s=#{param.level} 
+		</if>
+		<if test="param.sortCode != null and param.sortCode!=''">
+			and t.sort_code like '%${param.sortCode}%'
+		</if>
+		<if test="param.sortName != null and param.sortName!=''">
+			and t.sort_name like '%${param.sortName}%'
+		</if>
+		<if test="param.belong!= null">
+			and t.belong=#{param.belong} 
+		</if>
+		<if test="param.isDeleted != null">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+	<!--    	ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>           -->
+
+	</select>
+
+	<select id="validateName" resultMap="base" parameterType="SortManager">
+      SELECT  id,level_s "level" FROM gov_sort_manager t 
+       WHERE 1=1
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.id != null ">
+			and t.id != #{param.id}
+		</if>
+		<if test="param.type != null">
+			and t.type=#{param.type} 
+		</if>
+		<if test="param.level != null">
+			and t.level_s=#{param.level} 
+		</if>
+		<if test="param.sortCode != null and param.sortCode!=''">
+			and t.sort_code=#{param.sortCode}
+		</if>
+		<if test="param.sortName != null and param.sortName!=''">
+			and t.sort_name=#{param.sortName}
+		</if>
+		<if test="param.belong!= null">
+			and t.belong=#{param.belong} 
+		</if>
+	</select>
+	
+	<select id="count" resultType="int" parameterType="SortManager">
+		SELECT count(*) FROM gov_sort_manager t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="SortManager"  useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_sort_manager(time_create,time_modified,isDeleted,sort_code,sort_name,sort_id,level_s,type,belong,company_id,group_id) 
+	VALUES (#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{sortCode,jdbcType=VARCHAR},#{sortName,jdbcType=VARCHAR},#{sortId,jdbcType=NUMERIC},#{level,jdbcType=NUMERIC},#{type,jdbcType=NUMERIC},#{belong,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="SortManager">
+		UPDATE gov_sort_manager
+		SET isDeleted=1
+		WHERE id=#{id} 
+	</update>
+	<update id="delete1" parameterType="SortManager">
+		UPDATE gov_sort_manager
+		SET belong=1
+		WHERE id=#{id} 
+	</update> 
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_sort_manager
+		SET isDeleted=1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	<delete id="deletePhysically" parameterType="SortManager">
+		DELETE FROM gov_sort_manager
+		WHERE id=#{id} 
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_sort_manager
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="SortManager">
+	UPDATE gov_sort_manager 
+	SET
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		<if test="type != null">
+			, type=#{type,jdbcType=NUMERIC} 
+		</if>
+		<if test="sortId != null">
+			, sort_id=#{sortId,jdbcType=NUMERIC} 
+		</if>
+		<if test="level != null">
+			, level_s=#{level,jdbcType=NUMERIC} 
+		</if>
+		<if test="sortCode != null and sortCode!=''">
+			, sort_code=#{sortCode,jdbcType=VARCHAR}
+		</if>
+		<if test="sortName != null and sortName!=''">
+			, sort_name=#{sortName,jdbcType=VARCHAR}
+		</if>
+		<if test="belong!= null">
+			, belong=#{belong,jdbcType=NUMERIC} 
+		</if>
+		<if test="companyId!= null">
+			, company_id=#{companyId,jdbcType=NUMERIC} 
+		</if>
+	    <if test="groupId!= null">
+			, group_id=#{groupId,jdbcType=NUMERIC} 
+		</if>
+        <if test="isDeleted!= null">
+			, isDeleted=#{isDeleted,jdbcType=NUMERIC} 
+		</if>
+	WHERE id=#{id}
+	</update>
+
+</mapper>

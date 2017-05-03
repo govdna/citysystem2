@@ -237,40 +237,68 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 	public String treeAjax(Model m, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String type = req.getParameter("type");
 		Integer typei = Integer.valueOf(type);
-		if(typei==1){
-			m.addAttribute("url", "/backstage/model/houseModel/testAjax");
-		}else if(typei==2){
-			m.addAttribute("url", "/backstage/model/houseModel/legalAjax");
-		}else if(typei==3){
-			m.addAttribute("url", "/backstage/model/houseModel/creditAjax");
-		}else if(typei==4){
-			m.addAttribute("url", "/backstage/model/houseModel/licenceAjax");
-		}else{
+//		if(typei==1){
+//			m.addAttribute("url", "/backstage/model/houseModel/testAjax");
+//		}else if(typei==2){
+//			m.addAttribute("url", "/backstage/model/houseModel/legalAjax");
+//		}else if(typei==3){
+//			m.addAttribute("url", "/backstage/model/houseModel/creditAjax");
+//		}else if(typei==4){
+//			m.addAttribute("url", "/backstage/model/houseModel/licenceAjax");
+//		}else{
 			m.addAttribute("url", "/backstage/model/houseModel/customAjax?model="+typei);
-		}
-/*
-		switch(typei){
-		  case 1:
-		  m.addAttribute("url", "/backstage/model/houseModel/testAjax");
-		  break;
-		  case 2:
-		  m.addAttribute("url", "/backstage/model/houseModel/legalAjax");
-		  break;
-		  case 3:
-		  m.addAttribute("url", "/backstage/model/houseModel/creditAjax");
-		  break;
-		  case 4:
-		  m.addAttribute("url", "/backstage/model/houseModel/licenceAjax");
-		  break;
-		  case 6:
-		  m.addAttribute("url", "/backstage/model/houseModel/customAjax");
-		  break;
-		  default:
-		  m.addAttribute("url", "");
-		}
-*/		
+//		}
 		return "/system/model/houseModel6/index";
 	}
+	@RequestMapping(value="customAjax")
+	public String customAjax(CleanDataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("text/html;charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		JSONObject tree = new JSONObject();
+		JSONArray ja = new JSONArray();
+		JSONObject menu = new JSONObject();
+		HouseModelFields hmf= new HouseModelFields();
+		String type=req.getParameter("model");
+		
+		List<HouseModel> hm = service.customTree(Integer.valueOf(type));
+		InformationResource infor=new InformationResource();
+		if(hm.size()>0){
+			for (HouseModel h : hm) {
+				if(h != null){
+					infor.setId(h.getInformationResId());
+					  String infoName = informationResourceService.findById(infor).getValue1();
+					  menu.put("name",infoName);
+					  	  String s = h.getDataElementId();
+						  JSONArray ja2 = new JSONArray();
+					  	if(s == null || s.isEmpty()){}
+						  else{
+							  String [] stringArr= s.split(",");
+							  if(stringArr.length == 1){
+								  stringArr[0] = s;
+							  }
+							  for (String hs : stringArr){
+								  JSONObject menu2 = new JSONObject();
+								  o.setId(Integer.valueOf(hs));
+								  DataElement d = cleanDataElementService.findById(o);
+								  menu2.put("name", d.getChName());
+								  ja2.add(menu2);
+							  }  
+						  }					  
+						  menu.put("children", ja2);
+						ja.add(menu);  
+				}				  		  
+			}
+		}	
+		hmf.setModelType(Integer.valueOf(type));
+		hmf.setLevel(1);
+		tree.put("name", houseModelFieldsService.find(hmf).get(0).getModelName());
+		tree.put("children", ja);
+		res.getWriter().write(tree.toString());
+		res.getWriter().flush();
+		res.getWriter().close();
+		return null;
+	}
+
 	/** 
 	* @Title: testAjax 
 	* @Description: 用于获取人口库JSON数据展现 
@@ -281,7 +309,7 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
-	*/
+	
 	@RequestMapping(value="testAjax")
 	public String testAjax(DataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("text/html;charset=utf-8");
@@ -356,7 +384,6 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 		res.getWriter().close();
 		return null;
 	}
-	
 	/** 
 	* @Title: legalAjax 
 	* @Description: 用于获取法人库JSON数据展现  
@@ -367,7 +394,7 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
-	*/
+	
 	@RequestMapping(value="legalAjax")
 	public String legalAjax(DataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("text/html;charset=utf-8");
@@ -424,8 +451,7 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 		res.getWriter().flush();
 		res.getWriter().close();
 		return null;
-	}
-	
+	}	
 	/** 
 	* @Title: creditAjax 
 	* @Description: 用于获取信用库JSON数据展现 
@@ -436,7 +462,7 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
-	*/
+	
 	@RequestMapping(value="creditAjax")
 	public String creditAjax(DataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("text/html;charset=utf-8");
@@ -488,56 +514,6 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 		res.getWriter().close();
 		return null;
 	}
-
-	@RequestMapping(value="customAjax")
-	public String customAjax(CleanDataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
-		res.setContentType("text/html;charset=utf-8");
-		res.setCharacterEncoding("utf-8");
-		JSONObject tree = new JSONObject();
-		JSONArray ja = new JSONArray();
-		JSONObject menu = new JSONObject();
-		HouseModelFields hmf= new HouseModelFields();
-		String type=req.getParameter("model");
-		
-		List<HouseModel> hm = service.customTree(Integer.valueOf(type));
-		InformationResource infor=new InformationResource();
-		if(hm.size()>0){
-			for (HouseModel h : hm) {
-				if(h != null){
-					infor.setId(h.getInformationResId());
-					  String infoName = informationResourceService.findById(infor).getValue1();
-					  menu.put("name",infoName);
-					  	  String s = h.getDataElementId();
-						  JSONArray ja2 = new JSONArray();
-					  	if(s == null || s.isEmpty()){}
-						  else{
-							  String [] stringArr= s.split(",");
-							  if(stringArr.length == 1){
-								  stringArr[0] = s;
-							  }
-							  for (String hs : stringArr){
-								  JSONObject menu2 = new JSONObject();
-								  o.setId(Integer.valueOf(hs));
-								  DataElement d = cleanDataElementService.findById(o);
-								  menu2.put("name", d.getChName());
-								  ja2.add(menu2);
-							  }  
-						  }					  
-						  menu.put("children", ja2);
-						ja.add(menu);  
-				}				  		  
-			}
-		}	
-		hmf.setModelType(Integer.valueOf(type));
-		hmf.setLevel(1);
-		tree.put("name", houseModelFieldsService.find(hmf).get(0).getModelName());
-		tree.put("children", ja);
-		res.getWriter().write(tree.toString());
-		res.getWriter().flush();
-		res.getWriter().close();
-		return null;
-	}
-	
 	@RequestMapping(value="licenceAjax")
 	public String licenceAjax(DataElement o, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("text/html;charset=utf-8");
@@ -578,6 +554,7 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 		res.getWriter().close();
 		return null;
 	}
+	*/
 	
 	@Override
 	public void doBeforeListAjax(HouseModel o, HttpServletRequest req, HttpServletResponse res) {

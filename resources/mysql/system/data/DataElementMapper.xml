@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.data.DataElementDao">
+	<resultMap id="base" type="DataElement"></resultMap>
+	<resultMap id="GovTable" type="GovTable"></resultMap>
+	
+	<select id="getDataElementList" resultMap="base" parameterType="DataElement">
+        SELECT  id,class_type classType,source_type sourceType,system_type systemType,identifier,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_data_element t 
+        WHERE  isDeleted=0  and class_type=1
+		
+        ORDER BY id
+
+	</select>
+	<!--  数据元使用频率 -->
+	 <select id="getCompanyCount" resultMap="base" parameterType="DataElement">
+		select value8,count(id) counts from gov_data_element where class_type=1 and isDeleted=0 group by value8
+     </select>	
+     
+     <!--  各个机构所属的数据元数量 -->
+	 <select id="getUseCount" resultMap="base" parameterType="DataElement">
+		select t.id,t.value1,count(t.id) counts,count(DISTINCT m.company_id) companyId from gov_data_element t,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and m.isDeleted=0 and m.status=0 group by t.value1,t.id HAVING count(t.id) >0   order by counts desc
+     </select>
+     
+	<!--  根据tableId获取DataElement -->
+	<select id="getDataElementListByTableId" resultMap="base" parameterType="GovTable">
+	SELECT 
+	 gde.id,gde.identifier,gde.class_type classType,gde.source_type sourceType,gde.system_type systemType,gde.imported,gde.source_id sourceId,gde.father_id fatherId,gde.value1,gde.value2,gde.value3,gde.value4,gde.value5,gde.value6,gde.value7,gde.value8,gde.value9,gde.value10,gde.value11,gde.value12,gde.value13,gde.value14,gde.value15,gde.value16,gde.value17,gde.value18,gde.value19,gde.value20,gde.value21,gde.value22,gde.value23,gde.value24,gde.value25,gde.value26,gde.value27,gde.value28,gde.value29,gde.value30,gde.company_id companyId,gde.group_id groupId,gde.time_create timeCreate,gde.time_modified timeModified,gde.isDeleted,gde.status,gde.reason 
+	
+	 from gov_data_element gde,GOV_TABLE_FIELD gdl where gde.isDeleted=0  
+	 and gde.id= gdl.data_element_id
+
+	<if  test="param.id !=null">
+			and gdl.value3=${param.id}
+	</if>
+	
+	</select>	
+	
+	
+	<!--  根据DataList获取DataElement -->
+	<select id="getDataElementListByDataList" resultMap="base" parameterType="DataElement">
+	SELECT 
+	gdl.is_share isShare,gde.id,gde.identifier,gde.class_type classType,gde.source_type sourceType,gde.system_type systemType,gde.imported,gde.source_id sourceId,gde.father_id fatherId,gde.value1,gde.value2,gde.value3,gde.value4,gde.value5,gde.value6,gde.value7,gde.value8,gde.value9,gde.value10,gde.value11,gde.value12,gde.value13,gde.value14,gde.value15,gde.value16,gde.value17,gde.value18,gde.value19,gde.value20,gde.value21,gde.value22,gde.value23,gde.value24,gde.value25,gde.value26,gde.value27,gde.value28,gde.value29,gde.value30,gde.company_id companyId,gde.group_id groupId,gde.time_create timeCreate,gde.time_modified timeModified,gde.isDeleted,gde.status,gde.reason 
+	
+	 from gov_data_element gde,gov_data_list gdl where gde.isDeleted=0  
+	 and gde.id= gdl.data_element_id
+
+	<if  test="param.informationResId !=null and param.informationResId !=''">
+			and gdl.information_res_id=${param.informationResId}
+	</if>
+	<if  test="param.dataManagerId !=null and param.dataManagerId !=''">
+			and gdl.data_manager_id=${param.dataManagerId}
+	</if>
+	
+	</select>	
+
+	<select id="getByCustomizationId" resultMap="base" parameterType="DataElement">
+	SELECT 
+	gdl.is_share isShare,gde.identifier,gde.id,gde.source_type sourceType,gde.class_type classType,gde.system_type systemType,gde.imported,gde.source_id sourceId,gde.father_id fatherId,gde.value1,gde.value2,gde.value3,gde.value4,gde.value5,gde.value6,gde.value7,gde.value8,gde.value9,gde.value10,gde.value11,gde.value12,gde.value13,gde.value14,gde.value15,gde.value16,gde.value17,gde.value18,gde.value19,gde.value20,gde.value21,gde.value22,gde.value23,gde.value24,gde.value25,gde.value26,gde.value27,gde.value28,gde.value29,gde.value30,gde.company_id companyId,gde.group_id groupId,gde.time_create timeCreate,gde.time_modified timeModified,gde.isDeleted,gde.status,gde.reason 
+	 from gov_data_element gde,gov_data_list gdl where gde.isDeleted=0  
+	 and gde.id= gdl.data_element_id
+	<if  test="customizationId !=null ">
+			and gdl.customization_id=${customizationId}
+	</if>
+	
+	</select>
+
+	<select id="getDataElementListByInforResId" resultMap="base" parameterType="DataElement">
+	SELECT 
+	gdl.is_share isShare,gde.identifier,gde.id,gde.source_type sourceType,gde.class_type classType,gde.system_type systemType,gde.imported,gde.source_id sourceId,gde.father_id fatherId,gde.value1,gde.value2,gde.value3,gde.value4,gde.value5,gde.value6,gde.value7,gde.value8,gde.value9,gde.value10,gde.value11,gde.value12,gde.value13,gde.value14,gde.value15,gde.value16,gde.value17,gde.value18,gde.value19,gde.value20,gde.value21,gde.value22,gde.value23,gde.value24,gde.value25,gde.value26,gde.value27,gde.value28,gde.value29,gde.value30,gde.company_id companyId,gde.group_id groupId,gde.time_create timeCreate,gde.time_modified timeModified,gde.isDeleted,gde.status,gde.reason 
+	from gov_data_element gde,gov_data_list gdl where gde.isDeleted=0 
+	 and gde.id= gdl.data_element_id
+
+	<if  test="objectType !=null and objectType !=''">
+			and value5=${objectType}
+	</if>
+	<if  test="chName !=null and chName !=''">
+			and ch_name like '%${chName}%'
+	</if>
+	<if  test="inforResId !=null and inforResId !=''">
+			and gdl.information_res_id=${inforResId}
+	</if>	
+	</select>	
+	
+	<select id="getDataElementListByDataListPage" resultMap="base" >
+	select	gde.id,
+	gde.identifier,
+	gde.class_type classType,
+	gde.system_type systemType,
+	gde.imported,
+	gde.source_id sourceId,
+	gde.father_id fatherId,
+	gde.value1,
+	gde.value2,
+	gde.value3,
+	gde.value4,
+	gde.value5,
+	gde.value6,
+	gde.value7,
+	gde.value8,
+	gde.value9,
+	gde.value10,
+	gde.value11,
+	gde.value12,
+	gde.value13,
+	gde.value14,
+	gde.value15,
+	gde.value16,
+	gde.value17,
+	gde.value18,
+	gde.value19,
+	gde.value20,
+	gde.value21,
+	gde.value22,
+	gde.value23,
+	gde.value24,
+	gde.value25,
+	gde.value26,
+	gde.value27,
+	gde.value28,
+	gde.value29,
+	gde.value30,
+	gde.company_id companyId,
+	gde.group_id groupId,
+	gde.time_create timeCreate,
+	gde.time_modified timeModified,
+	gde.isDeleted,
+	gde.status,
+	gde.reason from gov_data_element gde where 1=1
+	<if  test="informationResId !=null ">	
+	and gde.id in (select gdl.data_element_id from gov_data_list gdl where gdl.information_res_id=${informationResId})
+	</if>
+	<if  test="dataManagerId !=null ">	
+	and gde.id in (select gdl.data_element_id from gov_data_list gdl where gdl.data_manager_id=${dataManagerId})
+	</if>
+	
+	<if  test="chName !=null and chName !=''">
+			and gde.value1 like '%${chName}%'
+	</if>
+	<if  test="objectType !=null and objectType !=''">
+			and gde.value5='${objectType}'
+	</if>
+
+	</select>
+		
+<!-- 根据 信息资源名称Id 读取关联表(字段为data_manager_id)对应 信息项  -->	
+	<select id="getDataElementListByDataManagerId" resultMap="base" >
+	SELECT 
+	gdl.is_share isShare,gde.identifier,gde.id,gde.source_type sourceType,gde.class_type classType,gde.system_type systemType,gde.imported,gde.source_id sourceId,gde.father_id fatherId,gde.value1,gde.value2,gde.value3,gde.value4,gde.value5,gde.value6,gde.value7,gde.value8,gde.value9,gde.value10,gde.value11,gde.value12,gde.value13,gde.value14,gde.value15,gde.value16,gde.value17,gde.value18,gde.value19,gde.value20,gde.value21,gde.value22,gde.value23,gde.value24,gde.value25,gde.value26,gde.value27,gde.value28,gde.value29,gde.value30,gde.company_id companyId,gde.group_id groupId,gde.time_create timeCreate,gde.time_modified timeModified,gde.isDeleted,gde.status,gde.reason 
+	from gov_data_element gde,gov_data_list gdl where gde.isDeleted=0  and class_type=1 and status=0 
+	 and gde.id= gdl.data_element_id
+
+	<if  test="objectType !=null and objectType !=''">
+			and value5=${objectType}
+	</if>
+	<if  test="chName !=null and chName !=''">
+			and gde.value1 like '%${chName}%'
+	</if>
+	
+	<if  test="inforResourceId !=null and inforResourceId !=''">
+			and gdl.data_manager_id=${inforResourceId}
+	</if>
+	GROUP BY id
+	</select>		
+		<select id="getDataElementListByInforResId2" resultMap="base" parameterType="DataElement">
+	SELECT 
+	 id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason 
+	 from gov_data_element t where isDeleted=0 
+	 <if  test="param.objectType !=null and param.objectType !=''">
+			and t.value5=#{param.objectType}
+	</if>
+	
+	<if  test="param.chName !=null and param.chName !=''">
+			and t.ch_name like '%${param.chName}%'
+	</if>
+	<if  test="param.status!=null">
+			and t.status =#{param.status}
+	</if>
+	and id in 
+	(SELECT data_element_id from gov_data_list where 1=1
+	<if  test="inforResId !=null and inforResId !=''">
+			and information_res_id=${inforResId}
+	</if>
+	);
+	</select>	
+	
+	<select id="getDataElementListByIds" resultMap="base" parameterType="DataElement">
+	SELECT 
+	 id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason 
+	 from gov_data_element where isDeleted=0 and class_type=1 and status=6 and id in 
+	(
+	<if  test="ids !=null and ids !=''">${ids}</if>
+	);
+	</select>	
+	
+
+	
+	<select id="getDataElementListByHouseModelId" resultMap="base" parameterType="DataElement">
+	SELECT 
+	 id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason 
+	from gov_clean_data_element where isDeleted=0 and   id in 
+	(SELECT data_element_id from gov_data_list where 1=1
+	<if  test="houseModelId !=null and houseModelId !=''">
+			and house_model_id=${houseModelId}
+	</if>
+	)
+	</select>	
+	
+	<select id="volidate" resultMap="base" parameterType="DataElement">
+      SELECT  id FROM gov_data_element t 
+       WHERE 1=1
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 = #{param.chName}
+		</if>
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType}
+		</if>
+		<if test="param.systemType != null ">
+			and t.system_type=#{param.systemType}
+		</if>		
+		<if test="param.id != null ">
+			and t.id != #{param.id}
+		</if>
+		<if test="param.value8 != null and param.value8 != ''">
+			and t.value8 = #{param.value8}
+		</if>
+	</select>
+	
+	<select id="findByName" resultMap="base" parameterType="DataElement">
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_data_element t 
+       WHERE 1=1
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 = #{param.chName}
+		</if>
+		<if  test="param.objectType !=null ">
+			and t.value5=${param.objectType}
+		</if>
+		<if test="param.companyId != null ">
+			and (t.company_id = #{param.companyId} or t.value8= #{param.companyId})
+		</if>
+		
+		<choose>
+			<when  test="param.status==99">
+					and t.id NOT IN ( SELECT id FROM gov_data_element g WHERE  g.father_id IS NOT NULL AND g.status!=0 )
+			</when>
+			<when  test="param.status==111">
+					and t.id in (SELECT DISTINCT father_id from gov_data_element WHERE status=0)
+			</when>
+			<when  test="param.status==113">
+					and t.id in (
+					SELECT DISTINCT
+						gov_data_list.data_element_id
+					FROM
+						gov_data_list,
+						gov_information_resource_main
+					WHERE
+						gov_data_list.data_manager_id = gov_information_resource_main. ID
+					AND gov_data_list.data_element_id > 0
+					ORDER BY
+						gov_data_list.data_element_id DESC
+					)
+			</when>
+			<otherwise>
+				<if test="param.status != null ">
+					and t.status=#{param.status}
+				</if>
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when  test="param.fatherId==0">
+					and t.father_id is null
+			</when>
+			<otherwise>
+				<if test="param.fatherId != null ">
+					and t.father_id=#{param.fatherId}
+				</if>
+			</otherwise>
+		</choose>
+		<choose>
+			<when  test="param.imported==0">
+					and t.imported is null
+			</when>
+			<otherwise>
+				<if test="param.imported != null ">
+					and t.imported=#{param.imported}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="param.sourceId != null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType}
+		</if>
+	
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="findExactly" resultMap="base" parameterType="DataElement">
+		SELECT id,identifier,class_type classType,source_type
+		sourceType,system_type systemType,imported,source_id
+		sourceId,father_id
+		fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id
+		companyId,group_id groupId,time_create timeCreate,time_modified
+		timeModified,isDeleted,status,reason FROM gov_data_element t
+		WHERE
+		class_type=1 
+		<if test="param.imported != null ">
+			and t.imported=#{param.imported}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.value1 != null and param.value1 != ''">
+			and t.value1 = #{param.value1}
+		</if>
+		<if test="param.value2 != null and param.value2 != ''">
+			and t.value2 = #{param.value2}
+		</if>
+		<if test="param.value3 != null and param.value3 != ''">
+			and t.value3 = #{param.value3}
+		</if>
+		<if test="param.value4 != null and param.value4 != ''">
+			and t.value4 = #{param.value4}
+		</if>
+		<if test="param.value5 != null and param.value5 != ''">
+			and t.value5 = #{param.value5}
+		</if>
+		<if test="param.value6 != null and param.value6 != ''">
+			and t.value6 = #{param.value6}
+		</if>
+		<if test="param.value7 != null and param.value7 != ''">
+			and t.value7 = #{param.value7}
+		</if>
+		<if test="param.value8 != null and param.value8 != ''">
+			and t.value8 = #{param.value8}
+		</if>
+		<if test="param.value9 != null and param.value9 != ''">
+			and t.value9 = #{param.value9}
+		</if>
+		<if test="param.value10 != null and param.value10 != ''">
+			and t.value10 = #{param.value10}
+		</if>
+		<if test="param.value11 != null and param.value11 != ''">
+			and t.value11 = #{param.value11}
+		</if>
+		<if test="param.value12 != null and param.value12 != ''">
+			and t.value12 = #{param.value12}
+		</if>
+		<if test="param.value13 != null and param.value13 != ''">
+			and t.value13 = #{param.value13}
+		</if>
+		<if test="param.value14 != null and param.value14 != ''">
+			and t.value14 = #{param.value14}
+		</if>
+		<if test="param.value15 != null and param.value15 != ''">
+			and t.value15 = #{param.value15}
+		</if>
+		<if test="param.value16 != null and param.value16 != ''">
+			and t.value16 = #{param.value16}
+		</if>
+		<if test="param.value17 != null and param.value17 != ''">
+			and t.value17 = #{param.value17}
+		</if>
+		<if test="param.value18 != null and param.value18 != ''">
+			and t.value18 = #{param.value18}
+		</if>
+		<if test="param.value19 != null and param.value19 != ''">
+			and t.value19 = #{param.value19}
+		</if>
+		<if test="param.value20 != null and param.value20 != ''">
+			and t.value20 = #{param.value20}
+		</if>
+		<if test="param.value21 != null and param.value21 != ''">
+			and t.value21 = #{param.value21}
+		</if>
+		<if test="param.value22 != null and param.value22 != ''">
+			and t.value22 = #{param.value22}
+		</if>
+		<if test="param.value23 != null and param.value23 != ''">
+			and t.value23 = #{param.value23}
+		</if>
+		<if test="param.value24 != null and param.value24 != ''">
+			and t.value24 = #{param.value24}
+		</if>
+		<if test="param.value25 != null and param.value25 != ''">
+			and t.value25 = #{param.value25}
+		</if>
+		<if test="param.value26 != null and param.value26 != ''">
+			and t.value26 = #{param.value26}
+		</if>
+		<if test="param.value27 != null and param.value27 != ''">
+			and t.value27 = #{param.value27}
+		</if>
+		<if test="param.value28 != null and param.value28 != ''">
+			and t.value28 = #{param.value28}
+		</if>
+		<if test="param.value29 != null and param.value29 != ''">
+			and t.value29 = #{param.value29}
+		</if>
+		<if test="param.value30 != null and param.value30 != ''">
+			and t.value30 = #{param.value30}
+		</if>
+	</select>
+	
+	<select id="find" resultMap="base" parameterType="DataElement">
+      SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_data_element t 
+       WHERE 1=1
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 like '%${param.chName}%'
+		</if>
+		<if  test="param.systemType !=null ">
+			and t.system_type=${param.systemType}
+		</if>			
+		<if  test="param.objectType !=null ">
+			and t.value5=#{param.value5,jdbcType=VARCHAR}
+		</if>
+		<if test="param.companyId != null ">
+			and (t.company_id = #{param.companyId} or t.value8= #{param.companyId})
+		</if>
+		<if  test="param.value8 !=null and param.value8 != ''">
+			and t.value8=#{param.value8}
+		</if>
+		
+		<choose>
+			<when  test="param.status==99">
+					and t.id NOT IN ( SELECT id FROM gov_data_element g WHERE  g.father_id IS NOT NULL AND g.status!=0 )
+			</when>
+			<when  test="param.status==111">
+					and t.id in (SELECT DISTINCT father_id from gov_data_element WHERE status=0)
+			</when>
+			<when  test="param.status==113">
+					and t.id in (SELECT DISTINCT data_element_id FROM `gov_data_list` WHERE `data_manager_id` IS NOT NULL AND `data_element_id` IS NOT NULL AND `data_element_id` != 0)
+			</when>
+			<otherwise>
+				<if test="param.status != null ">
+					and t.status=#{param.status}
+				</if>
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when  test="param.fatherId==0">
+					and t.father_id is null
+			</when>
+			<otherwise>
+				<if test="param.fatherId != null ">
+					and t.father_id=#{param.fatherId}
+				</if>
+			</otherwise>
+		</choose>
+		<choose>
+			<when  test="param.imported==0">
+					and t.imported is null
+			</when>
+			<otherwise>
+				<if test="param.imported != null ">
+					and t.imported=#{param.imported}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="param.sourceId != null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType}
+		</if>
+	
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+
+		SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_data_element t 
+		WHERE 1=1
+	
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.companyId != null ">
+			and (t.company_id = #{param.companyId} or t.value8= #{param.companyId})
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 like '%${param.chName}%'
+		</if>
+
+
+		<if test="param.sourceType!=99">
+			<choose>
+				<when test="param.sourceType==0">
+					and (t.source_type=${param.sourceType} or t.source_type is null)
+				</when>
+				<otherwise>
+					and t.source_type=${param.sourceType}
+				</otherwise>
+			</choose>
+		</if>
+		
+		<if  test="param.objectType !=null ">
+			and t.value5=#{param.value5,jdbcType=VARCHAR}
+		</if>
+		<if  test="param.value8 !=null and param.value8 != ''">
+			and t.value8=#{param.value8}
+		</if>
+		<if  test="param.value4 !=null and param.value4 != ''">
+			and t.value4=#{param.value4}
+		</if>
+		<if  test="param.value5 !=null and param.value5 != ''">
+			and t.value5=#{param.value5}
+		</if>
+		<choose>
+			<when test="param.systemType !=null">
+				and t.system_type=${param.systemType}
+			</when>
+			<otherwise>
+				and t.system_type is null
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when  test="param.status==99">
+					and t.id NOT IN ( SELECT id FROM gov_data_element g WHERE  g.father_id IS NOT NULL AND g.status!=0 )
+			</when>
+			<when  test="param.status==123">
+					and t.status in (1,2,5)
+			</when>
+			<when  test="param.status==111">
+					and t.id in (SELECT DISTINCT father_id from gov_data_element WHERE status=0)
+			</when>
+			<when  test="param.status==113">
+					and t.id in (
+					SELECT DISTINCT
+						gov_data_list.data_element_id
+					FROM
+						gov_data_list,
+						gov_information_resource_main
+					WHERE
+						gov_data_list.data_manager_id = gov_information_resource_main. ID
+					AND gov_data_list.data_element_id > 0
+					)
+			</when>
+			<otherwise>
+				<if test="param.status != null ">
+					and t.status=#{param.status}
+				</if>
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when  test="param.fatherId==0">
+					and t.father_id is null
+			</when>
+			<otherwise>
+				<if test="param.fatherId != null ">
+					and t.father_id=#{param.fatherId}
+				</if>
+			</otherwise>
+		</choose>
+		<choose>
+			<when  test="param.imported==0">
+					and t.imported is null
+			</when>
+			<otherwise>
+				<if test="param.imported != null ">
+					and t.imported=#{param.imported}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="param.sourceId != null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType,jdbcType=VARCHAR}
+		</if>
+	
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		ORDER BY
+		<choose>		
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>			
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<!--  -->
+	<select id="findSingleDataElementByPage" resultMap="base">
+
+		SELECT  id,identifier,class_type classType,source_type sourceType,system_type systemType,imported,source_id sourceId,father_id fatherId,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id companyId,group_id groupId,time_create timeCreate,time_modified timeModified,isDeleted,status,reason FROM gov_data_element t 
+		WHERE father_id IS NULL 
+		AND t.id NOT IN (  SELECT  father_id FROM gov_data_element WHERE father_id IS NOT NULL GROUP BY father_id)
+	
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.companyId != null ">
+			and t.company_id = #{param.companyId}
+		</if>
+		<if test="param.chName != null and param.chName != ''">
+			and t.value1 like '%${param.chName}%'
+		</if>
+		<if  test="param.objectType !=null ">
+			and value5=#{param.value5}
+		</if>
+		<choose>
+			<when  test="param.status==99">
+					and t.id NOT IN ( SELECT id FROM gov_data_element g WHERE  g.father_id IS NOT NULL AND g.status!=0 )
+			</when>
+			<otherwise>
+				<if test="param.status != null ">
+					and t.status=#{param.status}
+				</if>
+			</otherwise>
+		</choose>
+		
+		<if test="param.classType != null ">
+			and t.class_type=#{param.classType}
+		</if>
+	
+		ORDER BY t.time_create desc
+			
+	</select>
+	
+	<select id="maxIdentifier" resultType="String" parameterType="DataElement">
+		SELECT MAX(identifier) from gov_data_element where 1=1
+		<if test="classType != null ">
+			and class_type=#{classType}
+		</if>	
+		
+	</select>
+
+	<select id="count" resultType="int" parameterType="DataElement">
+		SELECT count(*) FROM gov_data_element t WHERE 1 = 1
+		<if test="companyId != null ">
+			and t.company_id = #{companyId}
+		</if>
+		<if test="value8 != null ">
+			and t.value8 = #{value8}
+		</if>		
+		<if test="isDeleted != null ">
+			and t.isDeleted=#{isDeleted}
+		</if>
+		<if test="classType != null ">
+			and t.class_type=#{classType}
+		</if>
+	</select>
+	<insert id="insert" parameterType="DataElement" useGeneratedKeys="true" keyProperty="id">  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_data_element(source_type,identifier,class_type,system_type,imported,source_id,father_id,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,company_id,group_id,time_create,time_modified,isDeleted,status,reason) 
+	VALUES (#{sourceType,jdbcType=NUMERIC},#{identifier,jdbcType=VARCHAR},#{classType,jdbcType=NUMERIC},#{systemType,jdbcType=NUMERIC},#{imported,jdbcType=NUMERIC},#{sourceId,jdbcType=NUMERIC},#{fatherId,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{status,jdbcType=NUMERIC},#{reason,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	<update id="delete" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_data_element
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	<delete id="deleteByValue" parameterType="DataElement">
+		DELETE FROM gov_data_element
+		WHERE value5=#{value5}
+	</delete>
+	<delete id="deletePhysically" parameterType="DataElement">
+		DELETE FROM gov_data_element
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_data_element
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+	</delete>
+		
+	<delete id="cleanTable" parameterType="DataElement">
+		DELETE FROM gov_data_element
+		<if test="param.classType != null ">
+			WHERE class_type=#{param.classType,jdbcType=NUMERIC}
+		</if>
+	</delete>
+		
+	<delete id="actualDelByInforId" parameterType="DataElement">
+		DELETE 
+		FROM 
+			gov_data_element 
+		WHERE 
+			gov_data_element.id IN ( 
+				SELECT 
+					gov_data_list.data_element_id 
+				FROM 
+					gov_data_list 
+				WHERE 
+					gov_data_list.data_manager_id = #{inforId} 
+			)
+	</delete>	
+		
+	<update id="toStatus" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET 
+		status=#{status,jdbcType=NUMERIC},
+		reason=#{reason,jdbcType=VARCHAR}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>		
+	
+	<update id="update" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET value1=#{value1,jdbcType=VARCHAR},
+		value2=#{value2,jdbcType=VARCHAR},
+		value3=#{value3,jdbcType=VARCHAR},
+		value4=#{value4,jdbcType=VARCHAR},
+		value5=#{value5,jdbcType=VARCHAR},
+		value6=#{value6,jdbcType=VARCHAR},
+		value7=#{value7,jdbcType=VARCHAR},
+		value8=#{value8,jdbcType=VARCHAR},
+		value9=#{value9,jdbcType=VARCHAR},
+		value10=#{value10,jdbcType=VARCHAR},
+		value11=#{value11,jdbcType=VARCHAR},
+		value12=#{value12,jdbcType=VARCHAR},
+		value13=#{value13,jdbcType=VARCHAR},
+		value14=#{value14,jdbcType=VARCHAR},
+		value15=#{value15,jdbcType=VARCHAR},
+		value16=#{value16,jdbcType=VARCHAR},
+		value17=#{value17,jdbcType=VARCHAR},
+		value18=#{value18,jdbcType=VARCHAR},
+		value19=#{value19,jdbcType=VARCHAR},
+		value20=#{value20,jdbcType=VARCHAR},
+		value21=#{value21,jdbcType=VARCHAR},
+		value22=#{value22,jdbcType=VARCHAR},
+		value23=#{value23,jdbcType=VARCHAR},
+		value24=#{value24,jdbcType=VARCHAR},
+		value25=#{value25,jdbcType=VARCHAR},
+		value26=#{value26,jdbcType=VARCHAR},
+		value27=#{value27,jdbcType=VARCHAR},
+		value28=#{value28,jdbcType=VARCHAR},
+		value29=#{value29,jdbcType=VARCHAR},
+		value30=#{value30,jdbcType=VARCHAR},
+		company_id=#{companyId,jdbcType=NUMERIC},	
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		identifier=#{identifier,jdbcType=VARCHAR},
+		class_type=#{classType,jdbcType=NUMERIC},
+		system_type=#{systemType,jdbcType=NUMERIC},
+		imported=#{imported,jdbcType=NUMERIC},
+	    source_id=#{sourceId,jdbcType=NUMERIC},
+	    father_id=#{fatherId,jdbcType=NUMERIC}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	<select id="echarts" resultMap="base" parameterType="DataElement">
+		SELECT count(value5) counts,value5 FROM gov_data_element WHERE isDeleted = 0 
+		AND value5 is NOT NULL
+		<if test="companyId != null ">
+			and company_id = #{companyId}
+		</if>
+		<if test="status != null ">
+			and status = #{status}
+		</if>
+		<if test="classType != null ">
+			and class_type = #{classType}
+		</if>
+		group by value5
+		order by counts desc
+	</select>
+	
+	<update id="clearColumn" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET value${valueNo}=''
+		WHERE id>0 and class_type=1
+	</update>
+	
+	<update id="updateChildIdentifier" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET identifier=#{param.identifier,jdbcType=VARCHAR}
+		WHERE father_id=#{param.id,jdbcType=NUMERIC}
+	</update>
+	
+	<update id="setChild" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET identifier=#{param.identifier,jdbcType=VARCHAR},
+		father_id=#{param.id,jdbcType=NUMERIC}
+		WHERE id in (${ids})
+	</update>
+	<update id="clearImported" parameterType="DataElement">
+		UPDATE gov_data_element
+		 SET imported =NULL WHERE id =#{param.sourceId,jdbcType=NUMERIC}
+	</update>
+	
+	<update id="clearAllImported" parameterType="DataElement">
+		UPDATE gov_data_element
+		 SET imported =NULL WHERE 
+		 <if test="classType != null ">
+			 class_type = #{classType}
+		</if>
+	</update>
+	
+	
+	<update id="statusAll" parameterType="DataElement">
+		UPDATE gov_data_element
+		SET status=0 where status=2 and class_type=1
+	</update>
+	
+	
+	
+	<select id="countInfor" resultMap="base" parameterType="DataElement">
+		SELECT id FROM gov_data_list WHERE 1 = 1
+		<if test="id != null ">
+			and data_element_id = #{id}
+		</if>
+		AND data_manager_id !=0 GROUP BY data_manager_id,id
+	</select>
+	<select id="countCom" resultMap="base" parameterType="DataElement">
+		SELECT gov_data_list.id FROM gov_data_list,gov_information_resource_main WHERE 1 = 1
+		<if test="id != null ">
+			and gov_data_list.data_element_id = #{id}
+		</if>
+		AND gov_data_list.data_manager_id = gov_information_resource_main.id GROUP BY gov_information_resource_main.value3, gov_data_list.id
+	</select>
+	<select id="findInforx" resultType="String" parameterType="DataElement">
+	<![CDATA[
+	SELECT group_concat(distinct data_manager_id) FROM gov_data_list WHERE data_manager_id > 0 AND data_element_id = #{id}
+	]]>
+	</select>
+	<select id="latestTime" resultType="date" parameterType="DataElement">
+		<![CDATA[SELECT time_modified FROM gov_data_element WHERE status = 0 AND isDeleted = 0   AND value8 = #{cpId}
+		ORDER BY time_modified DESC LIMIT 1]]>
+	</select>
+</mapper>

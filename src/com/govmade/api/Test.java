@@ -18,7 +18,7 @@ public static void main(String[] args) throws Exception {
     map.put("app_key", app_key);
     map.put("timestamp", timestamp);
     map.put("id", "68");
-    System.out.println(HttpUtil.getResult("http://127.0.0.1:8080/citysystem_hainan/api/information",map,"9QH3cpEygv2MaKPa7NAXw"));
+    System.out.println(HttpUtil.getResult("http://114.55.11.227:8088/CitySystem_Hainan/api/information",map,"9QH3cpEygv2MaKPa7NAXw"));
 }
 
 
