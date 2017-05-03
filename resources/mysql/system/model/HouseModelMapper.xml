@@ -273,7 +273,7 @@
 	<select id="popTreeFirst" resultMap="MapForPopTreeFirst">
 		SELECT
 		  gov_house_model.info_types,
-		  WMSYS.WM_CONCAT(distinct gov_data_list.data_element_id) data_element_ids	
+		  group_concat(distinct gov_data_list.data_element_id) data_element_ids	
 		FROM
 			gov_house_model LEFT JOIN gov_data_list ON gov_house_model.id = gov_data_list.house_model_id
 		WHERE
@@ -285,7 +285,7 @@
 	<select id="popTreeSecond" resultMap="MapForPopTreeSecond">
 		SELECT
 			  gov_house_model.info_name,
-			  WMSYS.WM_CONCAT(distinct gov_data_list.data_element_id) data_element_id	
+			  group_concat(distinct gov_data_list.data_element_id) data_element_id	
 			FROM
 				gov_house_model LEFT JOIN gov_data_list ON gov_house_model.id = gov_data_list.house_model_id
 			WHERE
@@ -297,7 +297,7 @@
 	<select id="legalTree" resultMap="MapForPopTreeFirst">
 		SELECT
 		  gov_house_model.info_types,
-		  WMSYS.WM_CONCAT(distinct gov_data_list.data_element_id) data_element_ids	
+		  group_concat(distinct gov_data_list.data_element_id) data_element_ids	
 		FROM
 			gov_house_model LEFT JOIN gov_data_list ON gov_house_model.id = gov_data_list.house_model_id
 		WHERE
@@ -308,7 +308,7 @@
 	<select id="creditTree" resultMap="MapForPopTreeFirst">
 		SELECT
 		  gov_house_model.info_types,
-		  WMSYS.WM_CONCAT(distinct gov_data_list.data_element_id) data_element_ids	
+		  group_concat(distinct gov_data_list.data_element_id) data_element_ids	
 		FROM
 			gov_house_model LEFT JOIN gov_data_list ON gov_house_model.id = gov_data_list.house_model_id
 		WHERE
@@ -319,7 +319,7 @@
 	<select id="licenceTree" resultMap="MapForLicence">
 		SELECT
 		  gov_house_model.info_name,
-		  WMSYS.WM_CONCAT(distinct gov_data_list.data_element_id) data_element_id	
+		  group_concat(distinct gov_data_list.data_element_id) data_element_id	
 		FROM
 			gov_house_model LEFT JOIN gov_data_list ON gov_house_model.id = gov_data_list.house_model_id
 		WHERE
@@ -330,7 +330,7 @@
 	<select id="customTree" resultMap="MapForLicence">
 		SELECT
 		  gov_house_model.information_res_id informationResId,
-		  WMSYS.WM_CONCAT(distinct gov_data_list.data_element_id) data_element_id	
+		  group_concat(distinct gov_data_list.data_element_id) data_element_id	
 		FROM
 			gov_house_model LEFT JOIN gov_data_list ON gov_house_model.id = gov_data_list.house_model_id
 		WHERE
