@@ -76,9 +76,8 @@
     <bean id="pagePlugin" class="com.govmade.common.mybatis.PageInterceptor">
 		<property name="properties">
 			<props>
-			 <!-- oracle  mysql-->
-				<prop key="databaseType">oracle</prop>
-			</props>
+			 <!-- <prop key="databaseType">mysql</prop>-->
+				<prop key="databaseType">oracle</prop></props>
 		</property>
 	</bean>
     <!-- 分页配置end-->
