@@ -15,13 +15,6 @@
 <style>
   .myclass{width: 400px;max-width: 500px; height: 300px;max-height: 400px;overflow-y: auto;}
   .myclass .layui-layer-content {padding: 20px;}
-  #allmap {
-    width: 100%;
-    height: calc(100vh - 70px);
-    overflow: hidden;
-    margin: 0;
-    font-family: "微软雅黑";
-  }
 </style>
 <body class="skin-<%=ServiceUtil.getThemeType(10)%>">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -31,8 +24,8 @@
 	                <div class="ibox-title">
 	                    <h5>分布地图展现</h5>
 	                </div>
-	                <div class="ibox-content" style="padding: 5px;">
-	                    <div id="allmap"></div>
+	                <div class="ibox-content">
+	                    <div class="echarts" id="main1" style="height:500px"></div>
 	                </div>
 	            </div>
 	        </div>
@@ -41,64 +34,209 @@
   <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 	<script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
   <script src="${base}/static/js/plugins/layer/layer.js"></script>
-  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=oZcrHfndGQ44Bj0ERaAlnnuGkKl8pg2B"></script>
 	<script>
-	// 百度地图API功能
-	var map = new BMap.Map("allmap");
-	map.centerAndZoom(new BMap.Point(109.900923, 19.175807), 9);
-	//map.disableDragging();
-	setTimeout(function() {
-	  map.setZoom(9);
-	}, 2000); 
-	map.enableScrollWheelZoom(true);
+  $(function() {
+    layer.config({
+      extend: '../extend/layer.ext.js'
+    });
+  })
+ var myChart = echarts.init(document.getElementById('main1'));
+  option = {
+    color: [
 
-	// 信息窗口部分
-	var opts = opts = {
-	      width : 250,     // 信息窗口宽度
-	      height: 80,     // 信息窗口高度
-	      title : "" , // 信息窗口标题
-	      enableMessage:true//设置允许信息窗发送短息
-	       };
-	function addClickHandler(content,marker){
-	    marker.addEventListener("click",function(e){
-	      openInfo(content,e)}
-	    );
-	  }
-	  function openInfo(content,e){
-	    var p = e.target;
-	    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-	    var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
-	    map.openInfoWindow(infoWindow,point); //开启信息窗口
-	  } 
-	  var infos = [
+    ],
+    title: {
+      text: '海南地图',
+      x: 'left'
+    },
+    tooltip: {
+      trigger: 'axis',
+      padding: 10,
+      formatter: function(params, ticket, callback) {
+        alert(params);
 
-	     <c:forEach var="obj" items="<%=ServiceUtil.getCompanyCountList()%>">
-	     [${obj.lng}, ${obj.lat}, {name: '${obj.companyName}', dataElement: ${obj.companyId}, informationResource: ${obj.groupId}}],
-	   	    
-	     </c:forEach>
-     	  ];
+        return params.data.info.name;
+      }
+    },
+    dataRange: {
+      min: 0,
+      max: 1000,
+      calculable: true,
+      color: ['rgb(255, 166, 0)', 'rgb(255, 255, 0)']
+    },
+    toolbox: {
+      show: false,
+      orient: 'vertical',
+      x: 'right',
+      y: 'center',
+      feature: {
+        mark: {
+          show: true
+        },
+        dataView: {
+          show: true,
+          readOnly: false
+        },
+        restore: {
+          show: true
+        },
+        saveAsImage: {
+          show: true
+        }
+      }
+    },
+    series: [{
+      name: '111',
+      type: 'map',
+      mapType: '海南',
+      hoverable: true,
+      roam: true,
+      data: [{
+        name: '海口市',
+        value: 1000,
 
-	  var data_info = [];
-	  
-	  $.each(infos, function(index, value) {
-  	  var info = [];
+      }, {
+        name: '万宁市',
+        value: 950,
 
-      var data = '<h4>'+ value[2].name+'</h4>'+ '数据元数量 :　' + value[2].dataElement + '<br>' + '信息资源数量 :　' + value[2].informationResource ;
+      }, {
+        name: '澄迈县',
+        value: 900,
 
-  		info.push(value[0],value[1], data);
-		  data_info.push(info);
-	  });
-	  
-	    for(var i=0;i<data_info.length;i++){
-	      var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
-	      var content = data_info[i][2];
-	      map.addOverlay(marker);               // 将标注添加到地图中
-	      addClickHandler(content,marker);
-	    }
-	 
+      }, {
+        name: '白沙黎族自治县',
+        value: 850,
 
+      }, {
+        name: '琼海市',
+        value: 800,
 
-	  
+      }, {
+        name: '昌江黎族自治县',
+        value: 750,
+
+      }, {
+        name: '临高县',
+        value: 700,
+
+      }, {
+        name: '陵水黎族自治县',
+        value: 650,
+
+      }, {
+        name: '屯昌县',
+        value: 600,
+
+      }, {
+        name: '定安县',
+        value: 550,
+
+      }, {
+        name: '保亭黎族苗族自治县',
+        value: 500,
+
+      }, {
+        name: '五指山市',
+        value: 450,
+
+      }, {
+        name: '儋州市',
+        value: 400,
+
+      }, {
+        name: '东方市',
+        value: 550,
+
+      }, {
+        name: '乐东黎族自治县',
+        value: 300,
+
+      }, {
+        name: '三亚市',
+        value: 950,
+
+      }, {
+        name: '文昌市',
+        value: 200,
+
+      }, {
+        name: '琼中黎族苗族自治县',
+        value: 150,
+
+      }],
+      markPoint: {
+        symbolSize: 5,
+        itemStyle: {
+          normal: {
+            borderColor: '#ff5722',
+            borderWidth: 3, 
+            label: {
+              show: false
+            }
+          },
+          emphasis: {
+            borderColor: '#ff5722',
+            borderWidth: 5,
+            label: {
+              show: false
+            }
+          }
+        },
+        data: [
+
+          {
+            name: "海口",
+            value: 44,
+            info: {
+              name: '1414',
+              dataElement: '222',
+              informationResource: '555'
+            },
+            tooltip: { // Series config.
+              trigger: 'item',
+              backgroundColor: 'black',
+              formatter: function(params, ticket, callback) {
+                return pars(params, ticket, callback);
+              }
+            },
+          },
+
+          {
+            name: "三亚",
+            value: 54,
+            info: {
+              name: '1515',
+              dataElement: '111',
+              informationResource: '333'
+            },
+            tooltip: { // Series config.
+              trigger: 'item',
+              backgroundColor: 'black',
+              formatter: function(params, ticket, callback) {
+                return pars(params, ticket, callback);
+              }
+            },
+          },
+
+        ]
+      },
+      geoCoord: {
+
+        "海口": [110.35, 20.02],
+
+        "三亚": [109.511909, 18.252847],
+
+      }
+    }]
+  };
+
+  myChart.setOption(option);
+
+  function pars(params, ticket, callback) {
+    var content = params.name + '<br>部门名称: ' + params.data.info.name + '<br>数据元数量: ' +
+      params.data.info.dataElement + '<br>信息资源数量: ' + params.data.info.informationResource
+    return content;
+  }
     </script>
 </body>
 </html>
