@@ -11,6 +11,7 @@ import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.repository.base.GovmadeBaseDao;
 import com.govmade.repository.base.MYBatis;
+import com.govmade.service.base.CanSimpleFields;
 
 
 /**   
@@ -31,7 +32,7 @@ import com.govmade.repository.base.MYBatis;
 * @version V1.0   
 */
 @MYBatis
-public interface DataElementDao  extends GovmadeBaseDao<DataElement> {
+public interface DataElementDao  extends GovmadeBaseDao<DataElement> ,CanSimpleFields {
 	//public List<DataElement> getDataElementList(DataElement d);
 	public List<DataElement> echarts(DataElement d);
 	public List<DataElement> getDataElementListByInforResId(@Param("inforResId")Integer inforResId,@Param("objectType")Integer objectType,@Param("chName")String chName);
