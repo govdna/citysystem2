@@ -37,6 +37,7 @@ public interface DataElementDao  extends GovmadeBaseDao<DataElement> {
 	public List<DataElement> getDataElementListByInforResId(@Param("inforResId")Integer inforResId,@Param("objectType")Integer objectType,@Param("chName")String chName);
 	public List<DataElement> getDataElementListByDataManagerId(@Param("inforResourceId")Integer inforResourceId,@Param("objectType")Integer objectType,@Param("chName")String chName,Page<DataElement> page);
 	public List<DataElement> getDataElementListByHouseModelId(@Param("houseModelId")Integer houseModelId);
+	public List<DataElement> getDElistByHouseModelId(@Param("param")DataList dataList);
 	public List<DataElement> getDataElementListByIds(@Param("ids")String ids);
 	/** 
 	* @Title: getDataElementListByDataList 

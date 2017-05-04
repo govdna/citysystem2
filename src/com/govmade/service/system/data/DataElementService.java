@@ -23,6 +23,7 @@ public interface DataElementService extends BaseService<DataElement>{
 	public List<DataElement> getDataElementListByInforResId(Integer inforResId,Integer objectType,String chName);
 	public Page<DataElement> getDataElementListByDataManagerId(Integer inforResourceId,Integer objectType,String chName,Page<DataElement> page);
 	public List<DataElement> getDataElementListByHouseModelId(Integer houseModelId);
+	public List<DataElement> getDElistByHouseModelId(DataList dataList);
 	public List<DataElement> getDataElementListByIds(String ids);
 	public List<DataElement> echarts(DataElement d);
 	/** 
