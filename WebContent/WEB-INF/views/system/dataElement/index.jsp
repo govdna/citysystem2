@@ -212,18 +212,18 @@ $(".name1").chosen({
 	  width: "100%"
 	});
   //验证名称重复
-$("input[name='chName']").blur(function() {
-  if ($("input[name='chName']").val() == "") {
+$("input[name='value1']").blur(function() {
+  if ($("input[name='value1']").val() == "") {
     return;
   }
-  jQuery.post("${base}/backstage/dataElement/validation", { "classType": 0, "chName": $("input[name='chName']").val(), "id": $("input[name='id']").val() }, function(data) {
+  jQuery.post("${base}/backstage/dataElement/validation", { "classType": 0, "chName": $("input[name='value1']").val(), "id": $("input[name='id']").val() }, function(data) {
     //data=JSON.parse(data); 
     if (data.results == 1) {
       layer.msg("此中文名称已存在，请重新填写");
-      $("input[name='chName']").val("");
-      $("input[name='egName']").val("");
+      $("input[name='value1']").val("");
+      $("input[name='value2']").val("");
     } else {
-      $("input[name='egName']").val(data.egName);
+      $("input[name='value2']").val(data.egName);
     }
   }, "json");
 });

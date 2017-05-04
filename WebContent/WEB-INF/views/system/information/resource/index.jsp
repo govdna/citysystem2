@@ -1080,6 +1080,14 @@ $("select[name='cId']").on('change', function(e, params) {
     openLayer();
     $(formId).form('clear');
     checkedIds = ",";
+    
+    <c:forEach var="obj" items="<%=ServiceUtil.buildImportJS()%>">
+    $(formId + ' input[name="value${obj.companyId}"]').val(data.value${obj.groupId});
+    $(formId + ' select[name="value${obj.companyId}"]').val(data.value${obj.groupId});
+    $(formId + ' select[name="value${obj.companyId}"]').find("option[value='"+data.value${obj.groupId}+"']").attr("selected",true);
+    </c:forEach>
+    
+    
     $('input[name="value14"]').val(getNowFormatDate());
     $('input[name="value14"]').attr("readonly","readonly"); 
     $(formId + ' input[name="sourceType"]').val(1);

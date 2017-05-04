@@ -67,7 +67,7 @@
  	
  	<![CDATA[
 	INSERT INTO gov_data_element_fields(search_type,name,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,is_show) 
-	VALUES (#{searchType,jdbcType=NUMERIC},#{name,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC}，#{isShow,jdbcType=NUMERIC})
+	VALUES (#{searchType,jdbcType=NUMERIC},#{name,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{isShow,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="DataElementFields">
