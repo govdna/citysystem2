@@ -146,12 +146,15 @@ public class ServiceUtil implements ApplicationContextAware {
 	}
 
 	// 自定义模型
-	public static List<HouseModelFields> fieldsType(HttpServletRequest request) {
+	public static List<HouseModelFields> fieldsType(HttpServletRequest request,Integer searchType) {
 		HouseModelFields o = new HouseModelFields();
 		String model = request.getParameter("model");
 		if (model != null && model != "") {
 			// System.out.println("model= "+model);
 			o.setModelType(Integer.valueOf(model));
+		}
+		if(searchType!=0){
+			o.setSearchType(searchType);
 		}
 		o.setFatherId(999);
 		o.setIsDeleted(0);
@@ -776,10 +779,8 @@ public class ServiceUtil implements ApplicationContextAware {
 	    		"['#1790cf', '#1bb2d8', '#99d2dd', '#88b0bb','#1c7099', '#038cc4', '#75abd0', '#afd6dd']",
 	    		"['#d8361b', '#f16b4c', '#f7b4a9', '#d26666','#99311c', '#c42703', '#d07e75']",
 	    		"['#E01F54', '#b8d2c7', '#f5e8c8', '#001852', '#c6b38e','#a4d8c2', '#f3d999', '#d3758f', '#dcc392', '#2e4783','#82b6e9', '#ff6347', '#a092f1', '#0a915d', '#eaf889','#6699FF', '#ff6666', '#3cb371', '#d5b158', '#38b6b6']",
-	    		"['#e52c3c', '#f7b1ab', '#fa506c', '#f59288', '#f8c4d8','#e54f5c', '#f06d5c', '#e54f80', '#f29c9f', '#eeb5b7']",
-	    		"['#181e2f','#2c549b','647595','#869ad9','#c3cee3']"
+	    		"['#e52c3c', '#f7b1ab', '#fa506c', '#f59288', '#f8c4d8','#e54f5c', '#f06d5c', '#e54f80', '#f29c9f', '#eeb5b7']"
 	    	};
-		System.out.println("a[colorNo]="+a[colorNo]);
 		return a[colorNo];
 	}
 }

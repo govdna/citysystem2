@@ -55,7 +55,11 @@ public class DataElementServiceImp extends GovmadeBaseServiceImp<DataElement> im
 	public List<DataElement> getDataElementListByHouseModelId(Integer houseModelId) {
 		return dataElementDao.getDataElementListByHouseModelId(houseModelId);
 	}
-
+	@Override
+	public List<DataElement> getDElistByHouseModelId(DataList dataList) {
+		return dataElementDao.getDElistByHouseModelId(dataList);
+	}
+	
 	@Override
 	public List<DataElement> getDataElementListByIds(String ids) {
 		return dataElementDao.getDataElementListByIds(ids);
