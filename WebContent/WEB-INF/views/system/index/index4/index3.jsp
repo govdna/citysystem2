@@ -126,6 +126,8 @@
           <c:set var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
           <c:if test="${roleid==1}">
           <a href="${base}/backstage/manage?menuType=4" class="btn-signout" style="margin-right:10px;">参数设置</a>
+          </c:if>
+          <c:if test="<%=!ServiceUtil.haveCheck(\"/backstage/information/resource/index\") %>">
           <div class="dropdown message-group">
             <c:set  var="noticeNum"   value="<%=ServiceUtil.noticeNum() %>"/>
             <c:set  var="deSatausNum"   value="<%=ServiceUtil.deSatausNum() %>"/>
