@@ -17,44 +17,8 @@
           <div class="form-inline">
             <div class="form-group" style="margin-left: 15px;">
       <div class="form-group pull-left">      
-      <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&searchType=1\"),\"list_no\",\"asc\")%>">      
-              <c:choose>
-              <c:when test="${obj.inputType==1}">
-                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
-                  class="form-control"
-                >
-              </c:when>
-              <c:when test="${obj.inputType==2}">
-              <label class="control-label  pull-left">${obj.name}</label>
-              <div class=" pull-left" style="margin-left:10px;width:250px;">
-              
-                <select name="search_value${obj.valueNo}" data-placeholder=" "
-                  class="chosen-select">
-                  <option value=""></option>
-                  <option value="">&nbsp;</option>
-                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
-                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
-                  </c:forEach>
-                </select>
-                </div>
-              </c:when>
-              <c:when test="${obj.inputType==3}">
-              <label class="control-label  pull-left">${obj.name}</label>
-              <div class=" pull-left" style="margin-left:10px;width:250px;">
-              
-                <select name="search_value${obj.valueNo}" data-placeholder=" "
-                  class="chosen-select">
-                  <option value=""></option>
-                   <option value="">&nbsp;</option>
-                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
-                  <option value="${obj2.id}">${obj2.itemName}</option>
-                  </c:forEach>
-                </select>
-                 </div>
-              </c:when>
-              <c:otherwise>
-              </c:otherwise>
-            </c:choose>              
+      <c:forEach var="obj" items="<%=ServiceUtil.fieldsType(request,1)%>">      
+              <%@include file="../../common/searchBase.jsp"%>
       </c:forEach>            
               <div class="btn-group">
               <button type="button" class="btn btn-primary ml5" onclick=" $('#dicList').bootstrapTable('refresh');" style="border-right: rgba(255,255,255,.3);">搜索</button>
@@ -68,50 +32,15 @@
                <c:if test="<%=!ServiceUtil.haveAdd(\"/backstage/model/customModel/index?model=6\") %>">
                 <a data-toggle="modal" id="addhm" class="btn btn-primary" onclick="addNew();" href="#">新增</a>
                </c:if>
+               <a data-toggle="modal" class="btn btn-primary" onclick="downloadData();" href="#">导出数据</a>
               </div>
               </div>
             </div>
           </div>
           
                     <ul class="dropdown-menu1 dn form-inline clearfix" style="padding-left: 0; margin: 5px 0 0;">
-			 <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&searchType=2\"),\"list_no\",\"asc\")%>">      
-              <c:choose>
-              <c:when test="${obj.inputType==1}">
-                <input type="text" placeholder="请输入${obj.name}" name="search_value${obj.valueNo}"
-                  class="form-control"
-                >
-              </c:when>
-              <c:when test="${obj.inputType==2}">
-              <label class="control-label  pull-left">${obj.name}</label>
-              <div class=" pull-left" style="margin-left:10px;width:250px;">
-              
-                <select name="search_value${obj.valueNo}" data-placeholder=" "
-                  class="chosen-select">
-                  <option value=""></option>
-                  <option value="">&nbsp;</option>
-                  <c:forEach var="obj2" items="${MyFunction:dic(obj.inputValue)}">
-                  <option value="${obj2.dicKey}">${obj2.dicValue}</option>
-                  </c:forEach>
-                </select>
-                </div>
-              </c:when>
-              <c:when test="${obj.inputType==3}">
-              <label class="control-label  pull-left">${obj.name}</label>
-              <div class=" pull-left" style="margin-left:10px;width:250px;">
-              
-                <select name="search_value${obj.valueNo}" data-placeholder=" "
-                  class="chosen-select">
-                  <option value=""></option>
-                   <option value="">&nbsp;</option>
-                  <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
-                  <option value="${obj2.id}">${obj2.itemName}</option>
-                  </c:forEach>
-                </select>
-                 </div>
-              </c:when>
-              <c:otherwise>
-              </c:otherwise>
-            </c:choose>              
+			 <c:forEach var="obj" items="<%=ServiceUtil.fieldsType(request,2)%>">      
+              <%@include file="../../common/searchBase.jsp"%>
       </c:forEach>
 			    </ul>          
           
@@ -128,7 +57,8 @@
       <input type="hidden" name="idForShow"  class="form-control">        
       <input type="hidden" name="dataElementId" />
       <input type="hidden" name="informationResId" id="inforResourceId" />
-      <c:forEach var="obj" items="<%=ServiceUtil.fieldsType(request)  %>">
+      <c:set var="houseModelFields" value="<%=ServiceUtil.fieldsType(request,0)  %>"/>
+      <c:forEach var="obj" items="${houseModelFields}">
         <div class="form-group">
           <label class="col-sm-3 control-label info-label"  data-id="data${obj.id}">${obj.name}：</label>
           <div class="col-sm-8">
@@ -444,6 +374,28 @@
       </div>
   </div>
 
+<!-- 导出数据开始 -->
+  <div id="download_div" style="display: none;" class="ibox-content">
+    <form method="post" class="form-horizontal" id="downloadForm">
+
+       <div class="alert alert-info">
+            如导出数据量大，下载请耐心等待！
+        </div>
+          信息资源字段：<br/>
+       <c:forEach var="obj" items="${houseModelFields}">
+      	<input type="checkbox" name="xlsFields" value="value${obj.valueNo}"/> ${obj.name}
+       	
+       </c:forEach>
+       <br/>
+       <br/>
+       数据元字段：<br/>
+       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataElementFieldsService\").find(ServiceUtil.buildBean(\"DataElementFields@isDeleted=0\"),\"list_no\",\"asc\")%>">
+       	<input type="checkbox" name="deFields" value="value${obj.valueNo}"/> ${obj.name}
+       </c:forEach>
+    </form>
+  </div>
+  <!-- 导出数据结束 -->
+
 </body>
 </html>
 
@@ -528,20 +480,7 @@ var  columns=${columns};
       page : params.offset / params.limit + 1,
       
       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"HouseModelFieldsService\").find(ServiceUtil.buildBean(\"HouseModelFields@isDeleted=0&level=2\"),\"list_no\",\"asc\")%>">
-    
-    <c:choose>
-    <c:when test="${obj.inputType==1&&obj.searchType!=null&&obj.searchType!=0}">
-     value${obj.valueNo}: $('input[name="search_value${obj.valueNo}"]').val(),
-    </c:when>
-    <c:when test="${obj.inputType==2&&obj.searchType!=null&&obj.searchType!=0}">
-    	value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
-    </c:when>
-    <c:when test="${obj.inputType==3&&obj.searchType!=null&&obj.searchType!=0}">
-		value${obj.valueNo}: $('select[name="search_value${obj.valueNo}"]').val(),
-  </c:when>
-    <c:otherwise></c:otherwise>
-  </c:choose>
-    
+      <%@include file="../../common/searchQueryParams.jsp"%>
     </c:forEach>
 
     };
@@ -1029,4 +968,34 @@ $('.tab-container-c .tab-nav a').on('click', function () {
 	  $(this).addClass('active').siblings().removeClass('active');
 	  $('.tab-container-c .tab-wrapper .item').eq(index).show().siblings().hide();
 	});
+	
+$('#downloadForm').form({  
+    url: url+'downloadData'+'?model='+${houseModelFields.get(0).getModelType()},  
+    success: function(result){ 
+    	 
+    },
+    onSubmit: function(param){
+		var qp=queryParams(param);
+		 for(var p in qp){
+			 if(p!='rows'&&p!='page'){
+				 param[p]=qp[p];
+			 }
+	     }
+    }
+});
+function downloadData(){
+	  //$('#downloadForm').form('clear');
+	  layerIndex=layer.open({
+	    type: 1,
+	    area: ['60%', '400px'], //宽高
+	    title: '选择导出字段',
+	    offset: '100px',
+	    btn: ['导出', '关闭'],
+	    yes: function(index, layero) {
+	    	 $('#downloadForm').submit();
+	    	 layer.close(layerIndex);
+	    },
+	    content: $('#download_div') //这里content是一个DOM
+	  });
+}	
 </script>

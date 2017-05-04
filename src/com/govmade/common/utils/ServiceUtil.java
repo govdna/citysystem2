@@ -146,12 +146,15 @@ public class ServiceUtil implements ApplicationContextAware {
 	}
 
 	// 自定义模型
-	public static List<HouseModelFields> fieldsType(HttpServletRequest request) {
+	public static List<HouseModelFields> fieldsType(HttpServletRequest request,Integer searchType) {
 		HouseModelFields o = new HouseModelFields();
 		String model = request.getParameter("model");
 		if (model != null && model != "") {
 			// System.out.println("model= "+model);
 			o.setModelType(Integer.valueOf(model));
+		}
+		if(searchType!=0){
+			o.setSearchType(searchType);
 		}
 		o.setFatherId(999);
 		o.setIsDeleted(0);
