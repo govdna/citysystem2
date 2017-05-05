@@ -80,69 +80,10 @@ padding: 3px 5px 3px 5px !important;
     <input type="hidden" name="sourceId"  class="form-control">
     <input type="hidden" name="fatherId"  class="form-control">
 
-    <div class="form-group">
-      <label class="col-sm-3 control-label">中文名称：</label>
-      <div class="col-sm-7">
-        <input type="text" name="chName"  class="form-control" required>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">英文名称：</label>
-      <div class="col-sm-7">
-        <input type="text" name="egName"  class="form-control" >
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">定义：</label>
-      <div class="col-sm-7">
-        <input type="text" name="define" class="form-control" >
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">数据类型：</label>
-      <div class="col-sm-7">
-        <select name="dataType" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
-          <option value=""></option>
-          <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"DATATYPE\") %>">
-          <option value="${obj.dicKey}">${obj.dicValue}</option>
-          </c:forEach>
-        </select>  
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">数据长度：</label>      
-      <div class="col-sm-7">
-        <input type="text" name="dataFormat" class="form-control" required>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">对象类型：</label>
-      <div class="col-sm-7">
-        <select name="value5" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
-          <option value=""></option>
-          <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"OBJECTTYPE\") %>">
-          <option value="${obj.dicKey}">${obj.dicValue}</option>
-          </c:forEach>
-        </select> 
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">备注：</label>
-      <div class="col-sm-7">
-        <input type="text" name="notes" class="form-control" >
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">来源部门：</label>
-      <div class="col-sm-7">
-        <select name="value8" data-placeholder=" " class="chosen-select" style="width:350px;" tabindex="4" required>
-          <option value=""></option>
-          <c:forEach var="obj" items="<%=ServiceUtil.getDicByDicNum(\"ZYTGF\") %>">
-          <option value="${obj.dicKey}">${obj.dicValue}</option>
-          </c:forEach>
-        </select>  
-      </div>
-    </div>
+<c:set var="simpleFields" value="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=DataElement\"),\"list_no\",\"asc\")%>"/>
+      <%@include file="../common/simpleFields.jsp"%>
+
+
     <div class="ibox-content" id="child_div" style="padding-left:0px;padding-right:0px;">
         <div class="btn-group" id="toolbar" role="group" style="margin-bottom:15px;">
           <div class="text-center detail-hide">
@@ -271,18 +212,18 @@ $(".name1").chosen({
 	  width: "100%"
 	});
   //验证名称重复
-$("input[name='chName']").blur(function() {
-  if ($("input[name='chName']").val() == "") {
+$("input[name='value1']").blur(function() {
+  if ($("input[name='value1']").val() == "") {
     return;
   }
-  jQuery.post("${base}/backstage/dataElement/validation", { "classType": 0, "chName": $("input[name='chName']").val(), "id": $("input[name='id']").val() }, function(data) {
+  jQuery.post("${base}/backstage/dataElement/validation", { "classType": 0, "chName": $("input[name='value1']").val(), "id": $("input[name='id']").val() }, function(data) {
     //data=JSON.parse(data); 
     if (data.results == 1) {
       layer.msg("此中文名称已存在，请重新填写");
-      $("input[name='chName']").val("");
-      $("input[name='egName']").val("");
+      $("input[name='value1']").val("");
+      $("input[name='value2']").val("");
     } else {
-      $("input[name='egName']").val(data.egName);
+      $("input[name='value2']").val(data.egName);
     }
   }, "json");
 });
@@ -399,27 +340,21 @@ var columns = [{
   formatter: 'checkFormatter2',
 }, {
   field: 'identifier',
-  title: '内部标识符',
-  sortable:true
-}, {
-  field: 'value1',
-  title: '中文名称',
-  formatter: 'longFormatter',
-  sortable:true
-}, {
-  field: 'dataTypeForShow',
-  title: '数据类型'
-}, {
-  field: 'value7',
-  title: '数据长度',
-  sortable:true
-}, {
-  field: 'objectTypeForShow',
-  title: '对象类型'
-}, {
-  field: 'value8ForShow',
-  title: '来源部门'
-}, {
+  title: '内部标识符'
+}, 
+<c:forEach var="obj" items="${simpleFields}">
+<c:if test="${obj.isShow==1}">
+	<c:choose>
+		<c:when test="${obj.inputType==1}">
+		 	{field: 'value${obj.valueNo}',title: '${obj.name}'}, 
+		</c:when>
+		<c:otherwise>
+			{field: 'value${obj.valueNo}ForShow',title: '${obj.name}'},
+    	</c:otherwise>
+	</c:choose>
+</c:if>       
+</c:forEach>
+{
   field: 'id',
   title: '操作',
   formatter: 'doFormatter', //对本列数据做格式化

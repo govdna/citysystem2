@@ -61,7 +61,7 @@ position: relative;
         <c:forEach items = "${uson}" var="sort" varStatus="i">  
           	<ul id="deper" class="clearfix" <c:if test="${i.count!=1}">style="display: none;"</c:if>>
             <c:forEach items="${sort.children}" var="item" varStatus="i"> 
-            <c:if test="${item.tp < 3}">
+            <c:if test="${item.tp == 1}">
             <li class="col-sm-4">            	
 	            <span class="name label label-success fir" value="${item.id}" dt="${item.tp}" title="${item.name}">           
 	            ${item.name}
@@ -73,6 +73,16 @@ position: relative;
             </c:if>
             </c:forEach>
             <c:forEach items="${sort.children}" var="item" varStatus="i">
+            <c:if test="${item.tp == 2}"> 
+            <blockquote class="col-sm-12">            	
+	            <span class="name label label-success fir" value="${item.id}" dt="${item.tp}" title="${item.name}">           
+	            ${item.name}
+	            <c:if test="${item.count > 0}">
+	            	<i>${item.count}</i>
+	            </c:if>
+	            </span>	           
+            </blockquote>
+            </c:if>
             <c:if test="${item.tp == 3}"> 
             <li class="col-sm-4">            	
 	            <span class="name label label-success fir" value="${item.id}" dt="${item.tp}" title="${item.name}">           
@@ -82,7 +92,7 @@ position: relative;
 	            </c:if>
 	            </span>	           
             </li>
-             </c:if>
+            </c:if>
             </c:forEach>
           </ul>
           </c:forEach>
@@ -229,7 +239,7 @@ position: relative;
 <%@include file="../../common/includeJS.jsp"%>
 <script>
 //$("#toolbar").on("click",'#deper',function(){ 
-$("#deper li").click(function() {
+$("#deper span").click(function() {
   $("table[name='dicList']").attr("id", "dicList");
   oTable = new TableInit();
   oTable.Init();

@@ -32,39 +32,42 @@ padding: 3px 5px 3px 5px !important;
     </div>
     <c:choose>
       <c:when test="${dataElement.classType==0}">
+         <c:forEach var="obj" items="<%=ServiceUtil.getService(\"SimpleFieldsService\").find(ServiceUtil.buildBean(\"SimpleFields@isDeleted=0&className=DataElement\"),\"list_no\",\"asc\")%>">
         <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data1" style="margin-top: 10px;text-align:right;">中文名称：</label>
-          <span class="col-xs-7 dt-span">${dataElement.value1}</span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data2" style="margin-top: 10px;text-align:right;">英文名称：</label>
-          <span class="col-xs-7 dt-span">${dataElement.value2}</span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data3" style="margin-top: 10px;text-align:right;">定义：</label>
-          <span class="col-xs-7 dt-span">${dataElement.value3}</span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data4" style="margin-top: 10px;text-align:right;">数据类型：</label>
-           <span class="col-xs-7 dt-span">${MyFunction:getDicValue("DATATYPE", dataElement.dataType)}</span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data7" style="margin-top: 10px;text-align:right;">数据长度：</label>
-          <span class="col-xs-7 dt-span">${dataElement.value7}</span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data5" style="margin-top: 10px;text-align:right;">对象类型：</label>
-          <span class="col-xs-7 dt-span">${MyFunction:getDicValue("OBJECTTYPE", dataElement.objectType)}
-          </span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data6" style="margin-top: 10px;text-align:right;">备注：</label>
-          <span class="col-xs-7 dt-span">${dataElement.notes}</span>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-4 control-label info-label" data-id="data8" style="margin-top: 10px;text-align:right;">来源部门：</label>
-          <span class="col-xs-7 dt-span">${MyFunction:getDicValue("ZYTGF", dataElement.value8)}</span>
-        </div>
+          <label class="col-xs-4 control-label info-label"  data-id="data${obj.id}" style="margin-top: 10px;text-align:right;">${obj.name}：</label>
+          <c:choose>
+            <c:when test="${obj.inputType==1}">
+                <span class="col-xs-7 dt-span">${dataElement.getValueByNo(obj.valueNo)}</span>
+            </c:when>
+            <c:when test="${obj.inputType==2}">
+              <span class="col-xs-7 dt-span">${MyFunction:getDicValue(obj.inputValue,dataElement.getValueByNo(obj.valueNo))}</span>      
+            </c:when>
+            <c:when test="${obj.inputType==3}">
+              <select name="value${obj.valueNo}" data-placeholder=" "
+                class="chosen-select"
+                <c:if test="${obj.required==1}" >required</c:if>>
+                <option value=""></option>
+                <c:forEach var="obj2" items="<%=ServiceUtil.getService(\"ItemSortService\").find(ServiceUtil.buildBean(\"ItemSort@isDeleted=0\"))%>">
+                <option value="${obj2.id}">${obj2.itemName}</option>
+                </c:forEach>
+              </select>
+            </c:when>
+            <c:when test="${obj.inputType==4}">
+              <input type="hidden" name="value${obj.valueNo}"
+                  class="form-control edit-hide detail-show"
+                  >
+              <input type="text" name="value${obj.valueNo}ForShow"
+                  class="form-control edit-hide detail-show"
+                  >
+            </c:when>
+            <c:when test="${obj.inputType==5}">
+              <span class="col-xs-7 dt-span">${MyFunction:getCompanyNameById(dataElement.getValueByNo(obj.valueNo))}</span>
+            </c:when>
+            <c:otherwise>
+            </c:otherwise>
+          </c:choose>
+          </div>
+        </c:forEach>
       </c:when>
       <c:otherwise>
         <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataElementFieldsService\").find(ServiceUtil.buildBean(\"DataElementFields@isDeleted=0\"),\"list_no\",\"asc\")%>">

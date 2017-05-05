@@ -11,6 +11,7 @@ import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.service.base.BaseService;
+import com.govmade.service.base.CanSimpleFields;
 
 /**   
 * @author (作者) Chenlei 774329191@qq.com   
@@ -18,7 +19,7 @@ import com.govmade.service.base.BaseService;
 * @date 2016年12月7日 上午8:56:08   
 * @Title: DataElementService.java  
 */
-public interface DataElementService extends BaseService<DataElement>{
+public interface DataElementService extends BaseService<DataElement>,CanSimpleFields{
 	//public List<DataElement> getDataElementList(int id);
 	public List<DataElement> getDataElementListByInforResId(Integer inforResId,Integer objectType,String chName);
 	public Page<DataElement> getDataElementListByDataManagerId(Integer inforResourceId,Integer objectType,String chName,Page<DataElement> page);

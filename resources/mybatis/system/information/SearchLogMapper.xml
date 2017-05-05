@@ -127,7 +127,7 @@
 	<select id="hotres" resultMap="base" parameterType="SearchLog">
 	<![CDATA[
 		SELECT
-			keyWord，COUNT
+			keyWord,COUNT
 		FROM
 			(
 				SELECT

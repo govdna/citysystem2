@@ -92,6 +92,7 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 	
 	public Map<String, DataHandler> getDataHandlers() {
 		Map<String, DataHandler> map = super.getDataHandlers();
+		map=DataHandlerUtil.buildSimpleFieldsDataHandlers(map, DataElement.class);
 		map.put("dataType", new DataHandler() {
 			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
 			@Override

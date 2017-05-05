@@ -18,9 +18,11 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.system.rbac.RBACMenuController;
+import com.govmade.entity.system.customFields.SimpleFields;
 import com.govmade.entity.system.data.CleanDataElement;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
+import com.govmade.entity.system.data.DataManager;
 import com.govmade.entity.system.dict.GovmadeDic;
 import com.govmade.entity.system.information.InformationRes;
 import com.govmade.entity.system.information.InformationResource;
@@ -36,6 +38,7 @@ import com.govmade.service.base.BaseService;
 import com.govmade.service.system.data.CleanDataElementService;
 import com.govmade.service.system.data.DataElementService;
 import com.govmade.service.system.data.DataListService;
+import com.govmade.service.system.data.DataManagerService;
 import com.govmade.service.system.dict.GovmadeDicService;
 import com.govmade.service.system.information.InformationBusinessService;
 import com.govmade.service.system.information.InformationResService;
@@ -46,6 +49,7 @@ import com.govmade.service.system.organization.CompanyService;
 import com.govmade.service.system.rbac.PermissionService;
 import com.govmade.service.system.rbac.RolePermissionService;
 import com.govmade.service.system.rbac.ScopeService;
+import com.govmade.service.system.simpleFields.SimpleFieldsService;
 import com.govmade.service.system.table.GovTableService;
 import com.govmade.service.system.theme.ThemeService;
 
@@ -69,7 +73,8 @@ public class ServiceUtil implements ApplicationContextAware {
 	private static HouseModelFieldsService houseModelFieldsService;
 	private static NoticeService noticeService;
 	private static GovTableService govTableService;
-
+	private static DataManagerService dataManagerService;
+	private static SimpleFieldsService simpleFieldsService;
 	private static Map<String, Integer> dataElementCount = new HashMap<String, Integer>();
 	private static Map<String, Integer> informationCount = new HashMap<String, Integer>();
 	private static long lastTime = 0;
@@ -77,6 +82,8 @@ public class ServiceUtil implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
 		applicationContext = arg0;
+		dataManagerService =(DataManagerService) applicationContext.getBean("DataManagerService");
+		simpleFieldsService= (SimpleFieldsService) applicationContext.getBean("SimpleFieldsService");
 		govmadeDicService = (GovmadeDicService) applicationContext.getBean("GovmadeDicService");
 		noticeService = (NoticeService) applicationContext.getBean("NoticeService");
 		dataElementService = (DataElementService) applicationContext.getBean("DataElementService");
@@ -783,4 +790,26 @@ public class ServiceUtil implements ApplicationContextAware {
 	    	};
 		return a[colorNo];
 	}
+	
+	//信息资源模版导入js
+	public static List<SimpleFields> buildImportJS(){
+		List<DataManager> dmList=dataManagerService.find(new DataManager());
+		SimpleFields field=new SimpleFields();
+		field.setClassName(InformationRes.class.getSimpleName());
+		List<SimpleFields> sfList=simpleFieldsService.find(field);
+		List<SimpleFields> list=new ArrayList<SimpleFields>();
+		for(DataManager d:dmList){
+			for(SimpleFields s:sfList){
+				if(d.getDataName().equals(s.getName())&&d.getInputType().equals(s.getInputType())){
+					SimpleFields sf=new SimpleFields();
+					sf.setInputType(s.getInputType());
+					sf.setCompanyId(d.getValueNo());
+					sf.setGroupId(s.getValueNo());
+					list.add(sf);
+				}
+			}
+		}
+		return list;
+	}
+	
 }

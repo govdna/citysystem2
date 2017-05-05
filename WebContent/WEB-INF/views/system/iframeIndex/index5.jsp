@@ -60,7 +60,7 @@
     },
     dataRange: {
       min: 0,
-      max: 1000,
+      max: <%=ServiceUtil.getCompanyCountByAddr("")%>,
       calculable: true,
       color: ['rgb(255, 166, 0)', 'rgb(255, 255, 0)']
     },
@@ -91,79 +91,25 @@
       mapType: '海南',
       hoverable: true,
       roam: true,
-      data: [{
-        name: '海口市',
-        value: 1000,
-
-      }, {
-        name: '万宁市',
-        value: 950,
-
-      }, {
-        name: '澄迈县',
-        value: 900,
-
-      }, {
-        name: '白沙黎族自治县',
-        value: 850,
-
-      }, {
-        name: '琼海市',
-        value: 800,
-
-      }, {
-        name: '昌江黎族自治县',
-        value: 750,
-
-      }, {
-        name: '临高县',
-        value: 700,
-
-      }, {
-        name: '陵水黎族自治县',
-        value: 650,
-
-      }, {
-        name: '屯昌县',
-        value: 600,
-
-      }, {
-        name: '定安县',
-        value: 550,
-
-      }, {
-        name: '保亭黎族苗族自治县',
-        value: 500,
-
-      }, {
-        name: '五指山市',
-        value: 450,
-
-      }, {
-        name: '儋州市',
-        value: 400,
-
-      }, {
-        name: '东方市',
-        value: 550,
-
-      }, {
-        name: '乐东黎族自治县',
-        value: 300,
-
-      }, {
-        name: '三亚市',
-        value: 950,
-
-      }, {
-        name: '文昌市',
-        value: 200,
-
-      }, {
-        name: '琼中黎族苗族自治县',
-        value: 150,
-
-      }],
+      data: [ {name: '三亚市',value: <%=ServiceUtil.getCompanyCountByAddr("三亚市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("三亚市")%>},
+              {name: '乐东黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("乐东黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("乐东黎族自治县")%>},
+              {name: '儋州市',value: <%=ServiceUtil.getCompanyCountByAddr("儋州市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("儋州市")%>},
+              {name: '琼中黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("琼中黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼中黎族苗族自治县")%>},
+              {name: '东方市',value: <%=ServiceUtil.getCompanyCountByAddr("东方市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("东方市")%>},
+              {name: '海口市',value: <%=ServiceUtil.getCompanyCountByAddr("海口市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("海口市")%>},
+              {name: '万宁市',value: <%=ServiceUtil.getCompanyCountByAddr("万宁市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("万宁市")%>},
+              {name: '澄迈县',value: <%=ServiceUtil.getCompanyCountByAddr("澄迈县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("澄迈县")%>},
+              {name: '白沙黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("白沙黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("白沙黎族自治县")%>},
+              {name: '琼海市',value: <%=ServiceUtil.getCompanyCountByAddr("琼海市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼海市")%>},
+              {name: '昌江黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("昌江黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("昌江黎族自治县")%>},
+              {name: '临高县',value: <%=ServiceUtil.getCompanyCountByAddr("临高县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("临高县")%>},
+              {name: '陵水黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("陵水黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("陵水黎族自治县")%>},
+              {name: '屯昌县',value: <%=ServiceUtil.getCompanyCountByAddr("屯昌县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("屯昌县")%>},
+              {name: '定安县',value: <%=ServiceUtil.getCompanyCountByAddr("定安县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("定安县")%>},
+              {name: '保亭黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("保亭黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("保亭黎族苗族自治县")%>},
+              {name: '文昌市',value: <%=ServiceUtil.getCompanyCountByAddr("文昌市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("文昌市")%>},
+              {name: '五指山市',value: <%=ServiceUtil.getCompanyCountByAddr("五指山市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("五指山市")%>}
+         ],
       markPoint: {
         symbolSize: 5,
         itemStyle: {
@@ -183,14 +129,14 @@
           }
         },
         data: [
-
-          {
-            name: "海口",
-            value: 44,
+		<c:forEach var="obj" items="<%=ServiceUtil.getCompanyCountList()%>">
+		{
+            name: '${obj.companyName}',
+            value:${obj.companyId},
             info: {
-              name: '1414',
-              dataElement: '222',
-              informationResource: '555'
+              name: '${obj.companyName}',
+              dataElement: ${obj.companyId},
+              informationResource: ${obj.groupId}
             },
             tooltip: { // Series config.
               trigger: 'item',
@@ -201,31 +147,14 @@
             },
           },
 
-          {
-            name: "三亚",
-            value: 54,
-            info: {
-              name: '1515',
-              dataElement: '111',
-              informationResource: '333'
-            },
-            tooltip: { // Series config.
-              trigger: 'item',
-              backgroundColor: 'black',
-              formatter: function(params, ticket, callback) {
-                return pars(params, ticket, callback);
-              }
-            },
-          },
-
+      	  </c:forEach>       
+               
         ]
       },
       geoCoord: {
-
-        "海口": [110.35, 20.02],
-
-        "三亚": [109.511909, 18.252847],
-
+    	  <c:forEach var="obj" items="<%=ServiceUtil.getCompanyCountList()%>">
+ 	      "${obj.companyName}":[${obj.lng}, ${obj.lat}],
+ 	     </c:forEach>
       }
     }]
   };
@@ -233,7 +162,7 @@
   myChart.setOption(option);
 
   function pars(params, ticket, callback) {
-    var content = params.name + '<br>部门名称: ' + params.data.info.name + '<br>数据元数量: ' +
+    var content = params.name  + '<br>数据元数量: ' +
       params.data.info.dataElement + '<br>信息资源数量: ' + params.data.info.informationResource
     return content;
   }
