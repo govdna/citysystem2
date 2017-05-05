@@ -185,6 +185,9 @@
       checkboxClass: 'icheckbox_square-grey',
          radioClass: 'iradio_square-grey'
      });
+    //  $('.icheck input').on('ifClicked', function(event){
+    //   alert(111);
+    // });
 	  $('.form_datetime1').datetimepicker({
 		  language: 'zh-CN',
 		  // weekStart: 1,
