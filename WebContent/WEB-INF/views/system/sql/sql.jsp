@@ -117,7 +117,12 @@
                 <div class="col-sm-9 clearfix">
                   <div class="pull-left">
                       <label class='pull-left'>周期</label>
-                      <input type="text" class="form-control pull-left" name="value6">
+                      <select name="" id="" class="form-control" style="width:calc(100% - 40px);">
+                        <option value="">一天</option>
+                        <option value="">一周</option>
+                        <option value="">一月</option>
+                      </select>
+                      
                   </div>
                   <div class="pull-left">
                     <div>
