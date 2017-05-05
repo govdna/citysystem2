@@ -226,6 +226,14 @@ body.skin-1.hook-login {
   background-position: center -2138px;
   background-color: rgba(0, 0, 0, .2);
 }
+.hook-index-item.skin-1 .nav .nav5 {
+  background-position: center -3217px;
+}
+
+.hook-index-item.skin-1 .nav div:hover .nav5 {
+  background-position: center -2823px;
+  background-color: rgba(0, 0, 0, .2);
+}
 
 .hook-index-item.skin-1 .nav h3 {
   color: #999999;

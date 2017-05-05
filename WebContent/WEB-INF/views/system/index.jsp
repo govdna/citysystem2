@@ -176,30 +176,105 @@ color: #666;
       </div>
     </div>
   </header>
-
-  <div class="container rel clearfix" style="padding-bottom: 20px;height: calc(100vh - 108px);box-sizing: border-box;">
-    <div class="row">
-      <div class="nav hook-nav-list nav-item-skin clearfix">
-        <div class="nav-list-skin-1">
+<%--  <c:forEach var="obj"   items="${menuType1}">
+       <c:choose>
+       <c:when test="${obj==0}">
+         <div class="nav-list-skin-1">
           <a href="${base}/backstage/manage?menuType=0" class=" nav1">
             <h3 class="text-center"><%=ServiceUtil.modRename(0) %></h3>
           </a>
-        </div>
-        <div class="nav-list-skin-2">
+         </div>
+        </c:when>
+        <c:when test="${obj==1}">
+         <div class="nav-list-skin-2">
           <a href="${base}/backstage/manage?menuType=1" class="nav2">
             <h3 class="text-center"><%=ServiceUtil.modRename(1) %></h3>
           </a>
-        </div>
-        <div class="nav-list-skin-3">
+         </div>
+        </c:when>
+      	<c:when test="${obj==2}">
+         <div class="nav-list-skin-3">
           <a href="${base}/backstage/manage?menuType=2" class="nav3">
             <h3 class="text-center"><%=ServiceUtil.modRename(2) %></h3>
           </a>
-        </div>
-        <div class="nav-list-skin-4">
+         </div>
+        </c:when>
+      	<c:when test="${obj==3}">
+         <div class="nav-list-skin-4">
           <a href="${base}/backstage/manage?menuType=3" class="nav4">
             <h3 class="text-center"><%=ServiceUtil.modRename(3) %></h3>
           </a>
-        </div>
+         </div>
+        </c:when>
+      	<c:when test="${obj==5}">
+      	 <div class="nav-list-skin-5">
+          <a href="${base}/backstage/manage?menuType=5" class="nav5">
+            <h3 class="text-center"><%=ServiceUtil.modRename(5) %></h3>
+          </a>
+         </div>
+        </c:when> 
+        <c:when test="${obj==6}">
+      	 <div class="nav-list-skin-6">
+          <a href="${base}/backstage/manage?menuType=6" class="nav6">
+            <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
+          </a>
+         </div>
+        </c:when>
+   		<c:otherwise>
+   		</c:otherwise>
+   		</c:choose>
+        </c:forEach>  --%>
+  <div class="container rel clearfix" style="padding-bottom: 20px;height: calc(100vh - 108px);box-sizing: border-box;">
+    <div class="row">
+      <div class="nav hook-nav-list nav-item-skin clearfix">
+        <c:forEach var="obj"   items="${menuType1}">
+	      <c:choose>
+	        <c:when test="${obj==0}">
+	         <div class="nav-list-skin-1">
+	          <a href="${base}/backstage/manage?menuType=0" class=" nav1">
+	            <h3 class="text-center"><%=ServiceUtil.modRename(0) %></h3>
+	          </a>
+	         </div>
+	        </c:when>
+	        <c:when test="${obj==1}">
+	         <div class="nav-list-skin-2">
+	          <a href="${base}/backstage/manage?menuType=1" class="nav2">
+	            <h3 class="text-center"><%=ServiceUtil.modRename(1) %></h3>
+	          </a>
+	         </div>
+	        </c:when>
+	      	<c:when test="${obj==2}">
+	         <div class="nav-list-skin-3">
+	          <a href="${base}/backstage/manage?menuType=2" class="nav3">
+	            <h3 class="text-center"><%=ServiceUtil.modRename(2) %></h3>
+	          </a>
+	         </div>
+	        </c:when>
+	      	<c:when test="${obj==3}">
+	         <div class="nav-list-skin-4">
+	          <a href="${base}/backstage/manage?menuType=3" class="nav4">
+	            <h3 class="text-center"><%=ServiceUtil.modRename(3) %></h3>
+	          </a>
+	         </div>
+	        </c:when>
+	      	<c:when test="${obj==5}">
+	      	 <div class="nav-list-skin-5">
+	          <a href="${base}/backstage/manage?menuType=5" class="nav5">
+	            <h3 class="text-center"><%=ServiceUtil.modRename(5) %></h3>
+	          </a>
+	         </div>
+	        </c:when> 
+	        <c:when test="${obj==6}">
+	      	 <div class="nav-list-skin-6">
+	          <a href="${base}/backstage/manage?menuType=6" class="nav6">
+	            <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
+	          </a>
+	         </div>
+	        </c:when>
+	   		<c:otherwise>
+	   		</c:otherwise>
+	   	  </c:choose>
+        </c:forEach> 
       </div>
     </div>
   </div>
