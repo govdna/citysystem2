@@ -950,9 +950,6 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom> {
 			List<String> list = new ArrayList<String>();
 			while (rs.next()) {
 				String cpName = rs.getString(5);
-				if (rs.getString(5).length() > 6) {
-					cpName = rs.getString(5).substring(0, 6);
-				}
 				int[] arr3 = new int[] { Integer.valueOf(rs.getString(1)), Integer.valueOf(rs.getString(2)),
 						Integer.valueOf(rs.getString(3)), Integer.valueOf(rs.getString(4)) };
 				json.put("value", arr3);
@@ -1695,6 +1692,80 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom> {
 			}
 		}
 		return false;
+	}
+	
+	@RequestMapping(value = "fieldrip")
+	public void fieldrip(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		String cid = req.getParameter("cid");
+		String mid = req.getParameter("mid");
+		JSONObject echartjson = new JSONObject();
+		JSONArray nodeArray = new JSONArray();
+		JSONArray linkArray = new JSONArray();
+		JSONObject unitjson = new JSONObject();
+		JSONObject linkjson = new JSONObject();
+		unitjson.put("category", 0);
+		unitjson.put("name", mid);
+		unitjson.put("value", 10);
+		nodeArray.add(unitjson);
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName(driver);
+			conn = (Connection) DriverManager.getConnection(dburl,user, pwd);	
+			stmt = (Statement) conn.createStatement();				
+			//注入sql语句
+			String sql = "SELECT\n" +
+					"	id,value1,value2\n" +
+					"FROM\n" +
+					"	gov_table_field\n" +
+					"WHERE\n" +
+					"	value4 = "+cid+"\n" +
+					"UNION\n" +
+					"	SELECT\n" +
+					"		id,value1,value2\n" +
+					"	FROM\n" +
+					"		gov_table_field\n" +
+					"	WHERE\n" +
+					"		value4 > 0\n" +
+					"	AND id = "+cid;			
+			ResultSet rs = stmt.executeQuery(sql);
+			Random random = new Random();
+			while (rs.next()) {
+				String name1 = rs.getString(3);
+				if(name1.trim().isEmpty()){
+					name1 = rs.getString(2);
+				}				
+				int s = random.nextInt(6) % (6 - 2 + 1) + 2;
+				unitjson.put("category", 1);
+				unitjson.put("name", name1);
+				unitjson.put("value", s);
+				nodeArray.add(unitjson);
+				linkjson.put("source", name1);
+				linkjson.put("target", mid);
+				linkjson.put("weight", s);
+				linkjson.put("name", "系统");
+				linkArray.add(linkjson);
+			}
+			if(linkArray.size()>0){
+				echartjson.put("node", nodeArray);
+				echartjson.put("link", linkArray);
+				res.getWriter().write(echartjson.toString());
+				res.getWriter().flush();
+				res.getWriter().close();
+			}else{
+				echartjson.put("status", 0);
+				res.getWriter().write(echartjson.toString());
+				res.getWriter().flush();
+				res.getWriter().close();
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			stmt.close();
+			conn.close();
+		}			
 	}
 
 }

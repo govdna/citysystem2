@@ -136,8 +136,24 @@ public class BackstageController extends BaseController<Object>{
 		    System.out.println(m.size()+"-----");
 		      model.addAttribute("menuType1",m);
 			return "/system/index/index8/index";
+		}else{
+			Permission p=new Permission();
+			p.setType(Permission.MENU);
+			List<Permission> list=permissionService.getPermissionsByRoleId(AccountShiroUtil.getCurrentUser().getRoleId(), p);	
+		    Set<Integer> m = new HashSet<Integer>();
+		    for(int x = 0; x < list.size(); x++){
+		    	Permission per=list.get(x);
+		    	if(per.getMenuType()==4){	    		
+		    	}else{
+		    	m.add( per.getMenuType());	
+		    	}
+		    }
+		    System.out.println(m.size()+"-----");
+		      model.addAttribute("menuType1",m);
+			return "/system/index";
 		}
-		return "/system/index";
+		return null;
+
 	}
 	
 	/**

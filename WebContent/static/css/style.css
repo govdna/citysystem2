@@ -7943,3 +7943,5 @@ body.rtls.top-navigation .footer.fixed {
 .zz p {text-align:center;font-size: 30px; position: absolute; top: 50%; left: 50%; margin-left: -55px;margin-top: -45px;color: #fff;}
 .ml5 {margin-left: 5px !important;}
 .multiselect .btn-default{background-color: #fff;border-color: #ccc;color: #333;}
+blockquote {margin: 30px -20px 20px;}
+blockquote:nth-child(1){margin-top:0px;}

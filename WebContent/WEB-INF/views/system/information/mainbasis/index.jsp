@@ -59,19 +59,17 @@ cursor: pointer;
         <div id = "tagList" >
         <c:forEach items = "${uson}" var="sort" varStatus="i">  
           	<ul id="deper" class="clearfix" <c:if test="${i.count!=1}">style="display: none;"</c:if>>
-            <c:forEach items="${sort.children}" var="item" varStatus="i"> 
-            <c:if test="${item.tp < 3}">
-            <li class="col-sm-4">            	
+            <c:forEach items="${sort.children}" var="item" varStatus="i">
+            <c:if test="${item.tp == 2}"> 
+            <blockquote class="col-sm-12">            	
 	            <span class="name label label-success fir" value="${item.id}" dt="${item.tp}" title="${item.name}">           
 	            ${item.name}
 	            <c:if test="${item.count > 0}">
 	            	<i>${item.count}</i>
 	            </c:if>
-	            </span>	            
-            </li>
+	            </span>	           
+            </blockquote>
             </c:if>
-            </c:forEach>
-            <c:forEach items="${sort.children}" var="item" varStatus="i">
             <c:if test="${item.tp == 3}"> 
             <li class="col-sm-4">            	
 	            <span class="name label label-success fir" value="${item.id}" dt="${item.tp}" title="${item.name}">           
@@ -81,7 +79,7 @@ cursor: pointer;
 	            </c:if>
 	            </span>	           
             </li>
-             </c:if>
+            </c:if>
             </c:forEach>
           </ul>
           </c:forEach>
@@ -270,7 +268,7 @@ $(".fir").click(function() {
 $(".sed").click(function() {
   inforTypes3 = $(this).attr('value');
 })
-$("#deper li").click(function() {
+$("#deper span").click(function() {
   $("table[name='dicList']").attr("id", "dicList");
   oTable = new TableInit();
   oTable.Init();

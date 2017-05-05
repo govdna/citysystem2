@@ -300,6 +300,13 @@ body.skin-3 {
 .skin-3 .hook-nav-list .nav4:hover {
   background-position: center -2138px;
 }
+.skin-3 .hook-nav-list .nav5 {
+  background-position: center -3217px;
+}
+
+.skin-3 .hook-nav-list .nav5:hover {
+  background-position: center -2829px;
+}
 
 .skin-3 .hook-nav-list h3 {
   color: #fff;
