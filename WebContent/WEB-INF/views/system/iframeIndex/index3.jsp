@@ -164,7 +164,12 @@ var color = <%=ServiceUtil.getEchartColor(10) %>
 			    yAxis : [
 			        {
 			            type : 'category',
-			            data : data.legend
+			            data : data.legend,
+			            axisLabel : {
+	                    	formatter:function(val){
+	    					return val.substring(0,6) ;
+							}
+	                     },
 			        }
 			    ],
 			    series : [
@@ -286,7 +291,10 @@ var color = <%=ServiceUtil.getEchartColor(10) %>
 	      }
 	    },
 	    legend: {
-	      data: keyCity
+	      data: keyCity,
+	      formatter:function(name){
+				return name.substring(0,6);
+				}
 	    },
 	    toolbox: {
 	      show: true,
@@ -420,7 +428,12 @@ var color = <%=ServiceUtil.getEchartColor(10) %>
 				    yAxis : [
 				        {
 				            type : 'category',
-				            data : data.legend
+				            data : data.legend,
+				            axisLabel : {
+		                    	formatter:function(val){
+		    					return val.substring(0,6) ;
+								}
+		                     },
 				        }
 				    ],
 				    series : [
@@ -486,7 +499,10 @@ var color = <%=ServiceUtil.getEchartColor(10) %>
 		   	      }
 		   	    },
 		   	    legend: {
-		   	      data: keyCity
+		   	      data: keyCity,
+	   	   		formatter:function(name){
+				return name.substring(0,6);
+				}
 		   	    },
 		   	    toolbox: {
 		   	      show: true,
