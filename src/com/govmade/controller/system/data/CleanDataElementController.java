@@ -219,6 +219,17 @@ public class CleanDataElementController extends GovmadeBaseController<CleanDataE
 		if (o.getId() == null) {
 			service.setIdentifier(o);
 		}
+		String name = req.getParameter("sameName");
+		if (StringUtils.isNotEmpty(name)) {
+			// 清洗重复数据元
+			o.setSystemType(1);
+		}
+
+		String dataElementIds = req.getParameter("dataElementIds");
+		if (StringUtils.isNotEmpty(dataElementIds)) {
+			// 清洗近义词数据元
+			o.setSystemType(1);
+		}
 	}
 
 	@RequestMapping(value = "detail")
