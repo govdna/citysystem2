@@ -90,6 +90,10 @@ color: #666;
 .blue-skin:hover {
   background: rgb(72, 96, 134);
 }
+.nav-item-skin div {
+  float: left;
+  width: 25%;
+}
 </style>
 </style>
 <body class="hook-index-item index-skin">
@@ -175,23 +179,23 @@ color: #666;
 
   <div class="container rel clearfix" style="padding-bottom: 20px;height: calc(100vh - 108px);box-sizing: border-box;">
     <div class="row">
-      <div class="nav hook-nav-list nav-item-skin">
-        <div class="col-sm-3 col-xs-1 nav-list-skin-1">
+      <div class="nav hook-nav-list nav-item-skin clearfix">
+        <div class="nav-list-skin-1">
           <a href="${base}/backstage/manage?menuType=0" class=" nav1">
             <h3 class="text-center"><%=ServiceUtil.modRename(0) %></h3>
           </a>
         </div>
-        <div class="col-sm-3 col-xs-1 nav-list-skin-2">
+        <div class="nav-list-skin-2">
           <a href="${base}/backstage/manage?menuType=1" class="nav2">
             <h3 class="text-center"><%=ServiceUtil.modRename(1) %></h3>
           </a>
         </div>
-        <div class="col-sm-3 col-xs-1 nav-list-skin-3">
+        <div class="nav-list-skin-3">
           <a href="${base}/backstage/manage?menuType=2" class="nav3">
             <h3 class="text-center"><%=ServiceUtil.modRename(2) %></h3>
           </a>
         </div>
-        <div class="col-sm-3 col-xs-1 nav-list-skin-4">
+        <div class="nav-list-skin-4">
           <a href="${base}/backstage/manage?menuType=3" class="nav4">
             <h3 class="text-center"><%=ServiceUtil.modRename(3) %></h3>
           </a>
@@ -208,8 +212,31 @@ color: #666;
 <script>
 $(function() {
   themeInit();
+  var item = $('.nav-item-skin div');
+  var itemLength = item.length;
+  itemHander(item, itemLength);
 })
 
+function itemHander (item, length) {
+  console.log(length);
+  switch(length) {
+    case 3:
+      item.css({
+        width: '33.333%'
+      });
+      break;
+    case 4:
+      item.css({
+        width: '25%'
+      });
+      break;
+    case 5:
+      item.css({
+        width: '20%'
+      });
+      break;
+  }
+}
 function themeInit() {
   $('body').addClass($('.theme').attr('data-skin'));
 }

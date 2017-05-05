@@ -233,10 +233,6 @@ a, a:hover, a:focus {text-decoration: none;}
          paddingTop: 10,
          paddingBottom: 10
        });
-       // itemName.css({
-       //   paddingTop: 10,
-       //   paddingBottom: 10
-       // });
        break;
      case 4:
        item.css({
