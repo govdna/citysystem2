@@ -73,31 +73,36 @@
 	
 	
 	<select id="findUseCountByPage" resultMap="base" parameterType="CleanDataElement">
-      select c.id,c.value1,count(c.id) counts,count(DISTINCT m.company_id) companyId from gov_data_element t,gov_clean_data_element c,gov_data_list d ,gov_information_resource_main m where m.id=d.data_manager_id and  d.data_element_id=t.id and t.class_type=1 and t.isDeleted=0 and c.isDeleted=0 and ((t.id=c.source_id) or (c.source_id is null and c.value1=t.value1))
+     select t.id,t.value1,count(t.id) counts,count(DISTINCT m.company_id) companyId 
+      FROM gov_information_resource_main m LEFT JOIN gov_data_list d ON  m.id=d.data_manager_id 
+
+ LEFT JOIN  gov_clean_data_element t ON  d.data_element_id=t.source_id     
+      
+      where  m.isDeleted=0 and t.isDeleted=0 and t.father_id IS NULL
       <choose>
 			<when test="param.systemType !=null and param.systemType !=0">
-				and c.system_type=${param.systemType}
+				and t.system_type=${param.systemType}
 			</when>
 			<when test="param.systemType !=null and param.systemType ==0">
-				and c.system_type is null
+				and t.system_type is null
 			</when>
 			<otherwise>
 				
 			</otherwise>
 		</choose>
       <if test="param.chName != null and param.chName != ''">
-			and c.value1 like '%${param.chName}%'
+			and t.value1 like '%${param.chName}%'
 	  </if>
       
       <if test="param.objectType !=null ">
-			and c.value5=#{param.value5}
+			and t.value5=#{param.value5}
 	  </if>
 	  
 	  <if  test="param.value8 !=null and  param.value8 != ''">
-			and c.value8=#{param.value8}
+			and t.value8=#{param.value8}
 	  </if>
 	  
-      group by c.value1,c.id HAVING count(c.id) >1  
+      group by t.value1,t.id HAVING count(t.id) >1  
 	</select>
 	
 	<select id="findExactly" resultMap="base" parameterType="CleanDataElement">
@@ -448,8 +453,8 @@
  	
  	
 	<update id="transferFather" parameterType="CleanDataElement">
-	update gov_clean_data_element set father_id=#{id} where father_id in ( select id from gov_clean_data_element
- WHERE value1=#{value1} and id!=#{id})
+	update gov_clean_data_element set father_id=#{id} where father_id in ( select b.id from (SELECT id FROM gov_clean_data_element WHERE value1=#{value1} and id!=#{id}) b
+ )
  	</update>
  
  

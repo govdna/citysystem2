@@ -709,6 +709,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom> {
 										unitjson.put("category", 4);
 										unitjson.put("name", name3);
 										unitjson.put("value", s2);
+										unitjson.put("dataRange", gs3.getId());
 										nodeArray.add(unitjson);
 										linkjson.put("source", name3);
 										linkjson.put("target", name2);
@@ -1699,7 +1700,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom> {
 		res.setContentType("application/json; charset=utf-8");
 		res.setCharacterEncoding("utf-8");
 		String cid = req.getParameter("cid");
-		String mid = req.getParameter("mid");
+		String mid = new String(req.getParameter("mid").getBytes("iso8859-1"),"utf-8");
 		JSONObject echartjson = new JSONObject();
 		JSONArray nodeArray = new JSONArray();
 		JSONArray linkArray = new JSONArray();
@@ -1717,19 +1718,30 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom> {
 			stmt = (Statement) conn.createStatement();				
 			//注入sql语句
 			String sql = "SELECT\n" +
-					"	id,value1,value2\n" +
+					"	id,\n" +
+					"	value1,\n" +
+					"	value2\n" +
 					"FROM\n" +
 					"	gov_table_field\n" +
 					"WHERE\n" +
 					"	value4 = "+cid+"\n" +
 					"UNION\n" +
 					"	SELECT\n" +
-					"		id,value1,value2\n" +
+					"		id,\n" +
+					"		value1,\n" +
+					"		value2\n" +
 					"	FROM\n" +
 					"		gov_table_field\n" +
 					"	WHERE\n" +
-					"		value4 > 0\n" +
-					"	AND id = "+cid;			
+					"		id in (\n" +
+					"			SELECT\n" +
+					"				value4\n" +
+					"			FROM\n" +
+					"				gov_table_field\n" +
+					"			WHERE\n" +
+					"				value4 > 0\n" +
+					"			AND id = \n" + cid +
+					"		)";			
 			ResultSet rs = stmt.executeQuery(sql);
 			Random random = new Random();
 			while (rs.next()) {
@@ -1745,7 +1757,7 @@ public class EchartController extends GovmadeBaseController<GovComputerRoom> {
 				linkjson.put("source", name1);
 				linkjson.put("target", mid);
 				linkjson.put("weight", s);
-				linkjson.put("name", "系统");
+				linkjson.put("name", "关联字段");
 				linkArray.add(linkjson);
 			}
 			if(linkArray.size()>0){

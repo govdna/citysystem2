@@ -598,7 +598,7 @@ function statuserro(id,s){
       chName:$('input[name="chN"]').val(),
       value5:$('select[name="obT"]').val(),
       value8:$('select[name="cId"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==100}" >
         companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
       </c:if>
       status:99

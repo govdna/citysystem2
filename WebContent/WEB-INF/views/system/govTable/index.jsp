@@ -310,7 +310,7 @@ $("select[name='cId']").on('change', function(e, params) {
     	 <%@include file="../common/searchQueryParams.jsp"%>
    	</c:forEach>
       
-   	<c:if test="${MyFunction:getMaxScope(\"/backstage/govTable/index\")==1}" >
+   	<c:if test="${MyFunction:getMaxScope(\"/backstage/govTable/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };
@@ -876,7 +876,7 @@ var queryParams3 = function(params) {
     objectType : $('select[name="dxl-select"]').val(),
     //status : 0,
     chName : $('input[name="keyword"]').val(),
-    <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
+    <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==100}" >
      companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
       </c:if>
   };

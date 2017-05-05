@@ -55,9 +55,12 @@ margin-left:5px;
             </div>
      </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-8">
       	<button class="btn btn-primary" onclick="sort(this);">按次数排序&nbsp;<i class="fa fa-sort-desc"></i></button>
+      <button class="btn btn-primary" onclick="sameConfig();">同义词配置</button>
+      
       </div>
+     
        <div class="clearfix"></div>
       </div>
       <div class="clearfix"></div>
@@ -516,6 +519,23 @@ function initChild(){
 	}
 }
 
+
+function sameConfig(){
+	
+		layer.open({
+		    type: 2,
+		    title: '同义词配置',
+		    shadeClose: true,
+		    shade: 0.1,
+		    area: ['80%', '80%'],
+		    content: base + '/backstage/sameDataElementConfig/index',
+		    cancel: function(index, layero){ 
+		    	initList();  
+		    } 
+		  });
+
+	
+}
 function detail(id){
 	layer.open({
 	    type: 2,
@@ -551,7 +571,7 @@ jQuery.post('${base}/backstage/cleanDataElement/sameFilterAjax',{name:$('input[n
 		if(typeof(result.rows.length)!='undefined'&&result.rows.length>0){
 			
 			for(var i=0;i<result.rows.length;i++){
-				html+=' <div class="pull-left com-count" data-value="'+result.rows[i].name+'">'+result.rows[i].name;
+				html+=' <div class="pull-left com-count" data-id="'+result.rows[i].id+'" data-value="'+result.rows[i].name+'">'+result.rows[i].name;
 				html+=' <span class="badge">'+result.rows[i].counts+'</span></div>';
 			}
 			html+='<div class="clearfix"></div>';

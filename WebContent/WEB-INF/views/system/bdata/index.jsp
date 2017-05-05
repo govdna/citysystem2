@@ -456,7 +456,7 @@ function longFormatter(value, row, index)
       sort:'identifier',
       order:'asc',
       chName:$('input[name="chN"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==100}" >
         companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
       </c:if>
       status:99

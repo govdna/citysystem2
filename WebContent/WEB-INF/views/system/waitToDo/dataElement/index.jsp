@@ -201,7 +201,7 @@ function readonly(id){
       page : params.offset / params.limit + 1,
       groupId : <%= AccountShiroUtil.getCurrentUser().getGroupId() %>,
       chName:$('input[name="chN"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/dataElement/waitToDo/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/dataElement/waitToDo/index\")==100}" >
       companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
     </c:if>
     };

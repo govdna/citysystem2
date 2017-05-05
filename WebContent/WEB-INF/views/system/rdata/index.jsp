@@ -296,7 +296,7 @@ background:#18a689;
 <!-- 导出数据开始 -->
   <div id="download_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="downloadForm">
-       <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==1}" >
+       <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==100}" >
         		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
        </c:if>
        
@@ -691,7 +691,7 @@ function statuserro(id,s){
       value8:userCompanyId,
       sourceType:$('select[name="sourceType_sel"]').val(),
       
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/govRdataElement/index\")==100}" >
         companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
       </c:if>
       status:99,

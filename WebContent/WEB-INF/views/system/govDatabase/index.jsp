@@ -93,7 +93,7 @@
 <!-- 导出数据开始 -->
   <div id="download_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="downloadForm">
-  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
+  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==100}" >
        		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
        </c:if>
        <div class="alert alert-info">
@@ -168,7 +168,7 @@ $(function() {
     	 <%@include file="../common/searchQueryParams.jsp"%>
    	</c:forEach>
       
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govDatabase/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/govDatabase/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };
