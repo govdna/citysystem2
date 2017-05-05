@@ -50,12 +50,12 @@
       x: 'left'
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: 'item',
       padding: 10,
       formatter: function(params, ticket, callback) {
-        alert(params);
+        console.log(params);
 
-        return params.data.info.name;
+        return params.data.name;
       }
     },
     dataRange: {

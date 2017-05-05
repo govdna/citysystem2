@@ -17,7 +17,7 @@
   </title>
   <link rel="shortcut icon" href="${base}/favicon.ico"> 
   <link href="${base}/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-  <link href="${base}/static/fonts/Font-Awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="${base}/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
    <link href="${base}/static/css/plugins/iCheck/_all.css" rel="stylesheet">
    <link href="${base}/static/css/animate.min.css" rel="stylesheet">
 </head>
@@ -41,6 +41,9 @@
 .panel-footer {background-color: #fff; border-top: none;}
 .panel-default>.panel-heading {background-color: #fff;border: none;}
 .panel-container #tables label {position: relative;    padding-left: 26px;}
+.gjpz div .pull-left input{width: calc(100% - 45px);float:left;}
+.gjpz div .pull-left label{line-height: 34px;text-align: center;width: 40px;}
+.gjpz div .pull-left{width: 50%;}
 /* .panel-container #tables label input {display: none;}
 .panel-container #tables label i {font-size: 16px;margin-right: 5px;} */
 </style>
@@ -89,6 +92,7 @@
                   <input type="text" class="form-control" name="value5">
                 </div>
               </div>
+              
               <div class="form-group">
                 <label class="control-label col-sm-3">数据库名:</label>
                 <div class="col-sm-9">
@@ -99,6 +103,28 @@
                 <label class="control-label col-sm-3">SID:</label>
                 <div class="col-sm-9">
                   <input type="text" class="form-control" name="value7">
+                </div>
+              </div>
+               <div class="form-group peizhi">
+                <label class="control-label col-sm-3">数据库名:</label>
+                <div class="col-sm-9">
+                  <label><input type="radio" name="iCheck" value="1">是</label>　　
+                  <label><input type="radio" name="iCheck" value="0">否</label>
+                </div>
+              </div>
+              <div class="form-group gjpz" style="display:none;">
+                <label class="control-label col-sm-3">高级配置:</label>
+                <div class="col-sm-9 clearfix">
+                  <div class="pull-left">
+                      <label class='pull-left'>周期</label>
+                      <input type="text" class="form-control pull-left" name="value6">
+                  </div>
+                  <div class="pull-left">
+                    <div>
+                      <label class='pull-left'>时间</label>
+                      <input type="text" class="form-control pull-left form_datetime1" name="value6" style="">
+                    </div>
+                  </div>
                 </div>
               </div>
               <!-- <div class="form-group icheck">
@@ -125,7 +151,7 @@
             <form class="form form-table" action="${base}/backstage/sql/listFields">
               <div class="form-group icheck">
                 <label class="control-label col-sm-12" style="margin-left: 30px;">数据表:</label>
-                <div id="tables" class="col-sm-12"></div>
+                <div id="tables" class="col-sm-12"></div>x
               </div>
             </form>
             </div>
@@ -137,16 +163,51 @@
       </div>
     </div>
   </div>
-<script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
-<script src="${base}/static/js/bootstrap.min.js?v=3.3.6"></script>
+  <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
+<script src="${base}/static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="${base}/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="${base}/static/js/plugins/iCheck/icheck.min.js"></script>
 <script src="${base}/static/js/plugins/layer/layer.js"></script>
 <script>
   $(function() {
-        /*$('.icheck input').iCheck({
+      $('.peizhi input').click(function() {
+
+        //console.log($(this).val());
+        if (+$(this).val()) {
+          console.log(1);
+          $('.gjpz').show();
+        }else {
+          $('.gjpz').hide();
+
+        }
+    });
+     $('.icheck input').iCheck({
+      checkboxClass: 'icheckbox_square-grey',
+         radioClass: 'iradio_square-grey'
+     });
+	  $('.form_datetime1').datetimepicker({
+		  language: 'zh-CN',
+		  // weekStart: 1,
+		  // todayBtn: 1,
+		  autoclose: 1,
+		  //todayHighlight: 1,
+		  startView: 1,
+		  forceParse: 0,
+		  //showMeridian: 1,
+		  format: 'hh:ii',
+		  pickerPosition: "top-left",
+      	// minView: 0,
+      minuteStep:5,
+		  zIndex: 100000000000
+		});
+    /*$('.peizhi input').click(funciton() {
+      console.log($(this).val());
+    });*/
+
+        $('.icheck input').iCheck({
         	checkboxClass: 'icheckbox_square-grey',
             radioClass: 'iradio_square-grey'
-        });*/
+        });
         $('.sql-choose div label').on('click', function() {
           $(this).addClass('active').siblings().removeClass('active');
           if($(this).find("input").val()=='oracle'){
