@@ -525,7 +525,7 @@ var queryParams = function(params) {
     rows : params.limit,
     page : params.offset / params.limit + 1,
     value1 : $('input[name="val1"]').val(),
-    <c:if test="${MyFunction:getMaxScope(\"/backstage/dataFile/index\")==1}" >
+    <c:if test="${MyFunction:getMaxScope(\"/backstage/dataFile/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     status:0,

@@ -7,7 +7,7 @@
 <%@ page import="com.govmade.common.utils.security.AccountShiroUtil" %>
 
 <c:choose>
-<c:when test="${MyFunction:getMaxScope(\"/backstage/information/resource/index\")==1}">
+<c:when test="${MyFunction:getMaxScope(\"/backstage/information/resource/index\")==100}">
 <c:set var="cpid" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>" />
 </c:when>
 <c:otherwise>

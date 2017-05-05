@@ -302,7 +302,7 @@ function doFormatter1(value, row, index) {
       rows : params.limit,
       page : params.offset / params.limit + 1,
       infoTypes:$('select[name="infoT"]').val(),
-    <c:if test="${MyFunction:getMaxScope(\"/backstage/model/houseModel/index\")==1}" >
+    <c:if test="${MyFunction:getMaxScope(\"/backstage/model/houseModel/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };
