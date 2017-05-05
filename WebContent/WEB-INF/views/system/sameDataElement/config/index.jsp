@@ -12,11 +12,13 @@
       <div class="ibox-content">
         <div id="toolbar">
           <div class="form-inline">
-            <div class="form-group">
-              <input type="text" placeholder="输入配置名称" name="dicN" class="form-control col-sm-8">
-              <div class="input-group-btn col-sm-4">
+            <div class="form-group col-xs-6 col-sm-6">
+            <div class="input-group">
+              <input type="text" placeholder="输入配置名称" name="dicN" class="form-control">
+              <div class="input-group-btn">
                 <button type="button" onclick=" $('#dicList').bootstrapTable('refresh');" class="btn btn-primary">搜索
                 </button>
+              </div>
               </div>
             </div>
             <div class="form-group" style="margin-left: 15px;">
