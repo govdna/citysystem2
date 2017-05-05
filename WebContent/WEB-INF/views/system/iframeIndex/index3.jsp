@@ -395,73 +395,75 @@ var color = <%=ServiceUtil.getEchartColor(10) %>
 	      arr.push($(this).val());
 	    }
 		 });
-	   $.ajax({
-	       type: "GET",
-	       url: "${base}/backstage/echart/dataInforSelect",
-	       data: {value1:arr.join(',')},
-	       dataType: "json",
-	       success: function(data){
-			var option = {
-				    
-				    tooltip : {
-				        trigger: 'axis'
-				    },
-				    legend: {
-				        data:['数据元数量', '信息资源数量','共享信息资源','开放信息资源']
-				    },
-				    toolbox: {
-				        show : true,
-				        feature : {
-				            dataView : {show: true, readOnly: false},
-				            magicType: {show: true, type: ['line', 'bar']},
-				            restore : {show: true},
-				            saveAsImage : {show: true}
-				        }
-				    },
-				    calculable : true,
-				    xAxis : [
-				        {
-				            type : 'value',
-				            boundaryGap : [0, 0.01]
-				        }
-				    ],
-				    yAxis : [
-				        {
-				            type : 'category',
-				            data : data.legend,
-				            axisLabel : {
-		                    	formatter:function(val){
-		    					return val.substring(0,6) ;
-								}
-		                     },
-				        }
-				    ],
-				    series : [
-				        {
-				            name:'数据元数量',
-				            type:'bar',
-				            data:data.data
-				        },
-				        {
-				            name:'信息资源数量',
-				            type:'bar',
-				            data:data.infor
-				        },
-				        {
-				            name:'共享信息资源',
-				            type:'bar',
-				            data:data.open
-				        },
-				        {
-				            name:'开放信息资源',
-				            type:'bar',
-				            data:data.share
-				        }
-				    ]
-				};
-	   		myChart1.setOption(option);
-	                }
-	   });
+		 if(arr.length > 0){
+			 $.ajax({
+			       type: "GET",
+			       url: "${base}/backstage/echart/dataInforSelect",
+			       data: {value1:arr.join(',')},
+			       dataType: "json",
+			       success: function(data){
+					var option = {
+						    
+						    tooltip : {
+						        trigger: 'axis'
+						    },
+						    legend: {
+						        data:['数据元数量', '信息资源数量','共享信息资源','开放信息资源']
+						    },
+						    toolbox: {
+						        show : true,
+						        feature : {
+						            dataView : {show: true, readOnly: false},
+						            magicType: {show: true, type: ['line', 'bar']},
+						            restore : {show: true},
+						            saveAsImage : {show: true}
+						        }
+						    },
+						    calculable : true,
+						    xAxis : [
+						        {
+						            type : 'value',
+						            boundaryGap : [0, 0.01]
+						        }
+						    ],
+						    yAxis : [
+						        {
+						            type : 'category',
+						            data : data.legend,
+						            axisLabel : {
+				                    	formatter:function(val){
+				    					return val.substring(0,6) ;
+										}
+				                     },
+						        }
+						    ],
+						    series : [
+						        {
+						            name:'数据元数量',
+						            type:'bar',
+						            data:data.data
+						        },
+						        {
+						            name:'信息资源数量',
+						            type:'bar',
+						            data:data.infor
+						        },
+						        {
+						            name:'共享信息资源',
+						            type:'bar',
+						            data:data.open
+						        },
+						        {
+						            name:'开放信息资源',
+						            type:'bar',
+						            data:data.share
+						        }
+						    ]
+						};
+			   		myChart1.setOption(option);
+			                }
+			   });
+		 }	   
 	 });
 	 
 	 $('.secondSubmit').click(function(){
@@ -471,127 +473,129 @@ var color = <%=ServiceUtil.getEchartColor(10) %>
 		      arr.push($(this).val());
 		    }
 			 });
-		   $.ajax({
-		       type: "GET",
-		       url: "${base}/backstage/echart/unionsSelect",
-		       data: {value1:arr.join(',')},
-		       dataType: "json",
-		       success: function(data){
-		    	   var keyCity = data.keyCity;
-		   	    var xpoint = data.xpoint;
-		   	    var sdata = data.sdata;
-		   	  var option = {
-		   	   
-		   	    tooltip: {
-		   	      trigger: 'axis',
-		   	      formatter: function (v) {
-		   	        var res = v[0][1] + '<br/>';
-		   	        if (v.length < 5) {
-		   	          for (var i = 0, l = v.length; i < l; i++) {
-		   	            res += v[i][0] + ' : ' + v[i][2] + '<br/>';
-		   	          }
-		   	        } else {
-		   	          for (var i = 0, l = v.length; i < l; i++) {
-		   	            res += v[i][0] + ' : ' + v[i][2] + ((i + 1) % 3 == 0 ? '<br/>' : ' ');
-		   	          }
-		   	        }
-		   	        return res;
-		   	      }
-		   	    },
-		   	    legend: {
-		   	      data: keyCity,
-	   	   		formatter:function(name){
-				return name.substring(0,6);
-				}
-		   	    },
-		   	    toolbox: {
-		   	      show: true,
-		   	      orient: 'vertical',
-		   	      x: 'right',
-		   	      y: 'center',
-		   	      feature: {
-		   	        mark: { show: true },
-		   	        dataView: { show: true, readOnly: false },
-		   	        magicType: { show: true, type: ['line', 'bar'] },
-		   	        restore: { show: true },
-		   	        saveAsImage: { show: true }
-		   	      }
-		   	    },
-		   	    grid: {
-		   	      x: 50,
-		   	      y: 80,
-		   	      x2: '32%',
-		   	      borderWidth: 0
-		   	    },
-		   	    xAxis: [{
-		   	      type: 'category',
-		   	      splitLine: { show: false },
-		   	      data: xpoint
-		   	    }],
-		   	    yAxis: [{
-		   	      type: 'value',
-		   	      splitArea: { show: true },
-		   	      splitLine: { show: true }
-		   	    }],
-		   	    polar: [{
-		   		  indicator: [],
-		   	      center: ['84%', 120],
-		   	      radius: 120
-		   	    }]
-		   	  };
-		   	  for (var i=0,l=xpoint.length;i<l;i++){
-		   		var unit = {};
-		   		unit.text=xpoint[i];
-		   		option.polar[0].indicator.push(unit);
-		   		}	
-		   		
-		   		
+			 if(arr.length > 0){
+				 $.ajax({
+				       type: "GET",
+				       url: "${base}/backstage/echart/unionsSelect",
+				       data: {value1:arr.join(',')},
+				       dataType: "json",
+				       success: function(data){
+				    	   var keyCity = data.keyCity;
+				   	    var xpoint = data.xpoint;
+				   	    var sdata = data.sdata;
+				   	  var option = {
+				   	   
+				   	    tooltip: {
+				   	      trigger: 'axis',
+				   	      formatter: function (v) {
+				   	        var res = v[0][1] + '<br/>';
+				   	        if (v.length < 5) {
+				   	          for (var i = 0, l = v.length; i < l; i++) {
+				   	            res += v[i][0] + ' : ' + v[i][2] + '<br/>';
+				   	          }
+				   	        } else {
+				   	          for (var i = 0, l = v.length; i < l; i++) {
+				   	            res += v[i][0] + ' : ' + v[i][2] + ((i + 1) % 3 == 0 ? '<br/>' : ' ');
+				   	          }
+				   	        }
+				   	        return res;
+				   	      }
+				   	    },
+				   	    legend: {
+				   	      data: keyCity,
+			   	   		formatter:function(name){
+						return name.substring(0,6);
+						}
+				   	    },
+				   	    toolbox: {
+				   	      show: true,
+				   	      orient: 'vertical',
+				   	      x: 'right',
+				   	      y: 'center',
+				   	      feature: {
+				   	        mark: { show: true },
+				   	        dataView: { show: true, readOnly: false },
+				   	        magicType: { show: true, type: ['line', 'bar'] },
+				   	        restore: { show: true },
+				   	        saveAsImage: { show: true }
+				   	      }
+				   	    },
+				   	    grid: {
+				   	      x: 50,
+				   	      y: 80,
+				   	      x2: '32%',
+				   	      borderWidth: 0
+				   	    },
+				   	    xAxis: [{
+				   	      type: 'category',
+				   	      splitLine: { show: false },
+				   	      data: xpoint
+				   	    }],
+				   	    yAxis: [{
+				   	      type: 'value',
+				   	      splitArea: { show: true },
+				   	      splitLine: { show: true }
+				   	    }],
+				   	    polar: [{
+				   		  indicator: [],
+				   	      center: ['84%', 120],
+				   	      radius: 120
+				   	    }]
+				   	  };
+				   	  for (var i=0,l=xpoint.length;i<l;i++){
+				   		var unit = {};
+				   		unit.text=xpoint[i];
+				   		option.polar[0].indicator.push(unit);
+				   		}	
+				   		
+				   		
 
-		   	  var selected = {};
-		   	  var series = [{
-		   	    name: '对比',
-		   	    type: 'radar',
-		   	    tooltip: {
-		   	      trigger: 'axis',
-		   	      formatter: function (v) {
-		   	        var res = v[0][3] + '<br/>';
-		   	        if (v.length < 5) {
-		   	          for (var i = 0, l = v.length; i < l; i++) {
-		   	            res += v[i][1] + ' : ' + v[i][2] + '<br/>';
-		   	          }
-		   	        } else {
-		   	          for (var i = 0, l = v.length; i < l; i++) {
-		   	            res += v[i][1] + ' : ' + v[i][2] + ((i + 1) % 3 == 0 ? '<br/>' : ' ');
-		   	          }
-		   	        }
-		   	        return res;
-		   	      }
-		   	    },
-		   	    itemStyle: {
-		   	      normal: {
-		   	        lineStyle: {
-		   	          width: 1
-		   	        }
-		   	      }
-		   	    },
-		   	    data: sdata
+				   	  var selected = {};
+				   	  var series = [{
+				   	    name: '对比',
+				   	    type: 'radar',
+				   	    tooltip: {
+				   	      trigger: 'axis',
+				   	      formatter: function (v) {
+				   	        var res = v[0][3] + '<br/>';
+				   	        if (v.length < 5) {
+				   	          for (var i = 0, l = v.length; i < l; i++) {
+				   	            res += v[i][1] + ' : ' + v[i][2] + '<br/>';
+				   	          }
+				   	        } else {
+				   	          for (var i = 0, l = v.length; i < l; i++) {
+				   	            res += v[i][1] + ' : ' + v[i][2] + ((i + 1) % 3 == 0 ? '<br/>' : ' ');
+				   	          }
+				   	        }
+				   	        return res;
+				   	      }
+				   	    },
+				   	    itemStyle: {
+				   	      normal: {
+				   	        lineStyle: {
+				   	          width: 1
+				   	        }
+				   	      }
+				   	    },
+				   	    data: sdata
 
-		   	  }];
-		   	   for (var i=0,l=sdata.length;i<l;i++){
-		   		var unit = {
-		   	    barCategoryGap: "10%",
-		   	    barGap: "5%",
-		   	    type: "bar"
-		   	  };
-		   	  unit.data = sdata[i].value;
-		   	  unit.name = sdata[i].name;
-		   		series.push(unit);
-		   		}
-		   	  option.series = series;
-		   	  var myChart4 = echarts.init(document.getElementById('main4'));
-		   		myChart4.setOption(option);
-		                }
-		   });
+				   	  }];
+				   	   for (var i=0,l=sdata.length;i<l;i++){
+				   		var unit = {
+				   	    barCategoryGap: "10%",
+				   	    barGap: "5%",
+				   	    type: "bar"
+				   	  };
+				   	  unit.data = sdata[i].value;
+				   	  unit.name = sdata[i].name;
+				   		series.push(unit);
+				   		}
+				   	  option.series = series;
+				   	  var myChart4 = echarts.init(document.getElementById('main4'));
+				   		myChart4.setOption(option);
+				                }
+				   });
+			 }		  
 		 });
 
 </script>
