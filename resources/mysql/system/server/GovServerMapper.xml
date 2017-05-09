@@ -366,7 +366,7 @@
 		SELECT ID,VALUE1,VALUE2 FROM gov_table WHERE VALUE3 = #{value3} AND ISDELETED = 0
 	</select>
 	<select id="fllist" resultMap="basee" parameterType="GovServer">
-		SELECT VALUE1,VALUE2 FROM gov_table_field WHERE VALUE3 =  #{value3} AND ISDELETED = 0
+		SELECT ID,VALUE1,VALUE2 FROM gov_table_field WHERE VALUE3 =  #{value3} AND ISDELETED = 0
 	</select>
 	<select id="syslist" resultMap="basee" parameterType="GovServer">
 		SELECT ID,VALUE1,Value2,VALUE7 FROM gov_application_system WHERE ISDELETED = 0 

@@ -512,7 +512,7 @@ background:#18a689;
 <!-- 导出数据开始 -->
   <div id="download_div" style="display: none;" class="ibox-content">
     <form method="post" class="form-horizontal" id="downloadForm">
-  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
+  	   <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==100}" >
        		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
        </c:if>
        <div class="alert alert-info">
@@ -936,7 +936,7 @@ $("select[name='cId']").on('change', function(e, params) {
           status:${status},
         </c:when>
         <c:otherwise>
-        <c:if test="${MyFunction:getMaxScope(\"/backstage/information/resource/index\")==1}" >
+        <c:if test="${MyFunction:getMaxScope(\"/backstage/information/resource/index\")==100}" >
           companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
         </c:otherwise>
@@ -991,7 +991,7 @@ $("select[name='cId']").on('change', function(e, params) {
       objectType : $('select[name="dxl-select"]').val(),
       //status : 0,
       chName : $('input[name="keyword"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/status/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };

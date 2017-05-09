@@ -449,7 +449,7 @@ cursor: pointer;
       objectType : $('select[name="dxl-select"]').val(),
       status : 0,
       chName : $('input[name="keyword"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/waitToDo/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/waitToDo/index\")==100}" >
     companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
   </c:if>
     };

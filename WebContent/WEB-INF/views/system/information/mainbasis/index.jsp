@@ -438,7 +438,11 @@ var queryParams = function(params) {
     page : params.offset / params.limit + 1,
     inforTypes2:inforTypes2,
     inforTypes3:inforTypes3,
-    status:0
+    status:0,
+    <c:set var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
+        <c:if test="${roleid!=1}">
+         companyId : <%=AccountShiroUtil.getCurrentUser().getCompanyId() %>
+        </c:if>
   };
   return temp;
 };

@@ -97,7 +97,7 @@ $(function () {
     	 <%@include file="../common/searchQueryParams.jsp"%>
    	</c:forEach>
       
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/govTableField/index\")==1}" >
+      <c:if test="${MyFunction:getMaxScope(\"/backstage/govTableField/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };

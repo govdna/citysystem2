@@ -50,12 +50,12 @@
       x: 'left'
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: 'item',
       padding: 10,
       formatter: function(params, ticket, callback) {
-        alert(params);
+        console.log(params);
 
-        return params.data.info.name;
+        return params.data.name;
       }
     },
     dataRange: {
@@ -91,24 +91,24 @@
       mapType: '海南',
       hoverable: true,
       roam: true,
-      data: [ {name: '三亚市',value: <%=ServiceUtil.getCompanyCountByAddr("三亚市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("三亚市")%>},
-              {name: '乐东黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("乐东黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("乐东黎族自治县")%>},
-              {name: '儋州市',value: <%=ServiceUtil.getCompanyCountByAddr("儋州市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("儋州市")%>},
-              {name: '琼中黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("琼中黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼中黎族苗族自治县")%>},
-              {name: '东方市',value: <%=ServiceUtil.getCompanyCountByAddr("东方市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("东方市")%>},
-              {name: '海口市',value: <%=ServiceUtil.getCompanyCountByAddr("海口市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("海口市")%>},
-              {name: '万宁市',value: <%=ServiceUtil.getCompanyCountByAddr("万宁市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("万宁市")%>},
-              {name: '澄迈县',value: <%=ServiceUtil.getCompanyCountByAddr("澄迈县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("澄迈县")%>},
-              {name: '白沙黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("白沙黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("白沙黎族自治县")%>},
-              {name: '琼海市',value: <%=ServiceUtil.getCompanyCountByAddr("琼海市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼海市")%>},
-              {name: '昌江黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("昌江黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("昌江黎族自治县")%>},
-              {name: '临高县',value: <%=ServiceUtil.getCompanyCountByAddr("临高县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("临高县")%>},
-              {name: '陵水黎族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("陵水黎族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("陵水黎族自治县")%>},
-              {name: '屯昌县',value: <%=ServiceUtil.getCompanyCountByAddr("屯昌县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("屯昌县")%>},
-              {name: '定安县',value: <%=ServiceUtil.getCompanyCountByAddr("定安县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("定安县")%>},
-              {name: '保亭黎族苗族自治县',value: <%=ServiceUtil.getCompanyCountByAddr("保亭黎族苗族自治县")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("保亭黎族苗族自治县")%>},
-              {name: '文昌市',value: <%=ServiceUtil.getCompanyCountByAddr("文昌市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("文昌市")%>},
-              {name: '五指山市',value: <%=ServiceUtil.getCompanyCountByAddr("五指山市")%>, info: <%=ServiceUtil.getCompanyCountByAddrJS("五指山市")%>}
+      data: [ {name: '三亚市',value: 44, info: <%=ServiceUtil.getCompanyCountByAddrJS("三亚市")%>},
+              {name: '乐东黎族自治县',value: 42, info: <%=ServiceUtil.getCompanyCountByAddrJS("乐东黎族自治县")%>},
+              {name: '儋州市',value: 40, info: <%=ServiceUtil.getCompanyCountByAddrJS("儋州市")%>},
+              {name: '琼中黎族苗族自治县',value: 38, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼中黎族苗族自治县")%>},
+              {name: '东方市',value: 36, info: <%=ServiceUtil.getCompanyCountByAddrJS("东方市")%>},
+              {name: '海口市',value: 34, info: <%=ServiceUtil.getCompanyCountByAddrJS("海口市")%>},
+              {name: '万宁市',value: 32, info: <%=ServiceUtil.getCompanyCountByAddrJS("万宁市")%>},
+              {name: '澄迈县',value: 30, info: <%=ServiceUtil.getCompanyCountByAddrJS("澄迈县")%>},
+              {name: '白沙黎族自治县',value: 28, info: <%=ServiceUtil.getCompanyCountByAddrJS("白沙黎族自治县")%>},
+              {name: '琼海市',value: 26, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼海市")%>},
+              {name: '昌江黎族自治县',value: 24, info: <%=ServiceUtil.getCompanyCountByAddrJS("昌江黎族自治县")%>},
+              {name: '临高县',value: 22, info: <%=ServiceUtil.getCompanyCountByAddrJS("临高县")%>},
+              {name: '陵水黎族自治县',value: 20, info: <%=ServiceUtil.getCompanyCountByAddrJS("陵水黎族自治县")%>},
+              {name: '屯昌县',value: 18, info: <%=ServiceUtil.getCompanyCountByAddrJS("屯昌县")%>},
+              {name: '定安县',value: 16, info: <%=ServiceUtil.getCompanyCountByAddrJS("定安县")%>},
+              {name: '保亭黎族苗族自治县',value: 14, info: <%=ServiceUtil.getCompanyCountByAddrJS("保亭黎族苗族自治县")%>},
+              {name: '文昌市',value: 12, info: <%=ServiceUtil.getCompanyCountByAddrJS("文昌市")%>},
+              {name: '五指山市',value: 8, info: <%=ServiceUtil.getCompanyCountByAddrJS("五指山市")%>}
          ],
       markPoint: {
         symbolSize: 5,
@@ -162,8 +162,10 @@
   myChart.setOption(option);
 
   function pars(params, ticket, callback) {
-    var content = params.name  + '<br>数据元数量: ' +
-      params.data.info.dataElement + '<br>信息资源数量: ' + params.data.info.informationResource
+      
+      var content = params.name  + '<br>信息资源数量: ' +
+      params.data.info.informationResource + '<br>数据元数量: ' + params.data.info.dataElement
+      
     return content;
   }
     </script>

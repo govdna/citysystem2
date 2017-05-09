@@ -277,7 +277,7 @@ function doFormatter1(value, row, index)
       sort:params.sort,
       order:params.order,
       infoTypes:$('select[name="infoT"]').val(),
-    <c:if test="${MyFunction:getMaxScope(\"/backstage/model/houseModel/index\")==1}" >
+    <c:if test="${MyFunction:getMaxScope(\"/backstage/model/houseModel/index\")==100}" >
        companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
         </c:if>
     };

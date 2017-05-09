@@ -706,7 +706,7 @@ var  columns=${columns};
 		    title: '数据元详情',
 		    shadeClose: true,
 		    shade: 0.1,
-		    area: ['620px', '80%'],
+		    area: ['620px', '70%'],
 		    content: base + '/backstage/cleanDataElement/detail?idForShow=' + id
 		  });
 	}

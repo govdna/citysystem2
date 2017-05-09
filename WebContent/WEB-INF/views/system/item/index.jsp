@@ -402,7 +402,7 @@ function doFormatter11(value, row, index)
 			itemName:$('input[name="itemN"]').val(),
 			companyId: $('select[name="cId"]').val(),
 			serContent: $('select[name="serC"]').val(),
-			<c:if test="${MyFunction:getMaxScope(\"/backstage/itemSort/index\")==1}" >
+			<c:if test="${MyFunction:getMaxScope(\"/backstage/itemSort/index\")==100}" >
 	     	companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
 	        </c:if>
 		};

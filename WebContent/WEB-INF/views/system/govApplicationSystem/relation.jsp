@@ -170,7 +170,7 @@ var queryParams = function(params) {
     companyId: $('select[name="cId"]').val(),
     value8:'233',
     value2:$('input[name="appN"]').val(),
-    <c:if test = "${MyFunction:getMaxScope(\"/backstage/govApplicationSystem/index\")==1}" >
+    <c:if test = "${MyFunction:getMaxScope(\"/backstage/govApplicationSystem/index\")==100}" >
     companyId: <%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
     </c:if>
   };
