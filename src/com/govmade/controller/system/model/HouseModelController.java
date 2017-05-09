@@ -280,8 +280,10 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 								  JSONObject menu2 = new JSONObject();
 								  o.setId(Integer.valueOf(hs));
 								  DataElement d = cleanDataElementService.findById(o);
-								  menu2.put("name", d.getChName());
-								  ja2.add(menu2);
+								  if(d.getChName()!=null && d.getChName()!=""){
+									  menu2.put("name", d.getChName());
+									  ja2.add(menu2);
+								  }								  
 							  }  
 						  }					  
 						  menu.put("children", ja2);
