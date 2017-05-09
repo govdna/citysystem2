@@ -580,7 +580,10 @@ public class GovRdataElementController extends DataElementController {
 	public ResponseEntity<byte[]> downloadData(DataElement de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
 		de.setClassType(getClassType());
-		DataElement2ExcelAdapter adapter = new DataElement2ExcelAdapter(dataElementservice.find(de), xlsFields,
+		List<DataElement> list=dataElementservice.find(de);
+		System.out.println(list.size());
+		System.out.println(getExcelHandler().size());
+		DataElement2ExcelAdapter adapter = new DataElement2ExcelAdapter(list, xlsFields,
 				getExcelHandler());
 		Object2ExcelUtil util = new Object2ExcelUtil(adapter);
 		String path = req.getSession().getServletContext().getRealPath("upload/excel");
