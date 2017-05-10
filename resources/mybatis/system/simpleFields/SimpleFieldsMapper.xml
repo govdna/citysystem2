@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.simpleFields.SimpleFieldsDao">
+	<resultMap id="base" type="SimpleFields"></resultMap>
+	<select id="find" resultMap="base" parameterType="SimpleFields">
+		SELECT  id,name,search_type searchType,class_name className,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,is_show isShow,title_text titleText
+		 FROM gov_simple_fields t WHERE 1=1
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.className != null ">
+			and t.class_name=#{param.className}
+		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>		
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,name,search_type searchType,class_name className,input_type inputType,input_value inputValue,value_no valueNo,required,list_no listNo,time_create timeCreate,time_modified timeModified,isDeleted,is_show isShow,title_text titleText
+		 FROM gov_simple_fields t WHERE 1=1
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.className != null ">
+			and t.class_name=#{param.className}
+		</if>
+		<if test="param.searchType != null ">
+			and t.search_type=#{param.searchType}
+		</if>		
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="SimpleFields">
+		SELECT count(*) FROM gov_simple_fields t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="SimpleFields" >	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_simple_fields_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_simple_fields(search_type,name,class_name,input_type,input_value,value_no,required,list_no,time_create,time_modified,isDeleted,is_show,title_text) 
+	VALUES (#{searchType,jdbcType=NUMERIC},#{name,jdbcType=VARCHAR},#{className,jdbcType=VARCHAR},#{inputType,jdbcType=VARCHAR},#{inputValue,jdbcType=VARCHAR},#{valueNo,jdbcType=NUMERIC},#{required,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{isShow,jdbcType=NUMERIC},#{titleText,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	<update id="delete" parameterType="SimpleFields">
+		UPDATE gov_simple_fields
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_simple_fields
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="SimpleFields">
+		DELETE FROM gov_simple_fields
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_simple_fields
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+    </delete>
+	<update id="update" parameterType="SimpleFields">
+		UPDATE gov_simple_fields
+		SET 
+		name=#{name,jdbcType=VARCHAR},
+		search_type=#{searchType,jdbcType=NUMERIC},
+        input_type=#{inputType,jdbcType=VARCHAR},
+        input_value=#{inputValue,jdbcType=VARCHAR},
+        value_no=#{valueNo,jdbcType=NUMERIC},
+        required=#{required,jdbcType=VARCHAR},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		list_no=#{listNo,jdbcType=NUMERIC},
+		is_show=#{isShow,jdbcType=NUMERIC},
+		title_text=#{titleText,jdbcType=VARCHAR}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

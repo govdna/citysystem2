@@ -1,0 +1,349 @@
+/*
+* @Author: kk
+* @Date:   2017-02-10 13:28:33
+* @Last Modified by:   kk
+* @Last Modified time: 2017-03-10 09:39:04
+*/
+
+
+/* before */
+
+.skin-3 .minimalize-styl-2 {
+  margin: 14px 5px 5px 30px;
+}
+
+.skin-3 .navbar-top-links li:last-child {
+  margin-right: 30px;
+}
+
+.skin-3.fixed-nav .minimalize-styl-2 {
+  margin: 14px 5px 5px 15px;
+}
+
+.skin-3 .spin-icon {
+  background: #ecba52 !important;
+}
+
+body.boxed-layout.skin-3 #wrapper {
+  background: #3e2c42;
+}
+
+.skin-3 .nav-header {
+  background: #ecba52;
+  background: url('patterns/header-profile-skin-3.png');
+}
+
+.skin-3.mini-navbar .nav-second-level {
+  background: #3e2c42;
+}
+
+.skin-3 .breadcrumb {
+  background: transparent;
+}
+
+.skin-3 .page-heading {
+  border: none;
+}
+
+
+/* .skin-3 .nav > li.active {
+    background: #38283c;
+} */
+
+.fixed-nav.skin-3 .navbar-fixed-top {
+  background: #fff;
+}
+
+.skin-3 .nav > li > a {
+  color: #fff;
+}
+
+.skin-3 .nav > li.active > a {
+  color: #fff;
+}
+
+.skin-3 .navbar-minimalize {
+  background: #ecba52;
+  border-color: #ecba52;
+}
+
+.skin-3 .navbar-static-top {
+  background: #ffffff;
+}
+
+.skin-3 .dashboard-header {
+  background: transparent;
+  border-bottom: none !important;
+  border-top: none;
+  padding: 20px 30px 10px 30px;
+}
+
+.skin-3 .wrapper-content {
+  padding: 30px 15px;
+}
+
+.skin-3 #page-wrapper {
+  background: #f4f6fa;
+}
+
+.skin-3 .ibox-title,
+.skin-3 .ibox-content {
+  border-width: 1px;
+}
+
+.skin-3 .ibox-content:last-child {
+  border-style: solid solid solid solid;
+}
+
+.skin-3 .nav > li.active {
+  border: none;
+}
+
+.skin-3 .nav-header {
+  padding: 35px 25px 25px 25px;
+}
+
+.skin-3 .nav-header a.dropdown-toggle {
+  color: #fff;
+  margin-top: 10px;
+}
+
+.skin-3 .nav-header a.dropdown-toggle .text-muted {
+  color: #fff;
+  opacity: 0.8;
+}
+
+.skin-3 .profile-element {
+  text-align: center;
+}
+
+.skin-3 .img-circle {
+  border-radius: 5px;
+}
+
+
+/* .skin-3 .navbar-default .nav > li > a:hover,
+.skin-3 .navbar-default .nav > li > a:focus {
+    background: #38283c;
+    color: #fff;
+} */
+
+.skin-3 .nav.nav-tabs > li.active > a {
+  color: #555;
+}
+
+.skin-3 .nav.nav-tabs > li.active {
+  background: transparent;
+}
+
+.skin-3 .content-tabs {
+  border-bottom: solid 2px #3e2c42;
+}
+
+.skin-3 .nav.nav-tabs > li.active {
+  background: transparent;
+}
+
+.skin-3 .page-tabs a.active {
+  background: #3e2c42;
+  color: #fff;
+}
+
+.skin-3 .page-tabs a.active:hover,
+.skin-3 .page-tabs a.active i:hover {
+  background: #38283c;
+  color: #fff;
+}
+
+
+/* after */
+.skin-3 .message-group .count-info{
+  color: #fff;
+}
+.hook-login.skin-3 .btn-submit {
+  background-color: #b74635!important;
+  border-color: #d15b47;
+}
+
+.hook-login.skin-3 .btn-submit:hover {
+  background-color: #b74635!important;
+  border-color: #d15b47;
+}
+.hook-index-item .nav a {
+  padding-top: 240px;
+}
+.hook-index-item .skin-3 {
+  background-image: url(../../images/login/bg2.jpg);
+}
+.index-skin.skin-3 .header .name span,
+.index-skin.skin-3 .header .btn-signout,
+.index-skin.skin-3 .header .btn-signout {
+  color: #fff;
+}
+.skin-3.hook-login {
+  background-image: url(../../images/index/bg1.jpg);
+  background-position: center top;
+}
+
+.skin-3 .register-page .register-page-case {
+  background: rgba(0, 0, 0, .2);
+  box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, .8);
+}
+
+.skin-3 .register-page .register-page-case h3 {
+  color: #fff;
+}
+
+.skin-3 .register-page input {
+  background-color: transparent;
+  color: #d7d7d7;
+}
+
+.skin-3 .register-page .user-case:before,
+.skin-3 .register-page .lock-case:before,
+.skin-3 .register-page .verify-case:before {
+  color: #d7d7d7;
+  font-weight: 600;
+}
+
+.skin-3 .register-page .form-group i {
+  background: url(../../images/login/icon_3.png) no-repeat;
+}
+
+.skin-3 .register-page .user-case i {
+  background-position: -8px -34px;
+}
+
+.skin-3 .register-page .lock-case i {
+  background-position: -8px -8px;
+}
+
+.skin-3 .register-page .verify-case i {
+  background-position: -8px -59px;
+}
+
+.skin-3 .register-page {
+  background-image: url(../../images/login/bg.jpg);
+}
+
+.skin-3 .register-page .last-copyright {
+  color: #d7d7d7;
+}
+
+
+/* logo end*/
+
+body.skin-3 {
+  background: url(../../images/login/bg.jpg);
+}
+
+.skin-3 .header,
+.skin-3 .navbar-default {
+  background: rgba(0, 0, 0, .25);
+}
+
+.skin-3 .header h1 {
+  color: #fff;
+}
+
+.skin-3 .header .name span,
+.skin-3 .header .btn-signout,
+.skin-3 .header .btn-signout {
+  border-color: #1c2536;
+  background-color: #202b3d;
+}
+
+.skin-3 .header .name img {
+  border-color: #3e4e6b;
+}
+
+.skin-3 .nav > li > a {
+  background: rgba(0, 0, 0, .25);
+}
+
+.skin-3 .sidebar-collapse {
+  background: rgba(41, 65, 103, 0.5);
+}
+
+.skin-3 .hook-nav-list a {
+  background: url(../../images/icon/icon_12.png) no-repeat;
+}
+
+.skin-3 .hook-nav-list .nav1 {
+  background-position: center -402px;
+}
+
+.skin-3 .hook-nav-list .nav1:hover {
+  background-position: center -53px;
+}
+
+.skin-3 .hook-nav-list .nav2 {
+  background-position: center -1096px;
+}
+
+.skin-3 .hook-nav-list .nav2:hover {
+  background-position: center -747px;
+}
+
+.skin-3 .hook-nav-list .nav3 {
+  background-position: center -1800px;
+}
+
+.skin-3 .hook-nav-list .nav3:hover {
+  background-position: center -1451px;
+}
+
+.skin-3 .hook-nav-list .nav4 {
+  background-position: center -2487px;
+}
+
+.skin-3 .hook-nav-list .nav4:hover {
+  background-position: center -2138px;
+}
+.skin-3 .hook-nav-list .nav5 {
+  background-position: center -3217px;
+}
+
+.skin-3 .hook-nav-list .nav5:hover {
+  background-position: center -2829px;
+}
+
+.skin-3 .hook-nav-list h3 {
+  color: #fff;
+}
+
+.skin-3 .hook-nav-list a:hover h3 {
+  color: #ffc424;
+}
+
+.skin-3 .last-copyright {
+  color: #f6f6f6;
+}
+
+.hook-login.skin-3 .header {
+  display: none;
+}
+/* button style */
+
+.btn-primary {
+  background-color: #3389D4 !important;
+  border-color: #3389D4 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  background-color: rgba(51, 137, 212, 0.9) !important;
+  border-color: rgba(51, 137, 212, 0.9) !important;
+}
+.tabsNav .nav a.current {
+  background-color: #005293 !important;
+}
+.skin-3 .count-info .label{
+  background-color: #2196f3;
+}
+.skin-3 .message-group .count-info {
+  border-color: #1c2536;
+}

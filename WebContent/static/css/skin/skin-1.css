@@ -1,0 +1,286 @@
+/*
+* @Author: kk
+* @Date:   2017-02-10 13:28:20
+* @Last Modified by:   kk
+* @Last Modified time: 2017-03-10 09:36:54
+*/
+
+
+/* before */
+
+.skin-1 .minimalize-styl-2 {
+  margin: 14px 5px 5px 30px;
+}
+
+.skin-1 .navbar-top-links li:last-child {
+  margin-right: 30px;
+}
+
+.skin-1.fixed-nav .minimalize-styl-2 {
+  margin: 14px 5px 5px 15px;
+}
+
+.skin-1 .spin-icon {
+  background: #0e9aef !important;
+}
+
+.skin-1 .nav-header {
+  background: #0e9aef;
+  background: url('patterns/header-profile-skin-1.png');
+}
+
+.skin-1.mini-navbar .nav-second-level {
+  background: #3e495f;
+}
+
+.skin-1 .breadcrumb {
+  background: transparent;
+}
+
+.skin-1 .page-heading {
+  border: none;
+}
+
+
+/* .skin-1 .nav > li.active {
+    background: #3a4459;
+} */
+
+.skin-1 .nav > li > a {
+  color: #fff;
+}
+
+.skin-1 .nav > li.active > a {
+  color: #fff;
+}
+
+.skin-1 .navbar-minimalize {
+  background: #0e9aef;
+  border-color: #0e9aef;
+}
+
+.skin-1 .navbar-static-top {
+  background: #ffffff;
+}
+
+.skin-1 .dashboard-header {
+  background: transparent;
+  border-bottom: none !important;
+  border-top: none;
+  padding: 20px 30px 10px 30px;
+}
+
+.fixed-nav.skin-1 .navbar-fixed-top {
+  background: #fff;
+}
+
+.skin-1 .wrapper-content {
+  padding: 30px 15px;
+}
+
+.skin-1 #page-wrapper {
+  background: #f4f6fa;
+}
+
+.skin-1 .ibox-title,
+.skin-1 .ibox-content {
+  border-width: 1px;
+}
+
+.skin-1 .ibox-content:last-child {
+  border-style: solid solid solid solid;
+}
+
+.skin-1 .nav > li.active {
+  border: none;
+}
+
+.skin-1 .nav-header {
+  padding: 35px 25px 25px 25px;
+}
+
+.skin-1 .nav-header a.dropdown-toggle {
+  color: #fff;
+  margin-top: 10px;
+}
+
+.skin-1 .nav-header a.dropdown-toggle .text-muted {
+  color: #fff;
+  opacity: 0.8;
+}
+
+.skin-1 .profile-element {
+  text-align: center;
+}
+
+.skin-1 .img-circle {
+  border-radius: 5px;
+}
+
+.skin-1 .nav.nav-tabs > li.active > a {
+  color: #555;
+}
+
+.skin-1 .content-tabs {
+  border-bottom: solid 2px #39aef5;
+}
+
+.skin-1 .nav.nav-tabs > li.active {
+  background: transparent;
+}
+
+.skin-1 .page-tabs a.active {
+  background: #39aef5;
+  color: #fff;
+}
+
+.skin-1 .page-tabs a.active:hover,
+.skin-1 .page-tabs a.active i:hover {
+  background: #0e9aef;
+  color: #fff;
+}
+
+
+/* after */
+.skin-1 .message-group .count-info{
+  color: #e9e9e9;
+  background-color: #9f9f9f;
+}
+.hook-login.skin-1 .btn-submit {
+  background-color: #b74635!important;
+  border-color: #d15b47;
+}
+
+.hook-login.skin-1 .btn-submit:hover {
+  background-color: #b74635!important;
+  border-color: #d15b47;
+}
+
+.hook-login.skin-1 .header {
+  display: none;
+}
+
+body.skin-1.hook-login {
+  background: url(../../images/login/bg1.jpg) center center;
+}
+
+.index-skin.skin-1 .header {
+  background-color: #d2d2d3;
+}
+
+.index-skin.skin-1 .header .name span {
+  color: #e9e9e9;
+  background-color: #9f9f9f;
+}
+
+.index-skin.skin-1 .header .btn-signout {
+  color: #e9e9e9;
+  background-color: #9f9f9f;
+}
+
+.index-skin.skin-1 .header .btn-signout:hover {
+  color: #fff;
+}
+
+.hook-index-item.skin-1 .nav a {
+  background: url(../../images/icon/icon_11.png) no-repeat;
+}
+
+.hook-index-item.skin-1 {
+  background-image: url(../../images/index/bg1.jpg);
+  background-position: center top;
+}
+
+.hook-index-item.skin-1 .nav .nav1 {
+  background-position: center -402px;
+}
+
+.hook-index-item.skin-1 .nav div:hover .nav1 {
+  background-position: center -53px;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.hook-index-item.skin-1 .nav .nav2 {
+  background-position: center -1096px;
+}
+
+.hook-index-item.skin-1 .nav div:hover .nav2 {
+  background-position: center -747px;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.hook-index-item.skin-1 .nav .nav3 {
+  background-position: center -1800px;
+}
+
+.hook-index-item.skin-1 .nav div:hover .nav3 {
+  background-position: center -1451px;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.hook-index-item.skin-1 .nav .nav4 {
+  background-position: center -2487px;
+}
+
+.hook-index-item.skin-1 .nav div:hover .nav4 {
+  background-position: center -2138px;
+  background-color: rgba(0, 0, 0, .2);
+}
+.hook-index-item.skin-1 .nav .nav5 {
+  background-position: center -3217px;
+}
+
+.hook-index-item.skin-1 .nav div:hover .nav5 {
+  background-position: center -2829px;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.hook-index-item.skin-1 .nav h3 {
+  color: #999999;
+  font-size: 20px;
+  line-height: 2.5;
+  margin-top: 20px;
+}
+
+.hook-index-item.skin-1 .nav div:hover h3 {
+  color: #ba1b21;
+}
+.hook-manage-skin.skin-1 {
+  background-color: #e6e6e8;
+}
+.hook-manage-skin.skin-1 .header {
+  background-color: #d2d2d3;
+}
+
+.hook-manage-skin.skin-1 .navbar-default {
+  background-image: : url(../../images/index/bg2.jpg);
+  background-size: cover;
+}
+.hook-manage-skin.skin-1 .nav > li > a {
+  color: #fff;
+  background: rgba(0, 0, 0, .25);
+}
+.hook-manage-skin.skin-1 .nav>li>a:focus, 
+.hook-manage-skin.skin-1 .nav>li>a:hover {
+    background-color: rgba(0, 0, 0, .3);
+}
+.hook-manage-skin.skin-1 .sidebar-collapse li .nav-title {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.hook-manage-skin.skin-1  .navbar-default .nav li li a:hover, 
+.hook-manage-skin.skin-1  .navbar-default .nav li li a:focus {
+  background: rgba(0, 0, 0, .45);
+  color: #fff;
+}
+.skin-1 .tabsNav .nav a.current {
+  background-color: #1ab394;
+  border-color: #1ab394;
+}
+.skin-1 .layui-layer-btn .layui-layer-btn0 {
+  background-color: #1ab394;
+  border-color: #1ab394;
+}
+#tagTop .red {
+  background: #1ab394 !important;
+  border-color: #1ab394 !important;
+}

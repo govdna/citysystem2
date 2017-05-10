@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.information.InformationResourceDao">
+	<resultMap id="base" type="InformationResource"></resultMap>
+	<resultMap id="company" type="Company"></resultMap>
+	<resultMap id="subscribe" type="Subscribe"></resultMap>
+
+	<select id="getInforResGroupByCompany" resultMap="company" parameterType="Company">
+		SELECT value3 id,COUNT(value3) address,gc.company_name companyName FROM gov_information_resource_main grm,gov_company gc 
+		WHERE grm.value3=gc.id  AND STATUS=0 AND grm.isDeleted=0 AND gc.isDeleted=0
+		GROUP BY value3 ,company_name
+		ORDER BY address DESC 
+	</select>
+	
+	
+	  <!--  各个机构所属的信息资源数量 -->
+	 <select id="getCompanyCount" resultMap="base" parameterType="DataElement">
+		 select value3,count(id) status from gov_information_resource_main where status=0 and isDeleted=0 group by value3
+ 	 </select>
+     
+     
+	<select id="getInforResByDataElementIds" resultMap="base" parameterType="subscribe">
+		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
+		FROM gov_information_resource_main t,gov_data_list l
+		where  l.data_manager_id=t.id and l.data_element_id in (${ids})
+		and t.isDeleted=0
+	</select>
+	
+	<select id="getInformationResourceBySubscribe" resultMap="base" parameterType="subscribe">
+		SELECT  t.id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4, t.time_create timeCreate, t.time_modified timeModified, t.isDeleted,  t.company_id companyId, t.group_id groupId, t.reason, t.status 
+		FROM gov_information_resource_main t,gov_subscribe gs WHERE gs.information_resource_id=t.id
+		<if test="accountId != null ">
+			and gs.account_id=#{accountId}
+		</if>
+		and t.isDeleted=0
+		and gs.isDeleted=0
+		order by gs.time_create desc
+		
+	</select>
+	
+	
+	<select id="getMaxCode" resultType="String" parameterType="InformationResource">
+	SELECT MAX(value2) from gov_information_resource_main where 1=1 
+	<if test="inforTypes != null ">
+		and inforTypes=#{inforTypes}
+	</if>	
+	<if test="inforTypes2 != null ">
+		and inforTypes2=#{inforTypes2}
+	</if>	
+	<choose>
+		<when  test="inforTypes3 != null ">
+				and inforTypes3=#{inforTypes3}
+		</when>
+		<otherwise>
+			and inforTypes3 is null
+		</otherwise>
+	</choose>
+	<choose>
+		<when  test="inforTypes4 != null ">
+				and inforTypes4=#{inforTypes4}
+		</when>
+		<otherwise>
+			and inforTypes4 is null
+		</otherwise>
+	</choose>	
+	</select>
+	
+	
+	
+	<select id="findExactly" resultMap="base" parameterType="InformationResource">
+		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.value1 != null and param.value1!='' ">
+			and t.value1 =#{param.value1}
+		</if>
+		<if test="param.value2 != null and param.value2!='' ">
+			and t.value2 =#{param.value2}
+		</if>
+		<if test="param.value3 != null and param.value3!='' ">
+			and t.value3=#{param.value3}
+		</if>
+		<if test="param.value4 != null and param.value4!='' ">
+			and t.value4=#{param.value4}
+		</if>
+		<if test="param.value5 != null and param.value5!='' ">
+			and (t.value5 like '%${param.value5}%' or t.value1 like '%${param.value5}%')
+		</if>
+		<choose>
+			<when  test="param.value6 != null and param.value6=='0'.toString() ">
+					and t.value6 IS NOT null and t.value6 != ''
+			</when>
+			<otherwise>
+				<if test="param.value6 != null and param.value6!='' ">
+					and t.value6=#{param.value6}
+				</if>
+			</otherwise>
+		</choose>
+		
+		
+		<if test="param.value7 != null and param.value7!='' ">
+			and t.value7=#{param.value7}
+		</if>
+		<if test="param.value8 != null and param.value8!='' ">
+			and t.value8=#{param.value8}
+		</if>
+		<if test="param.value9 != null and param.value9!='' ">
+			and t.value9=#{param.value9}
+		</if>
+		<if test="param.value10 != null and param.value10 != ''">
+			and t.value10 = #{param.value10}
+		</if>
+		<if test="param.value11 != null and param.value11 != ''">
+			and t.value11 = #{param.value11}
+		</if>
+		<if test="param.value12 != null and param.value12 != ''">
+			and t.value12 = #{param.value12}
+		</if>
+		<if test="param.value13 != null and param.value13 != ''">
+			and t.value13 = #{param.value13}
+		</if>
+		<if test="param.value14 != null and param.value14 != ''">
+			and t.value14 = #{param.value14}
+		</if>
+		<if test="param.value15 != null and param.value15 != ''">
+			and t.value15 = #{param.value15}
+		</if>
+		<if test="param.value16 != null and param.value16 != ''">
+			and t.value16 = #{param.value16}
+		</if>
+		<if test="param.value17 != null and param.value17 != ''">
+			and t.value17 = #{param.value17}
+		</if>
+		<if test="param.value18 != null and param.value18 != ''">
+			and t.value18 = #{param.value18}
+		</if>
+		<if test="param.value19 != null and param.value19 != ''">
+			and t.value19 = #{param.value19}
+		</if>
+		<if test="param.value20 != null and param.value20 != ''">
+			and t.value20 = #{param.value20}
+		</if>
+		<if test="param.value21 != null and param.value21 != ''">
+			and t.value21 = #{param.value21}
+		</if>
+		<if test="param.value22 != null and param.value22 != ''">
+			and t.value22 = #{param.value22}
+		</if>
+		<if test="param.value23 != null and param.value23 != ''">
+			and t.value23 = #{param.value23}
+		</if>
+		<if test="param.value24 != null and param.value24 != ''">
+			and t.value24 = #{param.value24}
+		</if>
+		<if test="param.value25 != null and param.value25 != ''">
+			and t.value25 = #{param.value25}
+		</if>
+		<if test="param.value26 != null and param.value26 != ''">
+			and t.value26 = #{param.value26}
+		</if>
+		<if test="param.value27 != null and param.value27 != ''">
+			and t.value27 = #{param.value27}
+		</if>
+		<if test="param.value28 != null and param.value28 != ''">
+			and t.value28 = #{param.value28}
+		</if>
+		<if test="param.value29 != null and param.value29 != ''">
+			and t.value29 = #{param.value29}
+		</if>
+		<if test="param.value30 != null and param.value30 != ''">
+			and t.value30 = #{param.value30}
+		</if>	
+		<if test="param.status != null ">
+			and t.status=#{param.status}
+		</if>
+		<if test="param.inforTypes != null ">
+			and t.inforTypes=#{param.inforTypes}
+		</if>
+		<if test="param.inforTypes2 != null ">
+			and t.inforTypes2=#{param.inforTypes2}
+		</if>
+		<if test="param.inforTypes3 != null ">
+			and t.inforTypes3=#{param.inforTypes3}
+		</if>
+		<if test="param.inforTypes4 != null ">
+			and t.inforTypes4=#{param.inforTypes4}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.groupId != null">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null">
+			and t.company_id=#{param.companyId}
+		</if>
+		<if test="param.inforTypes2 != null  and param.inforTypes2!=''">
+			and t.inforTypes2=#{param.inforTypes2}
+		</if>		
+		ORDER BY t.time_create desc
+			
+	</select>
+	
+	
+	
+	
+	
+	
+	<select id="find" resultMap="base" parameterType="InformationResource">
+		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.value1 != null and param.value1!='' ">
+			and t.value1 =#{param.value1}
+		</if>
+		<if test="param.value2 != null and param.value2!='' ">
+			and t.value2 =#{param.value2}
+		</if>
+		<if test="param.value3 != null and param.value3!='' ">
+			and t.value3=#{param.value3}
+		</if>
+		<if test="param.value4 != null and param.value4!='' ">
+			and t.value4=#{param.value4}
+		</if>
+		<if test="param.value5 != null and param.value5!='' ">
+			and (t.value5 like '%${param.value5}%' or t.value1 like '%${param.value5}%')
+		</if>
+		<choose>
+			<when  test="param.value6 != null and param.value6=='0'.toString() ">
+					and t.value6 IS NOT null and t.value6 != ''
+			</when>
+			<otherwise>
+				<if test="param.value6 != null and param.value6!='' ">
+					and t.value6=#{param.value6}
+				</if>
+			</otherwise>
+		</choose>
+		
+		
+		<if test="param.value7 != null and param.value7!='' ">
+			and t.value7=#{param.value7}
+		</if>
+		<if test="param.value8 != null and param.value8!='' ">
+			and t.value8=#{param.value8}
+		</if>
+		<if test="param.value9 != null and param.value9!='' ">
+			and t.value9=#{param.value9}
+		</if>
+		<if test="param.value11 != null and param.value11!='' ">
+			and t.value11=#{param.value11}
+		</if>		
+		<if test="param.status != null ">
+			and t.status=#{param.status}
+		</if>
+		<if test="param.inforTypes != null ">
+			and (t.inforTypes=#{param.inforTypes} or t.binforTypes=#{param.inforTypes})
+		</if>
+		<if test="param.inforTypes2 != null ">
+			and (t.inforTypes2=#{param.inforTypes2} or t.binforTypes2=#{param.inforTypes2})
+		</if>
+		<if test="param.inforTypes3 != null ">
+			and (t.inforTypes3=#{param.inforTypes3} or t.binforTypes3=#{param.inforTypes3})
+		</if>
+		<if test="param.inforTypes4 != null ">
+			and (t.inforTypes4=#{param.inforTypes4} or t.binforTypes4=#{param.inforTypes4})
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.groupId != null">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null">
+			and t.company_id=#{param.companyId}
+		</if>
+				
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,source_type sourceType,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create timeCreate,time_modified timeModified,isDeleted, company_id companyId,group_id groupId,reason,status FROM gov_information_resource_main t WHERE 1=1 
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.value1 != null and param.value1!='' ">
+			and t.value1 like '%${param.value1}%'
+		</if>
+		<if test="param.value2 != null and param.value2!='' ">
+			and t.value2  like '%${param.value2}%'
+		</if>
+		<if test="param.value3 != null and param.value3!='' ">
+			and t.value3=#{param.value3}
+		</if>
+		<if test="param.value4 != null and param.value4!='' ">
+			and t.value4=#{param.value4}
+		</if>
+		<if test="param.value5 != null and param.value5!='' ">
+			and (t.value5 like '%${param.value5}%' or t.value1 like '%${param.value5}%')
+		</if>
+		<choose>
+			<when  test="param.value6 != null and param.value6=='0'.toString() ">
+					and t.value6 > 0
+			</when>
+			<otherwise>
+				<if test="param.value6 != null and param.value6!='' ">
+					and t.value6=#{param.value6}
+				</if>
+			</otherwise>
+		</choose>
+		
+		<if test="param.value7 != null and param.value7!='' ">
+			and t.value7=#{param.value7}
+		</if>
+		<if test="param.value8 != null and param.value8!='' ">
+			and t.value8=#{param.value8}
+		</if>
+		<if test="param.value9 != null and param.value9!='' ">
+			and t.value9=#{param.value9}
+		</if>
+		<if test="param.value11 != null and param.value11!='' ">
+			and t.value11=#{param.value11}
+		</if>
+		<choose>
+			<when  test="param.status ==14">
+					and t.status in(1,4)
+			</when>
+			<otherwise>
+				
+			<if test="param.status != null ">
+				and t.status=#{param.status}
+			</if>
+			</otherwise>
+		</choose>
+			<if test="param.inforTypes != null ">
+			and (t.inforTypes=#{param.inforTypes} or t.binforTypes=#{param.inforTypes})
+		</if>
+		<if test="param.inforTypes2 != null ">
+			and (t.inforTypes2=#{param.inforTypes2} or t.binforTypes2=#{param.inforTypes2})
+		</if>
+		<if test="param.inforTypes3 != null ">
+			and (t.inforTypes3=#{param.inforTypes3} or t.binforTypes3=#{param.inforTypes3})
+		</if>
+		<if test="param.inforTypes4 != null ">
+			and (t.inforTypes4=#{param.inforTypes4} or t.binforTypes4=#{param.inforTypes4})
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.groupId != null">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null">
+			and (t.company_id=#{param.companyId} or t.value3=#{param.companyId})
+		</if>
+		
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="InformationResource">
+		SELECT count(*) FROM gov_information_resource_main t WHERE isDeleted=0 
+		<if test="inforTypes2 != null  and inforTypes2!=''">
+			and t.inforTypes2=#{inforTypes2}
+		</if>
+
+		<if test="inforTypes3 != null  and inforTypes3!=''">
+			and t.inforTypes3=#{inforTypes3}
+		</if>
+		<if test="inforTypes != null  and inforTypes!=''">
+			and t.inforTypes=#{inforTypes}
+		</if>
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="cpcount" resultType="InformationResource" parameterType="InformationResource">
+		SELECT value3 FROM gov_information_resource_main t WHERE isDeleted=0 
+		<if test="inforTypes2 != null  and inforTypes2!=''">
+			and t.inforTypes2=#{inforTypes2}
+		</if>
+
+		<if test="inforTypes3 != null  and inforTypes3!=''">
+			and t.inforTypes3=#{inforTypes3}
+		</if>
+		<if test="inforTypes != null  and inforTypes!=''">
+			and t.inforTypes=#{inforTypes}
+		</if>
+		<if test="companyId != null">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<if test="status != null ">
+			and t.status=#{status}
+		</if>
+		GROUP BY t.value3
+	</select>
+	
+	
+	<select id="countValue3" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,value3 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by value3
+	</select>
+	
+	<select id="countInforTypes" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,inforTypes FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by inforTypes
+	</select>
+	
+	<select id="countInforTypes2" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,inforTypes2 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by inforTypes2
+	</select>
+	
+	
+	<select id="countInforTypes3" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,inforTypes3 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by inforTypes3
+	</select>
+	
+	
+	
+	<select id="countBinforTypes2" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,binforTypes2 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by binforTypes2
+	</select>
+	
+	
+	<select id="countBinforTypes3" resultMap="base" parameterType="InformationResource">
+		SELECT count(id) status,binforTypes3 FROM gov_information_resource_main t WHERE isDeleted=0 
+		
+		<if test="companyId != null and companyId != '' ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="value3 != null and value3!='' ">
+			and t.value3=#{value3}
+		</if>		
+		<if test="value8 != null and value8!='' ">
+			and t.value8=#{value8}
+		</if>
+		<if test="value11 != null and value11!='' ">
+			and t.value11=#{value11}
+		</if>
+		<choose>
+			<when  test="status==14">
+					and t.status in (1,4)
+			</when>
+			<otherwise>
+				<if test="status != null ">
+					and t.status = #{status} 
+				</if>
+			</otherwise>
+		</choose>
+		 group by binforTypes3
+	</select>
+	
+	<select id="datacount" resultType="int" parameterType="InformationResource">
+		SELECT
+			  COUNT(gov_data_list.data_element_id)
+			FROM
+				gov_information_resource_main,
+				gov_data_list
+			WHERE
+				gov_information_resource_main.id = gov_data_list.data_manager_id
+				AND gov_information_resource_main.isDeleted=0
+				AND gov_information_resource_main.status=0
+				<if test="value8 != null and value8!='' ">
+				AND gov_information_resource_main.value8 = #{value8}
+				</if>
+				<if test="value11 != null and value11!='' ">
+				AND gov_information_resource_main.value11=#{value11}
+				</if>
+				<if test="companyId != null and companyId != '' ">
+				AND gov_information_resource_main.company_id = #{companyId}
+				</if>
+	</select>
+	<select id="sharecount" resultType="int" parameterType="InformationResource">
+		SELECT
+			  COUNT(gov_data_list.data_element_id)
+			FROM
+				gov_information_resource_main,
+				gov_data_list
+			WHERE
+				gov_information_resource_main.id = gov_data_list.data_manager_id
+				AND gov_information_resource_main.isDeleted=0
+				AND gov_information_resource_main.status=0
+				<if test="id != null and id != '' ">
+				AND gov_data_list.is_share=#{id}
+				</if>
+				<if test="companyId != null and companyId != '' ">
+				AND gov_information_resource_main.company_id = #{companyId}
+				</if>
+	</select>
+	<select id="tree" resultType="InformationResource" parameterType="InformationResource">
+		SELECT WMSYS.WM_CONCAT(value1) value1  FROM gov_information_resource_main WHERE rownum &lt; 30 AND   isDeleted=0 and status = 0 
+		<if test="inforTypes2 != null  and inforTypes2!=''">
+			and inforTypes2=#{inforTypes2}
+		</if>
+		<if test="companyId != null">
+			and company_id=#{companyId}
+		</if>
+	</select>
+	<insert id="insert" parameterType="InformationResource" >	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_information_res_main_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_information_resource_main(source_type,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12,value13,value14,value15,value16,value17,value18,value19,value20,value21,value22,value23,value24,value25,value26,value27,value28,value29,value30,inforTypes,inforTypes2,inforTypes3,inforTypes4,binforTypes,binforTypes2,binforTypes3,binforTypes4,time_create,time_modified,isDeleted,company_id,group_id,status,reason) 
+	VALUES (#{sourceType,jdbcType=NUMERIC},#{value1,jdbcType=VARCHAR},#{value2,jdbcType=VARCHAR},#{value3,jdbcType=VARCHAR},#{value4,jdbcType=VARCHAR},#{value5,jdbcType=VARCHAR},#{value6,jdbcType=VARCHAR},#{value7,jdbcType=VARCHAR},#{value8,jdbcType=VARCHAR},#{value9,jdbcType=VARCHAR},#{value10,jdbcType=VARCHAR},#{value11,jdbcType=VARCHAR},#{value12,jdbcType=VARCHAR},#{value13,jdbcType=VARCHAR},#{value14,jdbcType=VARCHAR},#{value15,jdbcType=VARCHAR},#{value16,jdbcType=VARCHAR},#{value17,jdbcType=VARCHAR},#{value18,jdbcType=VARCHAR},#{value19,jdbcType=VARCHAR},#{value20,jdbcType=VARCHAR},#{value21,jdbcType=VARCHAR},#{value22,jdbcType=VARCHAR},#{value23,jdbcType=VARCHAR},#{value24,jdbcType=VARCHAR},#{value25,jdbcType=VARCHAR},#{value26,jdbcType=VARCHAR},#{value27,jdbcType=VARCHAR},#{value28,jdbcType=VARCHAR},#{value29,jdbcType=VARCHAR},#{value30,jdbcType=VARCHAR},#{inforTypes,jdbcType=NUMERIC},#{inforTypes2,jdbcType=NUMERIC},#{inforTypes3,jdbcType=NUMERIC},#{inforTypes4,jdbcType=NUMERIC},#{binforTypes,jdbcType=NUMERIC},#{binforTypes2,jdbcType=NUMERIC},#{binforTypes3,jdbcType=NUMERIC},#{binforTypes4,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{status,jdbcType=NUMERIC},#{reason,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	<update id="delete" parameterType="InformationResource">
+		UPDATE gov_information_resource_main
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_information_resource_main
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="InformationResource">
+		DELETE FROM gov_information_resource_main
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_information_resource_main
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	
+	<delete id="truncateTable" parameterType="InformationResource">
+		truncate table gov_information_resource_main
+	</delete>
+	
+	<update id="update" parameterType="InformationResource">
+		UPDATE gov_information_resource_main
+		SET value1=#{value1,jdbcType=VARCHAR},
+		value2=#{value2,jdbcType=VARCHAR},
+		value3=#{value3,jdbcType=VARCHAR},
+		value4=#{value4,jdbcType=VARCHAR},
+		value5=#{value5,jdbcType=VARCHAR},
+		value6=#{value6,jdbcType=VARCHAR},
+		value7=#{value7,jdbcType=VARCHAR},
+		value8=#{value8,jdbcType=VARCHAR},
+		value9=#{value9,jdbcType=VARCHAR},
+		value10=#{value10,jdbcType=VARCHAR},
+		value11=#{value11,jdbcType=VARCHAR},
+		value12=#{value12,jdbcType=VARCHAR},
+		value13=#{value13,jdbcType=VARCHAR},
+		value14=#{value14,jdbcType=VARCHAR},
+		value15=#{value15,jdbcType=VARCHAR},
+		value16=#{value16,jdbcType=VARCHAR},
+		value17=#{value17,jdbcType=VARCHAR},
+		value18=#{value18,jdbcType=VARCHAR},
+		value19=#{value19,jdbcType=VARCHAR},
+		value20=#{value20,jdbcType=VARCHAR},
+		value21=#{value21,jdbcType=VARCHAR},
+		value22=#{value22,jdbcType=VARCHAR},
+		value23=#{value23,jdbcType=VARCHAR},
+		value24=#{value24,jdbcType=VARCHAR},
+		value25=#{value25,jdbcType=VARCHAR},
+		value26=#{value26,jdbcType=VARCHAR},
+		value27=#{value27,jdbcType=VARCHAR},
+		value28=#{value28,jdbcType=VARCHAR},
+		value29=#{value29,jdbcType=VARCHAR},
+		value30=#{value30,jdbcType=VARCHAR},
+		inforTypes=#{inforTypes,jdbcType=NUMERIC},
+		inforTypes2=#{inforTypes2,jdbcType=NUMERIC},
+		inforTypes3=#{inforTypes3,jdbcType=NUMERIC},
+		inforTypes4=#{inforTypes4,jdbcType=NUMERIC},
+		binforTypes=#{binforTypes,jdbcType=NUMERIC},
+		binforTypes2=#{binforTypes2,jdbcType=NUMERIC},
+		binforTypes3=#{binforTypes3,jdbcType=NUMERIC},
+		binforTypes4=#{binforTypes4,jdbcType=NUMERIC},
+		status=#{status,jdbcType=NUMERIC},
+        reason=#{reason,jdbcType=VARCHAR},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	<update id="updateStatus" parameterType="InformationResource">
+		UPDATE gov_information_resource_main
+		SET 
+		status=#{status,jdbcType=NUMERIC},
+        reason=#{reason,jdbcType=VARCHAR}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	<update id="allPass" parameterType="InformationResource">
+		UPDATE gov_information_resource_main
+		SET 
+		status=0
+        WHERE status=1
+	</update>
+	<update id="clearColumn" parameterType="InformationResource">
+		UPDATE gov_information_resource_main
+		SET value${valueNo}=''
+		WHERE id>0
+	</update>
+	<select id="latestTime" resultType="date" parameterType="InformationResource">
+		<![CDATA[	SELECT time_modified FROM gov_information_resource_main WHERE status = 0 and rownum<2 AND isDeleted = 0 AND value3 = #{cpId}
+		ORDER BY time_modified DESC ]]>
+	</select>
+</mapper>

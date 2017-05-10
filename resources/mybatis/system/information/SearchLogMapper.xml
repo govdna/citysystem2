@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.information.SearchLogDao">
+	<resultMap id="base" type="SearchLog"></resultMap>
+	
+	<select id="getHotKeyWord" resultMap="base" parameterType="SearchLog">
+		<![CDATA[SELECT keyword ,COUNT(keyword) accountId FROM gov_search_log 
+		WHERE 
+		 rownum<6 and
+		 time_modified>=(sysdate-7) 
+		GROUP BY keyword 
+		ORDER BY accountId DESC 
+		 ]]> 
+	</select>
+	
+	<select id="find" resultMap="base" parameterType="SearchLog">
+		SELECT  id,keyword keyWord,account_id accountId,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_search_log t WHERE 1=1
+		<if test="param.keyWord != null ">
+			and t.keyword=#{param.keyWord}
+		</if>
+		<if test="param.accountId != null ">
+			and t.account_id=#{param.accountId}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,keyword keyWord,account_id accountId,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_search_log t WHERE 1=1
+		<if test="param.keyWord != null ">
+			and t.keyword=#{param.keyWord}
+		</if>
+		<if test="param.accountId != null ">
+			and t.account_id=#{param.accountId}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="SearchLog">
+		SELECT count(*) FROM gov_search_log t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="SearchLog" >	
+ 	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_search_log_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+    
+ 	<![CDATA[
+	INSERT INTO gov_search_log(keyword,account_id,time_create,time_modified,isDeleted) 
+	VALUES (#{keyWord,jdbcType=VARCHAR},#{accountId,jdbcType=NUMERIC},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="SearchLog">
+		UPDATE gov_search_log
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_search_log
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="SearchLog">
+		DELETE FROM gov_search_log
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_search_log
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="SearchLog">
+		UPDATE gov_search_log
+		SET 
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+	<select id="hotres" resultMap="base" parameterType="SearchLog">
+	<![CDATA[
+		SELECT
+			keyWord,COUNT
+		FROM
+			(
+				SELECT
+					keyword keyWord,
+					COUNT (keyword) COUNT
+				FROM
+					gov_search_log
+				GROUP BY
+					keyword
+				ORDER BY
+					COUNT DESC
+			)
+		WHERE
+			ROWNUM < 11
+	]]>
+	</select>
+</mapper>

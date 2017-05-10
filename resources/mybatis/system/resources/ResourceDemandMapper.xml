@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.resources.ResourceDemandDao">
+	<resultMap id="base" type="ResourceDemand"></resultMap>
+	<select id="find" resultMap="base" parameterType="ResourceDemand">
+		SELECT  id,time_create timeCreate,time_modified timeModified,isDeleted,
+		number_s "number",res_name resName,res_data_name resDataName,res_company_id resCompanyId,res_group_id resGroupId,
+		company_id companyId,group_id groupId,res_format resFormat,res_purpose resPurpose,update_cycle updateCycle,remarks,status  FROM gov_resource_demand t WHERE 1=1
+		<if test="param.resName != null ">
+			and t.res_name=#{param.resName}
+		</if>
+			<if test="param.resDataName != null ">
+			and t.res_data_name=#{param.resDataName}
+		</if>
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.groupId != null ">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null ">
+			and t.company_id=#{param.companyId}
+		</if>
+		<if test="param.resCompanyId!= null ">
+			and t.res_company_id=#{param.resCompanyId}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+		SELECT  id,time_create timeCreate,time_modified timeModified,isDeleted,
+		number_s "number",res_name resName,res_data_name resDataName,res_company_id resCompanyId,res_group_id resGroupId,
+		company_id companyId,group_id groupId,res_format resFormat,res_purpose resPurpose,update_cycle updateCycle,remarks,status  FROM gov_resource_demand t WHERE 1=1
+		<if test="param.resName != null ">
+			and t.res_name=#{param.resName}
+		</if>
+			<if test="param.resDataName != null ">
+			and t.res_data_name=#{param.resDataName}
+		</if>
+
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+	    <if test="param.groupId != null ">
+			and t.group_id=#{param.groupId}
+		</if>
+		<if test="param.companyId != null ">
+			and t.company_id=#{param.companyId}
+		</if>
+		<if test="param.resCompanyId!= null ">
+			and t.res_company_id=#{param.resCompanyId}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="count" resultType="int" parameterType="ResourceDemand">
+		SELECT count(*) FROM gov_resource_demand t WHERE 1=1
+		<if test="isDeleted != null ">
+			and t.isDeleted=#{isDeleted}
+		</if>
+		<if test="companyId != null ">
+			and t.company_id=#{companyId}
+		</if>
+		<if test="resCompanyId!= null ">
+			and t.res_company_id=#{resCompanyId}
+		</if>
+	</select>
+	<insert id="insert" parameterType="ResourceDemand">	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT gov_resource_demand_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+ 	
+ 	<![CDATA[
+	INSERT INTO gov_resource_demand(time_create,time_modified,isDeleted,number_s,res_name,res_data_name,res_company_id,res_group_id,company_id,group_id,res_format,res_purpose,update_cycle,remarks,status) 
+	VALUES (#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC},#{number,jdbcType=VARCHAR},#{resName,jdbcType=VARCHAR},#{resDataName,jdbcType=VARCHAR},#{resCompanyId,jdbcType=NUMERIC},#{resGroupId,jdbcType=NUMERIC},#{companyId,jdbcType=NUMERIC},#{groupId,jdbcType=NUMERIC},#{resFormat,jdbcType=NUMERIC},#{resPurpose,jdbcType=VARCHAR},#{updateCycle},#{remarks,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+	]]>
+	</insert>
+	<update id="delete" parameterType="ResourceDemand">
+		UPDATE gov_resource_demand
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_resource_demand
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="ResourceDemand">
+		DELETE FROM gov_resource_demand
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_resource_demand
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+    </delete>
+	<update id="update" parameterType="ResourceDemand">
+		UPDATE gov_resource_demand
+		SET number_s =#{number,jdbcType=VARCHAR},
+        res_name =#{resName,jdbcType=VARCHAR},
+        res_data_name=#{resDataName,jdbcType=VARCHAR},
+        res_company_id=#{resCompanyId,jdbcType=NUMERIC},
+        res_group_id=#{resGroupId,jdbcType=NUMERIC},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP},
+		company_id=#{companyId,jdbcType=NUMERIC},
+		group_id=#{groupId,jdbcType=NUMERIC},
+		res_format=#{resFormat,jdbcType=NUMERIC},
+		res_purpose=#{resPurpose,jdbcType=VARCHAR},
+		update_cycle=#{updateCycle,jdbcType=NUMERIC},
+		remarks=#{remarks,jdbcType=VARCHAR},
+		status=#{status,jdbcType=VARCHAR}
+		
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

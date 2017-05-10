@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.versionControl.VersionControlDao">
+	<resultMap id="base" type="VersionControl"></resultMap>
+	<select id="find" resultMap="base" parameterType="VersionControl">
+		SELECT  id,source_id sourceId,new_version newVersion,class_name className,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_version_control t WHERE 1=1
+		<if test="param.id!= null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.sourceId!= null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.className!= null ">
+			and t.class_name=#{param.className}
+		</if>
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findByPage" resultMap="base">
+			SELECT  id,source_id sourceId,new_version newVersion,class_name className,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_version_control t WHERE 1=1
+		<if test="param.id!= null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.sourceId!= null ">
+			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.className!= null ">
+			and t.class_name=#{param.className}
+		</if>
+		
+		<if test="param.isDeleted != null ">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="count" resultType="int" parameterType="VersionControl">
+		SELECT count(*) FROM gov_version_control t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="VersionControl" useGeneratedKeys="true" keyProperty="id">  
+    
+ 	<![CDATA[
+	INSERT INTO gov_version_control(source_id,new_version,class_name,time_create,time_modified,isDeleted) 
+	VALUES (#{sourceId,jdbcType=NUMERIC},#{newVersion,jdbcType=VARCHAR},#{className,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="VersionControl">
+		UPDATE gov_version_control
+		SET isDeleted =1
+		WHERE id=#{id}
+	</update>
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE gov_version_control
+		SET isDeleted =1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	
+	<delete id="deletePhysically" parameterType="VersionControl">
+		DELETE FROM gov_version_control
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM gov_version_control
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="VersionControl">
+		UPDATE gov_version_control
+		SET 
+		
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>

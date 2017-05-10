@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.govmade.repository.system.rbac.PermissionDAO">
+	<resultMap id="base" type="Permission"></resultMap>
+	<select id="getPermissionsByRoleId" resultMap="base" parameterType="Permission">
+		SELECT DISTINCT t.id,t.code,t.name nodeName ,t.menu_type menuType,t.open_method openMethod,t.note,t.parent,t.level_s "level",t.url,t.icon,t.list_no listNo,t.type
+		FROM city_rbac_role_per_scope rps RIGHT JOIN city_rbac_permission t 
+		ON rps.permission_id=t.id  
+		WHERE  rps.role_id IN (${id}) 
+		<if test="param.type != null ">
+			AND t.type=#{param.type} 
+		</if>
+		<if test="param.menuType != null ">
+			AND t.menu_type=#{param.menuType} 
+		</if>
+		<if test="param.url != null ">
+			AND t.url like '%${param.url}%'
+		</if>
+		AND t.isDeleted=0
+		ORDER BY t.level_s,t.list_no asc
+	</select>
+	
+	<select id="find" resultMap="base" parameterType="Permission">
+		SELECT id,code,name nodeName ,t.menu_type menuType,t.open_method openMethod,note,parent,level_s "level",url,icon,list_no listNo,type,validity,time_create timeCreate,time_modified timeModified,isDeleted FROM city_rbac_permission t WHERE 1=1
+		<if test="param.level != null ">
+			and t.level_s=#{param.level}
+		</if>
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.type != null">
+			and t.type=#{param.type}
+		</if>
+		<if test="param.nodeName != null">
+			and t.name=#{param.nodeName}
+		</if>
+		<if test="param.menuType != null">
+			and t.menu_type=#{param.menuType}
+		</if>
+		<if test="param.isDeleted != null">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		<if test="param.url != null ">
+			AND t.url = #{param.url}
+		</if>
+		ORDER BY
+
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByPage" resultMap="base">
+		SELECT id,code,name nodeName ,t.menu_type menuType,t.open_method openMethod,note,parent,level_s "level",url,icon,list_no listNo,type,validity,time_create timeCreate,time_modified timeModified,isDeleted FROM city_rbac_permission t WHERE 1=1
+		<if test="param.level != null ">
+			and t.level_s=#{param.level}
+		</if>
+		<if test="param.id != null ">
+			and t.id=#{param.id}
+		</if>
+		<if test="param.nodeName != null">
+			and t.name like '%${param.nodeName}%'
+		</if>
+		<if test="param.type != null">
+			and t.type=#{param.type}
+		</if>
+		<if test="param.menuType != null">
+			and t.menu_type=#{param.menuType}
+		</if>
+		<if test="param.url != null ">
+			AND t.url = #{param.url}
+		</if>
+		<if test="param.isDeleted != null">
+			and t.isDeleted=#{param.isDeleted}
+		</if>
+		ORDER BY
+		<choose>
+			<when  test="sort !=null and sort!=''">
+					${sort}
+			</when>
+			<otherwise>
+				t.time_create
+			</otherwise>
+		</choose>
+		<choose>
+		
+			<when test="orderBy != null and orderBy!='' ">
+				${orderBy}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="count" resultType="int" parameterType="Permission">
+		SELECT count(*) FROM city_rbac_permission t WHERE 1=1
+	</select>
+	<insert id="insert" parameterType="Permission" >	
+ 	
+ 	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">  
+        SELECT city_rbac_permission_seq.CURRVAL  ID FROM DUAL  
+    </selectKey>  
+    
+ 	<![CDATA[
+	INSERT INTO city_rbac_permission(code,name,note,menu_type,open_method,parent,level_s,url,icon,list_no,type,validity,time_create,time_modified,isDeleted) 
+	VALUES (#{code,jdbcType=VARCHAR},#{nodeName,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{menuType,jdbcType=NUMERIC},#{openMethod,jdbcType=NUMERIC},#{parent,jdbcType=NUMERIC},#{level,jdbcType=NUMERIC},#{url,jdbcType=VARCHAR},#{icon,jdbcType=VARCHAR},#{listNo,jdbcType=NUMERIC},#{type,jdbcType=VARCHAR},#{validity,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	]]>
+	</insert>
+	<update id="delete" parameterType="Permission">
+		UPDATE city_rbac_permission
+		SET isDeleted=1
+		WHERE id=#{id}
+	</update>
+	
+	<update id="deleteToHouseModelFields" parameterType="Permission">
+		UPDATE city_rbac_permission
+		SET isDeleted=1
+		WHERE url = #{url} AND name = #{nodeName}
+	</update>
+	
+	<update id="deleteBatch" parameterType="java.util.List">
+		UPDATE city_rbac_permission
+		SET isDeleted=1
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</update>
+	<delete id="deletePhysically" parameterType="Permission">
+		DELETE FROM city_rbac_permission
+		WHERE id=#{id}
+	</delete>
+	<delete id="deleteBatchPhysically" parameterType="java.util.List">
+		DELETE FROM city_rbac_permission
+		WHERE id in
+		<foreach item="o" collection="list" open="(" separator=","
+			close=")">
+			#{o.id}
+		</foreach>
+
+	</delete>
+	<update id="update" parameterType="Permission">
+		UPDATE city_rbac_permission
+		SET name =#{nodeName,jdbcType=VARCHAR},
+		note=#{note,jdbcType=VARCHAR},
+		url=#{url,jdbcType=VARCHAR},
+		icon=#{icon,jdbcType=VARCHAR},
+		menu_type=#{menuType,jdbcType=NUMERIC},
+		open_method=#{openMethod,jdbcType=NUMERIC},
+		list_no=#{listNo,jdbcType=NUMERIC},
+		parent=#{parent,jdbcType=NUMERIC},
+		level_s =#{level,jdbcType=NUMERIC},
+		time_modified=#{timeModified,jdbcType=TIMESTAMP}
+		WHERE id=#{id,jdbcType=NUMERIC}
+	</update>
+
+</mapper>
