@@ -35,6 +35,7 @@ stroke-width: 1.5px;
 </body>
 </html>
 
+
 <%-- <%@include file="../../common/includeJS.jsp"%> --%>
 <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
 <script src="${base}/static/js/d3.v3.min.js"></script>

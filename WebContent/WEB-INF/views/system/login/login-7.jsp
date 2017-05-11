@@ -82,8 +82,8 @@ a, a:focus, a:hover {text-decoration: none;}
               <img class="verify pull-right" id="vimg" style="cursor:pointer;" title="验证码" width="60" height="40" src="verifyCode/slogin.do?random=0.7304289337922849">
             </div>
             <button type="button" id="loginBtn" class="btn btn-default btn-submit btn-block">登 录</button>
-            <a href="/CitySystem/upload/excel/ChromeStandalone_56.0.2924.87_Setup.exe" class="download-chrome pull-right">适配浏览器下载</a>
-          </form>
+			<a href="${base}/upload/excel/ChromeStandalone_56.0.2924.87_Setup.exe" class="download-chrome pull-right">适配浏览器下载</a>
+			 </form>
         </div>
       </div>
     </div>

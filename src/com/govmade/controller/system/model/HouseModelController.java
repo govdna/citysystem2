@@ -284,6 +284,7 @@ public class HouseModelController extends GovmadeBaseController<HouseModel>{
 									  menu2.put("name", d.getChName());
 									  ja2.add(menu2);
 								  }								  
+
 							  }  
 						  }					  
 						  menu.put("children", ja2);
