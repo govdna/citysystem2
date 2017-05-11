@@ -420,6 +420,9 @@ cursor: pointer;
      sort:params.sort,
      order:params.order,
      value1: $('input[name="val1"]').val(),
+     <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/waitToDo/index\")==100}" >
+   companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
+ </c:if>
    };
    return temp;
  };
@@ -449,9 +452,7 @@ cursor: pointer;
       objectType : $('select[name="dxl-select"]').val(),
       status : 0,
       chName : $('input[name="keyword"]').val(),
-      <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/waitToDo/index\")==100}" >
-    companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
-  </c:if>
+     
     };
     return temp;
   };

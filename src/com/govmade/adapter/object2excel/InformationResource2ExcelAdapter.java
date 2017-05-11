@@ -169,8 +169,9 @@ public class InformationResource2ExcelAdapter extends Object2ExcelComplexAdapter
 			DataHandler dh=map.get(fields[i]);
 			Object val=ObjectUtil.getFieldValueByName(fields[i], t);
 			if(dh!=null){
-				if(val!=null&&dh.doHandle(val)!=null){
-					str[i]=dh.doHandle(val).toString();
+				Object o=dh.doHandle(val);
+				if(val!=null&&o!=null){
+					str[i]=o.toString();
 				}else{
 					str[i]="";
 				}
@@ -214,8 +215,9 @@ public class InformationResource2ExcelAdapter extends Object2ExcelComplexAdapter
 			DataHandler dh=deMap.get(deFields[i]);
 			Object val=ObjectUtil.getFieldValueByName(deFields[i], t);
 			if(dh!=null){
-				if(val!=null&&dh.doHandle(val)!=null){
-					str[i+fields.length]=dh.doHandle(val).toString();
+				Object o=dh.doHandle(val);
+				if(val!=null&&o!=null){
+					str[i+fields.length]=o.toString();
 				}else{
 					str[i+fields.length]="";
 				}
