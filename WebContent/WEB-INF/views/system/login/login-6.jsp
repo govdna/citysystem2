@@ -76,7 +76,7 @@ a, a:focus, a:hover {text-decoration: none;}
               </div>
               <button type="button" id="loginBtn" class="btn btn-default btn-submit btn-block">登 录</button>
               <a href="${base}/upload/excel/ChromeStandalone_56.0.2924.87_Setup.exe" class="download-chrome pull-right">适配浏览器下载</a>
-            </form>
+			</form>
           </div>
         </div>
       </div>

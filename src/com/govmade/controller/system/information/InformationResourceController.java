@@ -325,11 +325,13 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		sms.setIsDeleted(0);
 		sm2.setIsDeleted(0);
 		sm2.setBelong(2);
-		;
 		o.setIsDeleted(0);
 		o.setStatus(0);
 		p.setIsDeleted(0);
 		p.setStatus(0);
+		if(!AccountShiroUtil.getCurrentUser().getRoleId().equals("1")){
+			p.setCompanyId(AccountShiroUtil.getCurrentUser().getCompanyId());
+		}
 		List<SortManager> smList = sortManagerService.find(sm);
 
 		Map<Integer, Integer> countMap = service.countInforTypes(p);

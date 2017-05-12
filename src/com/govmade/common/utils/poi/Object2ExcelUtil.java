@@ -81,9 +81,10 @@ public class Object2ExcelUtil {
 		row.setHeight((short) 540);
 		for (int i = 0; i < adapter.getList().size(); i++) {
 			Row rowi = sheet.createRow(i + 1);
-			for (int j = 0; j < adapter.object2StrArray(adapter.getList().get(i)).length; j++) {
+			String [] cs=adapter.object2StrArray(adapter.getList().get(i));
+			for (int j = 0; j < cs.length; j++) {
 				Cell cell = rowi.createCell(j);
-				cell.setCellValue(adapter.object2StrArray(adapter.getList().get(i))[j]); // 创建第一行
+				cell.setCellValue(cs[j]); // 创建第一行
 				cell.setCellStyle(textStyle); // 样式，居中
 			}
 		}

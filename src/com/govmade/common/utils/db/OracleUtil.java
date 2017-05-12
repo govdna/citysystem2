@@ -15,10 +15,11 @@ public class OracleUtil {
 		// readFileByLines("D://dc.sql");
 		// System.out.println(mysql2Oracle("'3','0',NULL,'2016-11-08
 		// 15:53:36','2016-12-15 19:44:11','0');"));
-		 //System.out.println(getSequence(new String[]{"GOV_API_ACCOUNT"}));
+		String ss="GOV_INFOR_RESOURCE_MAIN";
+		 System.out.println(getSequence(ss.split(",")));
 		// alterTable("GOV_COMPUTER_ROOM");
 		//value1_50xml();
-		 whereStr();
+		 //whereStr();
 	}
 	
 

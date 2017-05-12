@@ -421,8 +421,8 @@ cursor: pointer;
      order:params.order,
      value1: $('input[name="val1"]').val(),
      <c:if test="${MyFunction:getMaxScope(\"/backstage/resource/waitToDo/index\")==100}" >
-      companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
-     </c:if>
+   companyId:<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>,
+ </c:if>
    };
    return temp;
  };
@@ -451,7 +451,8 @@ cursor: pointer;
       page : params.offset / params.limit + 1,
       objectType : $('select[name="dxl-select"]').val(),
       status : 0,
-      chName : $('input[name="keyword"]').val()
+      chName : $('input[name="keyword"]').val(),
+     
     };
     return temp;
   };
