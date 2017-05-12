@@ -49,6 +49,9 @@ padding: 3px 5px 3px 5px !important;
              <c:if test="<%=!ServiceUtil.haveImp(\"/backstage/dataElement/index\") %>">
               <a data-toggle="modal" class="btn btn-primary" onclick="importFromExcel();" href="#">Excel导入</a>
               </c:if>
+              <c:if test="<%=!ServiceUtil.haveExp(\"/backstage/dataElement/index\") %>">
+	            <a data-toggle="modal" class="btn btn-primary" onclick="downloadData();" href="#">导出数据</a>
+	           </c:if>
              <c:if test="<%=!ServiceUtil.haveDel(\"/backstage/dataElement/index\") %>">
               <a data-toggle="modal" class="btn btn-primary" onclick="deleteAll();" href="#">批量删除</a>
              </c:if>             	   	   
@@ -199,7 +202,22 @@ padding: 3px 5px 3px 5px !important;
 </div>
 </body>
 </html>
-
+<!-- 导出数据开始 -->
+  <div id="download_div" style="display: none;" class="ibox-content">
+    <form method="post" class="form-horizontal" id="downloadForm">
+       <c:if test="${MyFunction:getMaxScope(\"/backstage/DataElement/index\")==100}" >
+        		<input type="hidden" name="companyId" value="<%=AccountShiroUtil.getCurrentUser().getCompanyId()%>"/>
+       </c:if>
+       
+      <div class="alert alert-info">
+            如导出数据量大，下载请耐心等待！
+        </div>
+       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataElementFieldsService\").find(ServiceUtil.buildBean(\"DataElementFields@isDeleted=0\"),\"list_no\",\"asc\")%>">
+       	<input type="checkbox" name="xlsFields" value="value${obj.valueNo}"/> ${obj.name}
+       </c:forEach>
+    </form>
+  </div>
+  <!-- 导出数据结束 -->
 <%@include file="../common/includeJS.jsp"%>
  <script src="${base}/static/js/plugins/webuploader/webuploader.min.js"></script>
 <script>
@@ -752,5 +770,35 @@ function openSingleLayer() {
 
   });
 }
+$('#downloadForm').form({  
+    url: url+'downloadData',  
+    success: function(result){     	 
+    },
+    onSubmit: function(param){
+    	var qp=queryParams(param);
+    	 for(var p in qp){
+    	 if(p!='rows'&&p!='page'){
+    	 param[p]=qp[p];
+    	 }
+    	}
+    }  
+});
 
+
+function downloadData(){
+	  //$('#downloadForm').form('clear');
+	  layerIndex=layer.open({
+	    type: 1,
+	    area: ['60%', '300px'], //宽高
+	    title: '选择导出字段',
+	    offset: '100px',
+	    btn: ['导出', '关闭'],
+	    yes: function(index, layero) {
+	    	 $('#downloadForm').submit();
+	    	 layer.close(layerIndex);
+	    },
+	    content: $('#download_div') //这里content是一个DOM
+	  });
+
+}
 </script>
