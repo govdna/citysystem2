@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.govmade.adapter.DataElementAdapter;
+import com.govmade.adapter.object2excel.DataElement22ExcelAdapter;
 import com.govmade.adapter.object2excel.DataElement2ExcelAdapter;
 import com.govmade.common.ajax.AjaxRes;
 import com.govmade.common.mybatis.Page;
@@ -47,6 +48,7 @@ import com.govmade.entity.base.IdBaseEntity;
 import com.govmade.entity.system.application.GovApplicationSystem;
 import com.govmade.entity.system.computer.GovComputerRoom;
 import com.govmade.entity.system.customFields.DataElementFields;
+import com.govmade.entity.system.customFields.SimpleFields;
 import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.database.GovDatabase;
@@ -67,6 +69,7 @@ import com.govmade.service.system.dict.GovmadeDicService;
 import com.govmade.service.system.information.InformationResourceService;
 import com.govmade.service.system.organization.CompanyService;
 import com.govmade.service.system.organization.GroupsService;
+import com.govmade.service.system.simpleFields.SimpleFieldsService;
 import com.govmade.service.system.table.GovTableFieldService;
 
 import net.sf.json.JSONArray;
@@ -109,6 +112,8 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 
 	@Autowired
 	private GovTableFieldService govTableFieldService;
+	@Autowired
+	private SimpleFieldsService simpleFieldsService;
 	
 	public Map<String, DataHandler> getDataHandlers() {
 		Map<String, DataHandler> map = super.getDataHandlers();
@@ -993,8 +998,11 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 	
 	private Map<String, DataHandler> getExcelHandler() {
 		Map<String, DataHandler> map = new HashMap<String, DataHandler>();
-		List<DataElementFields> list = dataElementFieldsService.find(new DataElementFields());
-		for (final DataElementFields sf : list) {
+		SimpleFields sfs = new SimpleFields();
+		sfs.setIsDeleted(0);
+		sfs.setClassName("DataElement");
+		List<SimpleFields> list = simpleFieldsService.find(sfs);
+		for (final SimpleFields sf : list) {
 			map.put("value" + sf.getValueNo(), new DataHandler() {
 
 				@Override
@@ -1072,7 +1080,7 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 	public ResponseEntity<byte[]> downloadData(DataElement de,String[] xlsFields, HttpServletRequest req, HttpServletResponse response)
 			throws Exception {
 		de.setClassType(getClassType());
-		DataElement2ExcelAdapter adapter = new DataElement2ExcelAdapter(service.find(de), xlsFields,
+		DataElement22ExcelAdapter adapter = new DataElement22ExcelAdapter(service.find(de), xlsFields,
 				getExcelHandler());
 		Object2ExcelUtil util = new Object2ExcelUtil(adapter);
 		String path = req.getSession().getServletContext().getRealPath("upload/excel");
@@ -1084,7 +1092,6 @@ public class DataElementController extends GovmadeBaseController<DataElement> {
 			targetFile.mkdirs();
 		}
 		util.object2Excel(fullPath);
-
 		HttpHeaders headers = new HttpHeaders();
 		String fn = new String(fileName.getBytes("UTF-8"), "iso-8859-1");// 为了解决中文名称乱码问题
 		headers.setContentDispositionFormData("attachment", fn);

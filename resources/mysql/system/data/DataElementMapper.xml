@@ -452,6 +452,33 @@
 		<if test="param.chName != null and param.chName != ''">
 			and t.value1 like '%${param.chName}%'
 		</if>
+		<if test="param.value2 != null and param.value2!=''">
+			and t.value2=#{param.value2}
+		</if>	
+		<if test="param.value3 != null and param.value3!=''">
+			and t.value3=#{param.value3}
+		</if>
+		<if test="param.value4 != null and param.value4!=''">
+			and t.value4=#{param.value4}
+		</if>
+		<if test="param.value5 != null and param.value5!=''">
+			and t.value5=#{param.value5}
+		</if>	
+		<if test="param.value6 != null and param.value6!=''">
+			and t.value6=#{param.value6}
+		</if>
+		<if test="param.value7 != null and param.value7!=''">
+			and t.value7=#{param.value7}
+		</if>
+		<if test="param.value8 != null and param.value8!=''">
+			and t.value8=#{param.value8}
+		</if>
+		<if test="param.value9 != null and param.value9!=''">
+			and t.value9=#{param.value9}
+		</if>	
+		<if test="param.value10 != null and param.value10!=''">
+			and t.value10=#{param.value10}
+		</if>
 		<if  test="param.systemType !=null ">
 			and t.system_type=${param.systemType}
 		</if>			

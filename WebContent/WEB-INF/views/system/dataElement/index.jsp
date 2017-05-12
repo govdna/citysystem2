@@ -212,8 +212,8 @@ padding: 3px 5px 3px 5px !important;
       <div class="alert alert-info">
             如导出数据量大，下载请耐心等待！
         </div>
-       <c:forEach var="obj" items="<%=ServiceUtil.getService(\"DataElementFieldsService\").find(ServiceUtil.buildBean(\"DataElementFields@isDeleted=0\"),\"list_no\",\"asc\")%>">
-       	<input type="checkbox" name="xlsFields" value="value${obj.valueNo}"/> ${obj.name}
+       <c:forEach var="obj" items="${simpleFields}">
+       	<div class="col-md-3"><input type="checkbox" name="xlsFields" value="value${obj.valueNo}"/> ${obj.name}</div>
        </c:forEach>
     </form>
   </div>
