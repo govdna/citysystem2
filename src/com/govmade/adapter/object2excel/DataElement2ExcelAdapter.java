@@ -44,8 +44,9 @@ public class DataElement2ExcelAdapter extends Object2ExcelAdapter<DataElement> {
 			DataHandler dh=map.get(fields[i]);
 			Object val=ObjectUtil.getFieldValueByName(fields[i], t);
 			if(dh!=null){
-				if(val!=null&&dh.doHandle(val)!=null){
-					str[i]=dh.doHandle(val).toString();
+				Object o=dh.doHandle(val);
+				if(val!=null&&o!=null){
+					str[i]=o.toString();
 				}else{
 					str[i]="";
 				}

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import com.govmade.common.utils.CachedDataHandler;
 import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.DataHandlerUtil;
 import com.govmade.common.utils.ObjectUtil;
@@ -21,6 +22,7 @@ import com.govmade.entity.system.data.DataElement;
 import com.govmade.entity.system.data.DataList;
 import com.govmade.entity.system.data.DataManager;
 import com.govmade.entity.system.database.GovDatabase;
+import com.govmade.entity.system.dict.GovmadeDic;
 import com.govmade.entity.system.information.InformationResource;
 import com.govmade.entity.system.item.ItemSort;
 import com.govmade.entity.system.memorizer.GovMemorizer;
@@ -31,6 +33,8 @@ import com.govmade.entity.system.tablex.GovTableField;
 import com.govmade.service.system.data.DataElementFieldsService;
 import com.govmade.service.system.data.DataElementService;
 import com.govmade.service.system.data.DataManagerService;
+import com.govmade.service.system.dict.GovmadeDicService;
+import com.govmade.service.system.organization.CompanyService;
 
 public class InformationResource2ExcelAdapter extends Object2ExcelComplexAdapter<InformationResource> {
 	private DataManagerService service = (DataManagerService) ServiceUtil
@@ -39,6 +43,10 @@ public class InformationResource2ExcelAdapter extends Object2ExcelComplexAdapter
 			.getService("DataElementFieldsService");
 	private DataElementService dataElementService= (DataElementService) ServiceUtil
 			.getService("DataElementService");
+	private GovmadeDicService govmadeDicservice= (GovmadeDicService) ServiceUtil
+	.getService("GovmadeDicService");
+	private CompanyService companyService= (CompanyService) ServiceUtil
+			.getService("CompanyService");
 	
 	private String[] fields;
 	private String[] deFields;//数据元字段
@@ -50,14 +58,16 @@ public class InformationResource2ExcelAdapter extends Object2ExcelComplexAdapter
 		this.fields = fields;
 		this.deFields = deFields;
 		this.map=map;
-		this.deMap=getExcelHandler();
+		this.deMap=getExcelCachedHandler();
 	}
 	
-	private Map<String, DataHandler> getExcelHandler() {
+
+	
+	private Map<String, DataHandler> getExcelCachedHandler() {
 		Map<String, DataHandler> map = new HashMap<String, DataHandler>();
 		List<DataElementFields> list = dataElementFieldsService.find(new DataElementFields());
 		for (final DataElementFields sf : list) {
-			map.put("value" + sf.getValueNo(), new DataHandler() {
+			map.put("value" + sf.getValueNo(), new CachedDataHandler() {
 
 				@Override
 				public int getMode() {
@@ -67,68 +77,127 @@ public class InformationResource2ExcelAdapter extends Object2ExcelComplexAdapter
 				@Override
 				public Object doHandle(Object obj) {
 					if (sf.getInputType().equals("2")) {
-						return ServiceUtil.getDicValue(sf.getInputValue(), (String) obj);
+						return getCache(obj);
+					} else if (sf.getInputType().equals("3")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("5")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("7")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("8")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("9")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("10")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("12")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("13")) {
+						return getCache(obj);
+					} else if (sf.getInputType().equals("14")) {
+						return getCache(obj);
+					}
+					return obj;
+				}
+
+				@Override
+				public Map<Object, Object> initCacheMap() {
+					Map<Object, Object> map=new HashMap<Object, Object>();
+					if (sf.getInputType().equals("2")) {
+						GovmadeDic dic=new GovmadeDic();
+						dic.setDicNum(sf.getInputValue());
+						List<GovmadeDic> list=govmadeDicservice.getDicTreeList(dic);
+						if(list!=null){
+							for(GovmadeDic d:list){
+								map.put(d.getDicKey(), d.getDicValue());
+							}
+						}
 					} else if (sf.getInputType().equals("3")) {
 						List<ItemSort> ls = ServiceUtil.getService("ItemSortService")
-								.find(ServiceUtil.buildBean("ItemSort@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getItemName();
-						}
+								.find(ServiceUtil.buildBean("ItemSort@isDeleted=0"));
+								if(ls!=null){
+									for(ItemSort d:ls){
+										map.put(d.getId()+"", d.getItemName());
+									}
+								}
+						
 					} else if (sf.getInputType().equals("5")) {
-						List<Company> ls = ServiceUtil.getService("CompanyService")
-								.find(ServiceUtil.buildBean("Company@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getCompanyName();
-						}
+						List<Company> ls =companyService.find(new Company());
+								if(ls!=null){
+									for(Company d:ls){
+										map.put(d.getId()+"", d.getCompanyName());
+									}
+								}
+						
 					} else if (sf.getInputType().equals("7")) {
 						List<GovServer> ls = ServiceUtil.getService("GovServerService")
-								.find(ServiceUtil.buildBean("GovServer@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
+								.find(ServiceUtil.buildBean("GovServer@isDeleted=0"));
+						if(ls!=null){
+							for(GovServer d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
 						}
+						
 					} else if (sf.getInputType().equals("8")) {
 						List<GovMemorizer> ls = ServiceUtil.getService("GovMemorizerService")
-								.find(ServiceUtil.buildBean("GovMemorizer@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
+								.find(ServiceUtil.buildBean("GovMemorizer@isDeleted=0"));
+						if(ls!=null){
+							for(GovMemorizer d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
 						}
+						
 					} else if (sf.getInputType().equals("9")) {
 						List<GovComputerRoom> ls = ServiceUtil.getService("GovComputerRoomService")
-								.find(ServiceUtil.buildBean("GovComputerRoom@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
+								.find(ServiceUtil.buildBean("GovComputerRoom@isDeleted=0"));
+						if(ls!=null){
+							for(GovComputerRoom d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
 						}
+						
 					} else if (sf.getInputType().equals("10")) {
 						List<GovApplicationSystem> ls = ServiceUtil.getService("GovApplicationSystemService")
-								.find(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
+								.find(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0"));
+						if(ls!=null){
+							for(GovApplicationSystem d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
 						}
+						
 					} else if (sf.getInputType().equals("12")) {
 						List<GovDatabase> ls = ServiceUtil.getService("GovDatabaseService")
-								.find(ServiceUtil.buildBean("GovDatabase@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue2();
+								.find(ServiceUtil.buildBean("GovDatabase@isDeleted=0"));
+						if(ls!=null){
+							for(GovDatabase d:ls){
+								map.put(d.getId()+"", d.getValue2());
+							}
 						}
+						
 					} else if (sf.getInputType().equals("13")) {
 						List<GovTable> ls = ServiceUtil.getService("GovTableService")
-								.find(ServiceUtil.buildBean("GovTable@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
+								.find(ServiceUtil.buildBean("GovTable@isDeleted=0"));
+						if(ls!=null){
+							for(GovTable d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
 						}
 					} else if (sf.getInputType().equals("14")) {
 						List<GovTableField> ls = ServiceUtil.getService("GovTableFieldService")
-								.find(ServiceUtil.buildBean("GovTableField@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
+								.find(ServiceUtil.buildBean("GovTableField@isDeleted=0" ));
+						if(ls!=null){
+							for(GovTableField d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
 						}
 					}
-					return obj;
+					return map;
 				}
 			});
 		}
 		return map;
 	}
+	
 
 	@Override
 	public String[] getTitle() {

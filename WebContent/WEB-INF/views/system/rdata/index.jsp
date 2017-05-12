@@ -1417,8 +1417,8 @@ $('#downloadForm').form({
 
 
 function downloadData(){
-	  //$('#downloadForm').form('clear');
-	  layerIndex=layer.open({
+	$('#downloadForm input[type="checkbox"]').attr("checked","true"); 
+	layerIndex=layer.open({
 	    type: 1,
 	    area: ['60%', '300px'], //宽高
 	    title: '选择导出字段',

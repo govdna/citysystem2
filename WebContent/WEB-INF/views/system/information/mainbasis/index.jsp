@@ -438,15 +438,11 @@ var queryParams = function(params) {
     page : params.offset / params.limit + 1,
     inforTypes2:inforTypes2,
     inforTypes3:inforTypes3,
-<<<<<<< HEAD
     status:0,
     <c:set var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
         <c:if test="${roleid!=1}">
          companyId : <%=AccountShiroUtil.getCurrentUser().getCompanyId() %>
         </c:if>
-=======
-    status:0
->>>>>>> branch 'master' of git@github.com:govdna/citysystem2.git
   };
   return temp;
 };

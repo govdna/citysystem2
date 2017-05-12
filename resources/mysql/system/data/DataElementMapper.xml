@@ -552,8 +552,11 @@
 				<when test="param.sourceType==0">
 					and (t.source_type=${param.sourceType} or t.source_type is null)
 				</when>
-				<otherwise>
+				<when test="param.sourceType!=0 and param.sourceType!=null">
 					and t.source_type=${param.sourceType}
+				</when>
+				<otherwise>
+					
 				</otherwise>
 			</choose>
 		</if>
@@ -575,7 +578,7 @@
 				and t.system_type=${param.systemType}
 			</when>
 			<otherwise>
-				and t.system_type is null
+				and t.system_type is NULL
 			</otherwise>
 		</choose>
 

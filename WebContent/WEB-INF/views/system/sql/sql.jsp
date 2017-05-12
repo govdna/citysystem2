@@ -106,14 +106,10 @@
                 </div>
               </div>
                <div class="form-group peizhi">
-                <label class="control-label col-sm-3">数据库名:</label>
+                <label class="control-label col-sm-3">定时更新:</label>
                 <div class="col-sm-9">
                   <label><input type="radio" name="iCheck" value="1">是</label>　　
                   <label><input type="radio" name="iCheck" value="0">否</label>
-                <label class="control-label col-sm-3">启动定时:</label>
-                <div class="col-sm-9">
-                  <label><input  type="radio" name="iCheck" value="1">是</label>　　
-                  <label><input checked type="radio" name="iCheck" value="0">否</label>
                 </div>
               </div>
               <div class="form-group gjpz" style="display:none;">

@@ -2010,7 +2010,8 @@ $('#downloadForm').form({
     }
 });
 function downloadData(){
-	  //$('#downloadForm').form('clear');
+	$('#downloadForm input[type="checkbox"]').attr("checked","true"); 
+	  
 	  layerIndex=layer.open({
 	    type: 1,
 	    area: ['60%', '400px'], //宽高

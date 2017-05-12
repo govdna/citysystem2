@@ -47,6 +47,7 @@ import com.govmade.adapter.object2excel.DataElement2ExcelAdapter;
 import com.govmade.adapter.object2excel.InformationResource2ExcelAdapter;
 import com.govmade.api.PushUtil;
 import com.govmade.common.ajax.AjaxRes;
+import com.govmade.common.utils.CachedDataHandler;
 import com.govmade.common.utils.ChineseTo;
 import com.govmade.common.utils.DataHandler;
 import com.govmade.common.utils.DataHandlerUtil;
@@ -561,7 +562,8 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		Map<String, DataHandler> map = new HashMap<String, DataHandler>();
 		List<DataManager> list = dataManagerService.find(new DataManager());
 		for (final DataManager sf : list) {
-			map.put("value" + sf.getValueNo(), new DataHandler() {
+			map.put("value" + sf.getValueNo(), new CachedDataHandler() {
+
 				@Override
 				public int getMode() {
 					return ADD_MODE;
@@ -570,68 +572,127 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 				@Override
 				public Object doHandle(Object obj) {
 					if (sf.getInputType().equals("2")) {
-						return ServiceUtil.getDicValue(sf.getInputValue(), (String) obj);
+						return getCache(obj);
 					} else if (sf.getInputType().equals("3")) {
-						List<ItemSort> ls = ServiceUtil.getService("ItemSortService")
-								.find(ServiceUtil.buildBean("ItemSort@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getItemName();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("5")) {
-						List<Company> ls = ServiceUtil.getService("CompanyService")
-								.find(ServiceUtil.buildBean("Company@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getCompanyName();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("7")) {
-						List<GovServer> ls = ServiceUtil.getService("GovServerService")
-								.find(ServiceUtil.buildBean("GovServer@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("8")) {
-						List<GovMemorizer> ls = ServiceUtil.getService("GovMemorizerService")
-								.find(ServiceUtil.buildBean("GovMemorizer@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("9")) {
-						List<GovComputerRoom> ls = ServiceUtil.getService("GovComputerRoomService")
-								.find(ServiceUtil.buildBean("GovComputerRoom@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("10")) {
-						List<GovApplicationSystem> ls = ServiceUtil.getService("GovApplicationSystemService")
-								.find(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("12")) {
-						List<GovDatabase> ls = ServiceUtil.getService("GovDatabaseService")
-								.find(ServiceUtil.buildBean("GovDatabase@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue2();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("13")) {
-						List<GovTable> ls = ServiceUtil.getService("GovTableService")
-								.find(ServiceUtil.buildBean("GovTable@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
-						}
+						return getCache(obj);
 					} else if (sf.getInputType().equals("14")) {
-						List<GovTableField> ls = ServiceUtil.getService("GovTableFieldService")
-								.find(ServiceUtil.buildBean("GovTableField@isDeleted=0&id=" + (String) obj));
-						if (ls != null && ls.size() > 0) {
-							return ls.get(0).getValue1();
-						}
+						return getCache(obj);
 					}
 					return obj;
 				}
+
+				@Override
+				public Map<Object, Object> initCacheMap() {
+					Map<Object, Object> map=new HashMap<Object, Object>();
+					if (sf.getInputType().equals("2")) {
+						GovmadeDic dic=new GovmadeDic();
+						dic.setDicNum(sf.getInputValue());
+						List<GovmadeDic> list=govmadeDicService.getDicTreeList(dic);
+						if(list!=null){
+							for(GovmadeDic d:list){
+								map.put(d.getDicKey(), d.getDicValue());
+							}
+						}
+					} else if (sf.getInputType().equals("3")) {
+						List<ItemSort> ls = ServiceUtil.getService("ItemSortService")
+								.find(ServiceUtil.buildBean("ItemSort@isDeleted=0"));
+								if(ls!=null){
+									for(ItemSort d:ls){
+										map.put(d.getId()+"", d.getItemName());
+									}
+								}
+						
+					} else if (sf.getInputType().equals("5")) {
+						List<Company> ls =companyService.find(new Company());
+								if(ls!=null){
+									for(Company d:ls){
+										map.put(d.getId()+"", d.getCompanyName());
+									}
+								}
+						
+					} else if (sf.getInputType().equals("7")) {
+						List<GovServer> ls = ServiceUtil.getService("GovServerService")
+								.find(ServiceUtil.buildBean("GovServer@isDeleted=0"));
+						if(ls!=null){
+							for(GovServer d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
+						}
+						
+					} else if (sf.getInputType().equals("8")) {
+						List<GovMemorizer> ls = ServiceUtil.getService("GovMemorizerService")
+								.find(ServiceUtil.buildBean("GovMemorizer@isDeleted=0"));
+						if(ls!=null){
+							for(GovMemorizer d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
+						}
+						
+					} else if (sf.getInputType().equals("9")) {
+						List<GovComputerRoom> ls = ServiceUtil.getService("GovComputerRoomService")
+								.find(ServiceUtil.buildBean("GovComputerRoom@isDeleted=0"));
+						if(ls!=null){
+							for(GovComputerRoom d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
+						}
+						
+					} else if (sf.getInputType().equals("10")) {
+						List<GovApplicationSystem> ls = ServiceUtil.getService("GovApplicationSystemService")
+								.find(ServiceUtil.buildBean("GovApplicationSystem@isDeleted=0"));
+						if(ls!=null){
+							for(GovApplicationSystem d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
+						}
+						
+					} else if (sf.getInputType().equals("12")) {
+						List<GovDatabase> ls = ServiceUtil.getService("GovDatabaseService")
+								.find(ServiceUtil.buildBean("GovDatabase@isDeleted=0"));
+						if(ls!=null){
+							for(GovDatabase d:ls){
+								map.put(d.getId()+"", d.getValue2());
+							}
+						}
+						
+					} else if (sf.getInputType().equals("13")) {
+						List<GovTable> ls = ServiceUtil.getService("GovTableService")
+								.find(ServiceUtil.buildBean("GovTable@isDeleted=0"));
+						if(ls!=null){
+							for(GovTable d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
+						}
+					} else if (sf.getInputType().equals("14")) {
+						List<GovTableField> ls = ServiceUtil.getService("GovTableFieldService")
+								.find(ServiceUtil.buildBean("GovTableField@isDeleted=0" ));
+						if(ls!=null){
+							for(GovTableField d:ls){
+								map.put(d.getId()+"", d.getValue1());
+							}
+						}
+					}
+					return map;
+				}
 			});
+				
 		}
 
-		map.put("value3", new DataHandler() {
+		map.put("value3", new CachedDataHandler() {
 
 			@Override
 			public int getMode() {
@@ -640,94 +701,55 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 
 			@Override
 			public Object doHandle(Object obj) {
-				if (obj == null) {
-					return "";
+				return getCache(obj);
+			}
+
+			@Override
+			public Map<Object, Object> initCacheMap() {
+				Map<Object, Object> map=new HashMap<Object, Object>();
+				
+				List<Company> ls =companyService.find(new Company());
+				if(ls!=null){
+					for(Company d:ls){
+						map.put(d.getId()+"", d.getCompanyName());
+					}
 				}
-				Company c = new Company();
-				c.setId(Integer.valueOf((String) obj));
-				c = companyService.findById(c);
-				return c.getCompanyName();
+				return map;
 			}
 
 		});
 
-		map.put("inforTypes", new DataHandler() {
-			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
-			@Override
-			public Object doHandle(Object obj) {
-				SortManager dic = new SortManager();
-				dic.setId((Integer) obj);
-				dic = sortManagerService.findById(dic);
-				if (dic.getSortName() != null) {
-					return dic.getSortName();
-				}
-				return "";
-			}
-
+		CachedDataHandler cdh=new CachedDataHandler() {
+			
 			@Override
 			public int getMode() {
 				return ADD_MODE;
 			}
-
-		});
-		map.put("inforTypes2", new DataHandler() {
-			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
+			
 			@Override
 			public Object doHandle(Object obj) {
-				SortManager dic = new SortManager();
-				dic.setId((Integer) obj);
-				dic = sortManagerService.findById(dic);
-				if (dic.getSortName() != null) {
-					return dic.getSortName();
+				
+				return getCache(obj);
+			}
+			
+			@Override
+			public Map<Object, Object> initCacheMap() {
+				Map<Object, Object> map=new HashMap<Object, Object>();
+				SortManager sm=new SortManager();
+				sm.setBelong(2);
+				List<SortManager> list=sortManagerService.find(sm);
+				if(list!=null){
+					for(SortManager s:list){
+						map.put(s.getId(), s.getSortName());
+					}
 				}
-				return "";
+				return map;
 			}
-
-			@Override
-			public int getMode() {
-				return ADD_MODE;
-			}
-
-		});
-
-		map.put("inforTypes3", new DataHandler() {
-			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
-			@Override
-			public Object doHandle(Object obj) {
-				SortManager dic = new SortManager();
-				dic.setId((Integer) obj);
-				dic = sortManagerService.findById(dic);
-				if (dic.getSortName() != null) {
-					return dic.getSortName();
-				}
-				return "";
-			}
-
-			@Override
-			public int getMode() {
-				return ADD_MODE;
-			}
-
-		});
-		map.put("inforTypes4", new DataHandler() {
-			// 数据类型（datatype）根据数据字典配置，通过ID读取后dicvalue
-			@Override
-			public Object doHandle(Object obj) {
-				SortManager dic = new SortManager();
-				dic.setId((Integer) obj);
-				dic = sortManagerService.findById(dic);
-				if (dic.getSortName() != null) {
-					return dic.getSortName();
-				}
-				return "";
-			}
-
-			@Override
-			public int getMode() {
-				return ADD_MODE;
-			}
-
-		});
+		};
+		map.put("inforTypes", cdh);
+		map.put("inforTypes2", cdh);
+		map.put("inforTypes3", cdh);
+		map.put("inforTypes4", cdh);
 		return map;
 	}
 
@@ -1581,7 +1603,7 @@ public class InformationResourceController extends GovmadeBaseController<Informa
 		if (deFields == null) {
 			deFields = new String[0];
 		}
-		InformationResource2ExcelAdapter adapter = new InformationResource2ExcelAdapter(service.find(de), xlsFields,
+		InformationResource2ExcelAdapter adapter = new InformationResource2ExcelAdapter(service.findByPage(de,null,null), xlsFields,
 				deFields, getExcelHandler());
 		Object2ExcelComplexUtil util = new Object2ExcelComplexUtil(adapter);
 		String path = req.getSession().getServletContext().getRealPath("upload/excel");
