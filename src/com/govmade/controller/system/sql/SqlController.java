@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,20 +17,28 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 
 import org.apache.commons.io.FileUtils;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.Trigger;
+import org.quartz.impl.JobDetailImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.govmade.common.utils.QuartzManager;
 import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.controller.base.GovmadeBaseController;
 import com.govmade.entity.system.computer.GovComputerRoom;
 import com.govmade.entity.system.database.GovDatabase;
 import com.govmade.entity.system.tablex.GovTable;
 import com.govmade.entity.system.tablex.GovTableField;
+import com.govmade.quartz.job.DataBaseJob;
 import com.govmade.service.base.BaseService;
 import com.govmade.service.system.database.GovDatabaseService;
 import com.govmade.service.system.table.GovTableFieldService;
@@ -45,6 +55,9 @@ public class SqlController extends GovmadeBaseController<GovComputerRoom>{
 	private GovTableFieldService govTableFieldService;
 	private Connection con = null;// 创建一个数据库连接
 	private String databaseName = "";
+	@Autowired
+	private Scheduler  scheduler ;
+	
 	@Override
 	public BaseService getService() {
 		// TODO Auto-generated method stub
@@ -68,6 +81,11 @@ public class SqlController extends GovmadeBaseController<GovComputerRoom>{
 		String address = c.getValue4();			//数据库连接地址
 		String dbport = c.getValue5();				//端口
 		databaseName = c.getValue6();	//数据库名
+		System.out.println("(每5秒输出一次)...");    
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("jobData", c);
+		QuartzManager.addJob(scheduler, "name", "group", "trrigger", "trriggerGroup", DataBaseJob.class, "0/5 * * * * ?",map);
+		
 		String url = "";
 		JSONArray js = new JSONArray();
 		if("mysql".equals(dbtype)){
