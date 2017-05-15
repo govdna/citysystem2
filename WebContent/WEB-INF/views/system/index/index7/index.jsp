@@ -125,34 +125,34 @@ a, a:hover, a:focus {text-decoration: none;}
       <div class="menu-list-container clearfix">
              <c:forEach var="obj"   items="${menuType1}">
             <c:choose>
-            <c:when test="${obj==0}">
-              <a href="${base}/backstage/manage?menuType=0" class="menu-item menu-item-1">
-                <div class="img"></div>
-                <p class="name text-center"><%=ServiceUtil.modRename(0)%></p>
-              </a>
-              </c:when>
             <c:when test="${obj==1}">
-              <a href="${base}/backstage/manage?menuType=1" class="menu-item menu-item-2">
+              <a href="${base}/backstage/manage?menuType=1" class="menu-item menu-item-1">
                 <div class="img"></div>
                 <p class="name text-center"><%=ServiceUtil.modRename(1)%></p>
               </a>
               </c:when>
             <c:when test="${obj==2}">
-              <a href="${base}/backstage/manage?menuType=2" class="menu-item menu-item-3">
+              <a href="${base}/backstage/manage?menuType=2" class="menu-item menu-item-2">
                 <div class="img"></div>
                 <p class="name text-center"><%=ServiceUtil.modRename(2)%></p>
               </a>
               </c:when>
             <c:when test="${obj==3}">
-              <a href="${base}/backstage/manage?menuType=3" class="menu-item menu-item-4">
-               <div class="img"></div>
-               <p class="name text-center"><%=ServiceUtil.modRename(3)%></p>
-             </a>
+              <a href="${base}/backstage/manage?menuType=3" class="menu-item menu-item-3">
+                <div class="img"></div>
+                <p class="name text-center"><%=ServiceUtil.modRename(3)%></p>
+              </a>
               </c:when>
             <c:when test="${obj==5}">
-               <a href="${base}/backstage/manage?menuType=5" class="menu-item menu-item-5">
+              <a href="${base}/backstage/manage?menuType=5" class="menu-item menu-item-4">
+               <div class="img"></div>
+               <p class="name text-center"><%=ServiceUtil.modRename(5)%></p>
+             </a>
+              </c:when>
+            <c:when test="${obj==6}">
+               <a href="${base}/backstage/manage?menuType=6" class="menu-item menu-item-5">
                  <div class="img"></div>
-                 <p class="name text-center"><%=ServiceUtil.modRename(5)%></p>
+                 <p class="name text-center"><%=ServiceUtil.modRename(6)%></p>
                 </a>
               </c:when>
             <c:otherwise>

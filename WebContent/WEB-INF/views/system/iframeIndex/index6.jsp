@@ -1,228 +1,173 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="com.govmade.common.utils.ServiceUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="com.govmade.common.utils.ServiceUtil" %>
-<%@ page import="com.govmade.common.utils.security.AccountShiroUtil" %>
-<%@ taglib uri="http://www.govmade.cn/MyFunction" prefix="MyFunction"%>
 <!DOCTYPE html >
 <html lang="en">
 
 <head>
 	<%@include file="../common/includeBaseHead.jsp"%>
-	<link href="${base}/static/css/style.css?v=4.1.0" rel="stylesheet">
-	<link href="${base}/static/css/index.css" rel="stylesheet">
-	<link rel="stylesheet" href="${base}/static/css/skin/skin-<%=ServiceUtil.getThemeType(10)%>.css">
+	<link href="${base}/static/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="${base}/static/css/plugins/webuploader/webuploader.css">
+   	<link rel="stylesheet" type="text/css" href="${base}/static/css/demo/webuploader-demo.css">
+    <link href="${base}/static/css/plugins/chosen/chosen.css" rel="stylesheet">
+  	<link href="${base}/static/css/style.css?v=4.1.0" rel="stylesheet">
 </head>
 <style>
-.label-primary, .badge-primary {
-    background-color: #319cdf !important;
-}
-.header .name img ,
-.header .name span,
-.message-group .count-info,
-.header .btn-signout{
-  border-color: #d7d7d7;
-}
-.header {
-    height: 80px;
-    min-width: 997px;
-    padding: 0 60px;
-    background-color: rgba(255, 255, 255, .7);
-    box-shadow: 0px 0px 20px 4px rgba(0, 0, 0, .2);
-    margin-bottom: 10px;
-}
+  .myclass{width: 400px;max-width: 500px; height: 300px;max-height: 400px;overflow-y: auto;}
+  .myclass .layui-layer-content {padding: 20px;}
 </style>
-<body id="body-bg">
-	<div class="body-height" style="position: absolute;top:0;left:0;width: 100%;">
-	<header class="header">
-	  <div class="container-fluid">
+<body class="skin-<%=ServiceUtil.getThemeType(10)%>">
+	<div class="wrapper wrapper-content animated fadeInRight">
 	    <div class="row">
-	      <a href="#" class="pull-left logo">
-	        <img src="${base}<%=ServiceUtil.getLogoBig(10)%>" alt="logo">
-	        <h1>
-	          <%=ServiceUtil.getTitleBig(10)%>
-	        </h1>
-	      </a>
-	      <div class="pull-right rel">
-	        <a href="#" class="name">
-	          <img src="${base}/static/images/icon/11.jpg" alt="头像"><span><%=AccountShiroUtil.getCurrentUser().getName()%></span>
-	        </a>
-	        <c:set  var="roleid"   value="<%=AccountShiroUtil.getCurrentUser().getRoleId() %>"/>
-	        <c:if test="${roleid==1}">
-	        <a href="${base}/backstage/manage?menuType=4" class="btn-signout" style="margin-right:10px;">参数设置</a>
-	          <div class="dropdown message-group">
-	          <c:set  var="noticeNum"   value="<%=ServiceUtil.noticeNum() %>"/>
-	          <c:set  var="deSatausNum"   value="<%=ServiceUtil.deSatausNum() %>"/>
-	          <c:set  var="inforSatausNum"   value="<%=ServiceUtil.inforSatausNum() %>"/>
-	          <c:set  var="num"   value="${noticeNum+inforSatausNum}"/>
-	            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">消息
-	              <c:if test="${num > 0}">
-	                <span class="label label-primary">${num}</span>
-	              </c:if>
-	            </a>
-	            <ul class="dropdown-menu dropdown-alerts"  style="left: -70px;">
-	            <c:choose>
-	              <c:when test="${num>0}"> 
-	                <c:if test="${noticeNum>0}">
-	                  <li>
-	                    <a href="${base}/backstage/manage?menuType=1&rurl=${base}/backstage/subscribe/index">
-	                      <div>
-	                        <i class="fa fa-envelope fa-fw"></i> 您订阅的信息资源有${noticeNum}条更新
-	                      </div>
-	                    </a>
-	                  </li>
-	                <li class="divider"></li>
-	                </c:if>
-	               <c:if test="${inforSatausNum>0}">
-	                  <li>
-	                    <a href="${base}/backstage/manage?menuType=1&rurl=${base}/backstage/information/resource/index?status=14">
-	                      <div>
-	                        <i class="fa fa-envelope fa-fw"></i> 信息资源有${inforSatausNum}条待审核
-	                      </div>
-	                    </a>
-	                  </li>
-	                </c:if> 
-	              </c:when>
-	              <c:otherwise>
-	                <div>
-	                  <i class="fa fa-envelope fa-fw"></i>没有新消息
+	        <div class="col-sm-12">
+	            <div class="ibox float-e-margins">
+	                <div class="ibox-title">
+	                    <h5>分布地图展现</h5>
 	                </div>
-	              </c:otherwise>
-	            </c:choose>
-	            </ul>
-	          </div>
-	        </c:if>
-	        <a href="${base}/system_logout" class="btn-signout btn-sign-out"><i class="fa fa-times mr5"></i>退出</a>
-	      </div>
+	                <div class="ibox-content">
+	                    <div class="echarts" id="main1" style="height:500px"></div>
+	                </div>
+	            </div>
+	        </div>
 	    </div>
-	  </div>
-	</header>
-	<div style="margin-top: 10px;height:calc(100vh - 90px)">
-	   <iframe class="" name="iframe0" width="100%" height="100%" src="http://101.204.247.165:54321" style="height:calc(100vh);background: #fff;border:none;"></iframe>
-	</div> 
 	</div>
-	<script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
-	<script src="${base}/static/js/bootstrap.min.js?v=3.3.6"></script>
-	<script src="${base}/static/js/particles.min.js"></script>
+  <script src="${base}/static/js/jquery.min.js?v=2.1.4"></script>
+	<script src="${base}/static/js/plugins/echarts/echarts-all.js"></script>
+  <script src="${base}/static/js/plugins/layer/layer.js"></script>
 	<script>
-		particlesJS('body-bg',   
-		  {
-		    "particles": {
-		      "number": {
-		        "value": 80,
-		        "density": {
-		          "enable": true,
-		          "value_area": 800
-		        }
-		      },
-		      "color": {
-		        "value": "#319cdf"
-		      },
-		      "shape": {
-		        "type": "circle",
-		        "stroke": {
-		          "width": 0,
-		          "color": "#000000"
-		        },
-		        "polygon": {
-		          "nb_sides": 5
-		        },
-		        "image": {
-		          "src": "img/github.svg",
-		          "width": 100,
-		          "height": 100
-		        }
-		      },
-		      "opacity": {
-		        "value": 0.5,
-		        "random": false,
-		        "anim": {
-		          "enable": false,
-		          "speed": 1,
-		          "opacity_min": 0.1,
-		          "sync": false
-		        }
-		      },
-		      "size": {
-		        "value": 12,
-		        "random": true,
-		        "anim": {
-		          "enable": false,
-		          "speed": 40,
-		          "size_min": 0.1,
-		          "sync": false
-		        }
-		      },
-		      "line_linked": {
-		        "enable": true,
-		        "distance": 150,
-		        "color": "#319cdf",
-		        "opacity": 0.4,
-		        "width": 1
-		      },
-		      "move": {
-		        "enable": true,
-		        "speed": 6,
-		        "direction": "none",
-		        "random": false,
-		        "straight": false,
-		        "out_mode": "out",
-		        "attract": {
-		          "enable": false,
-		          "rotateX": 600,
-		          "rotateY": 1200
-		        }
-		      }
-		    },
-		    "interactivity": {
-		      "detect_on": "canvas",
-		      "events": {
-		        "onhover": {
-		          "enable": true,
-		          "mode": "repulse"
-		        },
-		        "onclick": {
-		          "enable": true,
-		          "mode": "push"
-		        },
-		        "resize": true
-		      },
-		      "modes": {
-		        "grab": {
-		          "distance": 400,
-		          "line_linked": {
-		            "opacity": 1
-		          }
-		        },
-		        "bubble": {
-		          "distance": 400,
-		          "size": 40,
-		          "duration": 2,
-		          "opacity": 8,
-		          "speed": 3
-		        },
-		        "repulse": {
-		          "distance": 200
-		        },
-		        "push": {
-		          "particles_nb": 4
-		        },
-		        "remove": {
-		          "particles_nb": 2
-		        }
-		      }
-		    },
-		    "retina_detect": true,
-		    "config_demo": {
-		      "hide_card": false,
-		      "background_color": "#b61924",
-		      "background_image": "",
-		      "background_position": "50% 50%",
-		      "background_repeat": "no-repeat",
-		      "background_size": "cover"
-		    }
-		  }
-		);
-	</script>
+  $(function() {
+    layer.config({
+      extend: '../extend/layer.ext.js'
+    });
+  })
+ var myChart = echarts.init(document.getElementById('main1'));
+  option = {
+    color: [
+
+    ],
+    title: {
+      text: '海南地图',
+      x: 'left'
+    },
+    tooltip: {
+      trigger: 'item',
+      padding: 10,
+      formatter: function(params, ticket, callback) {
+        console.log(params);
+
+        return params.data.name;
+      }
+    },
+    dataRange: {
+      min: 0,
+      max: <%=ServiceUtil.getCompanyCountByAddr("")%>,
+      calculable: true,
+      color: ['rgb(255, 166, 0)', 'rgb(255, 255, 0)']
+    },
+    toolbox: {
+      show: false,
+      orient: 'vertical',
+      x: 'right',
+      y: 'center',
+      feature: {
+        mark: {
+          show: true
+        },
+        dataView: {
+          show: true,
+          readOnly: false
+        },
+        restore: {
+          show: true
+        },
+        saveAsImage: {
+          show: true
+        }
+      }
+    },
+    series: [{
+      name: '111',
+      type: 'map',
+      mapType: '海南',
+      hoverable: true,
+      roam: true,
+      data: [ {name: '三亚市',value: 44, info: <%=ServiceUtil.getCompanyCountByAddrJS("三亚市")%>},
+              {name: '乐东黎族自治县',value: 42, info: <%=ServiceUtil.getCompanyCountByAddrJS("乐东黎族自治县")%>},
+              {name: '儋州市',value: 40, info: <%=ServiceUtil.getCompanyCountByAddrJS("儋州市")%>},
+              {name: '琼中黎族苗族自治县',value: 38, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼中黎族苗族自治县")%>},
+              {name: '东方市',value: 36, info: <%=ServiceUtil.getCompanyCountByAddrJS("东方市")%>},
+              {name: '海口市',value: 34, info: <%=ServiceUtil.getCompanyCountByAddrJS("海口市")%>},
+              {name: '万宁市',value: 32, info: <%=ServiceUtil.getCompanyCountByAddrJS("万宁市")%>},
+              {name: '澄迈县',value: 30, info: <%=ServiceUtil.getCompanyCountByAddrJS("澄迈县")%>},
+              {name: '白沙黎族自治县',value: 28, info: <%=ServiceUtil.getCompanyCountByAddrJS("白沙黎族自治县")%>},
+              {name: '琼海市',value: 26, info: <%=ServiceUtil.getCompanyCountByAddrJS("琼海市")%>},
+              {name: '昌江黎族自治县',value: 24, info: <%=ServiceUtil.getCompanyCountByAddrJS("昌江黎族自治县")%>},
+              {name: '临高县',value: 22, info: <%=ServiceUtil.getCompanyCountByAddrJS("临高县")%>},
+              {name: '陵水黎族自治县',value: 20, info: <%=ServiceUtil.getCompanyCountByAddrJS("陵水黎族自治县")%>},
+              {name: '屯昌县',value: 18, info: <%=ServiceUtil.getCompanyCountByAddrJS("屯昌县")%>},
+              {name: '定安县',value: 16, info: <%=ServiceUtil.getCompanyCountByAddrJS("定安县")%>},
+              {name: '保亭黎族苗族自治县',value: 14, info: <%=ServiceUtil.getCompanyCountByAddrJS("保亭黎族苗族自治县")%>},
+              {name: '文昌市',value: 12, info: <%=ServiceUtil.getCompanyCountByAddrJS("文昌市")%>},
+              {name: '五指山市',value: 8, info: <%=ServiceUtil.getCompanyCountByAddrJS("五指山市")%>}
+         ],
+      markPoint: {
+        symbolSize: 5,
+        itemStyle: {
+          normal: {
+            borderColor: '#ff5722',
+            borderWidth: 3, 
+            label: {
+              show: false
+            }
+          },
+          emphasis: {
+            borderColor: '#ff5722',
+            borderWidth: 5,
+            label: {
+              show: false
+            }
+          }
+        },
+        data: [
+		<c:forEach var="obj" items="<%=ServiceUtil.getCompanyCountList()%>">
+		{
+            name: '${obj.companyName}',
+            value:${obj.companyId},
+            info: {
+              name: '${obj.companyName}',
+              dataElement: ${obj.companyId},
+              informationResource: ${obj.groupId}
+            },
+            tooltip: { // Series config.
+              trigger: 'item',
+              backgroundColor: 'black',
+              formatter: function(params, ticket, callback) {
+                return pars(params, ticket, callback);
+              }
+            },
+          },
+
+      	  </c:forEach>       
+               
+        ]
+      },
+      geoCoord: {
+    	  <c:forEach var="obj" items="<%=ServiceUtil.getCompanyCountList()%>">
+ 	      "${obj.companyName}":[${obj.lng}, ${obj.lat}],
+ 	     </c:forEach>
+      }
+    }]
+  };
+
+  myChart.setOption(option);
+
+  function pars(params, ticket, callback) {
+      
+      var content = params.name  + '<br>信息资源数量: ' +
+      params.data.info.informationResource + '<br>数据元数量: ' + params.data.info.dataElement
+      
+    return content;
+  }
+    </script>
 </body>
 </html>

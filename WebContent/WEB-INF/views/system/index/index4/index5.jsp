@@ -187,25 +187,25 @@
   <div class="container main-container">
     <div class="row">
       <div class="menu-list-container">
-        <a href="${base}/backstage/manage?menuType=0" class="menu-item menu-item-1">
+        <a href="${base}/backstage/manage?menuType=1" class="menu-item menu-item-1">
           <div class="img"></div>
-          <p class="name text-center"><%=ServiceUtil.modRename(0)%></p>
+          <p class="name text-center"><%=ServiceUtil.modRename(1)%></p>
         </a>
-        <a href="${base}/backstage/manage?menuType=1" class="menu-item menu-item-2">
-          <div class="img"></div>
-          <p class="name text-center"><%=ServiceUtil.modRename(1) %></p>
-        </a>
-        <a href="${base}/backstage/manage?menuType=2" class="menu-item menu-item-3">
+        <a href="${base}/backstage/manage?menuType=2" class="menu-item menu-item-2">
           <div class="img"></div>
           <p class="name text-center"><%=ServiceUtil.modRename(2) %></p>
         </a>
-        <a href="${base}/backstage/manage?menuType=3" class="menu-item menu-item-4">
+        <a href="${base}/backstage/manage?menuType=3" class="menu-item menu-item-3">
           <div class="img"></div>
           <p class="name text-center"><%=ServiceUtil.modRename(3) %></p>
         </a>
-        <a href="${base}/backstage/manage?menuType=5" class="menu-item menu-item-5">
+        <a href="${base}/backstage/manage?menuType=5" class="menu-item menu-item-4">
           <div class="img"></div>
           <p class="name text-center"><%=ServiceUtil.modRename(5) %></p>
+        </a>
+        <a href="${base}/backstage/manage?menuType=6" class="menu-item menu-item-5">
+          <div class="img"></div>
+          <p class="name text-center"><%=ServiceUtil.modRename(6) %></p>
         </a>
       </div>
     </div>

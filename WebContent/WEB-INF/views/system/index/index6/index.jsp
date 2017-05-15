@@ -138,16 +138,8 @@ a, a:hover, a:focus {text-decoration: none;}
           <div class="item-container clearfix">
            <c:forEach var="obj"   items="${menuType1}">
       		<c:choose>
-      		<c:when test="${obj==0}">
-            <a href="${base}/backstage/manage?menuType=0" class="item item-1">
-              <div class="item-body">
-                <div class="item-bg"></div>
-                <h3 class="text-center"><%=ServiceUtil.modRename(0) %></h3>
-              </div>
-            </a>
-            </c:when>
       		<c:when test="${obj==1}">
-            <a href="${base}/backstage/manage?menuType=1" class="item item-2">
+            <a href="${base}/backstage/manage?menuType=1" class="item item-1">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(1) %></h3>
@@ -155,7 +147,7 @@ a, a:hover, a:focus {text-decoration: none;}
             </a>
             </c:when>
       		<c:when test="${obj==2}">
-            <a href="${base}/backstage/manage?menuType=2" class="item item-3">
+            <a href="${base}/backstage/manage?menuType=2" class="item item-2">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(2) %></h3>
@@ -163,7 +155,7 @@ a, a:hover, a:focus {text-decoration: none;}
             </a>
             </c:when>
       		<c:when test="${obj==3}">
-            <a href="${base}/backstage/manage?menuType=3" class="item item-4">
+            <a href="${base}/backstage/manage?menuType=3" class="item item-3">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(3) %></h3>
@@ -171,18 +163,26 @@ a, a:hover, a:focus {text-decoration: none;}
             </a>
             </c:when>
       		<c:when test="${obj==5}">
-            <a href="${base}/backstage/manage?menuType=5" class="item item-5">
+            <a href="${base}/backstage/manage?menuType=5" class="item item-4">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(5) %></h3>
               </div>
             </a>
             </c:when>
-            <c:when test="${obj==6}">
-            <a href="${base}/backstage/iframeIndex?index=6" class="item item-6">
+      		<c:when test="${obj==6}">
+            <a href="${base}/backstage/manage?menuType=6" class="item item-5">
               <div class="item-body">
                 <div class="item-bg"></div>
                 <h3 class="text-center"><%=ServiceUtil.modRename(6) %></h3>
+              </div>
+            </a>
+            </c:when>
+            <c:when test="${obj==7}">
+            <a href="${base}/backstage/iframeIndex?index=7" class="item item-6">
+              <div class="item-body">
+                <div class="item-bg"></div>
+                <h3 class="text-center"><%=ServiceUtil.modRename(7) %></h3>
               </div>
             </a>
             </c:when> 
