@@ -3,12 +3,15 @@
 <mapper namespace="com.govmade.repository.system.versionControl.VersionControlDao">
 	<resultMap id="base" type="VersionControl"></resultMap>
 	<select id="find" resultMap="base" parameterType="VersionControl">
-		SELECT  id,source_id sourceId,new_version newVersion,class_name className,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_version_control t WHERE 1=1
+		SELECT  id,action_type actionType,account_id accountId,source_id sourceId,new_version newVersion,class_name className,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_version_control t WHERE 1=1
 		<if test="param.id!= null ">
 			and t.id=#{param.id}
 		</if>
 		<if test="param.sourceId!= null ">
 			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.accountId!= null ">
+			and t.account_id=#{param.accountId}
 		</if>
 		<if test="param.className!= null ">
 			and t.class_name=#{param.className}
@@ -38,12 +41,15 @@
 		</choose>
 	</select>
 	<select id="findByPage" resultMap="base">
-			SELECT  id,source_id sourceId,new_version newVersion,class_name className,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_version_control t WHERE 1=1
+			SELECT  id,action_type actionType,account_id accountId,source_id sourceId,new_version newVersion,class_name className,time_create timeCreate,time_modified timeModified,isDeleted FROM gov_version_control t WHERE 1=1
 		<if test="param.id!= null ">
 			and t.id=#{param.id}
 		</if>
 		<if test="param.sourceId!= null ">
 			and t.source_id=#{param.sourceId}
+		</if>
+		<if test="param.accountId!= null ">
+			and t.account_id=#{param.accountId}
 		</if>
 		<if test="param.className!= null ">
 			and t.class_name=#{param.className}
@@ -78,8 +84,8 @@
 	<insert id="insert" parameterType="VersionControl" useGeneratedKeys="true" keyProperty="id">  
     
  	<![CDATA[
-	INSERT INTO gov_version_control(source_id,new_version,class_name,time_create,time_modified,isDeleted) 
-	VALUES (#{sourceId,jdbcType=NUMERIC},#{newVersion,jdbcType=VARCHAR},#{className,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
+	INSERT INTO gov_version_control(action_type,account_id,source_id,new_version,class_name,time_create,time_modified,isDeleted) 
+	VALUES (#{actionType,jdbcType=VARCHAR},#{accountId,jdbcType=NUMERIC},#{sourceId,jdbcType=NUMERIC},#{newVersion,jdbcType=VARCHAR},#{className,jdbcType=VARCHAR},#{timeCreate,jdbcType=TIMESTAMP},#{timeModified,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=NUMERIC})
 	]]>
 	</insert>
 	<update id="delete" parameterType="VersionControl">

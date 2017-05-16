@@ -19,6 +19,8 @@ import com.govmade.entity.base.IdBaseEntity;
 public class VersionControl extends IdBaseEntity{
 	private Integer sourceId;//对应的记录id
 	private String newVersion;//新版本object json
+	private String actionType;//操作类型 create update remove 
+	private Integer accountId;//操作帐号
 	private String className;//类
 	public Integer getSourceId() {
 		return sourceId;
@@ -37,6 +39,18 @@ public class VersionControl extends IdBaseEntity{
 	}
 	public void setClassName(String className) {
 		this.className = className;
+	}
+	public String getActionType() {
+		return actionType;
+	}
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
+	}
+	public Integer getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
 	}
 
 	

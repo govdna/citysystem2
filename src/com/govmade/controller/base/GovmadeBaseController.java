@@ -34,14 +34,19 @@ import com.govmade.common.utils.security.AccountShiroUtil;
 import com.govmade.common.utils.webpage.PageData;
 import com.govmade.entity.base.IdBaseEntity;
 import com.govmade.entity.system.resources.Resources;
+import com.govmade.entity.system.versionControl.VersionControl;
 import com.govmade.service.base.BaseService;
 import com.govmade.service.system.resources.ResourcesService;
+import com.govmade.service.system.versionControl.VersionControlService;
 
 import net.sf.json.JSONObject;
 
 public abstract class GovmadeBaseController<T> {
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
-
+	
+	@Autowired
+	private VersionControlService versionControlService;
+	
 	public abstract BaseService getService();
 
 	public abstract String indexURL();
@@ -170,12 +175,26 @@ public abstract class GovmadeBaseController<T> {
 						((IdBaseEntity) o).setId(Integer.valueOf(is[i]));
 						doWithDelete(o,req,res);
 						getService().delete(o);
+						VersionControl version=new VersionControl();
+						version.setNewVersion(JSONObject.fromObject(o).toString());
+						version.setActionType("remove");
+						version.setAccountId(AccountShiroUtil.getCurrentUser().getId());
+						version.setClassName(o.getClass().getSimpleName());
+						version.setSourceId(((IdBaseEntity) o).getId());
+						versionControlService.insert(version);
 					}
 					
 				}
 			}else{
 				doWithDelete(o,req,res);
 				getService().delete(o);
+				VersionControl version=new VersionControl();
+				version.setNewVersion(JSONObject.fromObject(o).toString());
+				version.setActionType("remove");
+				version.setAccountId(AccountShiroUtil.getCurrentUser().getId());
+				version.setClassName(o.getClass().getSimpleName());
+				version.setSourceId(((IdBaseEntity) o).getId());
+				versionControlService.insert(version);
 			}
 			
 			ar.put("code", Const.SUCCEED);
@@ -219,13 +238,21 @@ public abstract class GovmadeBaseController<T> {
 
 		JSONObject ar = new JSONObject();
 		try {
+			VersionControl version=new VersionControl();
 			if (o instanceof IdBaseEntity && ((IdBaseEntity) o).getId() != null) {
 				getService().update(o);
+				version.setActionType("update");
 				ar.put("msg", Const.UPDATE_SUCCEED);
 			} else {
 				ar.put("msg", Const.SAVE_SUCCEED);
 				getService().insert(o);
+				version.setActionType("create");
 			}
+			version.setNewVersion(JSONObject.fromObject(o).toString());
+			version.setAccountId(AccountShiroUtil.getCurrentUser().getId());
+			version.setClassName(o.getClass().getSimpleName());
+			version.setSourceId(((IdBaseEntity) o).getId());
+			versionControlService.insert(version);
 			doAfterInsertUpdate(o,req,res);
 			ar.put("code", Const.SUCCEED);
 		} catch (Exception e) {
