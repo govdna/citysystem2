@@ -66,7 +66,7 @@ public class BackstageController extends BaseController<Object>{
 		    Set<Integer> m = new HashSet<Integer>();
 		    for(int x = 0; x < list.size(); x++){
 		    	Permission per=list.get(x);
-		    	if(per.getMenuType()==4||per.getMenuType()==6){	    		
+		    	if(per.getMenuType()==4||per.getMenuType()==7){	    		
 		    	}else{
 		    	m.add( per.getMenuType());	
 		    	}
